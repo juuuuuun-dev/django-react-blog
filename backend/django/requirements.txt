@@ -1,0 +1,7 @@
+Django==2.2
+uwsgi==2.0.18
+mysqlclient==1.4.2.post1
+djangorestframework==3.10
+django-filter==2.0.0
+djoser==1.1
+django-cors-headers==2.2

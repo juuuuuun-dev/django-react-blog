@@ -1,0 +1,9 @@
+version: '3.4'
+
+volumes: 
+  sync-django-blog:
+    external: true
+services:
+  django:
+    volumes:
+      - sync-django-blog:/app:consistent
