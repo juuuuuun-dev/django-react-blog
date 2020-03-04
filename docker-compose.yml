@@ -42,6 +42,7 @@ services:
     volumes:
       - ./backend/django:/app
     command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
+    # uwsgi --reload /app/config/uwsgi.pid
     expose:
       - "8001"
     depends_on:
