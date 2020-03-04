@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+from django.utils.translation import ugettext_lazy
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'djoser',
+    'category',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +67,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     "PAGE_SIZE": 2,
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',) 
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 
 TEMPLATES = [
@@ -139,7 +141,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-from django.utils.translation import ugettext_lazy
 LANGUAGES = (
     ('ja', ugettext_lazy('Japanese')),
     ('en', ugettext_lazy('English')),
