@@ -5,7 +5,7 @@ from .models import Article
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['title', 'content', 'category_id',
+    list_display = ['title', 'content', 'category',
                     'is_show', 'cover', 'created_at', 'updated_at']
 
     def category(self, obj):

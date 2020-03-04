@@ -11,8 +11,11 @@ class Article(models.Model):
     content = models.TextField(verbose_name='content')
     cover = models.CharField(max_length=255, null=True, blank=True)
     is_show = models.BooleanField()
-    category_id = models.ForeignKey(
+    category = models.ForeignKey(
         Category, verbose_name='category', on_delete=models.PROTECT)
-    tag_id = models.ManyToManyField(Tag, blank=True)
+    tag = models.ManyToManyField(Tag, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # def get_categories(self):
+    #     return "\n".join([p.cateroy_id for p in self category_id.all()])
