@@ -16,10 +16,10 @@ services:
       - ./backend/nginx/uwsgi_params:/etc/nginx/uwsgi_params
       - ./backend/django/static:/static
     depends_on:
-      - django
+      - backend
   db:
     image: mysql:5.7
-    container_name: django-blog.db
+    container_name: django-blog.mysql
     ports:
       - 3306:3306
     environment:
@@ -35,10 +35,10 @@ services:
     image: redis
     volumes:
       - redisdata:/data
-  django:
+  backend:
     build:
       context: ./backend/django
-    container_name: django-blog.django
+    container_name: django-blog.backend
     volumes:
       - ./backend/django:/app
     command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
@@ -47,3 +47,16 @@ services:
       - "8001"
     depends_on:
       - db
+  frontend:
+    build:
+      context: ./frontend
+    tty: true
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3030:3030"
+    depends_on:
+      - backend
+      - redis

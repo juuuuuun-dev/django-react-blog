@@ -1,9 +1,14 @@
 version: '3.4'
 
 volumes: 
-  sync-django-blog:
+  sync-blog-backend:
+    external: true
+  sync-blog-frontend:
     external: true
 services:
-  django:
+  backend:
     volumes:
-      - sync-django-blog:/app:consistent
+      - sync-blog-backend:/app:consistent
+  frontend:
+    volumes:
+      - sync-blog-frontend:/app:consistent
