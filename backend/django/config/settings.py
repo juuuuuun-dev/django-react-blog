@@ -34,6 +34,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'category',
+    'tag',
+    'article',
+    'user',
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,13 +48,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'allauth',
+    'allauth.account',
+    'rest_auth',
+    'rest_auth.registration',
     'djoser',
-    # 'blog.models.category',
-    # 'blog.models.tag',
-    # 'blog.models.article',
-    'category',
-    'tag',
-    'article',
 ]
 
 MIDDLEWARE = [
