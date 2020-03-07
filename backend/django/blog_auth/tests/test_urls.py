@@ -23,4 +23,4 @@ class RestUserAuthTestCase(APITestCase):
         }
         response = self.client.post("{}register/".format(self.base_api), post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        pprint(response.json)
+        
