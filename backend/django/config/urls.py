@@ -17,23 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
 from django.conf import settings
-from pprint import pprint
 from django.contrib.staticfiles.urls import static
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-api_version = 'api/v1/'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/user/', include("user.urls")),
-    # path("{}user/".format(api_version), include("user.urls"))
+    path("{}user/".format(settings.API_VERSION), include("user.urls")),
+    path("{}blog_auth/".format(settings.API_VERSION), include("blog_auth.urls")),
 ]
-# if settings.DEBUG:
-
-# urlpatterns += static(settings.MEDIA_URL,
-#                       document_root=settings.MEDIA_ROOT)
-# urlpatterns += staticfiles_urlpatterns()
-# urlpatterns += static(settings.MEDIA_URL,
-#                       document_root=settings.MEDIA_ROOT)
-
-# urlpatterns += static(settings.MEDIA_URL,
-#                       document_root=settings.MEDIA_ROOT)

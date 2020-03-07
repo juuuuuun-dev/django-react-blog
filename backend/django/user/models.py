@@ -32,8 +32,8 @@ class User(AbstractBaseUser):
     class Meta:
         db_table = 'users'
 
-    username = models.CharField(verbose_name='username', max_length=254, unique=True)
-    email = models.EmailField(verbose_name='email', max_length=254)
+    username = models.CharField(unique=True, verbose_name='username', max_length=50)
+    email = models.EmailField(unique=True, verbose_name='email', max_length=128)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)

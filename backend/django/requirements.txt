@@ -1,9 +1,9 @@
-Django==3.0.3
+Django==3.0.4
 uwsgi==2.0.18
 mysqlclient==1.4.2.post1
 djangorestframework==3.11.0
 django-filter==2.0.0
-djoser==1.1
+djoser==2.0.3
 django-cors-headers==3.2.1
 django-allauth==0.41.0
 django-rest-auth==0.9.5

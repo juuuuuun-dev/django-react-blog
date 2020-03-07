@@ -30,6 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# API
+API_VERSION = "api/v1/"
 
 # Application definition
 
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'tag',
     'article',
     'user',
+    'blog_auth',
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,10 +53,12 @@ INSTALLED_APPS = [
     'django_filters',
     'allauth',
     'allauth.account',
+    "allauth.socialaccount",
     'rest_auth',
     'rest_auth.registration',
     'djoser',
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,17 +73,29 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'config.urls'
 
 # REST
-
 REST_FRAMEWORK = {
     "DEFAULT_AUTHETICATION_CLASSES": (
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
+        # "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    "PAGE_SIZE": 2,
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # "PAGE_SIZE": 2,
+    # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
+
+# SIMPLE_JWT = {
+#     'AUTH_HEADER_TYPES': ('JWT',),
+#     'ACCESS_TOKEN_LIFETIME': 'timedelta(minutes=30)',
+# }
+
+# ALL_AUTH
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMIAL_VERIFICATION = "optional"
+ACCOUNT_USER_USENAME_FIELD = "email"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 TEMPLATES = [
     {
@@ -113,6 +130,7 @@ DATABASES = {
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
+            "init_command": "SET foreign_key_checks = 0;",
         },
     }
 }
@@ -161,3 +179,4 @@ LANGUAGES = (
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
+AUTH_USER_MODEL = "user.User"
