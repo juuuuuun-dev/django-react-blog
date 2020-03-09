@@ -46,8 +46,9 @@ class User(AbstractBaseUser):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile", primary_key=True)
     avator = models.FileField(upload_to="media/avatars/", null=True, blank=True)
+    url = models.TextField(null=True, blank=True)
     message = models.TextField(null=True, blank=True)
 
     def __str__(self):

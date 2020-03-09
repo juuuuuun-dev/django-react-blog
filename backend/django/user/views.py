@@ -6,7 +6,16 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, permission_classes
 
 from .models import UserProfile, User
+from .serializers import UserProfileSerializer, UserSerializer
 
+class UserProfileView(views.APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get(self, request):
+        user = User.objects.get(id=self.request.user.id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 # Create your views here.
 @api_view(["GET"])

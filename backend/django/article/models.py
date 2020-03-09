@@ -1,12 +1,13 @@
 from django.db import models
 from tag.models import Tag
 from category.models import Category
-
+from user.models import User, UserProfile
 
 class Article(models.Model):
     class Meta:
         db_table = 'articles'
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(verbose_name='title', max_length=255)
     content = models.TextField(verbose_name='content')
     cover = models.CharField(max_length=255, null=True, blank=True)
