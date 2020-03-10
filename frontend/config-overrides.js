@@ -1,20 +1,16 @@
-const { compose, injectBabelPlugin, getLoader } = require('react-app-rewired');
-const { rewireWorkboxGenerate } = require('react-app-rewire-workbox');
-const rewireLess = require('react-app-rewire-less');
-const tsImportPluginFactory = require('ts-import-plugin');
+const {
+  override,
+  fixBabelImports,
+  addLessLoader,
+} = require("customize-cra");
 
-module.exports = function override(config, env) {
-  // For Ant Design Override
-  // 1. Rewire Less https://github.com/timarney/react-app-rewired/tree/master/packages/react-app-rewire-less
-  // 2. Override variable https://mobile.ant.design/docs/react/customize-theme
-  config = rewireLess.withLoaderOptions({
+
+module.exports = override(
+  fixBabelImports("import", {
+    libraryName: "antd", libraryDirectory: "es", style: true // change importing css to less
+  }),
+  addLessLoader({
     javascriptEnabled: true,
-    modifyVars: {
-      'brand-primary': 'red' // Here! :)
-    }
-  })(config, env);
-
-  // ... other custom config
-
-  return config;
-};
+    modifyVars: { "@primary-color": "#333333" }
+  })
+);
