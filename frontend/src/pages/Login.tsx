@@ -1,8 +1,9 @@
 import React from 'react';
 import { Layout, Card } from 'antd';
+import LoginForm from '../components/form/LoginForm';
 
 const Login = () => {
-  const { Header, Footer, Sider, Content } = Layout;
+  const { Content } = Layout;
 
   return (
     <Layout className='site-layout-background' style={{}}>
@@ -16,7 +17,7 @@ const Login = () => {
             margin: '10% auto 0 auto'
           }}
         >
-          <p>Card content</p>
+          <LoginForm />
         </Card>
       </Content>
     </Layout>
