@@ -1,36 +1,52 @@
-import React from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { FC } from 'react';
+import { Form, Input, Button, Checkbox } from 'antd';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
-const LoginForm = () => {
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 }
-  };
-  const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 }
+
+const LoginForm: FC = () => {
+
+  const onFinish = (values: any) => {
+    console.log('Finish:', values);
   };
 
   return (
-    <Form {...layout} name='basic'>
+    <Form
+      name="normal_login"
+      className="login-form"
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+    >
       <Form.Item
-        label='email'
-        name='email'
-        rules={[{ required: true, message: 'Please input your email' }]}
+        name="email"
+        rules={[{ required: true, message: 'requreid email' }]}
       >
-        <Input />
+        <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="email" />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[{ required: true, message: 'Please input your Password!' }]}
+      >
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Password"
+        />
+      </Form.Item>
+      <Form.Item>
+        <Form.Item name="remember" valuePropName="checked" noStyle>
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>
+
+        <a className="login-form-forgot" href="">
+          Forgot password
+        </a>
       </Form.Item>
 
-      <Form.Item
-        label='Password'
-        name='password'
-        rules={[{ required: true, message: 'Please input your password' }]}
-      >
-        <Input.Password />
-      </Form.Item>
-      <Form.Item {...tailLayout}>
-        <Button type='primary' htmlType='submit'>
-          Submit
+      <Form.Item>
+        <Button type="primary" htmlType="submit" className="login-form-button">
+          Log in
         </Button>
+        <a href="">register now!</a>
       </Form.Item>
     </Form>
   );
