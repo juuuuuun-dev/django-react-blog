@@ -5,20 +5,21 @@ import Login from '../../../pages/admin/Login';
 import Articles from '../../../pages/Articles';
 
 export interface MainLayoutProps {
-  children: React.ReactNode;
+    children: React.ReactNode;
+    match: any
 }
 
-const AdminLayout = ({ children }: MainLayoutProps) => {
-  console.log('adminLayout');
-  return (
-    <>
-      <Header />
-      <Switch>
-        <Route exact path="/admin/login" component={Login} />
-        {/* <Route exact path="/articles" component={Articles} /> */}
-      </Switch>
-    </>
-  );
+const AdminLayout = ({ children, match }: MainLayoutProps) => {
+    console.log('adminLayout');
+    console.log(match)
+    return (
+        <>
+            <Header />
+            <Switch>
+                <Route exact path="/admin/login" component={Login} />
+            </Switch>
+        </>
+    );
 };
 
 export default AdminLayout;

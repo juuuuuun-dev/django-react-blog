@@ -5,20 +5,22 @@ import Index from '../../../pages/Index';
 import Articles from '../../../pages/Articles';
 
 export interface MainLayoutProps {
-  children: React.ReactNode;
+    children: React.ReactNode;
+    match: any
 }
 
-const MainLayout = ({ children }: MainLayoutProps) => {
-  console.log('MainLayout');
-  return (
-    <>
-      <Header />
-      <Switch>
-        <Route exact path="/" component={Index} />
-        <Route path="/articles" component={Articles} />
-      </Switch>
-    </>
-  );
+const MainLayout = ({ children, match }: MainLayoutProps) => {
+    console.log('MainLayout');
+    console.log({ match })
+    return (
+        <>
+            <Header />
+            <Switch>
+                <Route exact path="/" component={Index} />
+                <Route exact path="/articles" component={Articles} />
+            </Switch>
+        </>
+    );
 };
 
 export default MainLayout;
