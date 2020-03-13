@@ -27,7 +27,7 @@ const Header = () => {
         }}
       >
         <Row>
-          <Col flex="100px">Logo</Col>
+          <Col flex="100px">Admin</Col>
           <Col flex="auto">
             {width > 600 && (
               <Nav

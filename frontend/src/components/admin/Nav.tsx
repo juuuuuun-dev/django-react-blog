@@ -19,7 +19,7 @@ const Nav = ({ mode, styles, handleClick }: NavProps) => {
           <Link to="/">Top</Link>
         </Menu.Item>
         <Menu.Item>
-          <Link to="/articles">article</Link>
+          <Link to="/articles">Articles</Link>
         </Menu.Item>
         <SubMenu
           title={
@@ -39,7 +39,7 @@ const Nav = ({ mode, styles, handleClick }: NavProps) => {
           </Menu.ItemGroup>
         </SubMenu>
         <Menu.Item>
-          <Link to="/login">Login</Link>
+          <Link to="/admin/login">Login</Link>
         </Menu.Item>
       </Menu>
     </>

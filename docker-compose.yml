@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 volumes:
   django-blog.db.volume:
@@ -10,7 +10,7 @@ services:
     image: nginx:1.13
     container_name: django-blog.nginx
     ports:
-      - "8000:8000"
+      - '8000:8000'
     volumes:
       - ./backend/nginx/conf:/etc/nginx/conf.d
       - ./backend/nginx/uwsgi_params:/etc/nginx/uwsgi_params
@@ -24,7 +24,7 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: pass
-      TZ: "Asia/Tokyo"
+      TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     volumes:
       - .dbdata:/var/lib/mysql
@@ -44,7 +44,7 @@ services:
     command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
     # uwsgi --reload /app/config/uwsgi.pid
     expose:
-      - "8001"
+      - '8001'
     depends_on:
       - db
   frontend:
@@ -52,11 +52,11 @@ services:
       context: ./frontend
     tty: true
     environment:
-      TZ: "Asia/Tokyo"
+      TZ: 'Asia/Tokyo'
     volumes:
       - ./frontend:/app
     ports:
-      - "3030:3030"
+      - '3030:3030'
     depends_on:
       - backend
       - redis
