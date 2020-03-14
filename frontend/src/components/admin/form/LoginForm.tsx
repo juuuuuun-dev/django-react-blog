@@ -1,16 +1,24 @@
-import React, { FC } from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
-import { post } from '../../../helper/client';
-import ls, { get, set } from 'local-storage';
+import React from 'react';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 
-const LoginForm: FC = () => {
+import { post } from '../../../helper/client';
+import { set } from 'local-storage';
+import { useHistory } from 'react-router-dom'
+
+
+const LoginForm: React.FC = () => {
+  const history = useHistory()
+
   const onFinish = (values: any) => {
     post('/blog_auth/login/', values).then(res => {
       const { data } = res;
       set<string>('token', data.key);
-      console.log(res.data);
-    });
-    // const res = await axios.post
+      history.push('/admin/dashboard');
+    })
+      .catch(e => {
+        console.log(e)
+        message.error('Request error');
+      });
   };
 
   return (

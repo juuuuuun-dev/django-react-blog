@@ -5,7 +5,7 @@ import { useWindowSize } from '@react-hook/window-size';
 import Nav from './Nav';
 
 const Header = () => {
-  const headerHeight = '60px';
+  const headerHeight = '50px';
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
@@ -18,23 +18,25 @@ const Header = () => {
       <Header
         style={{
           height: headerHeight,
-          background: '#ffffff',
+          background: '#333333',
           padding: '0 20px',
-          // position: 'fixed',
-          // top: 0,
-          // left: 0,
-          // width: '100%'
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%'
         }}
       >
         <Row>
-          <Col flex="100px">Admin</Col>
+          <Col flex="100px"><h1 className="logo" style={{ lineHeight: headerHeight }}>Admin</h1></Col>
           <Col flex="auto">
             {width > 600 && (
               <Nav
+                theme="dark"
                 mode="horizontal"
                 styles={{
                   lineHeight: headerHeight,
                   float: 'right',
+                  background: "#333333"
                 }}
               />
             )}
