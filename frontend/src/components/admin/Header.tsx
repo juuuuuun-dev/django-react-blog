@@ -1,15 +1,29 @@
 import React from 'react';
 import { Layout, Drawer, Row, Col } from 'antd';
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { useWindowSize } from '@react-hook/window-size';
-import Nav from './Nav';
+import { AdminContext } from '../../context/adminContext'
 
+import Nav from './Nav';
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  MenuOutlined, CloseOutlined
+} from '@ant-design/icons';
 const Header = () => {
   const headerHeight = '50px';
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
-
+  const collapsed = false;
+  const { state, dispatch } = React.useContext(AdminContext);
+  console.log('amin header')
+  const toggle = () => {
+    console.log('toggle')
+    dispatch({
+      type: 'SIDER_TOGGLE'
+    })
+    console.log(state)
+  }
   const navOnClick = (): void => {
     console.log('click');
   };
@@ -20,12 +34,16 @@ const Header = () => {
           height: headerHeight,
           background: '#333333',
           padding: '0 20px',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%'
+          // position: 'fixed',
+          // top: 0,
+          // left: 0,
+          // width: '100%'
         }}
       >
+        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+          className: 'trigger',
+          onClick: toggle,
+        })}
         <Row>
           <Col flex="100px"><h1 className="logo" style={{ lineHeight: headerHeight }}>Admin</h1></Col>
           <Col flex="auto">
