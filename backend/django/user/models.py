@@ -32,8 +32,14 @@ class User(AbstractBaseUser):
     class Meta:
         db_table = 'users'
 
-    username = models.CharField(unique=True, verbose_name='username', max_length=50)
-    email = models.EmailField(unique=True, verbose_name='email', max_length=128)
+    username = models.CharField(
+        unique=True,
+        verbose_name='username',
+        max_length=50)
+    email = models.EmailField(
+        unique=True,
+        verbose_name='email',
+        max_length=128)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
@@ -46,9 +52,17 @@ class User(AbstractBaseUser):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile", primary_key=True)
-    avator = models.FileField(upload_to="media/avatars/", null=True, blank=True)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="profile",
+        primary_key=True)
+    avator = models.FileField(
+        upload_to="media/avatars/",
+        null=True,
+        blank=True)
     url = models.TextField(null=True, blank=True)
+
     message = models.TextField(null=True, blank=True)
 
     def __str__(self):

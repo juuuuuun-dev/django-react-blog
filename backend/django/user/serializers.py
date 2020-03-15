@@ -3,11 +3,16 @@ from .models import User, UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, source="profile")
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, source="profile")
+
+    def create(self, validated_data):
+        return UserProfile.objects.create(**validated_data)
 
     class Meta:
         model = UserProfile
         fields = (
+            "user",
             "avator",
             "url",
             "message",
@@ -30,8 +35,10 @@ class UserSerializer(serializers.ModelSerializer):
         instance.username = validated_data.get("username", instance.username)
         instance.save()
         # profile
-        instance.profile.message = profile_data.get("message", instance.profile.message)
-        instance.profile.avator = profile_data.get("avator", instance.profile.avator)
+        instance.profile.message = profile_data.get(
+            "message", instance.profile.message)
+        instance.profile.avator = profile_data.get(
+            "avator", instance.profile.avator)
         instance.profile.url = profile_data.get("url", instance.profile.url)
         instance.profile.save()
         return instance

@@ -80,6 +80,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         # "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # "PAGE_SIZE": 2,
@@ -93,18 +94,11 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:3010',
 )
 
-JWT_AUTH = {
-    'JWT_SECRET_KEY': SECRET_KEY,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': 'datetime.timedelta(days=7)',
-    'JWT_REFRESH_EXPIRATION_DELTA': "datetime.timedelta(days=30)",
-}
 
-# SIMPLE_JWT = {
-#     'AUTH_HEADER_TYPES': ('JWT',),
-#     'ACCESS_TOKEN_LIFETIME': 'timedelta(minutes=30)',
-# }
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': 'timedelta(minutes=160)',
+}
 
 # ALL_AUTH
 ACCOUNT_AUTHENTICATION_METHOD = "email"
