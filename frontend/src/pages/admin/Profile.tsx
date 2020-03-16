@@ -1,10 +1,10 @@
 import React from 'react';
+import ProfileForm from '../../components/admin/form/ProfileForm';
 
 const Profile = () => {
   return (
     <>
-      Profile
-      <br />
+      <ProfileForm />
     </>
   );
 };
