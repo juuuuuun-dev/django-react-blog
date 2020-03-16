@@ -1,19 +1,15 @@
 import React from 'react';
 import { Menu, Layout } from 'antd';
 import { Link } from 'react-router-dom';
-import { AdminContext } from '../../context/adminContext'
+import { AdminContext } from '../../context/adminContext';
 
-import {
-  VideoCameraOutlined,
-  UploadOutlined,
-  FormOutlined,
-} from '@ant-design/icons';
+import { VideoCameraOutlined, UploadOutlined, FormOutlined } from '@ant-design/icons';
 
 export interface NavProps {
-  background: string
+  background: string;
 }
 
-const SlideNav = ({ background }: NavProps) => {
+const SideNav = ({ background }: NavProps) => {
   const { Sider } = Layout;
   const { state, dispatch } = React.useContext(AdminContext);
   console.log('nav');
@@ -23,14 +19,14 @@ const SlideNav = ({ background }: NavProps) => {
         breakpoint="md"
         collapsedWidth="0"
         trigger={null}
-        width="140"
+        width="150"
         style={{ background: background }}
         onBreakpoint={broken => {
           console.log({ broken });
           if (broken) {
-            dispatch({ type: 'SIDER_HIDE' })
+            dispatch({ type: 'SIDER_HIDE' });
           } else {
-            dispatch({ type: 'SIDER_SHOW' })
+            dispatch({ type: 'SIDER_SHOW' });
           }
         }}
         // state
@@ -38,7 +34,8 @@ const SlideNav = ({ background }: NavProps) => {
         onCollapse={(collapsed, type) => {
           // callback
           console.log(collapsed, type);
-        }}>
+        }}
+      >
         <div className="logo">Admin</div>
         <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item key="1">
@@ -59,4 +56,4 @@ const SlideNav = ({ background }: NavProps) => {
   );
 };
 
-export default SlideNav;
+export default SideNav;

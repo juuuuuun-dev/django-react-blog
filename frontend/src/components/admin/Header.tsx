@@ -1,14 +1,10 @@
 import React from 'react';
 import { Layout, Drawer, Row, Col } from 'antd';
 import { useWindowSize } from '@react-hook/window-size';
-import { AdminContext } from '../../context/adminContext'
+import { AdminContext } from '../../context/adminContext';
 
 import Nav from './Nav';
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  MenuOutlined, CloseOutlined
-} from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
 const Header = () => {
   const headerHeight = '50px';
   const { Header } = Layout;
@@ -16,14 +12,14 @@ const Header = () => {
   const [width] = useWindowSize();
   const collapsed = false;
   const { state, dispatch } = React.useContext(AdminContext);
-  console.log('amin header')
+  console.log('amin header');
   const toggle = () => {
-    console.log('toggle')
+    console.log('toggle');
     dispatch({
-      type: 'SIDER_TOGGLE'
-    })
-    console.log(state)
-  }
+      type: 'SIDER_TOGGLE',
+    });
+    console.log(state);
+  };
   const navOnClick = (): void => {
     console.log('click');
   };
@@ -32,7 +28,7 @@ const Header = () => {
       <Header
         style={{
           height: headerHeight,
-          background: '#333333',
+          background: '#ffffff',
           padding: '0 20px',
           // position: 'fixed',
           // top: 0,
@@ -45,7 +41,11 @@ const Header = () => {
           onClick: toggle,
         })}
         <Row>
-          <Col flex="100px"><h1 className="logo" style={{ lineHeight: headerHeight }}>Admin</h1></Col>
+          <Col flex="100px">
+            <h1 className="logo" style={{ lineHeight: headerHeight }}>
+              Admin
+            </h1>
+          </Col>
           <Col flex="auto">
             {width > 600 && (
               <Nav
@@ -54,7 +54,7 @@ const Header = () => {
                 styles={{
                   lineHeight: headerHeight,
                   float: 'right',
-                  background: "#333333"
+                  background: '#333333',
                 }}
               />
             )}
