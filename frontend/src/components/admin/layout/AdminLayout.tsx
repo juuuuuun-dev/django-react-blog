@@ -22,7 +22,7 @@ const AdminLayout = () => {
             <SideNav background={'#3f3f3f'} />
             <Content style={{ padding: '0 0px', minHeight: 280 }}>
               <Header headerHeight="60px" />
-              <Content style={{ padding: '20px' }}>{RouteContentList}</Content>
+              <Content style={{ padding: '30px' }}>{RouteContentList}</Content>
             </Content>
           </Layout>
         </div>
