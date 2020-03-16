@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import { AdminContextProvider } from '../../../context/adminContext';
 import Login from '../../../pages/Login'
-import '../../../less/layout/admin.less';
+import '../../../less/admin/admin.less';
 
 export interface MainLayoutProps {
   children: React.ReactNode;
