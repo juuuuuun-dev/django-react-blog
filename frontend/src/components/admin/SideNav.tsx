@@ -3,7 +3,7 @@ import { Menu, Layout } from 'antd';
 import { Link } from 'react-router-dom';
 import { AdminContext } from '../../context/adminContext';
 
-import { VideoCameraOutlined, UploadOutlined, FormOutlined } from '@ant-design/icons';
+import { VideoCameraOutlined, UserOutlined, FormOutlined } from '@ant-design/icons';
 
 export interface NavProps {
   background: string;
@@ -12,7 +12,6 @@ export interface NavProps {
 const SideNav = ({ background }: NavProps) => {
   const { Sider } = Layout;
   const { state, dispatch } = React.useContext(AdminContext);
-  console.log('nav');
   return (
     <>
       <Sider
@@ -36,7 +35,7 @@ const SideNav = ({ background }: NavProps) => {
           console.log(collapsed, type);
         }}
       >
-        <div className="logo">Admin</div>
+        <div className="username">{state.username}</div>
         <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item key="1">
             <FormOutlined />
@@ -47,8 +46,8 @@ const SideNav = ({ background }: NavProps) => {
             <span>nav 2</span>
           </Menu.Item>
           <Menu.Item key="3">
-            <UploadOutlined />
-            <span>nav 3</span>
+            <UserOutlined />
+            <Link to="/admin/profile">Profile</Link>
           </Menu.Item>
         </Menu>
       </Sider>

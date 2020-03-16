@@ -13,14 +13,13 @@ import './less/app.less';
 function App() {
   return (
     <div className="App">
-
       <Layout>
         <Router>
           <Switch>
-            <Route exact path={["/", "/articles"]}>
+            <Route exact path={['/', '/articles']}>
               <MainLayout />
             </Route>
-            <Route exact path={["/admin/dashboard", "/admin/login"]}>
+            <Route exact path={['/admin/dashboard', '/admin/login', '/admin/profile']}>
               <AdminLayout />
             </Route>
           </Switch>

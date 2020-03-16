@@ -6,9 +6,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         read_only=True, source="profile")
 
-    def create(self, validated_data):
-        return UserProfile.objects.create(**validated_data)
-
     class Meta:
         model = UserProfile
         fields = (

@@ -1,11 +1,9 @@
 import React from 'react';
 import Header from '../Header';
-import { Route, Switch } from 'react-router-dom';
-import { Layout } from 'antd';
-import Dashboard from '../../../pages/admin/Dashboard';
-import Login from '../../../pages/admin/Login';
 import SideNav from '../SideNav';
 import { AdminContextProvider } from '../../../context/adminContext';
+import { Layout } from 'antd';
+import RouteContentList from './RouteContentList';
 import '../../../less/layout/admin.less';
 
 export interface MainLayoutProps {
@@ -14,7 +12,6 @@ export interface MainLayoutProps {
 }
 
 const AdminLayout = () => {
-  console.log('adminLayout');
   const { Content } = Layout;
 
   return (
@@ -24,11 +21,8 @@ const AdminLayout = () => {
           <Layout className="site-layout-background" style={{ padding: '0px 0' }}>
             <SideNav background={'#3f3f3f'} />
             <Content style={{ padding: '0 0px', minHeight: 280 }}>
-              <Header />
-              <Switch>
-                <Route path="/admin/dashboard" component={Dashboard} />
-                <Route path="/admin/login" component={Login} />
-              </Switch>
+              <Header headerHeight="60px" />
+              <Content style={{ padding: '20px' }}>{RouteContentList}</Content>
             </Content>
           </Layout>
         </div>

@@ -15,7 +15,7 @@ class UserProfileView(views.APIView):
 
     def get(self, request):
         user = User.objects.get(id=self.request.user.id)
-        serializer = UserProfileSerializer(user)
+        serializer = UserSerializer(user)
         return Response(serializer.data)
 
     def post(self, request):
