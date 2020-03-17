@@ -29,6 +29,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         profile_data = validated_data.get("profile")
+        if not profile_data:
+            raise serializers.ValidationError({
+                'profile': 'This field is required.'
+            })
         instance.username = validated_data.get("username", instance.username)
         instance.save()
         # profile

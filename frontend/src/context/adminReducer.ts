@@ -1,6 +1,7 @@
 export interface AdminState {
   isSiderShow: boolean;
-  adminLogin: boolean;
+  loading: boolean;
+  token: string;
   username: string;
   profile: IProfile;
 }
@@ -12,7 +13,8 @@ export interface IProfile {
 
 export const initState: AdminState = {
   isSiderShow: true,
-  adminLogin: false,
+  loading: false,
+  token: '',
   username: '',
   profile: {
     avator: '',
@@ -24,9 +26,10 @@ export const initState: AdminState = {
 const SIDER_SHOW = 'SIDER_SHOW' as const;
 const SIDER_HIDE = 'SIDER_HIDE' as const;
 const SIDER_TOGGLE = 'SIDER_TOGGLE' as const;
-const ADMIN_LOGIN = 'ADMIN_LOGIN' as const;
+const SET_TOKEN = 'SET_TOKEN' as const;
 const SET_PROFILE = 'SET_PROFILE' as const;
 const SET_USERNAME = 'SET_USERNAME' as const;
+const SET_LOADING = 'SET_LOADING' as const;
 
 export const siderShow = () => ({
   type: SIDER_SHOW,
@@ -37,8 +40,17 @@ export const siderHide = () => ({
 export const siderToggle = () => ({
   type: SIDER_TOGGLE,
 });
-export const adminLogin = () => ({
-  type: ADMIN_LOGIN,
+export const setToken = (token: string) => ({
+  type: SET_TOKEN,
+  payload: {
+    token,
+  },
+});
+export const setLoading = (loading: boolean) => ({
+  type: SET_LOADING,
+  payload: {
+    loading,
+  },
 });
 export const setProfile = (profile: IProfile) => ({
   type: SET_PROFILE,
@@ -57,9 +69,10 @@ export type Actions =
   | ReturnType<typeof siderShow>
   | ReturnType<typeof siderHide>
   | ReturnType<typeof siderToggle>
-  | ReturnType<typeof adminLogin>
+  | ReturnType<typeof setToken>
   | ReturnType<typeof setProfile>
-  | ReturnType<typeof setUsername>;
+  | ReturnType<typeof setUsername>
+  | ReturnType<typeof setLoading>;
 
 export const adminReducer = (state: AdminState, action: Actions) => {
   switch (action.type) {
@@ -69,11 +82,13 @@ export const adminReducer = (state: AdminState, action: Actions) => {
       return { ...state, isSiderShow: false };
     case SIDER_TOGGLE:
       return { ...state, isSiderShow: state.isSiderShow ? false : true };
-    case ADMIN_LOGIN:
-      return { ...state, adminLogin: true };
+    case SET_TOKEN:
+      return { ...state, token: action.payload.token };
     case SET_PROFILE:
       return { ...state, profile: action.payload.profile };
     case SET_USERNAME:
       return { ...state, username: action.payload.username };
+    case SET_LOADING:
+      return { ...state, loading: action.payload.loading };
   }
 };

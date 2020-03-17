@@ -24,6 +24,15 @@ class UserProfileView(views.APIView):
         serializer.save(user=self.request.user)
         return Response(serializer.data)
 
+    def patch(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.update(instance=self.request.user,
+                              validated_data=request.data)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # Create your views here.
 @api_view(["GET"])
 @permission_classes([AllowAny])

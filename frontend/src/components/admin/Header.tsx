@@ -19,9 +19,7 @@ const Header = ({ headerHeight }: HeaderProps) => {
       type: 'SIDER_TOGGLE',
     });
   };
-  const navOnClick = (): void => {
-    console.log('click');
-  };
+  const navOnClick = (): void => {};
   return (
     <>
       <Header

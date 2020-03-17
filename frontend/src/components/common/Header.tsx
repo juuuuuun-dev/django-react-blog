@@ -10,9 +10,7 @@ const Header = () => {
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
 
-  const navOnClick = (): void => {
-    console.log('click');
-  };
+  const navOnClick = (): void => {};
   return (
     <>
       <Header

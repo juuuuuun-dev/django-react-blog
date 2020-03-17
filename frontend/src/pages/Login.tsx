@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Card } from 'antd';
-import LoginForm from '../components/admin/form/LoginForm';
+import LoginForm from '../components/login/form/LoginForm';
 
 const Login = () => {
   const { Content } = Layout;

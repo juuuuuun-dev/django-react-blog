@@ -11,7 +11,7 @@ export interface NavProps {
 
 const Nav = ({ mode, styles, handleClick }: NavProps) => {
   const { SubMenu } = Menu;
-  console.log('nav');
+
   return (
     <>
       <Menu mode={mode} defaultSelectedKeys={['1']} style={styles}>

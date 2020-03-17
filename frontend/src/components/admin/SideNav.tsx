@@ -21,7 +21,6 @@ const SideNav = ({ background }: NavProps) => {
         width="150"
         style={{ background: background }}
         onBreakpoint={broken => {
-          console.log({ broken });
           if (broken) {
             dispatch({ type: 'SIDER_HIDE' });
           } else {
@@ -43,7 +42,7 @@ const SideNav = ({ background }: NavProps) => {
           </Menu.Item>
           <Menu.Item key="2">
             <VideoCameraOutlined />
-            <span>nav 2</span>
+            <Link to="/admin/dashboard">Dashboard</Link>
           </Menu.Item>
           <Menu.Item key="3">
             <UserOutlined />

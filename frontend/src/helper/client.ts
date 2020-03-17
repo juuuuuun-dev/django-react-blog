@@ -7,13 +7,6 @@ const client = axios.create({
 
 export const setToken = (token: string | unknown): void => {
   client.defaults.headers.common['Authorization'] = 'Token ' + token;
-}
-
-export const post = async (path: string, data: any) => {
-  return await client.post(path, data);
-};
-export const get = async (path: string) => {
-  return await client.get(path);
 };
 
-
+export default client;
