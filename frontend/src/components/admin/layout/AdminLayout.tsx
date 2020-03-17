@@ -5,9 +5,6 @@ import { AdminContextProvider } from '../../../context/adminContext';
 import { Layout } from 'antd';
 import Container from './Container';
 import '../../../less/admin/admin.less';
-import { Spin } from 'antd';
-import { AdminContext } from '../../../context/adminContext';
-
 export interface MainLayoutProps {
   children: React.ReactNode;
   match: any;

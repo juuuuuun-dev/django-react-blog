@@ -12,9 +12,13 @@ const toast = (props: IToastProps) => {
     case 'SUCCESS':
       text = props.text || 'Success';
       message.success(text);
+      break;
     case 'ERROR':
       text = props.text || 'Request error';
       message.error(text);
+      break;
+    default:
+      console.log('type error');
   }
 };
 

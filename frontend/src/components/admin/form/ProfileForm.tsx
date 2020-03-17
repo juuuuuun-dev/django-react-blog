@@ -9,10 +9,11 @@ const ProfileForm: React.FC = () => {
   const history = useHistory();
   const endPoint = '/user/user-profile/';
   const { state, dispatch } = React.useContext(AdminContext);
-  console.log('profile form');
   React.useEffect(() => {
-    fetchData();
-  }, []);
+    if (state.token !== '') {
+      fetchData(state.token);
+    }
+  }, [state.token]);
 
   const [fields, setFields] = React.useState([
     {
@@ -25,8 +26,8 @@ const ProfileForm: React.FC = () => {
     },
   ]);
 
-  const fetchData = async () => {
-    // setToken(state.token);
+  const fetchData = async (token: string) => {
+    setToken(token);
     const res = await axios.get(endPoint);
     if (res.status === 200) {
       console.log(res.data);
@@ -46,10 +47,11 @@ const ProfileForm: React.FC = () => {
   const onFinish = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await axios.patch(endPoint, values);
+      const res = await axios.patch(endPoint, { profile: values });
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'SUCCESS' });
     } catch {
+      console.log("error")
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'ERROR' });
     }
