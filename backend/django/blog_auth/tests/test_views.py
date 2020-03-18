@@ -16,29 +16,29 @@ class RestUserAuthTestCase(APITestCase):
         self.user_api = "/{}user/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
-        self.user.set_assword("test")
+        self.user.set_password("test")
         self.user.save()
-
 
     def test_register_success(self):
         print(settings.API_VERSION)
-        email = "test9@test.com",
         post_data = {
             "username": "test9",
             "email": "test9@test.com",
             "password1": "testtest1234",
             "password2": "testtest1234",
         }
-        response = self.client.post("{}register/".format(self.base_api), post_data, format='json')
+        response = self.client.post(
+            "{}register/".format(self.base_api), post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue('key' in response.data)
-        
+
         # login
         post_data = {
             "email": "test9@test.com",
             "password": "testtest1234",
         }
-        response = self.client.post("{}login/".format(self.base_api), post_data, format='json')
+        response = self.client.post(
+            "{}login/".format(self.base_api), post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_unsuccess(self):
@@ -46,9 +46,9 @@ class RestUserAuthTestCase(APITestCase):
             "email": "test9@test.com",
             "password": "testtest1234",
         }
-        response = self.client.post("{}login/".format(self.base_api), post_data, format='json')
+        response = self.client.post(
+            "{}login/".format(self.base_api), post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
 
     def test_logout_success(self):
         post_data = {
