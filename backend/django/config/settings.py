@@ -50,13 +50,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
     'django_filters',
-    'allauth',
-    'allauth.account',
-    "allauth.socialaccount",
-    'rest_auth',
-    'rest_auth.registration',
+    # 'allauth',
+    # 'allauth.account',
+    # "allauth.socialaccount",
+    # 'rest_auth',
+    # 'rest_auth.registration',
     'djoser',
 ]
 SITE_ID = 1
@@ -76,12 +76,11 @@ ROOT_URLCONF = 'config.urls'
 
 # REST
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHETICATION_CLASSES": (
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',)
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # "PAGE_SIZE": 2,
     # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
@@ -97,18 +96,18 @@ CORS_ORIGIN_WHITELIST = (
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=160),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
 # ALL_AUTH
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMIAL_VERIFICATION = "optional"
-ACCOUNT_USER_USENAME_FIELD = "email"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# ACCOUNT_AUTHENTICATION_METHOD = "email"
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_EMIAL_VERIFICATION = "optional"
+# ACCOUNT_USER_USENAME_FIELD = "email"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 TEMPLATES = [
     {
