@@ -84,11 +84,11 @@ const ProfileForm: React.FC = () => {
       <Form.Item label="username" name="username" rules={[{ required: true, message: 'Please input your username' }]}>
         <Input placeholder="username" />
       </Form.Item>
-      <Form.Item label="message" name="message" rules={[{ required: false, message: 'requreid email' }]}>
-        <Input.TextArea placeholder="message" />
-      </Form.Item>
       <Form.Item label="url" name="url" rules={[{ required: false, message: '' }]}>
         <Input placeholder="url" />
+      </Form.Item>
+      <Form.Item label="message" name="message" rules={[{ required: false, message: 'requreid email' }]}>
+        <Input.TextArea rows={6} placeholder="message" />
       </Form.Item>
 
       <Form.Item>
