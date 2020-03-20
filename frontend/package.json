@@ -1,17 +1,35 @@
 {
-  "name": "my-react-app",
+  "name": "react-blog",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-hook/window-size": "^1.0.13",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.0",
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
+    "@types/react-router-dom": "^5.1.3",
+    "antd": "^4.0.2",
+    "axios": "^0.19.2",
+    "customize-cra": "^0.9.1",
+    "eslit": "^6.0.0",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
+    "local-storage": "^2.0.0",
     "react": "^16.13.0",
+    "react-app-rewire-less": "^2.1.3",
+    "react-app-rewired": "^2.1.5",
     "react-dom": "^16.13.0",
-    "react-scripts": "3.4.0"
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.0",
+    "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-app-rewired start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -30,5 +48,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.0",
+    "css-loader": "^3.4.2",
+    "react-app-rewire-workbox": "^2.0.1",
+    "style-loader": "^1.1.3",
+    "ts-import-plugin": "^1.6.5"
   }
 }
