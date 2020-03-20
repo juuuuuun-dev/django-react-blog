@@ -9,9 +9,6 @@ from .views import MyTokenObtainPairView
 
 
 urlpatterns = [
-    # path("", include("rest_auth.urls")),
-    # path("register/", include("rest_auth.registration.urls")),
-    # new
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

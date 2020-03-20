@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from django.conf import settings
 from pprint import pprint
 from .test_models import UserFactory
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class RestUserAuthTestCase(APITestCase):
@@ -16,30 +17,21 @@ class RestUserAuthTestCase(APITestCase):
         self.user_api = "/{}user/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
-        self.user.set_password("test")
+        self.user.set_password("testtest1234")
         self.user.save()
 
-    def test_register_success(self):
-        print(settings.API_VERSION)
-        post_data = {
-            "username": "test9",
-            "email": "test9@test.com",
-            "password1": "testtest1234",
-            "password2": "testtest1234",
-        }
-        response = self.client.post(
-            "{}register/".format(self.base_api), post_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue('key' in response.data)
-
+    def test_login_success(self):
         # login
         post_data = {
-            "email": "test9@test.com",
+            "email": "test@test.com",
             "password": "testtest1234",
         }
         response = self.client.post(
-            "{}login/".format(self.base_api), post_data, format='json')
+            "{}token/".format(self.base_api), post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data['access'])
+        self.assertTrue(response.data['refresh'])
+        self.assertTrue(response.data['username'])
 
     def test_login_unsuccess(self):
         post_data = {
@@ -47,18 +39,23 @@ class RestUserAuthTestCase(APITestCase):
             "password": "testtest1234",
         }
         response = self.client.post(
-            "{}login/".format(self.base_api), post_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            "{}token/".format(self.base_api), post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_logout_success(self):
+    def test_token_refresh_success(self):
+        refresh = RefreshToken.for_user(self.user)
         post_data = {
-            "email": "test9@test.com",
-            "password": "testtest1234",
+            "refresh": str(refresh)
         }
-        # user = UserFactory.create(email="test@test.com",
-        #                             username="test",
-        #                             password="test",
-        #                             is_active = 0,
-        #                             is_staff = 0,
-        #                             is_admin = 0
-        # )
+        response = self.client.post(
+            "{}token/refresh/".format(self.base_api), post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data['access'])
+
+    def test_token_refresh_unsuccess(self):
+        post_data = {
+            "refresh": "test"
+        }
+        response = self.client.post(
+            "{}token/refresh/".format(self.base_api), post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

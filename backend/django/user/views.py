@@ -8,10 +8,11 @@ from .parmission import UserIsOwnerUserProfile
 
 from .models import UserProfile, User
 from .serializers import UserProfileSerializer, UserSerializer
+from pprint import pprint
 
 
 class UserProfileView(views.APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, AllowAny)
     # authentication_classes = (TokenAuthentication)
     # authentication_classes = [TokenAuthentication]
 
@@ -20,25 +21,25 @@ class UserProfileView(views.APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = UserProfileSerializer(data=self.request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=self.request.user)
-        return Response(serializer.data)
+    # def post(self, request):
+    #     serializer = UserProfileSerializer(data=self.request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save(user=self.request.user)
+    #     return Response(serializer.data)
 
     def patch(self, request):
         serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.update(instance=self.request.user,
+
+        # serializer = UserProfileSerializer(data=self.request.data)
+        if serializer.is_valid(raise_exception=True):
+            print("updatedayo")
+            user = User.objects.get(id=self.request.user.id)
+            serializer.update(instance=user,
                               validated_data=request.data)
+            serializer = UserSerializer(user)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class UserTestView(views.APIView):
-    def get(self, request):
-        content = {'message': 'harimo!'}
-        return Response(content)
 
 # Create your views here.
 @api_view(["GET"])

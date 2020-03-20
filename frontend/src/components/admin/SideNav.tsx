@@ -1,7 +1,9 @@
 import React from 'react';
-import { Menu, Layout } from 'antd';
+import { Menu, Layout, Popover, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
-import { AdminContext } from '../../context/adminContext';
+import { get } from 'local-storage';
+import { AdminContext, logout } from '../../context/adminContext';
+import { useHistory } from 'react-router-dom';
 
 import { VideoCameraOutlined, UserOutlined, FormOutlined } from '@ant-design/icons';
 
@@ -12,6 +14,8 @@ export interface NavProps {
 const SideNav = ({ background }: NavProps) => {
   const { Sider } = Layout;
   const { state, dispatch } = React.useContext(AdminContext);
+  const username: string = get('username');
+  const history = useHistory();
   return (
     <>
       <Sider
@@ -34,7 +38,13 @@ const SideNav = ({ background }: NavProps) => {
           console.log(collapsed, type);
         }}
       >
-        <div className="username">{state.username}</div>
+        <Popover
+          content={<a onClick={() => logout(history)}>Logout</a>}
+          placement="bottom"
+          trigger="click"
+        >
+          <div className="username"><Avatar size="small" icon={<UserOutlined />} /><span className="username__text">{username}</span></div>
+        </Popover>
         <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item key="1">
             <FormOutlined />
@@ -49,6 +59,7 @@ const SideNav = ({ background }: NavProps) => {
             <Link to="/admin/profile">Profile</Link>
           </Menu.Item>
         </Menu>
+
       </Sider>
     </>
   );

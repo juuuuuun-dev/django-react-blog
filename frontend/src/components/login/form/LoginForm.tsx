@@ -10,10 +10,12 @@ const LoginForm: React.FC = () => {
 
   const onFinish = (values: any) => {
     axios
-      .post('/blog_auth/login/', values)
+      .post('/blog_auth/token/', values)
       .then(res => {
         const { data } = res;
-        set<string>('token', data.key);
+        // set<string>('token', data.access);
+        set<string>('refresh', data.refresh);
+        set<string>('username', data.username);
         history.push('/admin/dashboard');
       })
       .catch(e => {
@@ -23,17 +25,12 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={onFinish}>
+    <Form name="normal_login" className="login-form" onFinish={onFinish}>
       <Form.Item name="email" rules={[{ required: true, message: 'requreid email' }]}>
         <Input placeholder="Email" />
       </Form.Item>
       <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
         <Input type="password" placeholder="Password" />
-      </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
       </Form.Item>
 
       <Form.Item>

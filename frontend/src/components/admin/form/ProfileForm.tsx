@@ -1,12 +1,11 @@
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button } from 'antd';
 import axios, { setToken } from '../../../helper/client';
-import { useHistory } from 'react-router-dom';
+import { get } from 'local-storage';
 import { AdminContext } from '../../../context/adminContext';
 import toast from '../../common/toast';
 
 const ProfileForm: React.FC = () => {
-  const history = useHistory();
   const endPoint = '/user/user-profile/';
   const { state, dispatch } = React.useContext(AdminContext);
   React.useEffect(() => {
@@ -16,6 +15,10 @@ const ProfileForm: React.FC = () => {
   }, [state.token]);
 
   const [fields, setFields] = React.useState([
+    {
+      name: 'username',
+      value: ''
+    },
     {
       name: 'message',
       value: '',
@@ -33,6 +36,10 @@ const ProfileForm: React.FC = () => {
       console.log(res.data);
       setFields([
         {
+          name: 'username',
+          value: res.data.username,
+        },
+        {
           name: 'message',
           value: res.data.profile.message,
         },
@@ -47,7 +54,14 @@ const ProfileForm: React.FC = () => {
   const onFinish = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await axios.patch(endPoint, { profile: values });
+      const data = {
+        username: values.username,
+        profile: {
+          message: values.message,
+          url: values.url
+        }
+      }
+      const res = await axios.patch(endPoint, data);
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'SUCCESS' });
     } catch {
@@ -67,10 +81,13 @@ const ProfileForm: React.FC = () => {
       initialValues={{ remember: true }}
       onFinish={onFinish}
     >
+      <Form.Item label="username" name="username" rules={[{ required: true, message: 'Please input your username' }]}>
+        <Input placeholder="username" />
+      </Form.Item>
       <Form.Item label="message" name="message" rules={[{ required: false, message: 'requreid email' }]}>
         <Input.TextArea placeholder="message" />
       </Form.Item>
-      <Form.Item label="url" name="url" rules={[{ required: false, message: 'Please input your Password!' }]}>
+      <Form.Item label="url" name="url" rules={[{ required: false, message: '' }]}>
         <Input placeholder="url" />
       </Form.Item>
 

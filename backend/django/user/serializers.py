@@ -27,8 +27,10 @@ class UserSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("username",)
 
+    # def username(self):
+
     def update(self, instance, validated_data):
-        profile_data = validated_data.get("profile")
+        profile_data = validated_data.get("profile", {})
         if not profile_data:
             raise serializers.ValidationError({
                 'profile': 'This field is required.'
