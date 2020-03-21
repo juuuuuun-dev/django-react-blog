@@ -37,8 +37,7 @@ env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 DEBUG = True
 sysStr = str(sys.argv[0])
-m = re.match(r'pytest$', sysStr)
-if len(sys.argv) > 1 and m:
+if len(sys.argv) > 1 and re.match(r'.*pytest$', sysStr):
     TESTING = True
 else:
     TESTING = False
