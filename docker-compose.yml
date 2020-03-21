@@ -45,6 +45,9 @@ services:
     # uwsgi --reload /app/config/uwsgi.pid
     expose:
       - '8001'
+    # environment:
+    #   EMAIL_PORT: 1025
+    #   EMAIL_HOST: smtp
     depends_on:
       - db
   frontend:
@@ -60,3 +63,10 @@ services:
     depends_on:
       - backend
       - redis
+  smtp:
+    container_name: smtp
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - 8025:8025
+      - 1025:1025
+    restart: always

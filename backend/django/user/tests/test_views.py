@@ -1,5 +1,6 @@
 from django.test import TestCase
 from rest_framework import status
+from django.forms import EmailField
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework.decorators import api_view
 from django.urls import reverse
@@ -8,6 +9,7 @@ from django.conf import settings
 from pprint import pprint
 from .test_models import UserFactory
 from rest_framework_simplejwt.tokens import RefreshToken
+import base64
 
 
 class RestUserProfileTestCase(APITestCase):
@@ -49,3 +51,13 @@ class RestUserProfileTestCase(APITestCase):
         self.assertEqual(
             response.data['username'], str(
                 post_data['username']))
+
+    def test_reset_password_send_mail(self):
+        post_data = {
+            "email": "test@test.com"
+        }
+
+        response = self.client.post(
+            "{}password-reset/".format(self.base_api), post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data['sending'])
