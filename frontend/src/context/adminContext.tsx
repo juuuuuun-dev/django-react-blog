@@ -20,7 +20,7 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
 
   React.useEffect(() => {
     verifyAuth();
-  });
+  }, []);
 
   const verifyAuth = async () => {
     const refresh: string = get('refresh');
