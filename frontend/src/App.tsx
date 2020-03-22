@@ -23,7 +23,7 @@ function App() {
             <Route exact path={['/admin/dashboard', '/admin/profile']}>
               <AdminLayout />
             </Route>
-            <Route exact path={['/login']}>
+            <Route path={['/login', '/password-reset', '/password-reset-confirm/:uid/:token/']}>
               <LoginLayout />
             </Route>
           </Switch>

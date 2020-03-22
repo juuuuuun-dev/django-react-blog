@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
 import axios, { setToken } from '../../../helper/client';
-import { get } from 'local-storage';
 import { AdminContext } from '../../../context/adminContext';
 import toast from '../../common/toast';
 
@@ -62,8 +61,10 @@ const ProfileForm: React.FC = () => {
         }
       }
       const res = await axios.patch(endPoint, data);
-      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-      toast({ type: 'SUCCESS' });
+      if (res.status === 200) {
+        dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+        toast({ type: 'SUCCESS' });
+      }
     } catch {
       console.log("error")
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });

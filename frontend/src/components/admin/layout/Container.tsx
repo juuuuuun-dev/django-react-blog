@@ -14,7 +14,7 @@ const RouteContentList = navList.map((item, index) => (
 ));
 
 const Container = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
+  const { state } = React.useContext(AdminContext);
   return (
     <Spin spinning={state.loading} tip="Loading...">
       {RouteContentList}

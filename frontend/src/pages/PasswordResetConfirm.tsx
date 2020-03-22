@@ -1,9 +1,8 @@
 import React from 'react';
 import { Layout, Card } from 'antd';
-import { Link } from 'react-router-dom';
-import LoginForm from '../components/login/form/LoginForm';
+import PasswordResetConfirmForm from '../components/login/form/PasswordResetConfirmForm';
 
-const Login = () => {
+const PasswordResetConfirm = () => {
   const { Content } = Layout;
   return (
     <Layout className="site-layout-background" style={{}}>
@@ -11,20 +10,17 @@ const Login = () => {
         <div
           style={{
             width: 'auto',
-            maxWidth: '300px',
+            maxWidth: '450px',
             margin: '15% auto 0 auto',
           }}
         >
-          <Card title="Login" bordered={false}>
-            <LoginForm />
+          <Card title="Reset password" bordered={false}>
+            <PasswordResetConfirmForm />
           </Card>
-          <Link className="login-form-forgot" to="password-reset">
-            Forgot password
-          </Link>
         </div>
       </Content>
     </Layout>
   );
 };
 
-export default Login;
+export default PasswordResetConfirm;

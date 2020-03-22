@@ -1,5 +1,9 @@
 from django.db import models
+from django.conf import settings
 from django.db.models.signals import post_save
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
@@ -64,6 +68,37 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def send_password_reset_email(self, site):
+        token = default_token_generator.make_token(self.user)
+        uid = self.user.pk
+        url = getattr(settings, 'FRONT_URL', None)
+        api = getattr(settings, 'API_VERSION', None)
+        reset_api = "/password-reset-confirm/{0}/{1}".format(uid, token)
+
+        context = {
+            'email': self.user.email,
+            'site_name': getattr(settings, 'SITE_NAME', 'site name'),
+            'user': self.user,
+            'reset_url': "{0}{1}".format(url, reset_api)
+        }
+
+        subject = render_to_string(
+            'user/password_reset_email_subject.html', context)
+        subject = ''.join(subject.splitlines())
+        message = render_to_string(
+            'user/password_reset_email.content.html', context)
+
+        msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
+        msg.attach_alternative(message, 'text/html')
+        msg.send()
+        TESTING = getattr(settings, 'TESTING', None)
+        if TESTING:
+            data = {
+                "urlname": "user:password-reset-confirm",
+                "token": token,
+            }
+            return data
 
 
 def create_user_profile(sender, instance, created, **kwargs):

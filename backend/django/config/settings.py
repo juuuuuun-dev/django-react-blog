@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 from django.utils.translation import ugettext_lazy
 from datetime import timedelta
+import environ
+import sys
+import re
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,6 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+TEST_RUNNER = 'my_project.runner.PytestTestRunner'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -27,7 +32,15 @@ MEDIA_URL = '/media/'
 SECRET_KEY = 'v5brmsg&*d&u((wk6bxpj48-tp)5&n19*45%7e#44&=6vo2j)i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, '.env'))
+DEBUG = env('DEBUG')
+sysStr = str(sys.argv[0])
+if len(sys.argv) > 1 and re.match(r'.*pytest$', sysStr):
+    TESTING = True
+else:
+    TESTING = False
 
 ALLOWED_HOSTS = []
 
@@ -60,7 +73,9 @@ INSTALLED_APPS = [
     'djoser',
 ]
 SITE_ID = 1
-
+SITE_NAME = "My blog!"
+URL = "http://localhost:8000"
+FRONT_URL = env('FRONT_URL')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -108,11 +123,17 @@ SIMPLE_JWT = {
 # ACCOUNT_EMIAL_VERIFICATION = "optional"
 # ACCOUNT_USER_USENAME_FIELD = "email"
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST = env('EMAIL_HOST')
+
+EMAIL_USE_TLS = False
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

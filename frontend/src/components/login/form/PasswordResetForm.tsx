@@ -1,22 +1,23 @@
 import React from 'react';
 import { Form, Input, Button, message } from 'antd';
-
 import axios from '../../../helper/client';
-import { set } from 'local-storage';
-import { useHistory } from 'react-router-dom';
+import toast from '../../common/toast';
+interface PasswordResetFormProps {
+  setSending: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-const LoginForm: React.FC = () => {
-  const history = useHistory();
+const PasswordResetForm = ({ setSending }: PasswordResetFormProps) => {
 
   const onFinish = (values: any) => {
     axios
-      .post('/blog_auth/token/', values)
+      .post('/user/password-reset/', values)
       .then(res => {
         const { data } = res;
-        // set<string>('token', data.access);
-        set<string>('refresh', data.refresh);
-        set<string>('username', data.username);
-        history.push('/admin/dashboard');
+        if (data.sending) {
+          toast({ type: 'SUCCESS', text: 'sending email' });
+          setSending(true)
+        }
+        console.log(data)
       })
       .catch(e => {
         console.log(e);
@@ -27,19 +28,16 @@ const LoginForm: React.FC = () => {
   return (
     <Form name="normal_login" className="login-form" onFinish={onFinish}>
       <Form.Item name="email" rules={[{ required: true, message: 'requreid email' }]}>
-        <Input placeholder="Email" />
-      </Form.Item>
-      <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
-        <Input type="password" placeholder="Password" />
+        <Input placeholder="Your email" />
       </Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          Login
+          Send
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-export default LoginForm;
+export default PasswordResetForm;

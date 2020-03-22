@@ -1,5 +1,7 @@
 from django.test import TestCase
+from django.urls import reverse
 from rest_framework import status
+from django.forms import EmailField
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework.decorators import api_view
 from django.urls import reverse
@@ -18,9 +20,6 @@ class RestUserProfileTestCase(APITestCase):
         self.user = UserFactory.create()
         self.user.set_password("testtest1234")
         self.user.save()
-        refresh = RefreshToken.for_user(self.user)
-        access = str(refresh.access_token)
-        self.client.credentials(HTTP_AUTHORIZATION="Bearer {}".format(access))
 
     def test_profile_get(self):
         response = self.client.get(
@@ -49,3 +48,76 @@ class RestUserProfileTestCase(APITestCase):
         self.assertEqual(
             response.data['username'], str(
                 post_data['username']))
+
+
+class PasswordResetViewTestCase(APITestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.base_api = "/{}user/".format(settings.API_VERSION)
+        # user
+        self.user = UserFactory.create()
+        self.user.set_password("testtest1234")
+        self.user.save()
+
+    def test_reset_password_send_mail_success(self):
+        post_data = {
+            "email": "test@test.com"
+        }
+
+        response = self.client.post(
+            "{}password-reset/".format(self.base_api), post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data['sending'])
+        self.assertTrue(response.data['reset_data'])
+
+    def test_reset_password_send_mail_unsuccess(self):
+        post_data = {
+            "email": "aaa@test.com"
+        }
+        response = self.client.post(
+            "{}password-reset/".format(self.base_api), post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class PasswordResetConfirmationViewTestCase(APITestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.base_api = "/{}user/".format(settings.API_VERSION)
+        self.auth_api = "/{}blog_auth/".format(settings.API_VERSION)
+        # user
+        self.user = UserFactory.create()
+        self.user.set_password("testtest1234")
+        self.user.save()
+
+    def test_reset_password_confirm_success(self):
+        post_data = {
+            "email": "test@test.com"
+        }
+
+        response = self.client.post(
+            "{}password-reset/".format(self.base_api), post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data['sending'])
+        self.assertTrue(response.data['reset_data'])
+        newpassword = "test1234"
+        data = {
+            "new_password": newpassword,
+            "new_password2": newpassword,
+        }
+        url = reverse(
+            response.data['reset_data']['urlname'],
+            kwargs={
+                "uid": self.user.id,
+                "token": response.data['reset_data']['token']})
+        confirm_response = self.client.post(
+            url, data)
+        self.assertEqual(confirm_response.status_code, status.HTTP_200_OK)
+        # login
+        login_data = {
+            "email": self.user.email,
+            "password": newpassword
+        }
+        response = self.client.post(
+            "{}token/".format(self.auth_api), login_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["access"])
