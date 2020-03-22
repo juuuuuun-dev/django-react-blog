@@ -1,16 +1,12 @@
 import React from 'react';
 import { Form, Input, Button, message } from 'antd';
-
 import axios from '../../../helper/client';
-import { set } from 'local-storage';
-import { useHistory } from 'react-router-dom';
 import toast from '../../common/toast';
 interface PasswordResetFormProps {
   setSending: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const PasswordResetForm = ({ setSending }: PasswordResetFormProps) => {
-  const history = useHistory();
 
   const onFinish = (values: any) => {
     axios

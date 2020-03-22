@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, message } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 
 import axios from '../../../helper/client';
 import { set } from 'local-storage';
