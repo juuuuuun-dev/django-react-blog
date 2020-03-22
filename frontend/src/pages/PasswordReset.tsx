@@ -1,10 +1,10 @@
 import React from 'react';
 import { Layout, Card } from 'antd';
-import { Link } from 'react-router-dom';
-import LoginForm from '../components/login/form/LoginForm';
+import PasswordResetForm from '../components/login/form/PasswordResetForm';
 
-const Login = () => {
+const PasswordReset = () => {
   const { Content } = Layout;
+  const [sending, setSending] = React.useState<boolean>(false)
   return (
     <Layout className="site-layout-background" style={{}}>
       <Content style={{ height: '100vh', padding: '20px' }}>
@@ -15,16 +15,14 @@ const Login = () => {
             margin: '15% auto 0 auto',
           }}
         >
-          <Card title="Login" bordered={false}>
-            <LoginForm />
+          <Card title="Forgot password" bordered={false}>
+            {!sending && <PasswordResetForm setSending={setSending} />}
+            {sending && <p>Sending password reset url! Check your email</p>}
           </Card>
-          <Link className="login-form-forgot" to="password-reset">
-            Forgot password
-          </Link>
         </div>
       </Content>
     </Layout>
   );
 };
 
-export default Login;
+export default PasswordReset;

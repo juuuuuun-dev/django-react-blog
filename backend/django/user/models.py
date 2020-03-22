@@ -72,7 +72,7 @@ class UserProfile(models.Model):
     def send_password_reset_email(self, site):
         token = default_token_generator.make_token(self.user)
         uid = self.user.pk
-        url = getattr(settings, 'URL', None)
+        url = getattr(settings, 'FRONT_URL', None)
         api = getattr(settings, 'API_VERSION', None)
         reset_api = "/{0}user/password-reset-confirm/{1}/{2}".format(
             api, uid, token)

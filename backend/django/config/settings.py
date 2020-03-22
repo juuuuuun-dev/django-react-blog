@@ -75,7 +75,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 SITE_NAME = "My blog!"
 URL = "http://localhost:8000"
-
+FRONT_URL = env('FRONT_URL')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -12,7 +12,7 @@ export interface MainLayoutProps {
 
 const AdminLayout = () => {
   const { Content } = Layout;
-
+  console.log("AdminLayout")
   return (
     <>
       <AdminContextProvider>

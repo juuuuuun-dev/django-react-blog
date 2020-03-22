@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import { AdminContextProvider } from '../../../context/adminContext';
 import Login from '../../../pages/Login';
+import PasswordReset from '../../../pages/PasswordReset';
 import '../../../less/admin/admin.less';
 
 export interface MainLayoutProps {
@@ -19,7 +20,8 @@ const LoginLayout = () => {
           <Layout className="site-layout-background">
             <Content style={{ height: '100vh' }}>
               <Content>
-                <Route path="/" component={Login} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/password-reset" component={PasswordReset} />
               </Content>
             </Content>
           </Layout>
