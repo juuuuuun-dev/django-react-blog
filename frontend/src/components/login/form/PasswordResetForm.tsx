@@ -32,7 +32,7 @@ const PasswordResetForm = ({ setSending }: PasswordResetFormProps) => {
   return (
     <Form name="normal_login" className="login-form" onFinish={onFinish}>
       <Form.Item name="email" rules={[{ required: true, message: 'requreid email' }]}>
-        <Input placeholder="Email" />
+        <Input placeholder="Your email" />
       </Form.Item>
 
       <Form.Item>

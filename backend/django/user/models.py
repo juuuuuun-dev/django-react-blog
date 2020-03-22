@@ -74,8 +74,7 @@ class UserProfile(models.Model):
         uid = self.user.pk
         url = getattr(settings, 'FRONT_URL', None)
         api = getattr(settings, 'API_VERSION', None)
-        reset_api = "/{0}user/password-reset-confirm/{1}/{2}".format(
-            api, uid, token)
+        reset_api = "/password-reset-confirm/{0}/{1}".format(uid, token)
 
         context = {
             'email': self.user.email,
