@@ -49,18 +49,20 @@ class PasswordResetView(views.APIView):
     def post(self, request):
         user_profile = self.get_user_profile(request.data['email'])
         if user_profile:
-            user_profile.send_password_reset_email(
+            result = user_profile.send_password_reset_email(
                 site=get_current_site(request))
             data = {
-                'sending': True
+                'sending': True,
             }
+            if result:
+                data['reset_data'] = result
             return Response(data=data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def get_user_profile(self, email):
         try:
             user_profile = UserProfile.objects.get(user__email=email)
-        except:
+        except BaseException:
             return None
         return user_profile
 
@@ -79,6 +81,7 @@ class PasswordResetConfirmationView(views.APIView):
         )
 
         if serializer.is_valid(raise_exception=True):
+            # print(self.user.is_active)
             new_password = serializer.validated_data.get('new_password')
             user = serializer.user
             user.set_password(new_password)

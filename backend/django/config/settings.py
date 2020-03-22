@@ -35,7 +35,7 @@ SECRET_KEY = 'v5brmsg&*d&u((wk6bxpj48-tp)5&n19*45%7e#44&=6vo2j)i'
 
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
-DEBUG = True
+DEBUG = env('DEBUG')
 sysStr = str(sys.argv[0])
 if len(sys.argv) > 1 and re.match(r'.*pytest$', sysStr):
     TESTING = True

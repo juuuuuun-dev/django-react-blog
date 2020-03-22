@@ -5,7 +5,6 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-import sys
 
 
 class CustomUserManager(BaseUserManager):
@@ -75,16 +74,14 @@ class UserProfile(models.Model):
         uid = self.user.pk
         url = getattr(settings, 'URL', None)
         api = getattr(settings, 'API_VERSION', None)
-        reset_url = "{0}/{1}/user/password-reset-confirm/{2}/{3}".format(
-            url, api, uid, token)
-        TESTING = getattr(settings, 'TESTING', None)
-        print(TESTING)
+        reset_api = "/{0}user/password-reset-confirm/{1}/{2}".format(
+            api, uid, token)
 
         context = {
             'email': self.user.email,
             'site_name': getattr(settings, 'SITE_NAME', 'site name'),
             'user': self.user,
-            'reset_url': reset_url,
+            'reset_url': "{0}{1}".format(url, reset_api)
         }
 
         subject = render_to_string(
@@ -96,6 +93,13 @@ class UserProfile(models.Model):
         msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
         msg.attach_alternative(message, 'text/html')
         msg.send()
+        TESTING = getattr(settings, 'TESTING', None)
+        if TESTING:
+            data = {
+                "urlname": "user:password-reset-confirm",
+                "token": token,
+            }
+            return data
 
 
 def create_user_profile(sender, instance, created, **kwargs):
