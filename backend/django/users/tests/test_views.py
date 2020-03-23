@@ -15,7 +15,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 class RestUserProfileTestCase(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.base_api = "/{}user/".format(settings.API_VERSION)
+        self.base_api = "/{}users/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
         self.user.set_password("testtest1234")
@@ -53,7 +53,7 @@ class RestUserProfileTestCase(APITestCase):
 class PasswordResetViewTestCase(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.base_api = "/{}user/".format(settings.API_VERSION)
+        self.base_api = "/{}users/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
         self.user.set_password("testtest1234")
@@ -82,7 +82,7 @@ class PasswordResetViewTestCase(APITestCase):
 class PasswordResetConfirmationViewTestCase(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.base_api = "/{}user/".format(settings.API_VERSION)
+        self.base_api = "/{}users/".format(settings.API_VERSION)
         self.auth_api = "/{}blog_auth/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()

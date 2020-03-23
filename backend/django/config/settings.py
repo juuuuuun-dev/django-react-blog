@@ -50,10 +50,10 @@ API_VERSION = "api/v1/"
 # Application definition
 
 INSTALLED_APPS = [
-    'category',
-    'tag',
-    'article',
-    'user',
+    'categories',
+    'tags',
+    'articles',
+    'users',
     'blog_auth',
     'django.contrib.sites',
     'django.contrib.admin',
@@ -212,4 +212,4 @@ LANGUAGES = (
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
-AUTH_USER_MODEL = "user.User"
+AUTH_USER_MODEL = "users.User"

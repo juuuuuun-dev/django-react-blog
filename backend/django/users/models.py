@@ -84,10 +84,10 @@ class UserProfile(models.Model):
         }
 
         subject = render_to_string(
-            'user/password_reset_email_subject.html', context)
+            'users/password_reset_email_subject.html', context)
         subject = ''.join(subject.splitlines())
         message = render_to_string(
-            'user/password_reset_email.content.html', context)
+            'users/password_reset_email.content.html', context)
 
         msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
         msg.attach_alternative(message, 'text/html')

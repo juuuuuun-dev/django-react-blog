@@ -14,7 +14,7 @@ class RestUserAuthTestCase(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.base_api = "/{}blog_auth/".format(settings.API_VERSION)
-        self.user_api = "/{}user/".format(settings.API_VERSION)
+        self.user_api = "/{}users/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
         self.user.set_password("testtest1234")
