@@ -3,10 +3,12 @@ import { Form, Input, Button } from 'antd';
 import axios, { setToken } from '../../../helper/client';
 import { AdminContext } from '../../../context/adminContext';
 import toast from '../../common/toast';
+import { set } from 'local-storage';
 
 const ProfileForm: React.FC = () => {
-  const endPoint = '/user/user-profile/';
+  const endPoint = '/users/user-profile/';
   const { state, dispatch } = React.useContext(AdminContext);
+
   React.useEffect(() => {
     if (state.token !== '') {
       fetchData(state.token);
@@ -16,7 +18,7 @@ const ProfileForm: React.FC = () => {
   const [fields, setFields] = React.useState([
     {
       name: 'username',
-      value: ''
+      value: '',
     },
     {
       name: 'message',
@@ -29,6 +31,7 @@ const ProfileForm: React.FC = () => {
   ]);
 
   const fetchData = async (token: string) => {
+    dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     setToken(token);
     const res = await axios.get(endPoint);
     if (res.status === 200) {
@@ -48,6 +51,7 @@ const ProfileForm: React.FC = () => {
         },
       ]);
     }
+    dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
 
   const onFinish = async (values: any) => {
@@ -57,16 +61,17 @@ const ProfileForm: React.FC = () => {
         username: values.username,
         profile: {
           message: values.message,
-          url: values.url
-        }
-      }
+          url: values.url,
+        },
+      };
       const res = await axios.patch(endPoint, data);
       if (res.status === 200) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+        set<string>('username', values.username);
         toast({ type: 'SUCCESS' });
       }
     } catch {
-      console.log("error")
+      console.log('error');
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'ERROR' });
     }
