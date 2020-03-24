@@ -2,10 +2,11 @@ import React from 'react';
 import { Menu, Layout, Popover, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { get } from 'local-storage';
+import { navList } from '../../config/admin';
 import { AdminContext, logout } from '../../context/adminContext';
 import { useHistory } from 'react-router-dom';
 
-import { VideoCameraOutlined, UserOutlined, FormOutlined } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 
 export interface NavProps {
   background: string;
@@ -38,28 +39,21 @@ const SideNav = ({ background }: NavProps) => {
           console.log(collapsed, type);
         }}
       >
-        <Popover
-          content={<a onClick={() => logout(history)}>Logout</a>}
-          placement="bottom"
-          trigger="click"
-        >
-          <div className="username"><Avatar size="small" icon={<UserOutlined />} /><span className="username__text">{username}</span></div>
+        <Popover content={<a onClick={() => logout(history)}>Logout</a>} placement="bottom" trigger="click">
+          <div className="username">
+            <Avatar size="small" icon={<UserOutlined />} />
+            <span className="username__text">{username}</span>
+          </div>
         </Popover>
         <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1">
-            <FormOutlined />
-            <span>Articles</span>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <VideoCameraOutlined />
-            <Link to="/admin/dashboard">Dashboard</Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <UserOutlined />
-            <Link to="/admin/profile">Profile</Link>
-          </Menu.Item>
+          {navList.map((item, index) => {
+            return (
+              <Menu.Item key={index}>
+                <Link to={item.path}>{item.title}</Link>
+              </Menu.Item>
+            );
+          })}
         </Menu>
-
       </Sider>
     </>
   );
