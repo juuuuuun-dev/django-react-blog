@@ -1,7 +1,6 @@
 from django.test import TestCase
 from rest_framework import status
-from rest_framework.test import APITestCase, APIRequestFactory
-from rest_framework.decorators import api_view
+from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework.response import Response
 from django.conf import settings
@@ -12,7 +11,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 class RestUserAuthTestCase(APITestCase):
     def setUp(self):
-        self.factory = APIRequestFactory()
         self.base_api = "/{}blog_auth/".format(settings.API_VERSION)
         self.user_api = "/{}users/".format(settings.API_VERSION)
         # user

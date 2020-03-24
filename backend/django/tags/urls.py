@@ -1,18 +1,14 @@
 from django.urls import path, include
-from .views import UserProfileView, PasswordResetView, \
-    PasswordResetConfirmationView
+from .views import AdminTagViewSet
+from rest_framework.routers import DefaultRouter
 app_name = 'tags'
+router = DefaultRouter()
+router.register(r'admin-tag', AdminTagViewSet)
 
 urlpatterns = [
-    # path('verify-auth/', verify_auth_view),
-    path('user-profile/', UserProfileView.as_view(), name='userprofile'),
-    path(
-        'password-reset/',
-        PasswordResetView.as_view(),
-        name='password-reset'),
+    path('', include(router.urls)),
+    # path(
+    #     'admin-tag', AdminTagViewSet.as_view({'get': 'list'}),
+    #     name='admin-tag'),
 
-    path('password-reset-confirm/<str:uid>/<str:token>/',
-         PasswordResetConfirmationView.as_view(),
-         name='password-reset-confirm'
-         ),
 ]
