@@ -1,7 +1,7 @@
 import React from 'react';
 import { adminReducer, AdminState, initState, Actions } from './adminReducer';
 import { get, set, remove, } from 'local-storage';
-import axios from '../helper/client';
+import axios, { setToken } from '../helper/client';
 import { useHistory } from 'react-router-dom';
 
 interface AdminContextProviderProps {
@@ -17,9 +17,20 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
   const [state, dispatch] = React.useReducer(adminReducer, initState);
   const value = { state, dispatch };
   const history = useHistory();
+  const [now, setNow] = React.useState(new Date());
 
   React.useEffect(() => {
-    verifyAuth();
+    const token = get<string>('token');
+    dispatch({ type: 'SET_TOKEN', payload: { token } })
+    setToken(token);
+    const intervalId = setInterval(() => {
+      setNow(new Date());
+      console.log('setInt');
+      verifyAuth();
+    }, 500000);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   const verifyAuth = async () => {
@@ -30,6 +41,7 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
         const { access } = res.data;
         set<string>('token', access);
         dispatch({ type: 'SET_TOKEN', payload: { token: access } })
+        setToken(access);
       } catch {
         logout(history);
       }
