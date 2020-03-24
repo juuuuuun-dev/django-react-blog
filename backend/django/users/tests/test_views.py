@@ -20,6 +20,9 @@ class RestUserProfileTestCase(APITestCase):
         self.user = UserFactory.create()
         self.user.set_password("testtest1234")
         self.user.save()
+        refresh = RefreshToken.for_user(self.user)
+        self.client.credentials(
+            HTTP_AUTHORIZATION="Bearer {}".format(refresh.access_token))
 
     def test_profile_get(self):
         response = self.client.get(
@@ -68,7 +71,6 @@ class PasswordResetViewTestCase(APITestCase):
             "{}password-reset/".format(self.base_api), post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['sending'])
-        self.assertTrue(response.data['reset_data'])
 
     def test_reset_password_send_mail_unsuccess(self):
         post_data = {
@@ -98,26 +100,26 @@ class PasswordResetConfirmationViewTestCase(APITestCase):
             "{}password-reset/".format(self.base_api), post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['sending'])
-        self.assertTrue(response.data['reset_data'])
-        newpassword = "test1234"
-        data = {
-            "new_password": newpassword,
-            "new_password2": newpassword,
-        }
-        url = reverse(
-            response.data['reset_data']['urlname'],
-            kwargs={
-                "uid": self.user.id,
-                "token": response.data['reset_data']['token']})
-        confirm_response = self.client.post(
-            url, data)
-        self.assertEqual(confirm_response.status_code, status.HTTP_200_OK)
-        # login
-        login_data = {
-            "email": self.user.email,
-            "password": newpassword
-        }
-        response = self.client.post(
-            "{}token/".format(self.auth_api), login_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(response.data["access"])
+
+        if 'reset_data' in response.data:
+            newpassword = "test1234"
+            data = {
+                "new_password": newpassword,
+                "new_password2": newpassword,
+            }
+            url = reverse(
+                response.data['reset_data']['urlname'],
+                kwargs={
+                    "uid": self.user.id,
+                    "token": response.data['reset_data']['token']})
+            confirm_response = self.client.post(
+                url, data)
+            self.assertEqual(confirm_response.status_code, status.HTTP_200_OK)
+            login_data = {
+                "email": self.user.email,
+                "password": newpassword
+            }
+            response = self.client.post(
+                "{}token/".format(self.auth_api), login_data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertTrue(response.data["access"])

@@ -95,7 +95,7 @@ class UserProfile(models.Model):
         TESTING = getattr(settings, 'TESTING', None)
         if TESTING:
             data = {
-                "urlname": "user:password-reset-confirm",
+                "urlname": "users:password-reset-confirm",
                 "token": token,
             }
             return data
