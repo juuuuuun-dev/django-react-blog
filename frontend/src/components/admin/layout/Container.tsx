@@ -14,7 +14,18 @@ const RouteContentList = navList.map((item, index) => (
 ));
 
 const Container = () => {
-  const { state } = React.useContext(AdminContext);
+  const { state, dispatch } = React.useContext(AdminContext);
+  const [now, setNow] = React.useState(new Date());
+  // @todo refresh
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      setNow(new Date());
+      console.log('setInt');
+    }, 10000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [now]);
   return (
     <Spin spinning={state.loading} tip="Loading...">
       {RouteContentList}
