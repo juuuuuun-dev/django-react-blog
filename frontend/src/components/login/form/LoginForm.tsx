@@ -13,7 +13,7 @@ const LoginForm: React.FC = () => {
       .post('/blog_auth/token/', values)
       .then(res => {
         const { data } = res;
-        // set<string>('token', data.access);
+        set<string>('token', data.access);
         set<string>('refresh', data.refresh);
         set<string>('username', data.username);
         history.push('/admin/dashboard');

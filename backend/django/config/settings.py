@@ -152,6 +152,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# date format
+DATE_FORMAT = '%Y-%m-%d'
+DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 DATABASES = {
     'default': {
@@ -192,15 +195,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 
-LANGUAGE_CODE = 'ja'
+LANGUAGE_CODE = env('LANGUAGE_CODE')
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = env('TIME_ZONE')
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 LANGUAGES = (
     ('ja', ugettext_lazy('Japanese')),

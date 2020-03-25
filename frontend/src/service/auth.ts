@@ -1,7 +1,7 @@
-import axios, { setToken } from '../helper/client';
+import axios from '../helper/client';
 
 interface refreshTokenProps {
-  refresh: string
+  refresh: string;
 }
 export const refreshToken = async ({ refresh }: refreshTokenProps) => {
   return await axios.post('/blog_auth/token/refresh/', { refresh });

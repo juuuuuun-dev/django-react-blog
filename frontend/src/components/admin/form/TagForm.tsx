@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import axios, { setToken } from '../../../helper/client';
+import axios from '../../../helper/client';
 import { AdminContext } from '../../../context/adminContext';
 import toast from '../../common/toast';
 import { set } from 'local-storage';
@@ -10,10 +10,10 @@ const TagForm: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
 
   React.useEffect(() => {
-    if (state.token !== '') {
-      fetchData(state.token);
+    if (state.hasToken) {
+      fetchData();
     }
-  }, [state.token]);
+  }, [state.hasToken]);
 
   const [fields, setFields] = React.useState([
     {
@@ -30,9 +30,8 @@ const TagForm: React.FC = () => {
     },
   ]);
 
-  const fetchData = async (token: string) => {
+  const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    setToken(token);
     const res = await axios.get(endPoint);
     if (res.status === 200) {
       console.log(res.data);

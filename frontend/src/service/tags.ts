@@ -1,4 +1,4 @@
-import axios, { setToken } from '../helper/client';
+import axios from '../helper/client';
 
 const adminEndPoint = '/tags/admin-tag/';
 

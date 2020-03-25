@@ -1,7 +1,8 @@
 import React from 'react';
 import { adminReducer, AdminState, initState, Actions } from './adminReducer';
-import { get, set, remove, } from 'local-storage';
-import axios, { setToken } from '../helper/client';
+import { get, set, remove } from 'local-storage';
+
+import axios, { setClientToken } from '../helper/client';
 import { useHistory } from 'react-router-dom';
 
 interface AdminContextProviderProps {
@@ -20,28 +21,38 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
   const [now, setNow] = React.useState(new Date());
 
   React.useEffect(() => {
-    const token = get<string>('token');
-    dispatch({ type: 'SET_TOKEN', payload: { token } })
-    setToken(token);
-    const intervalId = setInterval(() => {
-      setNow(new Date());
-      console.log('setInt');
-      verifyAuth();
-    }, 500000);
-    return () => {
-      clearInterval(intervalId);
+    const fn = async () => {
+      const token = get<string>('token');
+      await initToken(token);
+      const intervalId = setInterval(() => {
+        setNow(new Date());
+        refreshToken();
+      }, 300000);
+      return () => {
+        clearInterval(intervalId);
+      };
     };
+    fn();
   }, []);
 
-  const verifyAuth = async () => {
+  const initToken = async (token: string) => {
+    return new Promise(resolve => {
+      dispatch({ type: 'SET_HAS_TOKEN', payload: { hasToken: true } });
+      setClientToken(token);
+      set<string>('token', token);
+      resolve();
+    });
+  };
+
+  const refreshToken = async () => {
+    console.log('refresh token');
     const refresh: string = get('refresh');
     if (refresh) {
       try {
         const res = await axios.post('/blog_auth/token/refresh/', { refresh });
         const { access } = res.data;
         set<string>('token', access);
-        dispatch({ type: 'SET_TOKEN', payload: { token: access } })
-        setToken(access);
+        setClientToken(access);
       } catch {
         logout(history);
       }
@@ -62,4 +73,4 @@ export const logout = (history: any) => {
   remove('token');
   remove('refresh');
   remove('username');
-}
+};
