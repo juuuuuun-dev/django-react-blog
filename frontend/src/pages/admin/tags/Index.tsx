@@ -29,7 +29,7 @@ const Tags: React.FC = () => {
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
-
+  // @todo search
   const columns = [
     {
       title: 'name',
@@ -57,7 +57,7 @@ const Tags: React.FC = () => {
     },
   ];
 
-  return <Table columns={columns} dataSource={data} />;
+  return <Table columns={columns} dataSource={data} pagination={{ pageSize: 2 }} />;
 };
 
 export default Tags;
