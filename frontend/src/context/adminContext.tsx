@@ -22,8 +22,9 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
 
   React.useEffect(() => {
     const fn = async () => {
-      const token = get<string>('token');
-      await initToken(token);
+      await refreshToken();
+      dispatch({ type: 'SET_HAS_TOKEN', payload: { hasToken: true } });
+      // auto refresh
       const intervalId = setInterval(() => {
         setNow(new Date());
         refreshToken();
@@ -35,30 +36,24 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
     fn();
   }, []);
 
-  const initToken = async (token: string) => {
-    return new Promise(resolve => {
-      dispatch({ type: 'SET_HAS_TOKEN', payload: { hasToken: true } });
-      setClientToken(token);
-      set<string>('token', token);
-      resolve();
-    });
-  };
-
   const refreshToken = async () => {
-    console.log('refresh token');
-    const refresh: string = get('refresh');
-    if (refresh) {
-      try {
-        const res = await axios.post('/blog_auth/token/refresh/', { refresh });
-        const { access } = res.data;
-        set<string>('token', access);
-        setClientToken(access);
-      } catch {
+    return new Promise(async (resolve, reject) => {
+      const refresh: string = get('refresh');
+      if (refresh) {
+        try {
+          const res = await axios.post('/blog_auth/token/refresh/', { refresh });
+          const { access } = res.data;
+          set<string>('token', access);
+          setClientToken(access);
+          resolve();
+        } catch {
+          logout(history);
+        }
+      } else {
         logout(history);
+        reject();
       }
-    } else {
-      logout(history);
-    }
+    });
   };
 
   return (
