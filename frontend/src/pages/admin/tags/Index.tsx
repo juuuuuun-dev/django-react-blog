@@ -3,6 +3,8 @@ import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/tags';
 import { SearchOutlined } from '@ant-design/icons';
 import { Table, Input, Button } from 'antd';
+import Highlighter from "react-highlight-words";
+import searchColumn from "../../../components/admin/searchColumn"
 
 interface IData {
   id: number;
@@ -29,7 +31,84 @@ const Tags: React.FC = () => {
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
-  // @todo search
+
+  interface searchProp {
+    setSelectedKeys: ([]) => void | undefined;
+    selectedKeys: Array<number>;
+    confirm: string;
+    clearFilters: string;
+  }
+  const searchRef = React.useRef<null | Input>(null);
+  const getColumnSearchProps = (dataIndex: string) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: searchProp) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={searchRef}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: 'block' }}
+        />
+        <Button
+          type="primary"
+          onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          icon={<SearchOutlined />}
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered: any) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilter: (value: any, record: any) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible: any) => {
+      if (visible) {
+        setTimeout(() => {
+          if (searchRef !== null && searchRef.current) {
+            searchRef.current.select();
+          }
+        });
+      }
+    },
+    render: (text: any) =>
+      searchedColumn === dataIndex ? (
+        // text
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#eeeeee', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text.toString()}
+        />
+      ) : (
+          text
+        ),
+  });
+
+
+
+
+  const [searchText, setSearchText] = React.useState('');
+  const [searchedColumn, setSearchedColumn] = React.useState('');
+
+  const handleSearch = (selectedKeys: any, confirm: any, dataIndex: any) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex)
+  };
+
+  const handleReset = (clearFilters: any) => {
+    clearFilters();
+    setSearchText('');
+  };
   const columns = [
     {
       title: 'name',
@@ -38,6 +117,7 @@ const Tags: React.FC = () => {
       key: 'name',
       width: '33%',
       // ...getColumnSearchProps('name'),
+      ...searchColumn({ dataIndex: 'name', searchRef: searchRef, handleSearch: handleSearch, handleReset: handleReset, searchedColumn: searchedColumn, searchText: searchText })
     },
     {
       title: 'updated_at',
@@ -56,7 +136,6 @@ const Tags: React.FC = () => {
       sorter: (a: IData, b: IData) => (a.created_at > b.created_at ? 1 : 0),
     },
   ];
-
   return <Table columns={columns} dataSource={data} pagination={{ pageSize: 2 }} />;
 };
 
