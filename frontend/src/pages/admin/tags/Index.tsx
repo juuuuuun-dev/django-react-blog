@@ -1,10 +1,9 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/tags';
-import { SearchOutlined } from '@ant-design/icons';
 import { Table, Input, Button } from 'antd';
-import Highlighter from "react-highlight-words";
 import searchColumn from "../../../components/admin/searchColumn"
+import { Link, useRouteMatch } from 'react-router-dom';
 
 interface IData {
   id: number;
@@ -31,84 +30,22 @@ const Tags: React.FC = () => {
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
-
-  interface searchProp {
-    setSelectedKeys: ([]) => void | undefined;
-    selectedKeys: Array<number>;
-    confirm: string;
-    clearFilters: string;
-  }
+  const match = useRouteMatch();
+  console.log(match)
   const searchRef = React.useRef<null | Input>(null);
-  const getColumnSearchProps = (dataIndex: string) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: searchProp) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={searchRef}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{ width: 188, marginBottom: 8, display: 'block' }}
-        />
-        <Button
-          type="primary"
-          onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          icon={<SearchOutlined />}
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          Search
-        </Button>
-        <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: (filtered: any) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-    onFilter: (value: any, record: any) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: (visible: any) => {
-      if (visible) {
-        setTimeout(() => {
-          if (searchRef !== null && searchRef.current) {
-            searchRef.current.select();
-          }
-        });
-      }
-    },
-    render: (text: any) =>
-      searchedColumn === dataIndex ? (
-        // text
-        <Highlighter
-          highlightStyle={{ backgroundColor: '#eeeeee', padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text.toString()}
-        />
-      ) : (
-          text
-        ),
-  });
+  const [searchText, setSearchText] = React.useState<string>('');
+  const [searchedColumn, setSearchedColumn] = React.useState<string>('');
 
-
-
-
-  const [searchText, setSearchText] = React.useState('');
-  const [searchedColumn, setSearchedColumn] = React.useState('');
-
-  const handleSearch = (selectedKeys: any, confirm: any, dataIndex: any) => {
+  const handleSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex)
   };
-
-  const handleReset = (clearFilters: any) => {
+  const handleReset = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
   };
+
   const columns = [
     {
       title: 'name',
@@ -116,7 +53,6 @@ const Tags: React.FC = () => {
       dataIndex: 'name',
       key: 'name',
       width: '33%',
-      // ...getColumnSearchProps('name'),
       ...searchColumn({ dataIndex: 'name', searchRef: searchRef, handleSearch: handleSearch, handleReset: handleReset, searchedColumn: searchedColumn, searchText: searchText })
     },
     {
@@ -136,7 +72,12 @@ const Tags: React.FC = () => {
       sorter: (a: IData, b: IData) => (a.created_at > b.created_at ? 1 : 0),
     },
   ];
-  return <Table columns={columns} dataSource={data} pagination={{ pageSize: 2 }} />;
+  return (
+    <>
+      <Link to="./create"><Button style={{ marginBottom: "10px" }}>CREATE</Button></Link>
+      <Table className="table" columns={columns} dataSource={data} pagination={{ pageSize: 20 }} />
+    </>
+  );
 };
 
 export default Tags;

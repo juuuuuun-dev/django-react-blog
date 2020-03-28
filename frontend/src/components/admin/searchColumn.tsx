@@ -7,16 +7,15 @@ interface props {
   dataIndex: string;
   searchRef: React.MutableRefObject<Input | null>;
   handleSearch: any;
-  handleReset: any;
-  searchedColumn: any;
+  handleReset: (clearFilters: () => void) => void;
+  searchedColumn: string;
   searchText: string;
 }
 interface searchProp {
-  setSelectedKeys: ([]) => void | undefined;
+  setSelectedKeys: (value: string[]) => void | undefined;
   selectedKeys: Array<number>;
   confirm: string;
-  clearFilters: string;
-
+  clearFilters: () => void;
 }
 const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searchedColumn, searchText }: props) => ({
   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: searchProp) => (
@@ -43,13 +42,13 @@ const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searche
       </Button>
     </div>
   ),
-  filterIcon: (filtered: any) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-  onFilter: (value: any, record: any) =>
+  filterIcon: (filtered: string) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+  onFilter: (value: string, record: any) =>
     record[dataIndex]
       .toString()
       .toLowerCase()
       .includes(value.toLowerCase()),
-  onFilterDropdownVisibleChange: (visible: any) => {
+  onFilterDropdownVisibleChange: (visible: boolean) => {
     if (visible) {
       setTimeout(() => {
         if (searchRef !== null && searchRef.current) {
@@ -58,7 +57,7 @@ const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searche
       });
     }
   },
-  render: (text: any) =>
+  render: (text: string) =>
     searchedColumn === dataIndex ? (
       // text
       <Highlighter
