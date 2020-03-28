@@ -47,11 +47,13 @@ const SideNav = ({ background }: NavProps) => {
         </Popover>
         <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={['1']}>
           {navList.map((item, index) => {
-            return (
-              <Menu.Item key={index}>
-                <Link to={item.path}>{item.title}</Link>
-              </Menu.Item>
-            );
+            if (!item.hiddenNav) {
+              return (
+                <Menu.Item key={index}>
+                  <Link to={item.path}>{item.title}</Link>
+                </Menu.Item>
+              );
+            }
           })}
         </Menu>
       </Sider>

@@ -2,6 +2,7 @@ import React from "react";
 import { Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from "react-highlight-words";
+import { Link, useRouteMatch } from 'react-router-dom';
 
 interface props {
   dataIndex: string;
@@ -10,6 +11,7 @@ interface props {
   handleReset: (clearFilters: () => void) => void;
   searchedColumn: string;
   searchText: string;
+  path: string;
 }
 interface searchProp {
   setSelectedKeys: (value: string[]) => void | undefined;
@@ -17,7 +19,7 @@ interface searchProp {
   confirm: string;
   clearFilters: () => void;
 }
-const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searchedColumn, searchText }: props) => ({
+const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searchedColumn, searchText, path }: props) => ({
   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: searchProp) => (
     <div style={{ padding: 8 }}>
       <Input
@@ -57,17 +59,19 @@ const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searche
       });
     }
   },
-  render: (text: string) =>
+  render: (text: string, record: any) =>
     searchedColumn === dataIndex ? (
       // text
-      <Highlighter
-        highlightStyle={{ backgroundColor: '#eeeeee', padding: 0 }}
-        searchWords={[searchText]}
-        autoEscape
-        textToHighlight={text.toString()}
-      />
+      <Link to={`${path}/${record.id}`}>
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#eeeeee', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text.toString()}
+        />
+      </Link>
     ) : (
-        text
+        <Link to={`${path}/${record.id}/edit`}>{text}</Link>
       ),
 });
 

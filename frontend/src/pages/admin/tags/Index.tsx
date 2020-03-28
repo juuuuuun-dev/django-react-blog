@@ -16,6 +16,7 @@ interface IData {
 const Tags: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [data, setData] = React.useState<IData[]>([]);
+  const match = useRouteMatch();
   React.useEffect(() => {
     if (state.hasToken) {
       fetchData();
@@ -30,8 +31,6 @@ const Tags: React.FC = () => {
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
-  const match = useRouteMatch();
-  console.log(match)
   const searchRef = React.useRef<null | Input>(null);
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
@@ -53,7 +52,15 @@ const Tags: React.FC = () => {
       dataIndex: 'name',
       key: 'name',
       width: '33%',
-      ...searchColumn({ dataIndex: 'name', searchRef: searchRef, handleSearch: handleSearch, handleReset: handleReset, searchedColumn: searchedColumn, searchText: searchText })
+      ...searchColumn({
+        dataIndex: 'name',
+        searchRef: searchRef,
+        handleSearch: handleSearch,
+        handleReset: handleReset,
+        searchedColumn: searchedColumn,
+        searchText: searchText,
+        path: match.path,
+      })
     },
     {
       title: 'updated_at',
@@ -74,7 +81,7 @@ const Tags: React.FC = () => {
   ];
   return (
     <>
-      <Link to="./create"><Button style={{ marginBottom: "10px" }}>CREATE</Button></Link>
+      <Link to={`${match.path}/create`}><Button type="primary" style={{ marginBottom: "10px" }}>CREATE</Button></Link>
       <Table className="table" columns={columns} dataSource={data} pagination={{ pageSize: 20 }} />
     </>
   );
