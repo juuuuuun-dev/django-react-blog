@@ -9,3 +9,7 @@ export const list = async () => {
 export const retrieve = async (id: string | undefined) => {
   return axios.get(`${adminEndPoint}/${id}`)
 }
+
+export const update = async (id: string | undefined, data: any) => {
+  return axios.put(`${adminEndPoint}/${id}/`, data)
+}
