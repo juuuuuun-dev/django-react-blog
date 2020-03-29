@@ -1,19 +1,17 @@
 import React from 'react';
-import { retrieve, update } from '../../../service/tags';
+import { retrieve, update, destroy } from '../../../service/tags';
 import { AdminContext } from '../../../context/adminContext';
 import TagForm from '../../../components/admin/form/TagForm'
 import { ITagData } from '../../../types/tags';
 import toast from '../../../components/common/toast';
-
-import { Table, Input, Button } from 'antd';
-import searchColumn from "../../../components/admin/searchColumn"
-import { Link, useRouteMatch, useParams } from 'react-router-dom';
-
+import { useHistory, useParams } from 'react-router-dom';
+import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const TagEdit: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [data, setData] = React.useState<ITagData | undefined>();
   const { id } = useParams();
+  const history = useHistory();
   React.useEffect(() => {
     if (state.hasToken) {
       fetchData();
@@ -28,6 +26,7 @@ const TagEdit: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
 
+  // edit
   const onSubmit = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
@@ -38,6 +37,22 @@ const TagEdit: React.FC = () => {
       if (res.status === 200) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
+        history.push("/admin/tags");
+      }
+    } catch {
+      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+      toast({ type: 'ERROR' });
+    }
+  }
+  // delete
+  const onDelete = async () => {
+    dispatch({ type: 'SET_LOADING', payload: { loading: true } });
+    try {
+      const res = await destroy(id);
+      if (res.status === 204) {
+        dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+        toast({ type: 'SUCCESS' });
+        history.push("/admin/tags");
       }
     } catch {
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
@@ -46,6 +61,7 @@ const TagEdit: React.FC = () => {
   }
   return (
     <>
+      <DeleteBtn onDelete={onDelete} />
       <TagForm data={data} onSubmit={onSubmit} />
     </>
   );
