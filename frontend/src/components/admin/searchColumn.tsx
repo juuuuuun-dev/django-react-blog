@@ -2,7 +2,7 @@ import React from "react";
 import { Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from "react-highlight-words";
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface props {
   dataIndex: string;
@@ -13,14 +13,14 @@ interface props {
   searchText: string;
   path: string;
 }
-interface searchProp {
+interface SearchProp {
   setSelectedKeys: (value: string[]) => void | undefined;
   selectedKeys: Array<number>;
   confirm: string;
   clearFilters: () => void;
 }
 const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searchedColumn, searchText, path }: props) => ({
-  filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: searchProp) => (
+  filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: SearchProp) => (
     <div style={{ padding: 8 }}>
       <Input
         ref={searchRef}
@@ -62,7 +62,7 @@ const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searche
   render: (text: string, record: any) =>
     searchedColumn === dataIndex ? (
       // text
-      <Link to={`${path}/${record.id}`}>
+      <Link to={`${path}/${record.id}/edit`}>
         <Highlighter
           highlightStyle={{ backgroundColor: '#eeeeee', padding: 0 }}
           searchWords={[searchText]}

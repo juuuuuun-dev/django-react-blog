@@ -10,6 +10,8 @@ import DeleteBtn from '../../../components/admin/DeleteBtn';
 const TagEdit: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [data, setData] = React.useState<ITagData | undefined>();
+  const [error, setError] = React.useState({})
+
   const { id } = useParams();
   const history = useHistory();
   React.useEffect(() => {
@@ -39,7 +41,10 @@ const TagEdit: React.FC = () => {
         toast({ type: 'SUCCESS' });
         history.push("/admin/tags");
       }
-    } catch {
+    } catch (e) {
+      if (e.response.data) {
+        setError(e.response.data)
+      }
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'ERROR' });
     }
@@ -62,7 +67,7 @@ const TagEdit: React.FC = () => {
   return (
     <>
       <DeleteBtn onDelete={onDelete} />
-      <TagForm data={data} onSubmit={onSubmit} />
+      <TagForm data={data} onSubmit={onSubmit} error={error} />
     </>
   );
 };

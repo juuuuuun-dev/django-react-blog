@@ -3,10 +3,11 @@ import { create } from '../../../service/tags';
 import { AdminContext } from '../../../context/adminContext';
 import TagForm from '../../../components/admin/form/TagForm'
 import toast from '../../../components/common/toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const TagCreate: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
+  const [error, setError] = React.useState({})
   const history = useHistory();
 
   const onSubmit = async (values: any) => {
@@ -21,14 +22,17 @@ const TagCreate: React.FC = () => {
         toast({ type: 'SUCCESS' });
         history.push("/admin/tags");
       }
-    } catch {
+    } catch (e) {
+      if (e.response.data) {
+        setError(e.response.data)
+      }
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'ERROR' });
     }
   }
   return (
     <>
-      <TagForm onSubmit={onSubmit} />
+      <TagForm onSubmit={onSubmit} error={error} />
     </>
   );
 };

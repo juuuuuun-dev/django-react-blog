@@ -1,16 +1,16 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { ITagData } from '../../../types/tags';
-import axios from '../../../helper/client';
-import { AdminContext } from '../../../context/adminContext';
-import toast from '../../common/toast';
-import { set } from 'local-storage';
+
 
 interface IProps {
   data?: ITagData;
   onSubmit: (values: any) => Promise<void>;
+  error?: {
+    name?: Array<string>
+  }
 }
-const TagForm: React.FC<IProps> = ({ data, onSubmit }) => {
+const TagForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
   const [fields, setFields] = React.useState([
     {
       name: 'name',
@@ -27,7 +27,7 @@ const TagForm: React.FC<IProps> = ({ data, onSubmit }) => {
       ]);
     }
   }, [data]);
-
+  console.log({ error })
   const onFinish = async (values: any) => {
     onSubmit(values)
   };
@@ -40,7 +40,13 @@ const TagForm: React.FC<IProps> = ({ data, onSubmit }) => {
       fields={fields}
       onFinish={onFinish}
     >
-      <Form.Item label="name" name="name" rules={[{ required: true, message: 'Please input name' }]}>
+      <Form.Item
+        label="name"
+        name="name"
+        validateStatus={error && error.name ? "error" : "success"}
+        help={error && error.name ? "This name already exists" : null}
+        rules={[{ required: true, message: 'Please input name' }]}
+      >
         <Input placeholder="name" />
       </Form.Item>
 

@@ -45,7 +45,7 @@ const SideNav = ({ background }: NavProps) => {
             <span className="username__text">{username}</span>
           </div>
         </Popover>
-        <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={['1']}>
+        <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={['0']}>
           {navList.map((item, index) => {
             if (!item.hiddenNav) {
               return (
