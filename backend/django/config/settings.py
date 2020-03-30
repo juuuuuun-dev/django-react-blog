@@ -37,7 +37,7 @@ env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 DEBUG = env('DEBUG')
 sysStr = str(sys.argv[0])
-if len(sys.argv) > 1 and re.match(r'.*pytest$', sysStr):
+if len(sys.argv) > 1 and re.match(r'.*test$', sysStr):
     TESTING = True
 else:
     TESTING = False
@@ -50,10 +50,10 @@ API_VERSION = "api/v1/"
 # Application definition
 
 INSTALLED_APPS = [
-    'category',
-    'tag',
-    'article',
-    'user',
+    'categories',
+    'tags',
+    'articles',
+    'users',
     'blog_auth',
     'django.contrib.sites',
     'django.contrib.admin',
@@ -111,7 +111,7 @@ CORS_ORIGIN_WHITELIST = (
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
@@ -152,6 +152,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# date format
+DATE_FORMAT = '%Y-%m-%d'
+DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 DATABASES = {
     'default': {
@@ -192,15 +195,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 
-LANGUAGE_CODE = 'ja'
+LANGUAGE_CODE = env('LANGUAGE_CODE')
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = env('TIME_ZONE')
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 LANGUAGES = (
     ('ja', ugettext_lazy('Japanese')),
@@ -212,4 +215,4 @@ LANGUAGES = (
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
-AUTH_USER_MODEL = "user.User"
+AUTH_USER_MODEL = "users.User"

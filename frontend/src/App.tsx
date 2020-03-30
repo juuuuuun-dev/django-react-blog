@@ -6,12 +6,13 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import MainLayout from './components/main/layout/MainLayout';
 import AdminLayout from './components/admin/layout/AdminLayout';
 import LoginLayout from './components/login/layout/LoginLayout';
-
-// import 'antd/dist/antd.css';
+import { adminPathList } from './config/admin';
 
 import './less/app.less';
 
 function App() {
+
+
   return (
     <div className="App">
       <Layout>
@@ -20,7 +21,7 @@ function App() {
             <Route exact path={['/', '/articles']}>
               <MainLayout />
             </Route>
-            <Route exact path={['/admin/dashboard', '/admin/profile']}>
+            <Route exact path={adminPathList}>
               <AdminLayout />
             </Route>
             <Route path={['/login', '/password-reset', '/password-reset-confirm/:uid/:token/']}>

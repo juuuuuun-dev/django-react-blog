@@ -11,7 +11,7 @@ const Login = () => {
         <div
           style={{
             width: 'auto',
-            maxWidth: '300px',
+            maxWidth: '350px',
             margin: '15% auto 0 auto',
           }}
         >

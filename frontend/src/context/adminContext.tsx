@@ -1,7 +1,8 @@
 import React from 'react';
 import { adminReducer, AdminState, initState, Actions } from './adminReducer';
-import { get, set, remove, } from 'local-storage';
-import axios from '../helper/client';
+import { get, set, remove } from 'local-storage';
+
+import axios, { setClientToken } from '../helper/client';
 import { useHistory } from 'react-router-dom';
 
 interface AdminContextProviderProps {
@@ -17,25 +18,42 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
   const [state, dispatch] = React.useReducer(adminReducer, initState);
   const value = { state, dispatch };
   const history = useHistory();
+  const [now, setNow] = React.useState(new Date());
 
   React.useEffect(() => {
-    verifyAuth();
+    const fn = async () => {
+      await refreshToken();
+      dispatch({ type: 'SET_HAS_TOKEN', payload: { hasToken: true } });
+      // auto refresh
+      const intervalId = setInterval(() => {
+        setNow(new Date());
+        refreshToken();
+      }, 300000);
+      return () => {
+        clearInterval(intervalId);
+      };
+    };
+    fn();
   }, []);
 
-  const verifyAuth = async () => {
-    const refresh: string = get('refresh');
-    if (refresh) {
-      try {
-        const res = await axios.post('/blog_auth/token/refresh/', { refresh });
-        const { access } = res.data;
-        set<string>('token', access);
-        dispatch({ type: 'SET_TOKEN', payload: { token: access } })
-      } catch {
+  const refreshToken = async () => {
+    return new Promise(async (resolve, reject) => {
+      const refresh: string = get('refresh');
+      if (refresh) {
+        try {
+          const res = await axios.post('/blog_auth/token/refresh/', { refresh });
+          const { access } = res.data;
+          set<string>('token', access);
+          setClientToken(access);
+          resolve();
+        } catch {
+          logout(history);
+        }
+      } else {
         logout(history);
+        reject();
       }
-    } else {
-      logout(history);
-    }
+    });
   };
 
   return (
@@ -50,4 +68,4 @@ export const logout = (history: any) => {
   remove('token');
   remove('refresh');
   remove('username');
-}
+};

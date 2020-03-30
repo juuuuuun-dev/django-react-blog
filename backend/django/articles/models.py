@@ -1,7 +1,8 @@
 from django.db import models
-from tag.models import Tag
-from category.models import Category
-from user.models import User, UserProfile
+from tags.models import Tag
+from categories.models import Category
+from users.models import User, UserProfile
+
 
 class Article(models.Model):
     class Meta:

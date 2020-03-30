@@ -5,7 +5,8 @@ const client = axios.create({
   baseURL: endPoint,
 });
 
-export const setToken = (token: string | unknown): void => {
+export const setClientToken = (token: string | unknown): void => {
+  console.log('setClientToken');
   client.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 };
 

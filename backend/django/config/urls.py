@@ -21,6 +21,11 @@ from django.contrib.staticfiles.urls import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("{}user/".format(settings.API_VERSION), include("user.urls")),
-    path("{}blog_auth/".format(settings.API_VERSION), include("blog_auth.urls")),
+    path("{}users/".format(settings.API_VERSION), include("users.urls")),
+    path("{}blog_auth/".format(settings.API_VERSION),
+         include("blog_auth.urls")),
+
+    path("{}tags/".format(settings.API_VERSION), include("tags.urls")),
+
+
 ]

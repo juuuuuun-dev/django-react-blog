@@ -1,6 +1,7 @@
 from django.urls import path, include
-from .views import UserProfileView, PasswordResetView, PasswordResetConfirmationView
-app_name = 'user'
+from .views import UserProfileView, PasswordResetView, \
+    PasswordResetConfirmationView
+app_name = 'users'
 
 urlpatterns = [
     # path('verify-auth/', verify_auth_view),

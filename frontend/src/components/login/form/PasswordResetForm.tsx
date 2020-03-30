@@ -3,21 +3,20 @@ import { Form, Input, Button, message } from 'antd';
 import axios from '../../../helper/client';
 import toast from '../../common/toast';
 interface PasswordResetFormProps {
-  setSending: React.Dispatch<React.SetStateAction<boolean>>
+  setSending: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PasswordResetForm = ({ setSending }: PasswordResetFormProps) => {
-
   const onFinish = (values: any) => {
     axios
-      .post('/user/password-reset/', values)
+      .post('/users/password-reset/', values)
       .then(res => {
         const { data } = res;
         if (data.sending) {
           toast({ type: 'SUCCESS', text: 'sending email' });
-          setSending(true)
+          setSending(true);
         }
-        console.log(data)
+        console.log(data);
       })
       .catch(e => {
         console.log(e);
