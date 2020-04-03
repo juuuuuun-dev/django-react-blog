@@ -26,6 +26,7 @@ urlpatterns = [
          include("blog_auth.urls")),
 
     path("{}tags/".format(settings.API_VERSION), include("tags.urls")),
+    path("{}categories/".format(settings.API_VERSION), include("categories.urls")),
 
 
 ]

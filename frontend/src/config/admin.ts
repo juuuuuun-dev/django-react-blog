@@ -1,9 +1,12 @@
 import React from 'react';
 import Dashboard from '../pages/admin/Dashboard';
 import Profile from '../pages/admin/Profile';
-import Tags from '../pages/admin/tags/Index';
-import TagEdit from '../pages/admin/tags/TagEdit';
-import TagCreate from '../pages/admin/tags/TagCreate';
+import Tags from '../pages/admin/tags/index';
+import TagEdit from '../pages/admin/tags/edit';
+import TagCreate from '../pages/admin/tags/create';
+import Categories from '../pages/admin/categories/index';
+import CategoryEdit from '../pages/admin/categories/edit';
+import CategoryCreate from '../pages/admin/categories/create';
 
 interface INavList {
   path: string;
@@ -35,6 +38,24 @@ export const navList: INavList[] = [
     path: '/admin/tags/create',
     title: 'TagCreate',
     component: TagCreate,
+    hiddenNav: true,
+  },
+  {
+    path: '/admin/categories',
+    title: 'Categories',
+    component: Categories,
+    exact: true,
+  },
+  {
+    path: '/admin/categoeis/:id/edit',
+    title: 'Category edit',
+    component: CategoryEdit,
+    hiddenNav: true,
+  },
+  {
+    path: '/admin/categories/create',
+    title: 'Categoreis create',
+    component: CategoryCreate,
     hiddenNav: true,
   },
   {
