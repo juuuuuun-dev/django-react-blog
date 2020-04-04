@@ -27,6 +27,6 @@ urlpatterns = [
 
     path("{}tags/".format(settings.API_VERSION), include("tags.urls")),
     path("{}categories/".format(settings.API_VERSION), include("categories.urls")),
-
+    path("{}posts/".format(settings.API_VERSION), include("posts.urls")),
 
 ]
