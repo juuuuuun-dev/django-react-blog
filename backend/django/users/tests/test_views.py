@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework.response import Response
 from django.conf import settings
 from pprint import pprint
-from .test_models import UserFactory
+from users.factories import UserFactory
 from rest_framework_simplejwt.tokens import RefreshToken
 
 

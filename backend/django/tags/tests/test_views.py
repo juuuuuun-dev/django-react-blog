@@ -4,7 +4,7 @@ from django.conf import settings
 from rest_framework.test import APITestCase
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from users.tests.test_models import UserFactory
+from users.factories import UserFactory
 from rest_framework_simplejwt.tokens import RefreshToken
 from tags.factories import TagFactory
 

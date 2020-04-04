@@ -47,7 +47,7 @@ export const navList: INavList[] = [
     exact: true,
   },
   {
-    path: '/admin/categoeis/:id/edit',
+    path: '/admin/categories/:id/edit',
     title: 'Category edit',
     component: CategoryEdit,
     hiddenNav: true,
@@ -65,6 +65,6 @@ export const navList: INavList[] = [
   },
 ];
 
-export const adminPathList = navList.map((value) => {
+export const adminPathList = navList.map(value => {
   return value.path;
 });
