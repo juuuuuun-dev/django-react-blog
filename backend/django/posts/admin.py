@@ -1,10 +1,10 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Article
+from .models import Post
 
 
-class ArticleAdmin(admin.ModelAdmin):
+class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'content', 'category',
                     'is_show', 'cover', 'created_at', 'updated_at']
 
@@ -12,4 +12,4 @@ class ArticleAdmin(admin.ModelAdmin):
         return obj.category_id.name
 
 
-admin.site.register(Article, ArticleAdmin)
+admin.site.register(Post, PostAdmin)

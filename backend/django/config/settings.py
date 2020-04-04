@@ -52,7 +52,7 @@ API_VERSION = "api/v1/"
 INSTALLED_APPS = [
     'categories',
     'tags',
-    'articles',
+    'posts',
     'users',
     'blog_auth',
     'django.contrib.sites',

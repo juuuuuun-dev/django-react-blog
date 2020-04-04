@@ -4,9 +4,9 @@ from categories.models import Category
 from users.models import User, UserProfile
 
 
-class Article(models.Model):
+class Post(models.Model):
     class Meta:
-        db_table = 'articles'
+        db_table = 'posts'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(verbose_name='title', max_length=255)
@@ -18,6 +18,3 @@ class Article(models.Model):
     tag = models.ManyToManyField(Tag, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    # def get_categories(self):
-    #     return "\n".join([p.cateroy_id for p in self category_id.all()])
