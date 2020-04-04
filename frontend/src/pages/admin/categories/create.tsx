@@ -1,13 +1,13 @@
 import React from 'react';
-import { create } from '../../../service/tags';
+import { create } from '../../../service/categories';
 import { AdminContext } from '../../../context/adminContext';
-import TagForm from '../../../components/admin/form/TagForm'
+import Form from '../../../components/admin/form/CategoryForm';
 import toast from '../../../components/common/toast';
 import { useHistory } from 'react-router-dom';
 
-const TagCreate: React.FC = () => {
+const Create: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [error, setError] = React.useState({})
+  const [error, setError] = React.useState({});
   const history = useHistory();
 
   const onSubmit = async (values: any) => {
@@ -20,21 +20,21 @@ const TagCreate: React.FC = () => {
       if (res.status === 201) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
-        history.push("/admin/tags");
+        history.push('/admin/categories');
       }
     } catch (e) {
       if (e.response.data) {
-        setError(e.response.data)
+        setError(e.response.data);
       }
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'ERROR' });
     }
-  }
+  };
   return (
     <>
-      <TagForm onSubmit={onSubmit} error={error} />
+      <Form onSubmit={onSubmit} error={error} />
     </>
   );
 };
 
-export default TagCreate;
+export default Create;
