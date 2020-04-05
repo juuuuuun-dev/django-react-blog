@@ -32,7 +32,6 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.data[0]['title'], post.title)
         self.assertTrue(response.data[0]['category'])
         self.assertEqual(len(response.data[0]['tag']), 1)
-        print(response.data[0])
 
     def test_retrieve(self):
         tag = TagFactory.create(name="tag")
@@ -50,5 +49,34 @@ class AdminPostViewSetTestCase(APITestCase):
             "category": category.id,
         }
         response = self.client.post(self.admin_api, post_data, format="json")
-        pprint(response.data)
-        # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['title'], post_data['title'])
+        self.assertEqual(response.data['content'], post_data['content'])
+        self.assertEqual(response.data['is_show'], post_data['is_show'])
+        self.assertEqual(response.data['category'], post_data['category'])
+
+    def test_put(self):
+        tag = TagFactory.create(name="tag")
+        post = PostFactory.create(user=self.user, tag=[tag])
+        category = CategoryFactory.create(name="test")
+
+        post_data = {
+            "title": "testtest",
+            "content": "content test",
+            "is_show": False,
+            "category": category.id,
+        }
+        response = self.client.put(
+            "{0}{1}/".format(self.admin_api, post.id), post_data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['title'], post_data['title'])
+        self.assertEqual(response.data['content'], post_data['content'])
+        self.assertEqual(response.data['is_show'], post_data['is_show'])
+        self.assertEqual(response.data['category'], post_data['category'])
+
+    def test_delete(self):
+        tag = TagFactory.create(name="tag")
+        post = PostFactory.create(user=self.user, tag=[tag])
+        response = self.client.delete(
+            "{0}{1}/".format(self.admin_api, post.id), format="json")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

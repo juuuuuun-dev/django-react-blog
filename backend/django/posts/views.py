@@ -11,6 +11,5 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
     def perform_create(self, serializer):
-        print("perform_create")
         user = User.objects.get(id=self.request.user.id)
         serializer.save(user=user)
