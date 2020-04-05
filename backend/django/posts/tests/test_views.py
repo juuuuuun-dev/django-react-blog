@@ -1,15 +1,11 @@
-from django.test import TestCase
 from rest_framework import status
 from django.conf import settings
 from rest_framework.test import APITestCase
-from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from users.factories import UserFactory
 from tags.factories import TagFactory
 from categories.factories import CategoryFactory
-from rest_framework_simplejwt.tokens import RefreshToken
 from posts.factories import PostFactory
-from pprint import pprint
 
 
 class AdminPostViewSetTestCase(APITestCase):
