@@ -7,6 +7,10 @@ import TagCreate from '../pages/admin/tags/create';
 import Categories from '../pages/admin/categories/index';
 import CategoryEdit from '../pages/admin/categories/edit';
 import CategoryCreate from '../pages/admin/categories/create';
+import Posts from '../pages/admin/posts/index';
+import PostEdit from '../pages/admin/posts/edit';
+import PostCreate from '../pages/admin/posts/create';
+
 
 interface INavList {
   path: string;
@@ -21,6 +25,24 @@ export const navList: INavList[] = [
     path: '/admin/dashboard',
     title: 'Dashboard',
     component: Dashboard,
+  },
+  {
+    path: '/admin/posts',
+    title: 'Posts',
+    component: Posts,
+    exact: true,
+  },
+  {
+    path: '/admin/posts/:id/edit',
+    title: 'Post edit',
+    component: PostEdit,
+    hiddenNav: true,
+  },
+  {
+    path: '/admin/posts/create',
+    title: 'Post create',
+    component: PostCreate,
+    hiddenNav: true,
   },
   {
     path: '/admin/tags',
