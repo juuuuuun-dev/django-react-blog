@@ -6,6 +6,7 @@ from users.factories import UserFactory
 from tags.factories import TagFactory
 from categories.factories import CategoryFactory
 from posts.factories import PostFactory
+from django.urls import reverse
 
 
 class AdminPostViewSetTestCase(APITestCase):
@@ -76,3 +77,10 @@ class AdminPostViewSetTestCase(APITestCase):
         response = self.client.delete(
             "{0}{1}/".format(self.admin_api, post.id), format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_form_item(self):
+        api = reverse("posts:post-form-item")
+        print(api)
+        response = self.client.get(api, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print(response.data)

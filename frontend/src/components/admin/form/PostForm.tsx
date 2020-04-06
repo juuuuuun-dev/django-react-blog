@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Switch } from 'antd';
 import { ITagData } from '../../../types/posts';
 
 
@@ -16,6 +16,14 @@ const PostForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       name: 'title',
       value: '',
     },
+    {
+      name: 'content',
+      value: '',
+    },
+    {
+      name: 'is_show',
+      value: false,
+    },
   ]);
   React.useEffect(() => {
     if (data) {
@@ -24,13 +32,37 @@ const PostForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
           name: 'title',
           value: data.title
         },
+        {
+          name: 'content',
+          value: data.content,
+        },
+        {
+          name: 'is_show',
+          value: data.is_show,
+        },
       ]);
     }
   }, [data]);
-  console.log({ error })
   const onFinish = async (values: any) => {
-    onSubmit(values)
+    console.log({ values });
+    // onSubmit(values)
   };
+
+  const handleShow = () => {
+    // const res = fields.map((value) => {
+    //   if (value.name === 'is_show') {
+    //     return {
+    //       name: 'is_show',
+    //       value: value.value !== true,
+    //     }
+    //   } else {
+    //     return value;
+    //   }
+    // })
+    // setFields(res);
+    // console.log({ res })
+    // setFields([]);
+  }
 
   return (
     <Form
@@ -55,6 +87,12 @@ const PostForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
         rules={[{ required: true, message: 'Please input content' }]}
       >
         <Input.TextArea rows={16} placeholder="Content" />
+      </Form.Item>
+      <Form.Item
+        label="Show"
+        name="is_show"
+      >
+        <Switch onChange={handleShow} />
       </Form.Item>
 
       <Form.Item colon={false}>
