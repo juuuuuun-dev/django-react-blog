@@ -1,10 +1,13 @@
 import axios from '../helper/client';
-
+import { ITagData } from '../types/tags'
+import { IPostFormItem } from '../types/posts'
 const adminEndPoint = '/posts/admin-post/';
 
 interface IData {
   name: string;
+
 }
+
 
 export const list = async () => {
   return axios.get(adminEndPoint);
@@ -20,6 +23,10 @@ export const update = async (id: string | undefined, data: IData) => {
 
 export const create = async (data: IData) => {
   return axios.post(`${adminEndPoint}`, data)
+}
+
+export const postFormItem = async () => {
+  return axios.get(`${adminEndPoint}/form-item`);
 }
 
 export const destroy = async (id: string | undefined) => {

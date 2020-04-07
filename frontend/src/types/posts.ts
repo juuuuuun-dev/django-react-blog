@@ -1,4 +1,6 @@
-export interface ITagData {
+import { ITagData } from '../types/tags'
+import { ICategoriesData } from '../types/categories'
+export interface IPostData {
   id: number;
   key: number;
   title: string;
@@ -8,4 +10,9 @@ export interface ITagData {
   tag: Array<number>;
   updated_at: string;
   created_at: string;
+}
+
+export interface IPostFormItem {
+  tags: ITagData[];
+  categories: ICategoriesData[]
 }

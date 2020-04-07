@@ -8,7 +8,7 @@ form_item = AdminPostViewSet.as_view({
 })
 
 router = DefaultRouter()
-router.register(r'admin-post', AdminPostViewSet)
+router.register(r'admin-post', AdminPostViewSet, basename="admin-post")
 
 urlpatterns = [
     path('', include(router.urls)),

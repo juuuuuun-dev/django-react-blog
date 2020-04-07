@@ -1,16 +1,17 @@
 import React from 'react';
 import { Form, Input, Button, Switch } from 'antd';
-import { ITagData } from '../../../types/posts';
+import { IPostData, IPostFormItem } from '../../../types/posts';
 
 
 interface IProps {
-  data?: ITagData;
+  data?: IPostData;
+  formItem?: IPostFormItem;
   onSubmit: (values: any) => Promise<void>;
   error?: {
     title?: Array<string>
   }
 }
-const PostForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
+const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
   const [fields, setFields] = React.useState([
     {
       name: 'title',

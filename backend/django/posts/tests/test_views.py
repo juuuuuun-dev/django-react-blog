@@ -1,5 +1,4 @@
 from rest_framework import status
-from django.conf import settings
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 from users.factories import UserFactory
@@ -11,8 +10,6 @@ from django.urls import reverse
 
 class AdminPostViewSetTestCase(APITestCase):
     def setUp(self):
-        self.admin_api = "/{}posts/admin-post/".format(settings.API_VERSION)
-        # user
         self.user = UserFactory.create()
         self.user.set_password("test1234")
         self.user.save()
@@ -23,7 +20,8 @@ class AdminPostViewSetTestCase(APITestCase):
     def test_get(self):
         tag = TagFactory.create(name="tag")
         post = PostFactory.create(user=self.user, tag=[tag])
-        response = self.client.get(self.admin_api)
+        api = reverse("posts:admin-post-list")
+        response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['title'], post.title)
@@ -33,8 +31,8 @@ class AdminPostViewSetTestCase(APITestCase):
     def test_retrieve(self):
         tag = TagFactory.create(name="tag")
         post = PostFactory.create(user=self.user, tag=[tag])
-        response = self.client.get(
-            "{0}{1}/".format(self.admin_api, post.id), format="json")
+        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_post(self):
@@ -45,7 +43,8 @@ class AdminPostViewSetTestCase(APITestCase):
             "is_show": True,
             "category": category.id,
         }
-        response = self.client.post(self.admin_api, post_data, format="json")
+        api = reverse("posts:admin-post-list")
+        response = self.client.post(api, post_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], post_data['title'])
         self.assertEqual(response.data['content'], post_data['content'])
@@ -56,6 +55,7 @@ class AdminPostViewSetTestCase(APITestCase):
         tag = TagFactory.create(name="tag")
         post = PostFactory.create(user=self.user, tag=[tag])
         category = CategoryFactory.create(name="test")
+        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
 
         post_data = {
             "title": "testtest",
@@ -63,8 +63,7 @@ class AdminPostViewSetTestCase(APITestCase):
             "is_show": False,
             "category": category.id,
         }
-        response = self.client.put(
-            "{0}{1}/".format(self.admin_api, post.id), post_data, format="json")
+        response = self.client.put(api, post_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], post_data['title'])
         self.assertEqual(response.data['content'], post_data['content'])
@@ -74,13 +73,18 @@ class AdminPostViewSetTestCase(APITestCase):
     def test_delete(self):
         tag = TagFactory.create(name="tag")
         post = PostFactory.create(user=self.user, tag=[tag])
-        response = self.client.delete(
-            "{0}{1}/".format(self.admin_api, post.id), format="json")
+        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+
+        response = self.client.delete(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_form_item(self):
+        category = CategoryFactory.create(name="test")
+        tag = TagFactory.create(name="test-tag")
         api = reverse("posts:post-form-item")
-        print(api)
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
+        self.assertEqual(len(response.data['tags']), 1)
+        self.assertEqual(len(response.data['categories']), 1)
+        self.assertEqual(response.data['tags'][0]['name'], tag.name)
+        self.assertEqual(response.data['categories'][0]['name'], category.name)
