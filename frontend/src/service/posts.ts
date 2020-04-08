@@ -1,12 +1,7 @@
 import axios from '../helper/client';
-import { ITagData } from '../types/tags'
-import { IPostFormItem } from '../types/posts'
+import { IData } from '../types/posts'
+
 const adminEndPoint = '/posts/admin-post/';
-
-interface IData {
-  name: string;
-
-}
 
 
 export const list = async () => {

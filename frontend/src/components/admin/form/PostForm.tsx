@@ -1,10 +1,10 @@
 import React from 'react';
-import { Form, Input, Button, Switch } from 'antd';
-import { IPostData, IPostFormItem } from '../../../types/posts';
+import { Form, Input, Button, Switch, Select } from 'antd';
+import { IData, IPostFormItem } from '../../../types/posts';
 
 
 interface IProps {
-  data?: IPostData;
+  data?: IData;
   formItem?: IPostFormItem;
   onSubmit: (values: any) => Promise<void>;
   error?: {
@@ -12,6 +12,7 @@ interface IProps {
   }
 }
 const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
+  const { Option } = Select;
   const [fields, setFields] = React.useState([
     {
       name: 'title',
@@ -46,7 +47,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
   }, [data]);
   const onFinish = async (values: any) => {
     console.log({ values });
-    // onSubmit(values)
+    onSubmit(values)
   };
 
   const handleShow = () => {
@@ -88,6 +89,45 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         rules={[{ required: true, message: 'Please input content' }]}
       >
         <Input.TextArea rows={16} placeholder="Content" />
+      </Form.Item>
+      <Form.Item
+        label="Category"
+        name="category"
+        rules={[{ required: true, message: 'Please select category' }]}
+      >
+        <Select
+          showSearch
+          style={{ width: 200 }}
+          placeholder="Select a person"
+          optionFilterProp="children"
+          filterOption={(input, option) => {
+            if (option) {
+              return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            return false
+          }}
+        >
+          {formItem?.categories.map((value, index) => {
+            return <Option key={index} value={value.id}>{value.name}</Option>
+          })}
+
+        </Select>
+      </Form.Item>
+
+      <Form.Item
+        label="Tag"
+        name="tag"
+      >
+        <Select
+          mode="multiple"
+          style={{ width: '100%' }}
+          placeholder="Please select"
+          defaultValue={[]}
+        >
+          {formItem?.tags.map((value, index) => {
+            return <Option key={index} value={value.id}>{value.name}</Option>
+          })}
+        </Select>
       </Form.Item>
       <Form.Item
         label="Show"

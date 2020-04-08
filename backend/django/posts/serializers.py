@@ -3,6 +3,10 @@ from users.serializers import UsernameSerializer
 from tags.serializers import TagSerializer
 from .models import Post
 from users.models import User
+from categories.models import Category
+
+""" @todo select_related()
+"""
 
 
 class PostSerializer(serializers.ModelSerializer):

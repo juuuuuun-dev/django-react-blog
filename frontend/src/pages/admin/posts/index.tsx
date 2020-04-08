@@ -1,14 +1,20 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/posts';
+// import { IData } from '../../../types/posts';
 import { Table, Input, Button } from 'antd';
 import searchColumn from "../../../components/admin/searchColumn"
 import { Link, useRouteMatch } from 'react-router-dom';
+import { CheckOutlined } from '@ant-design/icons';
 
 interface IData {
   id: number;
   key: number;
-  name: string;
+  title: string;
+  content: string;
+  is_show: boolean;
+  category: number;
+  tag: Array<number>;
   updated_at: string;
   created_at: string;
 }
@@ -47,13 +53,13 @@ const Posts: React.FC = () => {
 
   const columns = [
     {
-      title: 'name',
-      name: 'name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'title',
+      name: 'title',
+      dataIndex: 'title',
+      key: 'title',
       width: '33%',
       ...searchColumn({
-        dataIndex: 'name',
+        dataIndex: 'title',
         searchRef: searchRef,
         handleSearch: handleSearch,
         handleReset: handleReset,
@@ -61,6 +67,28 @@ const Posts: React.FC = () => {
         searchText: searchText,
         path: match.path,
       })
+    },
+    {
+      title: 'show',
+      name: 'is_show',
+      dataIndex: 'is_show',
+      key: 'is_show',
+      render: (text: boolean) =>
+        text === true ? (
+          <CheckOutlined />
+        ) : (
+            <></>
+          ),
+      width: '33%',
+      sorter: (a: IData, b: IData) => (a.is_show > b.is_show ? 1 : 0),
+    },
+    {
+      title: 'cateogry',
+      name: 'cateogry',
+      dataIndex: 'cateogry',
+      key: 'cateogry',
+      width: '33%',
+      sorter: (a: IData, b: IData) => (a.is_show > b.is_show ? 1 : 0),
     },
     {
       title: 'updated_at',

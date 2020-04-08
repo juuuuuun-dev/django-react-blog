@@ -2,18 +2,18 @@ import React from 'react';
 import { retrieve, update, destroy } from '../../../service/posts';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/PostForm'
-import { IPostData } from '../../../types/posts';
+import { IData } from '../../../types/posts';
 import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const Edit: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IPostData | undefined>();
+  const [data, setData] = React.useState<IData | undefined>();
   const [error, setError] = React.useState({})
-
   const { id } = useParams();
   const history = useHistory();
+  const redirectPath = "/admin/posts";
   React.useEffect(() => {
     if (state.hasToken) {
       fetchData();
@@ -33,13 +33,18 @@ const Edit: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const data = {
-        name: values.name,
+        id: values.id,
+        title: values.title,
+        content: values.content,
+        is_show: values.is_show,
+        category: values.category,
+        tag: values.tag,
       };
       const res = await update(id, data);
       if (res.status === 200) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
-        history.push("/admin/categories");
+        history.push(redirectPath);
       }
     } catch (e) {
       if (e.response.data) {
@@ -57,7 +62,7 @@ const Edit: React.FC = () => {
       if (res.status === 204) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
-        history.push("/admin/categories");
+        history.push(redirectPath);
       }
     } catch {
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });

@@ -37,11 +37,14 @@ class AdminPostViewSetTestCase(APITestCase):
 
     def test_post(self):
         category = CategoryFactory.create(name="test")
+        tag = TagFactory.create(name="test")
+
         post_data = {
             "title": "test",
             "content": "content test",
             "is_show": True,
             "category": category.id,
+            "tag": [tag.id],
         }
         api = reverse("posts:admin-post-list")
         response = self.client.post(api, post_data, format="json")

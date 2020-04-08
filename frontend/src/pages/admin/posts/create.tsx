@@ -28,13 +28,17 @@ const Create: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const data = {
-        name: values.name,
+        title: values.title,
+        content: values.content,
+        is_show: values.is_show,
+        category: values.category,
+        tag: values.tag,
       };
       const res = await create(data);
       if (res.status === 201) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
-        history.push('/admin/categories');
+        history.push('/admin/posts');
       }
     } catch (e) {
       if (e.response.data) {
