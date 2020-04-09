@@ -1,13 +1,13 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/posts';
-// import { IData } from '../../../types/posts';
-import { Table, Input, Button } from 'antd';
+import { ITextValue, ITagList } from '../../../types/tags';
+import { Table, Input, Button, Tag } from 'antd';
 import searchColumn from "../../../components/admin/searchColumn"
 import { Link, useRouteMatch } from 'react-router-dom';
 import { CheckOutlined } from '@ant-design/icons';
 
-interface IData {
+interface IPostData {
   id: number;
   key: number;
   title: string;
@@ -21,7 +21,8 @@ interface IData {
 
 const Posts: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IData[]>([]);
+  const [data, setData] = React.useState<IPostData[] | undefined>([]);
+  const [tags, setTags] = React.useState<ITextValue[]>([]);
   const match = useRouteMatch();
   React.useEffect(() => {
     if (state.hasToken) {
@@ -33,7 +34,16 @@ const Posts: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     const res = await list();
     if (res.status === 200) {
-      setData(res.data);
+      setData(res.data.data);
+      const tags: ITextValue[] = [];
+      res.data.tags.map((value: ITagList) => {
+        tags.push({
+          text: value.name,
+          value: value.name,
+        })
+      });
+      console.log(tags)
+      setTags(tags);
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
@@ -69,44 +79,73 @@ const Posts: React.FC = () => {
       })
     },
     {
+      title: 'category',
+      name: 'category',
+      dataIndex: 'category',
+      key: 'category',
+      width: '20%',
+      sorter: (a: IPostData, b: IPostData) => (a.is_show > b.is_show ? 1 : 0),
+      render: (text: { id: number, name: string }) =>
+        (<>{text.name}</>)
+    },
+    {
+      title: 'tag',
+      name: 'tag',
+      dataIndex: 'tag',
+      key: 'tag',
+      width: '20%',
+      filters: tags,
+      onFilter: (value: string, record: IPostData) => {
+        if (record.tag.length) {
+          let includeFlag: boolean = false;
+          record.tag.forEach((obj: any) => {
+            if (obj.name.includes(value)) {
+              includeFlag = true;
+            }
+          })
+          return includeFlag;
+        } else {
+          return false;
+        }
+      },
+      sorter: (a: IPostData, b: IPostData) => (a.is_show > b.is_show ? 1 : 0),
+      render: (text: Array<any>) =>
+        text.length ? (<>{text.map((value, index) => {
+          return <Tag key={index}>{value.name}</Tag>
+        })}</>
+        ) : (<>a</>)
+    },
+    {
       title: 'show',
       name: 'is_show',
       dataIndex: 'is_show',
       key: 'is_show',
       render: (text: boolean) =>
         text === true ? (
-          <CheckOutlined />
+          <CheckOutlined style={{ color: '#243a82' }} />
         ) : (
             <></>
           ),
-      width: '33%',
-      sorter: (a: IData, b: IData) => (a.is_show > b.is_show ? 1 : 0),
+      width: '10%',
+      sorter: (a: IPostData, b: IPostData) => (a.is_show > b.is_show ? 1 : 0),
     },
     {
-      title: 'category',
-      name: 'category',
-      dataIndex: 'category',
-      key: 'category',
-      width: '33%',
-      sorter: (a: IData, b: IData) => (a.is_show > b.is_show ? 1 : 0),
-      render: (text: { id: number, name: string }) =>
-        (<>{text.name}</>)
-    },
-    {
-      title: 'updated_at',
+      title: 'updated',
       name: 'updated_at',
       dataIndex: 'updated_at',
       key: 'updated_at',
-      width: '33%',
-      sorter: (a: IData, b: IData) => (a.updated_at > b.updated_at ? 1 : 0),
+      width: '10%',
+      sorter: (a: IPostData, b: IPostData) => (a.updated_at > b.updated_at ? 1 : 0),
+      render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
-      title: 'created_at',
+      title: 'created',
       name: 'created_at',
       dataIndex: 'created_at',
       key: 'created_at',
-      width: '33%',
-      sorter: (a: IData, b: IData) => (a.created_at > b.created_at ? 1 : 0),
+      width: '10%',
+      sorter: (a: IPostData, b: IPostData) => (a.created_at > b.created_at ? 1 : 0),
+      render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];
   return (

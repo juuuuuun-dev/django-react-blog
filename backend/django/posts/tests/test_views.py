@@ -19,15 +19,16 @@ class AdminPostViewSetTestCase(APITestCase):
 
     def test_get(self):
         tag = TagFactory.create(name="tagdayo")
+        TagFactory.create(name="tag2")
         post = PostFactory.create(user=self.user, tag=[tag])
         api = reverse("posts:admin-post-list")
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['title'], post.title)
-        self.assertTrue(response.data[0]['category'])
-        self.assertEqual(len(response.data[0]['tag']), 1)
-        print(response.data)
+        self.assertEqual(len(response.data['data']), 1)
+        self.assertEqual(response.data['data'][0]['title'], post.title)
+        self.assertTrue(response.data['data'][0]['category'])
+        self.assertEqual(len(response.data['data'][0]['tag']), 1)
+        self.assertEqual(len(response.data['tags']), 2)
 
     def test_retrieve(self):
         tag = TagFactory.create(name="tag")

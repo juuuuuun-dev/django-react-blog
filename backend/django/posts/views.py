@@ -7,7 +7,7 @@ from tags.models import Tag
 from users.models import User
 from rest_framework.response import Response
 from categories.serializers import CategorySerializer
-from tags.serializers import TagSerializer
+from tags.serializers import TagListSerializer
 
 
 class AdminPostViewSet(viewsets.ModelViewSet):
@@ -16,17 +16,21 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
     def list(self, request):
-        queryset = Post.objects.select_related("category").all()
-        print(queryset[0].category.name)
+        queryset = Post.objects.all()
         serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        tagSerializer = TagListSerializer(Tag.objects.all(), many=True)
+        data = {
+            "data": serializer.data,
+            "tags": tagSerializer.data,
+        }
+        return Response(data)
 
     def form_item(self, serializser):
         categorySerializer = CategorySerializer(
             Category.objects.all(),
             many=True
         )
-        tagSerializer = TagSerializer(Tag.objects.all(), many=True)
+        tagSerializer = TagListSerializer(Tag.objects.all(), many=True)
 
         data = {
             "categories": categorySerializer.data,
