@@ -83,12 +83,14 @@ const Posts: React.FC = () => {
       sorter: (a: IData, b: IData) => (a.is_show > b.is_show ? 1 : 0),
     },
     {
-      title: 'cateogry',
-      name: 'cateogry',
-      dataIndex: 'cateogry',
-      key: 'cateogry',
+      title: 'category',
+      name: 'category',
+      dataIndex: 'category',
+      key: 'category',
       width: '33%',
       sorter: (a: IData, b: IData) => (a.is_show > b.is_show ? 1 : 0),
+      render: (text: { id: number, name: string }) =>
+        (<>{text.name}</>)
     },
     {
       title: 'updated_at',

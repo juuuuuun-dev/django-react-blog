@@ -11,9 +11,15 @@ from tags.serializers import TagSerializer
 
 
 class AdminPostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().select_related("category")
     permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
+
+    def list(self, request):
+        queryset = Post.objects.select_related("category").all()
+        print(queryset[0].category.name)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
     def form_item(self, serializser):
         categorySerializer = CategorySerializer(
@@ -30,4 +36,11 @@ class AdminPostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = User.objects.get(id=self.request.user.id)
-        serializer.save(user=user)
+        category = Category.objects.get(id=self.request.data['category'])
+        tags = Tag.objects.filter(id__in=self.request.data['tag'])
+        serializer.save(user=user, category=category, tag=tags)
+
+    def perform_update(self, serializer):
+        category = Category.objects.get(id=self.request.data['category'])
+        tags = Tag.objects.filter(id__in=self.request.data['tag'])
+        serializer.save(category=category, tag=tags)

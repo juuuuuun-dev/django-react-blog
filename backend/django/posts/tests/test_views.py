@@ -18,7 +18,7 @@ class AdminPostViewSetTestCase(APITestCase):
             HTTP_AUTHORIZATION="Bearer {}".format(refresh.access_token))
 
     def test_get(self):
-        tag = TagFactory.create(name="tag")
+        tag = TagFactory.create(name="tagdayo")
         post = PostFactory.create(user=self.user, tag=[tag])
         api = reverse("posts:admin-post-list")
         response = self.client.get(api)
@@ -27,6 +27,7 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.data[0]['title'], post.title)
         self.assertTrue(response.data[0]['category'])
         self.assertEqual(len(response.data[0]['tag']), 1)
+        print(response.data)
 
     def test_retrieve(self):
         tag = TagFactory.create(name="tag")
@@ -38,13 +39,13 @@ class AdminPostViewSetTestCase(APITestCase):
     def test_post(self):
         category = CategoryFactory.create(name="test")
         tag = TagFactory.create(name="test")
-
+        tag2 = TagFactory.create(name="test2")
         post_data = {
             "title": "test",
             "content": "content test",
             "is_show": True,
             "category": category.id,
-            "tag": [tag.id],
+            "tag": [tag.id, tag2.id],
         }
         api = reverse("posts:admin-post-list")
         response = self.client.post(api, post_data, format="json")
@@ -52,7 +53,11 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.data['title'], post_data['title'])
         self.assertEqual(response.data['content'], post_data['content'])
         self.assertEqual(response.data['is_show'], post_data['is_show'])
-        self.assertEqual(response.data['category'], post_data['category'])
+        self.assertEqual(response.data['category']['id'], category.id)
+        self.assertEqual(response.data['tag'][0]['id'], tag.id)
+        self.assertEqual(response.data['tag'][1]['id'], tag2.id)
+
+        print(response.data['tag'])
 
     def test_put(self):
         tag = TagFactory.create(name="tag")
@@ -65,13 +70,15 @@ class AdminPostViewSetTestCase(APITestCase):
             "content": "content test",
             "is_show": False,
             "category": category.id,
+            "tag": [tag.id]
         }
         response = self.client.put(api, post_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], post_data['title'])
         self.assertEqual(response.data['content'], post_data['content'])
         self.assertEqual(response.data['is_show'], post_data['is_show'])
-        self.assertEqual(response.data['category'], post_data['category'])
+        self.assertEqual(response.data['category']['id'], category.id)
+        self.assertEqual(response.data['tag'][0]['id'], tag.id)
 
     def test_delete(self):
         tag = TagFactory.create(name="tag")
