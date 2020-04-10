@@ -52,7 +52,7 @@ API_VERSION = "api/v1/"
 INSTALLED_APPS = [
     'categories',
     'tags',
-    'articles',
+    'posts',
     'users',
     'blog_auth',
     'django.contrib.sites',
@@ -209,6 +209,22 @@ LANGUAGES = (
     ('ja', ugettext_lazy('Japanese')),
     ('en', ugettext_lazy('English')),
 )
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        },
+    }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

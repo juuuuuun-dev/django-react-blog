@@ -1,4 +1,4 @@
-export interface ITagData {
+export interface ICategoriesData {
   id: number;
   key: number;
   name: string;
@@ -6,12 +6,7 @@ export interface ITagData {
   created_at: string;
 }
 
-export interface ITagList {
+export interface ICategoriesList {
   id: number;
   name: string;
-}
-
-export interface ITextValue {
-  text: string;
-  value: string;
 }
