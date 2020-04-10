@@ -1,18 +1,18 @@
-import { ITagData } from '../types/tags'
-import { ICategoriesData } from '../types/categories'
+import { ITagList } from '../types/tags'
+import { ICategoriesList } from '../types/categories'
 export interface IData {
   id?: number;
   key?: number;
   title: string;
   content: string;
   is_show: boolean;
-  category: number;
-  tag: Array<number>;
+  category: ICategoriesList;
+  tag: ITagList[],
   updated_at?: string;
   created_at?: string;
 }
 
 export interface IPostFormItem {
-  tags: ITagData[];
-  categories: ICategoriesData[]
+  tags: ITagList[];
+  categories: ICategoriesList[]
 }

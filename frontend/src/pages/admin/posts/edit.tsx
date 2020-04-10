@@ -2,7 +2,7 @@ import React from 'react';
 import { retrieve, update, destroy } from '../../../service/posts';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/PostForm'
-import { IData } from '../../../types/posts';
+import { IData, IPostFormItem } from '../../../types/posts';
 import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
@@ -10,6 +10,7 @@ import DeleteBtn from '../../../components/admin/DeleteBtn';
 const Edit: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [data, setData] = React.useState<IData | undefined>();
+  const [formItem, setFormItem] = React.useState<IPostFormItem | undefined>();
   const [error, setError] = React.useState({})
   const { id } = useParams();
   const history = useHistory();
@@ -23,7 +24,8 @@ const Edit: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     const res = await retrieve(id);
     if (res.status === 200) {
-      setData(res.data);
+      setData(res.data.post);
+      setFormItem({ categories: res.data.categories, tags: res.data.tags });
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
@@ -72,7 +74,7 @@ const Edit: React.FC = () => {
   return (
     <>
       <DeleteBtn onDelete={onDelete} />
-      <Form data={data} onSubmit={onSubmit} error={error} />
+      <Form data={data} formItem={formItem} onSubmit={onSubmit} error={error} />
     </>
   );
 };

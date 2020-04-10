@@ -110,10 +110,10 @@ const Posts: React.FC = () => {
       },
       sorter: (a: IPostData, b: IPostData) => (a.is_show > b.is_show ? 1 : 0),
       render: (text: Array<any>) =>
-        text.length ? (<>{text.map((value, index) => {
+        (<>{text.map((value, index) => {
           return <Tag key={index}>{value.name}</Tag>
         })}</>
-        ) : (<>a</>)
+        )
     },
     {
       title: 'show',

@@ -13,65 +13,34 @@ interface IProps {
 }
 const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
   const { Option } = Select;
-  const [fields, setFields] = React.useState([
-    {
-      name: 'title',
-      value: '',
-    },
-    {
-      name: 'content',
-      value: '',
-    },
-    {
-      name: 'is_show',
-      value: false,
-    },
-  ]);
+  const [form] = Form.useForm();
+
   React.useEffect(() => {
     if (data) {
-      setFields([
+      form.setFieldsValue(
         {
-          name: 'title',
-          value: data.title
+          title: data.title,
+          content: data.content,
+          is_show: data.is_show || false,
+          category: data.category.id,
+          tag: data.tag.map((value) => {
+            return value.id
+          })
         },
-        {
-          name: 'content',
-          value: data.content,
-        },
-        {
-          name: 'is_show',
-          value: data.is_show,
-        },
-      ]);
+      );
     }
   }, [data]);
   const onFinish = async (values: any) => {
-    console.log({ values });
     onSubmit(values)
   };
-
-  const handleShow = () => {
-    // const res = fields.map((value) => {
-    //   if (value.name === 'is_show') {
-    //     return {
-    //       name: 'is_show',
-    //       value: value.value !== true,
-    //     }
-    //   } else {
-    //     return value;
-    //   }
-    // })
-    // setFields(res);
-    // console.log({ res })
-    // setFields([]);
-  }
 
   return (
     <Form
       labelCol={{ span: 3 }}
       wrapperCol={{ span: 14 }}
       name="tag"
-      fields={fields}
+      // fields={fields}
+      form={form}
       onFinish={onFinish}
     >
       <Form.Item
@@ -107,7 +76,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
             return false
           }}
         >
-          {formItem?.categories.map((value, index) => {
+          {formItem?.categories?.map((value, index) => {
             return <Option key={index} value={value.id}>{value.name}</Option>
           })}
 
@@ -133,7 +102,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         label="Show"
         name="is_show"
       >
-        <Switch onChange={handleShow} />
+        <Switch />
       </Form.Item>
 
       <Form.Item colon={false}>

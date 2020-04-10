@@ -1,12 +1,13 @@
 from .serializers import PostSerializer
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 from .models import Post
 from categories.models import Category
 from tags.models import Tag
 from users.models import User
 from rest_framework.response import Response
-from categories.serializers import CategorySerializer
+from categories.serializers import CategoryListSerializer
 from tags.serializers import TagListSerializer
 
 
@@ -25,17 +26,16 @@ class AdminPostViewSet(viewsets.ModelViewSet):
         }
         return Response(data)
 
-    def form_item(self, serializser):
-        categorySerializer = CategorySerializer(
-            Category.objects.all(),
-            many=True
-        )
-        tagSerializer = TagListSerializer(Tag.objects.all(), many=True)
+    def retrieve(self, request, pk=None):
+        queryset = Post.objects.all()
+        post = get_object_or_404(queryset, pk=pk)
+        serializer = PostSerializer(post)
+        data = self.getTagAndCategoryList()
+        data["post"] = serializer.data
+        return Response(data)
 
-        data = {
-            "categories": categorySerializer.data,
-            "tags": tagSerializer.data,
-        }
+    def form_item(self, serializser):
+        data = self.getTagAndCategoryList()
         return Response(data)
 
     def perform_create(self, serializer):
@@ -48,3 +48,12 @@ class AdminPostViewSet(viewsets.ModelViewSet):
         category = Category.objects.get(id=self.request.data['category'])
         tags = Tag.objects.filter(id__in=self.request.data['tag'])
         serializer.save(category=category, tag=tags)
+
+    def getTagAndCategoryList(self):
+        tagSerializer = TagListSerializer(Tag.objects.all(), many=True)
+        categorySerializer = CategoryListSerializer(
+            Category.objects.all(), many=True)
+        return {
+            "tags": tagSerializer.data,
+            "categories": categorySerializer.data,
+        }

@@ -30,7 +30,7 @@ const Create: React.FC = () => {
       const data = {
         title: values.title,
         content: values.content,
-        is_show: values.is_show,
+        is_show: values.is_show || false,
         category: values.category,
         tag: values.tag,
       };
