@@ -53,15 +53,6 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class UsernameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            "username",
-        )
-        read_only_fields = ("username",)
-
-
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField(
         required=True

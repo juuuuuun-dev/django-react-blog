@@ -1,8 +1,8 @@
-from .serializers import PostSerializer
+from ..models import Post
+from ..serializers import AdminPostSerializer
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from .models import Post
 from categories.models import Category
 from tags.models import Tag
 from users.models import User
@@ -11,10 +11,14 @@ from categories.serializers import CategoryListSerializer
 from tags.serializers import TagListSerializer
 
 
+class MainPostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all().select_related("category")
+
+
 class AdminPostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().select_related("category")
     permission_classes = (IsAuthenticated,)
-    serializer_class = PostSerializer
+    serializer_class = AdminPostSerializer
 
     def list(self, request):
         queryset = Post.objects.all()
@@ -29,7 +33,7 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = Post.objects.all()
         post = get_object_or_404(queryset, pk=pk)
-        serializer = PostSerializer(post)
+        serializer = AdminPostSerializer(post)
         data = self.getTagAndCategoryList()
         data["post"] = serializer.data
         return Response(data)
