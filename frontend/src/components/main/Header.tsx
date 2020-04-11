@@ -10,36 +10,37 @@ const Header = () => {
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
 
-  const navOnClick = (): void => {};
+  const navOnClick = (): void => { };
   return (
     <>
       <Header
         style={{
           height: headerHeight,
           background: '#ffffff',
-          padding: '0 20px',
           // position: 'fixed',
           // top: 0,
           // left: 0,
           // width: '100%'
         }}
       >
-        <Row>
-          <Col flex="100px">Logo</Col>
-          <Col flex="auto">
-            {width > 600 && (
-              <Nav
-                mode="horizontal"
-                styles={{
-                  lineHeight: headerHeight,
-                  float: 'right',
-                }}
-              />
-            )}
-            {width <= 600 && <Humberger showDrawer={showDrawer} setShowDrawer={setShowDrawer} />}
-          </Col>
-        </Row>
-        <div className="logo"></div>
+        <div className="header-container">
+          <Row>
+            <Col flex="100px">Logo</Col>
+            <Col flex="auto">
+              {width > 600 && (
+                <Nav
+                  mode="horizontal"
+                  styles={{
+                    lineHeight: headerHeight,
+                    float: 'right',
+                  }}
+                />
+              )}
+              {width <= 600 && <Humberger showDrawer={showDrawer} setShowDrawer={setShowDrawer} />}
+            </Col>
+          </Row>
+          <div className="logo"></div>
+        </div>
       </Header>
 
       <Drawer

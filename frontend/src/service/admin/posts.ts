@@ -1,5 +1,5 @@
-import axios from '../helper/client';
-import { IData } from '../types/posts'
+import axios from '../../helper/client';
+import { IData } from '../../types/posts'
 const adminEndPoint = '/posts/admin-post/';
 
 

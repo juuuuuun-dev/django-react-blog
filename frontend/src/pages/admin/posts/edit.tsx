@@ -1,5 +1,5 @@
 import React from 'react';
-import { retrieve, update, destroy } from '../../../service/posts';
+import { retrieve, update, destroy } from '../../../service/admin/posts';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/PostForm'
 import { IData, IPostFormItem } from '../../../types/posts';

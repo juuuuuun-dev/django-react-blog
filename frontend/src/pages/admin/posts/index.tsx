@@ -1,6 +1,6 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
-import { list } from '../../../service/posts';
+import { list } from '../../../service/admin/posts';
 import { ITextValue, ITagList } from '../../../types/tags';
 import { Table, Input, Button, Tag } from 'antd';
 import searchColumn from "../../../components/admin/searchColumn"

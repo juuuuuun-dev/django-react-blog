@@ -1,0 +1,36 @@
+// sm	≥576px,
+// md	≥768px,
+// lg	≥992px,
+// xl	≥1200px,
+// xxl	≥1600px
+.header-container {
+  max-width: @max-width;
+  margin: 0 auto;
+  padding: 0 @global-padding;
+}
+.main-container{
+  max-width: @max-width;
+  margin: 0 auto;
+  padding: @global-padding;
+}
+.right-contents{
+  background: #fff;
+  margin-left: @global-margin;
+}
+.post {
+  margin-bottom: @global-padding;
+}
+
+
+// sm
+@media screen and (max-width: @break-point) {
+  .header-container {
+    padding: 0 @global-padding / 2;
+  }
+  .main-container {
+    padding: @global-padding / 2;
+  }
+  .right-contents{
+    margin-left: 0;
+  }
+}
