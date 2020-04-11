@@ -1,5 +1,5 @@
 from ..models import Post
-from ..serializers import MainPostSerializer
+from ..serializers.main_serializers import MainPostSerializer
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
