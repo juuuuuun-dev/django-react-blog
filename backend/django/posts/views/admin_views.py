@@ -11,17 +11,13 @@ from categories.serializers import CategoryListSerializer
 from tags.serializers import TagListSerializer
 
 
-class MainPostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all().select_related("category")
-
-
 class AdminPostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all().select_related("category")
+    queryset = Post.objects.all().order_by('-id')
     permission_classes = (IsAuthenticated,)
     serializer_class = AdminPostSerializer
 
     def list(self, request):
-        queryset = Post.objects.all()
+        queryset = self.queryset
         serializer = self.serializer_class(queryset, many=True)
         tagSerializer = TagListSerializer(Tag.objects.all(), many=True)
         data = {
@@ -31,7 +27,7 @@ class AdminPostViewSet(viewsets.ModelViewSet):
         return Response(data)
 
     def retrieve(self, request, pk=None):
-        queryset = Post.objects.all()
+        queryset = self.queryset
         post = get_object_or_404(queryset, pk=pk)
         serializer = AdminPostSerializer(post)
         data = self.getTagAndCategoryList()

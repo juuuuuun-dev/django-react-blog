@@ -3,6 +3,8 @@ from tags.models import Tag
 from categories.models import Category
 from users.models import User
 
+# @todo 取得してからcontent処理
+
 
 class Post(models.Model):
     class Meta:

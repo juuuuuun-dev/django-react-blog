@@ -1,11 +1,13 @@
 import React from 'react';
 import PostListItem from '../components/main/PostListItem'
+import { IPostData } from '../types/posts'
 import { list } from '../service/main/posts'
 import { Card } from 'antd';
 import { LazyLoadImage, LazyLoadComponent } from 'react-lazy-load-image-component';
 
 const Index = () => {
   const { Meta } = Card;
+  const [posts, setPosts] = React.useState<IPostData[]>()
   React.useEffect(() => {
     fetchData();
   }, []);
@@ -13,10 +15,14 @@ const Index = () => {
     const res = await list();
     if (res.status === 200) {
       console.log({ res })
+      setPosts(res.data.posts)
     }
   }
   return (
     <>
+      {posts?.map((value, index) => {
+        return <PostListItem post={value} />
+      })}
       <div className="post">
         <LazyLoadComponent>
           <Card

@@ -2,14 +2,14 @@ import React from 'react';
 import { retrieve, update, destroy } from '../../../service/admin/posts';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/PostForm'
-import { IData, IPostFormItem } from '../../../types/posts';
+import { IPostData, IPostFormItem } from '../../../types/posts';
 import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const Edit: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IData | undefined>();
+  const [data, setData] = React.useState<IPostData | undefined>();
   const [formItem, setFormItem] = React.useState<IPostFormItem | undefined>();
   const [error, setError] = React.useState({})
   const { id } = useParams();

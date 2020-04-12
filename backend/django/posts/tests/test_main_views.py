@@ -20,17 +20,17 @@ class PostListTestCase(APITestCase):
         api = reverse("posts:post-list")
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['post']), 1)
-        self.assertEqual(response.data['post'][0]['title'], post.title)
-        self.assertTrue(response.data['post'][0]['category'])
-        self.assertEqual(len(response.data['post'][0]['tag']), 1)
+        self.assertEqual(len(response.data['posts']), 1)
+        self.assertEqual(response.data['posts'][0]['title'], post.title)
+        self.assertTrue(response.data['posts'][0]['category'])
+        self.assertEqual(len(response.data['posts'][0]['tag']), 1)
 
     def test_get_not_show(self):
         PostFactory.create(user=self.user, is_show=False)
         api = reverse("posts:post-list")
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['post']), 0)
+        self.assertEqual(len(response.data['posts']), 0)
 
 
 class PostDetailTestCase(APITestCase):

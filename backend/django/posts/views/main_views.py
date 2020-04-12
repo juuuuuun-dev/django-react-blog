@@ -10,10 +10,10 @@ class PostList(APIView):
     serializer_class = MainPostSerializer
 
     def get(self, request):
-        posts = Post.objects.filter(is_show=True).order_by('id')
+        posts = Post.objects.filter(is_show=True).order_by('-id')
         serializer = self.serializer_class(posts, many=True)
         result = {
-            "post": serializer.data,
+            "posts": serializer.data,
         }
         return Response(result)
 

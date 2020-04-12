@@ -1,10 +1,18 @@
 import React from 'react';
+import ReactMde from "react-mde";
+import * as Showdown from "showdown";
 import { Form, Input, Button, Switch, Select } from 'antd';
-import { IData, IPostFormItem } from '../../../types/posts';
+import { IPostData, IPostFormItem } from '../../../types/posts';
+import "react-mde/lib/styles/css/react-mde-all.css";
 
-
+const converter = new Showdown.Converter({
+  tables: true,
+  simplifiedAutoLink: true,
+  strikethrough: true,
+  tasklists: true
+});
 interface IProps {
-  data?: IData;
+  data?: IPostData;
   formItem?: IPostFormItem;
   onSubmit: (values: any) => Promise<void>;
   error?: {
@@ -33,7 +41,8 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
   const onFinish = async (values: any) => {
     onSubmit(values)
   };
-
+  const [content, setContent] = React.useState("**Hello world!!!**");
+  const [selectedTab, setSelectedTab] = React.useState<"write" | "preview">("write");
   return (
     <Form
       labelCol={{ span: 3 }}
@@ -57,7 +66,16 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         name="content"
         rules={[{ required: true, message: 'Please input content' }]}
       >
-        <Input.TextArea rows={16} placeholder="Content" />
+        <ReactMde
+          value={content}
+          onChange={setContent}
+          selectedTab={selectedTab}
+          onTabChange={setSelectedTab}
+          generateMarkdownPreview={markdown =>
+            Promise.resolve(converter.makeHtml(markdown))
+          }
+        />
+        {/* <Input.TextArea rows={16} placeholder="Content" /> */}
       </Form.Item>
       <Form.Item
         label="Category"
