@@ -4,7 +4,7 @@ import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { useWindowSize } from '@react-hook/window-size';
 import Nav from './Nav';
 
-const Header = () => {
+const Header: React.FC = () => {
   const headerHeight = '60px';
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);

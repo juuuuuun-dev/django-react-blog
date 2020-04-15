@@ -1,14 +1,24 @@
 import React from 'react';
 import { Card, Typography } from 'antd';
 import { IPostData } from '../../types/posts'
+import * as Showdown from "showdown";
+
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 interface IProps {
   post: IPostData;
 }
 
+const converter = new Showdown.Converter({
+  tables: true,
+  simplifiedAutoLink: true,
+  strikethrough: true,
+  tasklists: true
+});
+
 const PostDetail: React.FC<IProps> = ({ post }) => {
   const { Meta } = Card;
   const { Paragraph } = Typography;
+
   return (
     <>
       <div className="post">
@@ -24,15 +34,7 @@ const PostDetail: React.FC<IProps> = ({ post }) => {
             title={post.title}
             description={`${post.created_at} | ${post.category.name} | `}
           />
-          <Paragraph
-            ellipsis={{
-              rows: 2,
-              expandable: false,
-            }}
-            title={`${post.content}`}
-          >
-            {post.content}
-          </Paragraph>
+          <div className="content" dangerouslySetInnerHTML={{ __html: converter.makeHtml(post.content) }}></div>
         </Card>
       </div>
     </>
