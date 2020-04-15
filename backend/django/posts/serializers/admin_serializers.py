@@ -1,16 +1,10 @@
 from rest_framework import serializers
-from users.serializers import UsernameSerializer
 from tags.serializers import TagListSerializer
 from categories.serializers import CategoryListSerializer
-from .models import Post
-from users.models import User
-from categories.models import Category
-
-""" @todo select_related()
-"""
+from ..models import Post
 
 
-class PostSerializer(serializers.ModelSerializer):
+class AdminPostSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         read_only=True, source="post")
     username = serializers.PrimaryKeyRelatedField(

@@ -1,0 +1,56 @@
+// sm	≥576px,
+// md	≥768px,
+// lg	≥992px,
+// xl	≥1200px,
+// xxl	≥1600px
+.header-container {
+  max-width: @max-width;
+  margin: 0 auto;
+  padding: 0 @global-padding;
+}
+.main-container{
+  max-width: @max-width;
+  margin: 0 auto;
+  padding: @global-padding;
+}
+.right-contents{
+  background: #fff;
+  margin-left: @global-margin;
+}
+
+//////////////
+// post
+//////////////
+.post {
+  margin-bottom: @global-padding;
+}
+.post .ant-card-meta-title {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+}
+.post .ant-card-meta-detail > div:not(:last-child) {
+  margin-bottom: 0px;
+}
+.post .ant-card-meta-description {
+  font-size: .7rem;
+  margin-bottom: 15px;
+}
+.post-list .ant-typography {
+  line-height: 1rem;
+  font-size: .7rem;
+  margin-bottom: 0;
+}
+
+
+// sm
+@media screen and (max-width: @break-point) {
+  .header-container {
+    padding: 0 @global-padding / 2;
+  }
+  .main-container {
+    padding: @global-padding / 2;
+  }
+  .right-contents{
+    margin-left: 0;
+  }
+}

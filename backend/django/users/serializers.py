@@ -1,9 +1,7 @@
 from rest_framework import serializers
 from .models import User, UserProfile
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth import get_user_model
-import base64
 
 User = get_user_model()
 
@@ -51,15 +49,6 @@ class UserSerializer(serializers.ModelSerializer):
         instance.profile.url = profile_data.get("url", instance.profile.url)
         instance.profile.save()
         return instance
-
-
-class UsernameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            "username",
-        )
-        read_only_fields = ("username",)
 
 
 class PasswordResetSerializer(serializers.Serializer):

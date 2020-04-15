@@ -80,11 +80,11 @@ class AdminPostViewSetTestCase(APITestCase):
 
         post_data = {
             "title": "testtest",
-            "content": "content test",
+            "content": "#title\n##body\n<img src=\"/img.jpg\" />\n<a href=\"./link/\">lidayo</a>",
             "is_show": False,
             "category": category.id,
-            "tag": [tag.id]
-        }
+            "tag": [
+                tag.id]}
         response = self.client.put(api, post_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], post_data['title'])
@@ -92,6 +92,7 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.data['is_show'], post_data['is_show'])
         self.assertEqual(response.data['category']['id'], category.id)
         self.assertEqual(response.data['tag'][0]['id'], tag.id)
+        print(response.data)
 
     def test_delete(self):
         tag = TagFactory.create(name="tag")

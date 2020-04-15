@@ -1,10 +1,18 @@
 import React from 'react';
-import { Form, Input, Button, Switch, Select } from 'antd';
-import { IData, IPostFormItem } from '../../../types/posts';
+import ReactMde from "react-mde";
+import * as Showdown from "showdown";
+import { Form, Input, Button, Switch, Checkbox, Select } from 'antd';
+import { IPostData, IPostFormItem } from '../../../types/posts';
+import "react-mde/lib/styles/css/react-mde-all.css";
 
-
+const converter = new Showdown.Converter({
+  tables: true,
+  simplifiedAutoLink: true,
+  strikethrough: true,
+  tasklists: true
+});
 interface IProps {
-  data?: IData;
+  data?: IPostData;
   formItem?: IPostFormItem;
   onSubmit: (values: any) => Promise<void>;
   error?: {
@@ -14,26 +22,29 @@ interface IProps {
 const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
   const { Option } = Select;
   const [form] = Form.useForm();
-
+  const [isShow, setIsShow] = React.useState<boolean>(false)
   React.useEffect(() => {
     if (data) {
       form.setFieldsValue(
         {
           title: data.title,
           content: data.content,
-          is_show: data.is_show || false,
+          is_show: data.is_show,
           category: data.category.id,
           tag: data.tag.map((value) => {
             return value.id
           })
         },
       );
+      setIsShow(data.is_show || false)
     }
   }, [data]);
+  console.log({ isShow })
   const onFinish = async (values: any) => {
     onSubmit(values)
   };
-
+  const [content, setContent] = React.useState("**Hello world!!!**");
+  const [selectedTab, setSelectedTab] = React.useState<"write" | "preview">("write");
   return (
     <Form
       labelCol={{ span: 3 }}
@@ -57,7 +68,16 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         name="content"
         rules={[{ required: true, message: 'Please input content' }]}
       >
-        <Input.TextArea rows={16} placeholder="Content" />
+        <ReactMde
+          value={content}
+          onChange={setContent}
+          selectedTab={selectedTab}
+          onTabChange={setSelectedTab}
+          generateMarkdownPreview={markdown =>
+            Promise.resolve(converter.makeHtml(markdown))
+          }
+        />
+        {/* <Input.TextArea rows={16} placeholder="Content" /> */}
       </Form.Item>
       <Form.Item
         label="Category"
@@ -102,7 +122,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         label="Show"
         name="is_show"
       >
-        <Switch />
+        <Switch checked={isShow} onClick={() => setIsShow(isShow != true)} />
       </Form.Item>
 
       <Form.Item colon={false}>
