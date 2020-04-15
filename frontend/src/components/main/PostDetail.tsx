@@ -1,24 +1,18 @@
 import React from 'react';
 import { Card, Typography } from 'antd';
-import { IPostListData } from '../../types/posts'
+import { IPostData } from '../../types/posts'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { useHistory } from 'react-router-dom';
-
 interface IProps {
-  post: IPostListData;
+  post: IPostData;
 }
 
-const PostListItem: React.FC<IProps> = ({ post }) => {
+const PostDetail: React.FC<IProps> = ({ post }) => {
   const { Meta } = Card;
-  const history = useHistory();
   const { Paragraph } = Typography;
   return (
     <>
-      <div className="post post-list">
+      <div className="post">
         <Card
-          hoverable
-          style={{ width: "100%" }}
-          onClick={() => history.push(`/post/${post.id}`)}
           cover={
             <LazyLoadImage
               alt="test"
@@ -35,9 +29,9 @@ const PostListItem: React.FC<IProps> = ({ post }) => {
               rows: 2,
               expandable: false,
             }}
-            title={`${post.plain_content}`}
+            title={`${post.content}`}
           >
-            {post.plain_content}
+            {post.content}
           </Paragraph>
         </Card>
       </div>
@@ -46,4 +40,4 @@ const PostListItem: React.FC<IProps> = ({ post }) => {
 };
 
 
-export default PostListItem;
+export default PostDetail;

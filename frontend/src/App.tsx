@@ -7,18 +7,19 @@ import MainLayout from './components/main/layout/MainLayout';
 import AdminLayout from './components/admin/layout/AdminLayout';
 import LoginLayout from './components/login/layout/LoginLayout';
 import { adminPathList } from './config/admin';
+import { mainPathList } from './config/main';
 
 import './less/app.less';
 
 function App() {
 
-
+  console.log(mainPathList);
   return (
     <div className="App">
       <Layout>
         <Router>
           <Switch>
-            <Route exact path={['/', '/articles']}>
+            <Route exact path={mainPathList}>
               <MainLayout />
             </Route>
             <Route exact path={adminPathList}>
