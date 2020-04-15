@@ -12,6 +12,16 @@ export interface IPostData {
   created_at?: string;
 }
 
+export interface IPostListData {
+  id?: number;
+  title: string;
+  plain_content: string;
+  category: ICategoriesList;
+  tag: ITagList[],
+  updated_at: string;
+  created_at: string;
+}
+
 export interface IPostFormItem {
   tags: ITagList[];
   categories: ICategoriesList[]

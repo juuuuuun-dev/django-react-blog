@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMde from "react-mde";
 import * as Showdown from "showdown";
-import { Form, Input, Button, Switch, Select } from 'antd';
+import { Form, Input, Button, Switch, Checkbox, Select } from 'antd';
 import { IPostData, IPostFormItem } from '../../../types/posts';
 import "react-mde/lib/styles/css/react-mde-all.css";
 
@@ -22,22 +22,24 @@ interface IProps {
 const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
   const { Option } = Select;
   const [form] = Form.useForm();
-
+  const [isShow, setIsShow] = React.useState<boolean>(false)
   React.useEffect(() => {
     if (data) {
       form.setFieldsValue(
         {
           title: data.title,
           content: data.content,
-          is_show: data.is_show || false,
+          is_show: data.is_show,
           category: data.category.id,
           tag: data.tag.map((value) => {
             return value.id
           })
         },
       );
+      setIsShow(data.is_show || false)
     }
   }, [data]);
+  console.log({ isShow })
   const onFinish = async (values: any) => {
     onSubmit(values)
   };
@@ -120,7 +122,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         label="Show"
         name="is_show"
       >
-        <Switch />
+        <Switch checked={isShow} onClick={() => setIsShow(isShow != true)} />
       </Form.Item>
 
       <Form.Item colon={false}>

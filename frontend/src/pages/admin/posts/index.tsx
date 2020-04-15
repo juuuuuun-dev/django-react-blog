@@ -24,6 +24,7 @@ const Posts: React.FC = () => {
   const [data, setData] = React.useState<IPostData[] | undefined>([]);
   const [tags, setTags] = React.useState<ITextValue[]>([]);
   const match = useRouteMatch();
+  console.log({ data })
   React.useEffect(() => {
     if (state.hasToken) {
       fetchData();

@@ -9,6 +9,8 @@ from users.models import User
 from rest_framework.response import Response
 from categories.serializers import CategoryListSerializer
 from tags.serializers import TagListSerializer
+from bs4 import BeautifulSoup
+from markdown import markdown
 
 
 class AdminPostViewSet(viewsets.ModelViewSet):
@@ -17,7 +19,7 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     serializer_class = AdminPostSerializer
 
     def list(self, request):
-        queryset = self.queryset
+        queryset = Post.objects.all().order_by('-id')
         serializer = self.serializer_class(queryset, many=True)
         tagSerializer = TagListSerializer(Tag.objects.all(), many=True)
         data = {
@@ -42,12 +44,20 @@ class AdminPostViewSet(viewsets.ModelViewSet):
         user = User.objects.get(id=self.request.user.id)
         category = Category.objects.get(id=self.request.data['category'])
         tags = Tag.objects.filter(id__in=self.request.data['tag'])
-        serializer.save(user=user, category=category, tag=tags)
+        html = markdown(self.request.data['content'])
+        plain = ''.join(BeautifulSoup(html).findAll(text=True))
+        serializer.save(
+            user=user,
+            plain_content=plain,
+            category=category,
+            tag=tags)
 
     def perform_update(self, serializer):
         category = Category.objects.get(id=self.request.data['category'])
         tags = Tag.objects.filter(id__in=self.request.data['tag'])
-        serializer.save(category=category, tag=tags)
+        html = markdown(self.request.data['content'])
+        plain = ''.join(BeautifulSoup(html).findAll(text=True))
+        serializer.save(plain_content=plain, category=category, tag=tags)
 
     def getTagAndCategoryList(self):
         tagSerializer = TagListSerializer(Tag.objects.all(), many=True)

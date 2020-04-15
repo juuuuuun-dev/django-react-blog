@@ -1,5 +1,6 @@
 from ..models import Post
-from ..serializers.main_serializers import MainPostSerializer
+from ..serializers.main_serializers import MainPostSerializer,\
+    MainPostListSerializer
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 
 class PostList(APIView):
     queryset = Post.objects.all()
-    serializer_class = MainPostSerializer
+    serializer_class = MainPostListSerializer
 
     def get(self, request):
         posts = Post.objects.filter(is_show=True).order_by('-id')

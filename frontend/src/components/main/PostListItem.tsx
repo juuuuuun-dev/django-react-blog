@@ -1,15 +1,14 @@
 import React from 'react';
-import { Card } from 'antd';
-import { IPostData } from '../../types/posts'
+import { Card, Typography } from 'antd';
+import { IPostListData } from '../../types/posts'
 import { LazyLoadImage, LazyLoadComponent } from 'react-lazy-load-image-component';
-
 interface IProps {
-  post: IPostData;
+  post: IPostListData;
 }
 
 const PostListItem: React.FC<IProps> = ({ post }) => {
   const { Meta } = Card;
-
+  const { Paragraph } = Typography;
   return (
     <>
       <div className="post">
@@ -27,7 +26,17 @@ const PostListItem: React.FC<IProps> = ({ post }) => {
             title={post.title}
             description={`${post.created_at} | ${post.category.name} | `}
           />
-          Wes Anderson banjo you probably haven’t heard of them cred, XOXO deep v kale chips Kickstarter viral. Swag meggings jean shorts chillwave seitan disrupt. Meditation flexitarian authentic organic, you probably haven’t heard of them taxidermy fap pop-up. Trust fund Tumblr Schlitz Banksy Austin squid. Paleo wayfarers twee ugh Sartorial street art gastropub pork belly tofu […]
+          <Paragraph
+            style={{ maxWidth: "780px" }}
+            ellipsis={{
+              rows: 2,
+              expandable: false,
+              // suffix: '[..]',
+            }}
+            title={`${post.plain_content}`}
+          >
+            {post.plain_content}
+          </Paragraph>
         </Card>
       </div>
     </>
