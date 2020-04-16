@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'tags',
     'posts',
     'users',
+    'media',
     'blog_auth',
     'django.contrib.sites',
     'django.contrib.admin',
