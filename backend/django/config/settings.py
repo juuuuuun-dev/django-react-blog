@@ -20,8 +20,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
+MEDIA_URL = '/storage/'
 
 TEST_RUNNER = 'my_project.runner.PytestTestRunner'
 
@@ -72,6 +72,8 @@ INSTALLED_APPS = [
     # 'rest_auth',
     # 'rest_auth.registration',
     'djoser',
+    'django_cleanup.apps.CleanupConfig',
+    'imagekit',
 ]
 SITE_ID = 1
 SITE_NAME = "My blog!"

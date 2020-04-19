@@ -1,24 +1,15 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
-import { list } from '../../../service/admin/posts';
-import { ITextValue, ITagList } from '../../../types/tags';
-import { Table, Input, Button, Tag } from 'antd';
+import { list } from '../../../service/admin/media';
+import { Table, Input, Button } from 'antd';
 import searchColumn from "../../../components/admin/searchColumn"
 import { Link, useRouteMatch } from 'react-router-dom';
-import { CheckOutlined } from '@ant-design/icons';
+import { IMediaList } from '../../../types/media'
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-interface IPostData {
-  id: number;
-  key: number;
-  name: string;
-  path: string;
-  created_at: string;
-  updated_at: string;
-}
-const Posts: React.FC = () => {
+const Media: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IPostData[] | undefined>([]);
-  const [tags, setTags] = React.useState<ITextValue[]>([]);
+  const [data, setData] = React.useState<IMediaList[] | undefined>([]);
   const match = useRouteMatch();
   console.log({ data })
   React.useEffect(() => {
@@ -31,16 +22,7 @@ const Posts: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     const res = await list();
     if (res.status === 200) {
-      setData(res.data.data);
-      const tags: ITextValue[] = [];
-      res.data.tags.map((value: ITagList) => {
-        tags.push({
-          text: value.name,
-          value: value.name,
-        })
-      });
-      console.log(tags)
-      setTags(tags);
+      setData(res.data);
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
@@ -60,13 +42,13 @@ const Posts: React.FC = () => {
 
   const columns = [
     {
-      title: 'title',
-      name: 'title',
-      dataIndex: 'title',
-      key: 'title',
+      title: 'name',
+      name: 'name',
+      dataIndex: 'name',
+      key: 'name',
       width: '33%',
       ...searchColumn({
-        dataIndex: 'title',
+        dataIndex: 'name',
         searchRef: searchRef,
         handleSearch: handleSearch,
         handleReset: handleReset,
@@ -76,12 +58,21 @@ const Posts: React.FC = () => {
       })
     },
     {
+      title: 'file',
+      name: 'file',
+      dataIndex: 'file',
+      key: 'file',
+      width: '10%',
+      sorter: (a: IMediaList, b: IMediaList) => (a.created_at > b.created_at ? 1 : 0),
+      render: (text: string, record: IMediaList) => (<LazyLoadImage alt="thumb" width={40} src={record.thumb} />)
+    },
+    {
       title: 'updated',
       name: 'updated_at',
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '10%',
-      sorter: (a: IPostData, b: IPostData) => (a.updated_at > b.updated_at ? 1 : 0),
+      sorter: (a: IMediaList, b: IMediaList) => (a.updated_at > b.updated_at ? 1 : 0),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -90,7 +81,7 @@ const Posts: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '10%',
-      sorter: (a: IPostData, b: IPostData) => (a.created_at > b.created_at ? 1 : 0),
+      sorter: (a: IMediaList, b: IMediaList) => (a.created_at > b.created_at ? 1 : 0),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];
@@ -102,4 +93,4 @@ const Posts: React.FC = () => {
   );
 };
 
-export default Posts;
+export default Media;

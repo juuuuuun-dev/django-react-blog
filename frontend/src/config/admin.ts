@@ -10,8 +10,9 @@ import CategoryCreate from '../pages/admin/categories/create';
 import Posts from '../pages/admin/posts/index';
 import PostEdit from '../pages/admin/posts/edit';
 import PostCreate from '../pages/admin/posts/create';
+import Media from '../pages/admin/media/index';
 import MediaCreate from '../pages/admin/media/create';
-
+import MediaEdit from '../pages/admin/media/edit';
 
 
 interface INavList {
@@ -83,9 +84,21 @@ export const navList: INavList[] = [
     hiddenNav: true,
   },
   {
+    path: '/admin/media',
+    title: 'Media',
+    component: Media,
+    exact: true,
+  },
+  {
     path: '/admin/media/create',
     title: 'Media create',
     component: MediaCreate,
+    hiddenNav: true,
+  },
+  {
+    path: '/admin/media/:id/edit',
+    title: 'Media edit',
+    component: MediaEdit,
     hiddenNav: true,
   },
   {

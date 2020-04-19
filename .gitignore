@@ -94,3 +94,7 @@ __pycache__/
 
 # docker-sync
 .unison*
+
+# media
+backend/django/storage/media/
+backend/django/storage/CACHE/

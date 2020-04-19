@@ -1,14 +1,13 @@
 import React from 'react';
-import { create, postFormItem } from '../../../service/admin/posts';
+import { create } from '../../../service/admin/media';
 import { AdminContext } from '../../../context/adminContext';
-import Form from '../../../components/admin/form/MeidaForm';
+import Form from '../../../components/admin/form/MediaForm';
 import toast from '../../../components/common/toast';
-import { IPostFormItem } from '../../../types/posts'
 import { useHistory } from 'react-router-dom';
 
 const Create: React.FC = () => {
+  const redirectPath = '/admin/media';
   const { state, dispatch } = React.useContext(AdminContext);
-  const [formItem, setFormItem] = React.useState<IPostFormItem | undefined>();
   const [error, setError] = React.useState({});
   const history = useHistory();
   React.useEffect(() => {
@@ -18,27 +17,22 @@ const Create: React.FC = () => {
   }, [state.hasToken]);
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await postFormItem();
-    if (res.status === 200) {
-      setFormItem(res.data);
-    }
+
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
   const onSubmit = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const data = {
-        title: values.title,
-        content: values.content,
-        is_show: values.is_show || false,
-        category: values.category,
-        tag: values.tag,
-      };
-      const res = await create(data);
+      const params = new FormData();
+      params.append('name', values.name);
+      params.append('file', values.file);
+
+      console.log({ params })
+      const res = await create(params);
       if (res.status === 201) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
-        history.push('/admin/posts');
+        history.push(redirectPath);
       }
     } catch (e) {
       if (e.response.data) {
