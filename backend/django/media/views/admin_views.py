@@ -10,3 +10,12 @@ class AdminMediaViewSet(viewsets.ModelViewSet):
     queryset = Media.objects.all().order_by('-id')
     permission_classes = (IsAuthenticated,)
     serializer_class = AdminMediaSerializer
+
+    def perform_update(self, serializer):
+        """
+        remove thumb
+        """
+        if "file" in self.request.data:
+            media = Media.objects.get(id=self.kwargs['pk'])
+            Media.deleteThumb(media.file)
+        serializer.save()

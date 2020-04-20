@@ -26,12 +26,11 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
   const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
   const [file, setFile] = React.useState<File | undefined>();
   const [removeFile, setRemoveFile] = React.useState<boolean>(false)
-
+  console.log({ data })
 
   React.useEffect(() => {
     if (data) {
-      // setImageUrl('https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png');
-
+      setImageUrl(data.file);
       form.setFieldsValue(
         {
           name: data.name,
@@ -46,7 +45,6 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       return false;
     }
     values.file = file;
-    console.log({ values })
     onSubmit(values)
   };
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
@@ -93,12 +91,9 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
     }
   };
 
-  const handlePreview = async (file: any) => {
-    if (!file.url && !file.preview) {
-      // file.preview = await getBase64(file.originFileObj);
-      console.log('handlePreview')
-      setPreviewVisible(true)
-    }
+  const handlePreview = () => {
+    setPreviewVisible(true);
+    // window.open(imageUrl, "imgwindow")
   }
 
   const handleRemove = async (file: any) => {
@@ -150,13 +145,13 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
             }]}
             beforeUpload={beforeUpload}
 
-            onPreview={handlePreview}
+            // onPreview={handlePreview}
             onChange={handleChange}
             onRemove={handleRemove}
           >
             {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
           </Upload>
-          {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} onClick={() => setPreviewVisible(true)} /><DeleteOutlined onClick={handleRemove} /></> : <></>}
+          {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} onClick={() => handlePreview()} /><DeleteOutlined onClick={handleRemove} /></> : <></>}
         </Form.Item>
 
         <Form.Item colon={false}>

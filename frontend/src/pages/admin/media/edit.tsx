@@ -8,6 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const MediaEdit: React.FC = () => {
+  const redirectPath = "/admin/media";
   const { state, dispatch } = React.useContext(AdminContext);
   const [data, setData] = React.useState<IMediaData | undefined>();
   const [error, setError] = React.useState({})
@@ -34,13 +35,15 @@ const MediaEdit: React.FC = () => {
     try {
       const params = new FormData();
       params.append('name', values.name);
-      params.append('file', values.file);
+      if (values.file) {
+        params.append('file', values.file);
+      }
 
       const res = await update(id, params);
       if (res.status === 200) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
-        history.push("/admin/tags");
+        history.push(redirectPath);
       }
     } catch (e) {
       if (e.response.data) {
@@ -58,7 +61,7 @@ const MediaEdit: React.FC = () => {
       if (res.status === 204) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
-        history.push("/admin/tags");
+        history.push(redirectPath);
       }
     } catch {
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });

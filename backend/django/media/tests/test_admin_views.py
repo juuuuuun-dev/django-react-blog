@@ -5,6 +5,7 @@ from users.factories import UserFactory
 from ..factories import MediaFactory
 from ..models import Media
 from django.urls import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class AdminMediaViewSetTestCase(APITestCase):
@@ -25,6 +26,23 @@ class AdminMediaViewSetTestCase(APITestCase):
         self.assertEqual(response.data[0]['name'], media.name)
         print(response.data[0]['file'])
         print(media.thumb.url)
+        media.file.delete()
+
+    def test_put(self):
+        media = MediaFactory.create(name='test')
+        api = reverse("media:admin-media-detail", kwargs={"pk": media.id})
+        post_data = {
+            "name": "put",
+            "file": SimpleUploadedFile(
+                name='test_image.jpg',
+                content=open(
+                    "media/tests/test.jpg",
+                    'rb').read(),
+                content_type='image/jpeg')}
+        response = self.client.put(api, post_data, format="multipart")
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['name'], post_data['name'])
         media.file.delete()
 
     def test_delete(self):
