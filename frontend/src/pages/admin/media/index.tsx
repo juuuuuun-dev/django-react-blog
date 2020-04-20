@@ -11,7 +11,6 @@ const Media: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [data, setData] = React.useState<IMediaList[] | undefined>([]);
   const match = useRouteMatch();
-  console.log({ data })
   React.useEffect(() => {
     if (state.hasToken) {
       fetchData();
@@ -40,6 +39,10 @@ const Media: React.FC = () => {
     setSearchText('');
   };
 
+  const handlePreview = (imageUrl: string) => {
+    window.open(imageUrl, "imgwindow")
+  }
+
   const columns = [
     {
       title: 'name',
@@ -64,7 +67,7 @@ const Media: React.FC = () => {
       key: 'file',
       width: '10%',
       sorter: (a: IMediaList, b: IMediaList) => (a.created_at > b.created_at ? 1 : 0),
-      render: (text: string, record: IMediaList) => (<LazyLoadImage alt="thumb" width={40} src={record.thumb} />)
+      render: (text: string, record: IMediaList) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
     },
     {
       title: 'updated',

@@ -32,8 +32,6 @@ class Media(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def deleteThumb(file):
-        print("deleteThumb")
-        print(file)
         m = re.match(r'(.*)(?=\.)', file.name)
         path = "{}/{}/{}".format(settings.MEDIA_ROOT,
                                  settings.IMAGEKIT_CACHEFILE_DIR,
