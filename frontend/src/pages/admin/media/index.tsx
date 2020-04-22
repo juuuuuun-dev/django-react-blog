@@ -1,27 +1,36 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/admin/media';
-import { Table, Input, Button } from 'antd';
+import { Table, Input, Button, Row, Col } from 'antd';
+import { useQuery, useHistoryPushWithQuery } from '../../../helper/query'
 import searchColumn from "../../../components/admin/searchColumn"
-import { Link, useRouteMatch } from 'react-router-dom';
-import { IMediaList } from '../../../types/media'
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { IMediaList, IMediaListResult } from '../../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Media: React.FC = () => {
+  const query = useQuery();
+  const { Search } = Input;
+  const [page, setPage] = React.useState<string>(query.get("page") || "1")
+  const history = useHistory();
+  const location = useLocation();
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IMediaList[] | undefined>([]);
-  const match = useRouteMatch();
+  const [data, setData] = React.useState<IMediaList | undefined>();
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  // const [page, setPage] = React.useState<number>(1);
   React.useEffect(() => {
     if (state.hasToken) {
       fetchData();
     }
-  }, [state.hasToken]);
+  }, [state.hasToken, page, searchQuery]);
 
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await list();
-    if (res.status === 200) {
+    try {
+      const res = await list({ page, search: searchQuery });
       setData(res.data);
+    } catch {
+      console.log("error")
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
@@ -29,11 +38,35 @@ const Media: React.FC = () => {
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
 
-  const handleSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
+  const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex)
   };
+
+
+  const handleQuerySearch = (search: string): void => {
+    setSearchQuery(search);
+
+  }
+
+  const HandlePageChange = (page: number, pageSize?: number | undefined): void => {
+    setPage(String(page));
+    // const location = useLocation();
+    useHistoryPushWithQuery({
+      pathname: location.pathname,
+      query: { page }
+    })
+    // pushHistory(page);
+  }
+  // const pushHistory = ({ pushPage, search }): void => {
+  //   const queryPage = pushPage || page;
+  //   const pushLocation = {
+  //     pathname: location.pathname,
+  //     search: `?page=${page}`
+  //   }
+  //   history.push(pushLocation);
+  // }
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
@@ -53,11 +86,11 @@ const Media: React.FC = () => {
       ...searchColumn({
         dataIndex: 'name',
         searchRef: searchRef,
-        handleSearch: handleSearch,
+        handleSearch: handleFilterSearch,
         handleReset: handleReset,
         searchedColumn: searchedColumn,
         searchText: searchText,
-        path: match.path,
+        path: location.pathname,
       })
     },
     {
@@ -66,8 +99,7 @@ const Media: React.FC = () => {
       dataIndex: 'file',
       key: 'file',
       width: '10%',
-      sorter: (a: IMediaList, b: IMediaList) => (a.created_at > b.created_at ? 1 : 0),
-      render: (text: string, record: IMediaList) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
+      render: (text: string, record: IMediaListResult) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
     },
     {
       title: 'updated',
@@ -75,7 +107,7 @@ const Media: React.FC = () => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '10%',
-      sorter: (a: IMediaList, b: IMediaList) => (a.updated_at > b.updated_at ? 1 : 0),
+      sorter: (a: IMediaListResult, b: IMediaListResult) => (a.updated_at > b.updated_at ? 1 : 0),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -84,14 +116,31 @@ const Media: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '10%',
-      sorter: (a: IMediaList, b: IMediaList) => (a.created_at > b.created_at ? 1 : 0),
+      sorter: (a: IMediaListResult, b: IMediaListResult) => (a.created_at > b.created_at ? 1 : 0),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];
   return (
     <>
-      <Link to={`${match.path}/create`}><Button type="primary" style={{ marginBottom: "10px" }}>CREATE</Button></Link>
-      <Table className="table" columns={columns} dataSource={data} pagination={{ pageSize: 20 }} />
+      <Row className="create-search-row">
+        <Col flex="1 1 120px">
+          <Link to={`${location.pathname}/create`}><Button type="primary" style={{ marginBottom: "10px" }}>CREATE</Button></Link>
+        </Col>
+        <Col flex="0 1 300px">
+          <Search placeholder="search" onSearch={(value) => handleQuerySearch(value)} enterButton />
+        </Col>
+      </Row>
+      <Table
+        className="table"
+        columns={columns}
+        dataSource={data?.results}
+        pagination={{
+          total: data?.count,
+          pageSize: state.pageSize,
+          defaultCurrent: parseInt(page || "1"),
+          onChange: HandlePageChange,
+        }}
+      />
     </>
   );
 };

@@ -1,4 +1,5 @@
-export interface IMediaData {
+import { IPagination } from "./pagination"
+export interface IMediaData extends IPagination {
   id?: number;
   name: string;
   file: any;
@@ -6,9 +7,13 @@ export interface IMediaData {
   created_at?: string;
 }
 
-export interface IMediaList extends IMediaData {
+export interface IMediaListResult extends IMediaData {
   key: number;
   thumb: string;
   updated_at: string;
   created_at: string;
+}
+
+export interface IMediaList extends IPagination {
+  results: IMediaListResult[]
 }
