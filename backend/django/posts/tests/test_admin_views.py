@@ -6,6 +6,7 @@ from tags.factories import TagFactory
 from categories.factories import CategoryFactory
 from posts.factories import PostFactory
 from django.urls import reverse
+from urllib.parse import urlencode
 
 
 class AdminPostViewSetTestCase(APITestCase):
@@ -24,11 +25,29 @@ class AdminPostViewSetTestCase(APITestCase):
         api = reverse("posts:admin-post-list")
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['data']), 1)
-        self.assertEqual(response.data['data'][0]['title'], post.title)
-        self.assertTrue(response.data['data'][0]['category'])
-        self.assertEqual(len(response.data['data'][0]['tag']), 1)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['title'], post.title)
+        self.assertTrue(response.data['results'][0]['category'])
+        self.assertEqual(len(response.data['results'][0]['tag']), 1)
         self.assertEqual(len(response.data['tags']), 2)
+
+    def test_get_not_found(self):
+        tag = TagFactory.create(name="tagdayo")
+        TagFactory.create(name="tag2")
+        post = PostFactory.create(user=self.user, tag=[tag])
+        api = "".join([
+            reverse("posts:admin-post-list"),
+            "?",
+            urlencode({"page": 10}),
+        ])
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        api = "".join([
+            reverse("posts:admin-post-list"),
+            "?",
+            urlencode({"page": 1, "search": "abe"}),
+        ])
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_retrieve(self):
         tag = TagFactory.create(name="tag")
@@ -92,7 +111,6 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.data['is_show'], post_data['is_show'])
         self.assertEqual(response.data['category']['id'], category.id)
         self.assertEqual(response.data['tag'][0]['id'], tag.id)
-        print(response.data)
 
     def test_delete(self):
         tag = TagFactory.create(name="tag")

@@ -2,41 +2,39 @@ import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/admin/media';
 import { Table, Input, Button, Row, Col } from 'antd';
-import { useQuery, useHistoryPushWithQuery } from '../../../helper/query'
-import searchColumn from "../../../components/admin/searchColumn"
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
+import { Link, useLocation } from 'react-router-dom';
 import { IMediaList, IMediaListResult } from '../../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 
 const Media: React.FC = () => {
-  const query = useQuery();
-  const { Search } = Input;
-  const [page, setPage] = React.useState<string>(query.get("page") || "1")
-  const history = useHistory();
-  const location = useLocation();
   const { state, dispatch } = React.useContext(AdminContext);
+  const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
   const [data, setData] = React.useState<IMediaList | undefined>();
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
-  // const [page, setPage] = React.useState<number>(1);
+  const [searchText, setSearchText] = React.useState<string>('');
+  const [searchedColumn, setSearchedColumn] = React.useState<string>('');
+  const searchRef = React.useRef<null | Input>(null);
+
+  const { Search } = Input;
+  const location = useLocation();
   React.useEffect(() => {
+    console.log("effect")
     if (state.hasToken) {
       fetchData();
     }
-  }, [state.hasToken, page, searchQuery]);
+  }, [state.hasToken, query.page, query.search]);
 
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await list({ page, search: searchQuery });
+      const res = await list({ page: query.page, search: query.search });
       setData(res.data);
     } catch {
       console.log("error")
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
-  const searchRef = React.useRef<null | Input>(null);
-  const [searchText, setSearchText] = React.useState<string>('');
-  const [searchedColumn, setSearchedColumn] = React.useState<string>('');
 
   const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();
@@ -44,29 +42,20 @@ const Media: React.FC = () => {
     setSearchedColumn(dataIndex)
   };
 
-
   const handleQuerySearch = (search: string): void => {
-    setSearchQuery(search);
-
+    setQuery({
+      page: 1,
+      search: search
+    }, 'push');
   }
 
-  const HandlePageChange = (page: number, pageSize?: number | undefined): void => {
-    setPage(String(page));
-    // const location = useLocation();
-    useHistoryPushWithQuery({
-      pathname: location.pathname,
-      query: { page }
-    })
-    // pushHistory(page);
+  const handlePageChange = (page: number, pageSize?: number | undefined): void => {
+    setQuery({
+      page: page,
+      search: query.search
+    }, 'push')
   }
-  // const pushHistory = ({ pushPage, search }): void => {
-  //   const queryPage = pushPage || page;
-  //   const pushLocation = {
-  //     pathname: location.pathname,
-  //     search: `?page=${page}`
-  //   }
-  //   history.push(pushLocation);
-  // }
+
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
@@ -83,7 +72,7 @@ const Media: React.FC = () => {
       dataIndex: 'name',
       key: 'name',
       width: '33%',
-      ...searchColumn({
+      ...searchWithinPageColumn({
         dataIndex: 'name',
         searchRef: searchRef,
         handleSearch: handleFilterSearch,
@@ -127,7 +116,7 @@ const Media: React.FC = () => {
           <Link to={`${location.pathname}/create`}><Button type="primary" style={{ marginBottom: "10px" }}>CREATE</Button></Link>
         </Col>
         <Col flex="0 1 300px">
-          <Search placeholder="search" onSearch={(value) => handleQuerySearch(value)} enterButton />
+          <Search placeholder="search" defaultValue={`${query.search}`} onSearch={(value) => handleQuerySearch(value)} enterButton />
         </Col>
       </Row>
       <Table
@@ -137,8 +126,8 @@ const Media: React.FC = () => {
         pagination={{
           total: data?.count,
           pageSize: state.pageSize,
-          defaultCurrent: parseInt(page || "1"),
-          onChange: HandlePageChange,
+          defaultCurrent: query.page || 1,
+          onChange: handlePageChange,
         }}
       />
     </>

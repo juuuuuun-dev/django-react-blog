@@ -11,22 +11,25 @@ from categories.serializers import CategoryListSerializer
 from tags.serializers import TagListSerializer
 from bs4 import BeautifulSoup
 from markdown import markdown
+from rest_framework import filters
+from ..paginatin import PostPagination
 
 
 class AdminPostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('-id')
     permission_classes = (IsAuthenticated,)
     serializer_class = AdminPostSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'plain_content']
+    pagination_class = PostPagination
 
     def list(self, request):
-        queryset = Post.objects.all().order_by('-id')
-        serializer = self.serializer_class(queryset, many=True)
-        tagSerializer = TagListSerializer(Tag.objects.all(), many=True)
-        data = {
-            "data": serializer.data,
-            "tags": tagSerializer.data,
-        }
-        return Response(data)
+        # queryset = Post.objects.all().order_by('-id')
+        queryset = self.filter_queryset(self.queryset.filter())
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(
+            serializer.data)
 
     def retrieve(self, request, pk=None):
         queryset = self.queryset

@@ -1,62 +1,70 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/admin/posts';
-import { ITextValue, ITagList } from '../../../types/tags';
-import { Table, Input, Button, Tag } from 'antd';
-import searchColumn from "../../../components/admin/searchColumn"
-import { Link, useRouteMatch } from 'react-router-dom';
+import { ITextValue, ITagListResult } from '../../../types/tags';
+import { Table, Input, Tag } from 'antd';
+import { IPostList, IPostListResult } from '../../../types/posts';
+import CreateAndSearchRow from '../../../components/admin/CreatAndSearchRow';
+import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
+import { useLocation } from 'react-router-dom';
 import { CheckOutlined } from '@ant-design/icons';
-
-interface IPostData {
-  id: number;
-  key: number;
-  title: string;
-  content: string;
-  is_show: boolean;
-  category: number;
-  tag: Array<number>;
-  updated_at: string;
-  created_at: string;
-}
+import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 
 const Posts: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IPostData[] | undefined>([]);
+  const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
+  const [searchText, setSearchText] = React.useState<string>('');
+  const [searchedColumn, setSearchedColumn] = React.useState<string>('');
+  const [data, setData] = React.useState<IPostList | undefined>();
   const [tags, setTags] = React.useState<ITextValue[]>([]);
-  const match = useRouteMatch();
-  console.log({ data })
+  const searchRef = React.useRef<null | Input>(null);
+  const location = useLocation();
+
   React.useEffect(() => {
     if (state.hasToken) {
       fetchData();
     }
-  }, [state.hasToken]);
+  }, [state.hasToken, query.page, query.search]);
 
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await list();
-    if (res.status === 200) {
-      setData(res.data.data);
+
+    try {
+      const res = await list({ page: query.page, search: query.search });
+      setData(res.data);
       const tags: ITextValue[] = [];
-      res.data.tags.map((value: ITagList) => {
+      res.data.tags.map((value: ITagListResult) => {
         tags.push({
           text: value.name,
           value: value.name,
         })
       });
-      console.log(tags)
       setTags(tags);
+    } catch {
+      console.log("not found")
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
-  const searchRef = React.useRef<null | Input>(null);
-  const [searchText, setSearchText] = React.useState<string>('');
-  const [searchedColumn, setSearchedColumn] = React.useState<string>('');
 
-  const handleSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
+  const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex)
   };
+
+  const handleQuerySearch = (search: string): void => {
+    setQuery({
+      page: 1,
+      search: search
+    }, 'push');
+  }
+
+  const handlePageChange = (page: number, pageSize?: number | undefined): void => {
+    setQuery({
+      page: page,
+      search: query.search
+    }, 'push')
+  }
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
@@ -69,14 +77,14 @@ const Posts: React.FC = () => {
       dataIndex: 'title',
       key: 'title',
       width: '33%',
-      ...searchColumn({
+      ...searchWithinPageColumn({
         dataIndex: 'title',
         searchRef: searchRef,
-        handleSearch: handleSearch,
+        handleSearch: handleFilterSearch,
         handleReset: handleReset,
         searchedColumn: searchedColumn,
         searchText: searchText,
-        path: match.path,
+        path: location.pathname,
       })
     },
     {
@@ -85,7 +93,7 @@ const Posts: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       width: '20%',
-      sorter: (a: IPostData, b: IPostData) => (a.is_show > b.is_show ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => (a.is_show > b.is_show ? 1 : 0),
       render: (text: { id: number, name: string }) =>
         (<>{text.name}</>)
     },
@@ -96,7 +104,7 @@ const Posts: React.FC = () => {
       key: 'tag',
       width: '20%',
       filters: tags,
-      onFilter: (value: string, record: IPostData) => {
+      onFilter: (value: string | number | boolean, record: IPostListResult) => {
         if (record.tag.length) {
           let includeFlag: boolean = false;
           record.tag.forEach((obj: any) => {
@@ -109,7 +117,7 @@ const Posts: React.FC = () => {
           return false;
         }
       },
-      sorter: (a: IPostData, b: IPostData) => (a.is_show > b.is_show ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => (a.is_show > b.is_show ? 1 : 0),
       render: (text: Array<any>) =>
         (<>{text.map((value, index) => {
           return <Tag key={index}>{value.name}</Tag>
@@ -128,7 +136,7 @@ const Posts: React.FC = () => {
             <></>
           ),
       width: '10%',
-      sorter: (a: IPostData, b: IPostData) => (a.is_show > b.is_show ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => (a.is_show > b.is_show ? 1 : 0),
     },
     {
       title: 'updated',
@@ -136,7 +144,7 @@ const Posts: React.FC = () => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '10%',
-      sorter: (a: IPostData, b: IPostData) => (a.updated_at > b.updated_at ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => (a.updated_at > b.updated_at ? 1 : 0),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -145,14 +153,27 @@ const Posts: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '10%',
-      sorter: (a: IPostData, b: IPostData) => (a.created_at > b.created_at ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => (a.created_at > b.created_at ? 1 : 0),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];
   return (
     <>
-      <Link to={`${match.path}/create`}><Button type="primary" style={{ marginBottom: "10px" }}>CREATE</Button></Link>
-      <Table className="table" columns={columns} dataSource={data} pagination={{ pageSize: 20 }} />
+      <CreateAndSearchRow
+        pathname={location.pathname}
+        search={query.search}
+        handleQuerySearch={handleQuerySearch}
+      />
+      <Table
+        className="table"
+        columns={columns}
+        dataSource={data?.results}
+        pagination={{
+          total: data?.count,
+          pageSize: state.pageSize,
+          defaultCurrent: query.page || 1,
+          onChange: handlePageChange,
+        }} />
     </>
   );
 };

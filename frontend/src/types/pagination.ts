@@ -5,6 +5,6 @@ export interface IPagination {
 }
 
 export interface IListQuery {
-  page: string | null;
-  search?: string;
+  page: number | null | undefined;
+  search?: string | null | undefined;
 }

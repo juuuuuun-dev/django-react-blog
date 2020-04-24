@@ -2,8 +2,11 @@ import axios from '../../helper/client';
 import { IListQuery } from '../../types/pagination';
 import { queryStringify } from '../../helper/query';
 
-import { IPostData } from '../../types/posts'
-const endPoint = '/posts/admin-post/';
+const endPoint = '/tags/admin-tag/';
+
+interface IData {
+  name: string;
+}
 
 export const list = async (queries: IListQuery) => {
   const query = queryStringify(queries);
@@ -14,16 +17,12 @@ export const retrieve = async (id: string | undefined) => {
   return axios.get(`${endPoint}/${id}`)
 }
 
-export const update = async (id: string | undefined, data: IPostData) => {
+export const update = async (id: string | undefined, data: IData) => {
   return axios.put(`${endPoint}/${id}/`, data)
 }
 
-export const create = async (data: IPostData) => {
+export const create = async (data: IData) => {
   return axios.post(`${endPoint}`, data)
-}
-
-export const postFormItem = async () => {
-  return axios.get(`${endPoint}/form-item`);
 }
 
 export const destroy = async (id: string | undefined) => {

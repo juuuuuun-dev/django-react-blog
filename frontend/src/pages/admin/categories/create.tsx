@@ -1,5 +1,5 @@
 import React from 'react';
-import { create } from '../../../service/categories';
+import { create } from '../../../service/admin/categories';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/CategoryForm';
 import toast from '../../../components/common/toast';

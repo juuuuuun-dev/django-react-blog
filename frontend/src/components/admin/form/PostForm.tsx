@@ -68,20 +68,19 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         >
           <Input placeholder="Title" />
         </Form.Item>
+        <Button
+          style={{ marginBottom: 10 }}
+          size="small"
+          icon={<CameraOutlined />}
+          onClick={() => setMediaModalVisible(true)}
+        >
+          Add Media
+        </Button>
         <Form.Item
           label="Content"
           name="content"
           rules={[{ required: true, message: 'Please input content' }]}
         >
-
-          <Button
-            style={{ marginBottom: 10 }}
-            size="small"
-            icon={<CameraOutlined />}
-            onClick={() => setMediaModalVisible(true)}
-          >
-            Add Media
-        </Button>
 
           <ReactMde
             value={content}

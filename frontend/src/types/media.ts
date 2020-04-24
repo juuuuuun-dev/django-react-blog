@@ -1,5 +1,5 @@
 import { IPagination } from "./pagination"
-export interface IMediaData extends IPagination {
+export interface IMediaData {
   id?: number;
   name: string;
   file: any;
