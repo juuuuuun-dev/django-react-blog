@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import AdminCategoryViewSet
+from .views.admin_views import AdminCategoryViewSet
 from rest_framework.routers import DefaultRouter
 app_name = 'categories'
 router = DefaultRouter()

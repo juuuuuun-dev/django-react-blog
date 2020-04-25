@@ -1,14 +1,21 @@
+import { IPagination } from "./pagination"
 export interface ITagData {
   id: number;
-  key: number;
   name: string;
   updated_at: string;
   created_at: string;
 }
 
-export interface ITagList {
+export interface ITagListResult {
   id: number;
   name: string;
+  key: number;
+  updated_at: string;
+  created_at: string;
+}
+
+export interface ITagList extends IPagination {
+  results: ITagListResult[]
 }
 
 export interface ITextValue {

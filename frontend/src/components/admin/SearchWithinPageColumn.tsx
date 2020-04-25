@@ -19,12 +19,12 @@ interface SearchProp {
   confirm: string;
   clearFilters: () => void;
 }
-const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searchedColumn, searchText, path }: props) => ({
+const searchWithinPageColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searchedColumn, searchText, path }: props) => ({
   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: SearchProp) => (
     <div style={{ padding: 8 }}>
       <Input
         ref={searchRef}
-        placeholder={`Search ${dataIndex}`}
+        placeholder={`Search within page`}
         value={selectedKeys[0]}
         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
         onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
@@ -45,11 +45,11 @@ const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searche
     </div>
   ),
   filterIcon: (filtered: string) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-  onFilter: (value: string, record: any) =>
+  onFilter: (value: string | number | boolean, record: any) =>
     record[dataIndex]
       .toString()
       .toLowerCase()
-      .includes(value.toLowerCase()),
+      .includes(value),
   onFilterDropdownVisibleChange: (visible: boolean) => {
     if (visible) {
       setTimeout(() => {
@@ -76,4 +76,4 @@ const searchColumn = ({ dataIndex, searchRef, handleSearch, handleReset, searche
 });
 
 
-export default searchColumn;
+export default searchWithinPageColumn;

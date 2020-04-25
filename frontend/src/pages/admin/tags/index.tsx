@@ -1,45 +1,58 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
-import { list } from '../../../service/tags';
-import { Table, Input, Button } from 'antd';
-import searchColumn from "../../../components/admin/searchColumn"
-import { Link, useRouteMatch } from 'react-router-dom';
+import { list } from '../../../service/admin/tags';
+import { Table, Input } from 'antd';
+import { ITagList, ITagListResult } from '../../../types/tags';
+import CreateAndSearchRow from '../../../components/admin/CreatAndSearchRow';
+import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
+import { useLocation } from 'react-router-dom';
+import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 
-interface IData {
-  id: number;
-  key: number;
-  name: string;
-  updated_at: string;
-  created_at: string;
-}
 
 const Tags: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IData[]>([]);
-  const match = useRouteMatch();
+  const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
+  const [data, setData] = React.useState<ITagList>();
+  const [searchText, setSearchText] = React.useState<string>('');
+  const [searchedColumn, setSearchedColumn] = React.useState<string>('');
+  const searchRef = React.useRef<null | Input>(null);
+  const location = useLocation();
   React.useEffect(() => {
     if (state.hasToken) {
       fetchData();
     }
-  }, [state.hasToken]);
+  }, [state.hasToken, query.page, query.search]);
 
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await list();
-    if (res.status === 200) {
+    try {
+      const res = await list({ page: query.page, search: query.search });
       setData(res.data);
+    } catch {
+      console.log("not found")
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
-  const searchRef = React.useRef<null | Input>(null);
-  const [searchText, setSearchText] = React.useState<string>('');
-  const [searchedColumn, setSearchedColumn] = React.useState<string>('');
 
-  const handleSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
+  const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex)
   };
+
+  const handleQuerySearch = (search: string): void => {
+    setQuery({
+      page: 1,
+      search: search
+    }, 'push');
+  }
+
+  const handlePageChange = (page: number, pageSize?: number | undefined): void => {
+    setQuery({
+      page: page,
+      search: query.search
+    }, 'push')
+  }
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
@@ -52,14 +65,14 @@ const Tags: React.FC = () => {
       dataIndex: 'name',
       key: 'name',
       width: '33%',
-      ...searchColumn({
+      ...searchWithinPageColumn({
         dataIndex: 'name',
         searchRef: searchRef,
-        handleSearch: handleSearch,
+        handleSearch: handleFilterSearch,
         handleReset: handleReset,
         searchedColumn: searchedColumn,
         searchText: searchText,
-        path: match.path,
+        path: location.pathname,
       })
     },
     {
@@ -67,22 +80,37 @@ const Tags: React.FC = () => {
       name: 'updated_at',
       dataIndex: 'updated_at',
       key: 'updated_at',
-      width: '33%',
-      sorter: (a: IData, b: IData) => (a.updated_at > b.updated_at ? 1 : 0),
+      width: '20%',
+      sorter: (a: ITagListResult, b: ITagListResult) => (a.updated_at > b.updated_at ? 1 : 0),
+      render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
       title: 'created_at',
       name: 'created_at',
       dataIndex: 'created_at',
       key: 'created_at',
-      width: '33%',
-      sorter: (a: IData, b: IData) => (a.created_at > b.created_at ? 1 : 0),
+      width: '20%',
+      sorter: (a: ITagListResult, b: ITagListResult) => (a.created_at > b.created_at ? 1 : 0),
+      render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];
   return (
     <>
-      <Link to={`${match.path}/create`}><Button type="primary" style={{ marginBottom: "10px" }}>CREATE</Button></Link>
-      <Table className="table" columns={columns} dataSource={data} pagination={{ pageSize: 20 }} />
+      <CreateAndSearchRow
+        pathname={location.pathname}
+        search={query.search}
+        handleQuerySearch={handleQuerySearch}
+      />
+      <Table
+        className="table"
+        columns={columns}
+        dataSource={data?.results}
+        pagination={{
+          total: data?.count,
+          pageSize: state.pageSize,
+          defaultCurrent: query.page || 1,
+          onChange: handlePageChange,
+        }} />
     </>
   );
 };

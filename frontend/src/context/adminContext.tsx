@@ -28,7 +28,7 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
       const intervalId = setInterval(() => {
         setNow(new Date());
         refreshToken();
-      }, 300000);
+      }, 400000);
       return () => {
         clearInterval(intervalId);
       };

@@ -3,12 +3,14 @@ export interface AdminState {
   loading: boolean;
   hasToken: boolean;
   username: string;
+  pageSize: number;
 }
 export const initState: AdminState = {
   isSiderShow: true,
   loading: false,
   hasToken: false,
   username: '',
+  pageSize: parseInt(process.env.pageSize || "20"),
 };
 
 const SIDER_SHOW = 'SIDER_SHOW' as const;

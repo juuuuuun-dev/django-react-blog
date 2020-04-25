@@ -1,28 +1,31 @@
 import axios from '../../helper/client';
+import { IListQuery } from '../../types/pagination';
+import { queryStringify } from '../../helper/query';
+
 import { IPostData } from '../../types/posts'
-const adminEndPoint = '/posts/admin-post/';
+const endPoint = '/posts/admin-post/';
 
-
-export const list = async () => {
-  return axios.get(adminEndPoint);
+export const list = async (queries: IListQuery) => {
+  const query = queryStringify(queries);
+  return axios.get(`${endPoint}?${query}`);
 };
 
 export const retrieve = async (id: string | undefined) => {
-  return axios.get(`${adminEndPoint}/${id}`)
+  return axios.get(`${endPoint}/${id}`)
 }
 
 export const update = async (id: string | undefined, data: IPostData) => {
-  return axios.put(`${adminEndPoint}/${id}/`, data)
+  return axios.put(`${endPoint}/${id}/`, data)
 }
 
 export const create = async (data: IPostData) => {
-  return axios.post(`${adminEndPoint}`, data)
+  return axios.post(`${endPoint}`, data)
 }
 
 export const postFormItem = async () => {
-  return axios.get(`${adminEndPoint}/form-item`);
+  return axios.get(`${endPoint}/form-item`);
 }
 
 export const destroy = async (id: string | undefined) => {
-  return axios.delete(`${adminEndPoint}/${id}`)
+  return axios.delete(`${endPoint}/${id}`)
 }

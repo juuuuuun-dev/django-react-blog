@@ -41,7 +41,7 @@
     <type label="Inet CIDR Addr" length="0" sql="CIDR" quote="'"/>
     <type label="Geometry" length="0" sql="GEOMETRY" quote="'"/>
   </group>
-</datatypes><table x="1155" y="361" name="posts">
+</datatypes><table x="548" y="200" name="posts">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -49,6 +49,9 @@
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
 <row name="content" null="1" autoincrement="0">
+<datatype>TEXT</datatype>
+<default>NULL</default></row>
+<row name="plain_content" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
 <default>NULL</default></row>
 <row name="cover" null="1" autoincrement="0">
@@ -75,7 +78,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1408" y="704" name="categories">
+<table x="800" y="598" name="categories">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -92,7 +95,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1606" y="351" name="tags">
+<table x="1000" y="199" name="tags">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -109,7 +112,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1402" y="350" name="post_tag">
+<table x="800" y="194" name="post_tag">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -125,7 +128,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1402" y="486" name="comments">
+<table x="802" y="350" name="comments">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -149,18 +152,27 @@
 <part>id</part>
 </key>
 </table>
-<table x="899" y="748" name="media">
+<table x="548" y="505" name="media">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="name" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
 <row name="path" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="created_at" null="1" autoincrement="0">
+<datatype>DATE</datatype>
+<default>NULL</default></row>
+<row name="updated_at" null="1" autoincrement="0">
+<datatype>DATE</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="902" y="352" name="users">
+<table x="299" y="201" name="users">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -183,7 +195,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="900" y="564" name="user_profiles">
+<table x="302" y="449" name="user_profiles">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>

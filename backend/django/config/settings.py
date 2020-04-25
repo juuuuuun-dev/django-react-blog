@@ -20,8 +20,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
+MEDIA_URL = '/storage/'
 
 TEST_RUNNER = 'my_project.runner.PytestTestRunner'
 
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'tags',
     'posts',
     'users',
+    'media',
     'blog_auth',
     'django.contrib.sites',
     'django.contrib.admin',
@@ -71,6 +72,8 @@ INSTALLED_APPS = [
     # 'rest_auth',
     # 'rest_auth.registration',
     'djoser',
+    'django_cleanup.apps.CleanupConfig',
+    'imagekit',
 ]
 SITE_ID = 1
 SITE_NAME = "My blog!"
@@ -94,15 +97,15 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
     ],
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': env.int('PAGE_SIZE', 20)
 }
 
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     env('CORS_ORIGIN_WHITELIST').split(',')
-    # 'http://localhost:3010',
-    # 'http://127.0.0.1:3010',
-    # 'http://192.168.11.10:3010'
 )
 
 
