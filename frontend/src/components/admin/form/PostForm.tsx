@@ -27,8 +27,12 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
   const [form] = Form.useForm();
   const [isShow, setIsShow] = React.useState<boolean>(false)
   const [mediaModalVisible, setMediaModalVisible] = React.useState<boolean>(false)
+  const [selectedTab, setSelectedTab] = React.useState<"write" | "preview">("write");
+  const [content, setContent] = React.useState<string>("");
+
   React.useEffect(() => {
     if (data) {
+      setContent(data.content)
       form.setFieldsValue(
         {
           title: data.title,
@@ -44,10 +48,13 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
     }
   }, [data]);
   const onFinish = async (values: any) => {
+    values.content = content;
     onSubmit(values)
   };
-  const [content, setContent] = React.useState("**Hello world!!!**");
-  const [selectedTab, setSelectedTab] = React.useState<"write" | "preview">("write");
+
+  const handleMdeChange = (value: string) => {
+    console.log({ value })
+  }
   return (
     <>
       <Form
@@ -77,10 +84,9 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         </Button>
         <Form.Item
           label="Content"
-          name="content"
-          rules={[{ required: true, message: 'Please input content' }]}
+        // name="content"
+        // rules={[{ required: true, message: 'Please input content' }]}
         >
-
           <ReactMde
             ref={contentRef}
             value={content}
@@ -125,7 +131,6 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
             mode="multiple"
             style={{ width: '100%' }}
             placeholder="Please select"
-            defaultValue={[]}
           >
             {formItem?.tags.map((value, index) => {
               return <Option key={index} value={value.id}>{value.name}</Option>
@@ -145,7 +150,13 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         </Button>
         </Form.Item>
       </Form>
-      <MediaModal target={contentRef.current} visible={mediaModalVisible} setVisible={setMediaModalVisible} />
+      <MediaModal
+        content={content}
+        setContent={setContent}
+        target={contentRef.current}
+        visible={mediaModalVisible}
+        setVisible={setMediaModalVisible}
+      />
     </>
   );
 };

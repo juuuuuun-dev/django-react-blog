@@ -7,21 +7,21 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { EyeOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons'
 
 interface IProps {
+  content: string;
+  setContent: React.Dispatch<React.SetStateAction<string>>;
   visible: boolean;
   setVisible: (bool: boolean) => void;
   target: any;
 }
-const MediaModal: React.FC<IProps> = ({ visible, setVisible, target }) => {
+const MediaModal: React.FC<IProps> = ({ content, setContent, visible, setVisible, target }) => {
   const { Search } = Input;
   const { state } = React.useContext(AdminContext);
   const [data, setData] = React.useState<IMediaList | undefined>();
   const [page, setPage] = React.useState<number>(1);
   const [search, setSearch] = React.useState<string | undefined>();
   const [load, setLoad] = React.useState<boolean>(false);
-  console.log({ data });
   React.useEffect(() => {
     if (visible) {
-      console.log("effect")
       fetchData();
     }
   }, [visible, page, search])
@@ -45,16 +45,18 @@ const MediaModal: React.FC<IProps> = ({ visible, setVisible, target }) => {
     setPage(page);
   }
 
-  const PopContent: React.FC = () => {
-    return (
-      <>
-        <Button style={{ marginRight: 10 }} shape="circle" onClick={() => console.log("click")} icon={<PlusOutlined />} size="middle" />
-        <Button style={{ marginRight: 10 }} shape="circle" onClick={() => console.log("click")} icon={<EyeOutlined />} size="middle" />
-        {/* <Button shape="circle" onClick={() => console.log("click")} icon={<CloseOutlined />} size="middle" /> */}
-
-      </>
-    )
+  const handleAdd = (value: IMediaListResult): void => {
+    const start = target.textAreaRef.selectionStart;
+    const text = `![${value.name}](${value.file})`;
+    const newContent = content.substr(0, start) + text + content.substr(start);
+    setContent(newContent);
+    setVisible(false);
   }
+
+  const handlePreview = (imageUrl: string) => {
+    window.open(imageUrl, "imgwindow")
+  }
+
 
   return (
     <Modal
@@ -76,7 +78,12 @@ const MediaModal: React.FC<IProps> = ({ visible, setVisible, target }) => {
         <div className="media-thumbs clearfix">
           {data?.results.map((value, index) => {
             return <div className="media-thumbs__item" key={index}>
-              <Popover title={value.name} content={PopContent}>
+              <Popover title={value.name} content={
+                <>
+                  <Button style={{ marginRight: 10 }} shape="circle" onClick={() => handleAdd(value)} icon={<PlusOutlined />} size="middle" />
+                  <Button style={{ marginRight: 10 }} shape="circle" onClick={() => handlePreview(value.file)} icon={<EyeOutlined />} size="middle" />
+                </>
+              }>
                 <LazyLoadImage onClick={() => handleClick(value)} src={value.thumb} alt={value.name}></LazyLoadImage>
               </Popover>
             </div>
