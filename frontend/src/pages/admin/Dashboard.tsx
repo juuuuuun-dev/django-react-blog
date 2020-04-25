@@ -1,12 +1,16 @@
 import React from 'react';
+import { Calendar } from 'antd';
 
 const Dashboard = () => {
-    return (
-        <>
-            admin dashboard
-            <br />
-        </>
-    );
+  const onPanelChange = (value: any, mode: any) => {
+
+  }
+  return (
+    <>
+      <Calendar fullscreen={false} onPanelChange={onPanelChange} />
+      <br />
+    </>
+  );
 };
 
 export default Dashboard;
