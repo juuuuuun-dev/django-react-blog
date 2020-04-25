@@ -10,7 +10,7 @@ export const initState: AdminState = {
   loading: false,
   hasToken: false,
   username: '',
-  pageSize: 1,
+  pageSize: parseInt(process.env.pageSize || "20"),
 };
 
 const SIDER_SHOW = 'SIDER_SHOW' as const;

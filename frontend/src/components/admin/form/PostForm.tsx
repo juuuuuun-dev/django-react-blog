@@ -22,7 +22,7 @@ interface IProps {
   }
 }
 const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
-
+  const contentRef = React.useRef(null);
   const { Option } = Select;
   const [form] = Form.useForm();
   const [isShow, setIsShow] = React.useState<boolean>(false)
@@ -43,7 +43,6 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
       setIsShow(data.is_show || false)
     }
   }, [data]);
-  console.log({ isShow })
   const onFinish = async (values: any) => {
     onSubmit(values)
   };
@@ -83,6 +82,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         >
 
           <ReactMde
+            ref={contentRef}
             value={content}
             onChange={setContent}
             selectedTab={selectedTab}
@@ -145,7 +145,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
         </Button>
         </Form.Item>
       </Form>
-      <MediaModal visible={mediaModalVisible} setVisible={setMediaModalVisible} />
+      <MediaModal target={contentRef.current} visible={mediaModalVisible} setVisible={setMediaModalVisible} />
     </>
   );
 };
