@@ -3,7 +3,8 @@ import { Menu, Layout, Popover, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { get } from 'local-storage';
 import { navList } from '../../config/admin';
-import { AdminContext, logout } from '../../context/adminContext';
+import { AdminContext } from '../../context/adminContext';
+import { logout } from '../../service/admin/auth';
 import { useHistory } from 'react-router-dom';
 
 import { UserOutlined } from '@ant-design/icons';
