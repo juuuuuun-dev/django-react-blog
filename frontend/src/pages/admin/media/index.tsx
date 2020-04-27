@@ -19,12 +19,10 @@ const Media: React.FC = () => {
   const { Search } = Input;
   const location = useLocation();
   React.useEffect(() => {
-    console.log("effect")
     if (state.hasToken) {
       fetchData();
     }
   }, [state.hasToken, query.page, query.search]);
-
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
@@ -120,7 +118,8 @@ const Media: React.FC = () => {
         </Col>
       </Row>
       <Table
-        className="table"
+        data-testid="list-table"
+        className="list-table"
         columns={columns}
         dataSource={data?.results}
         pagination={{

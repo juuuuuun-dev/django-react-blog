@@ -22,7 +22,6 @@ export const AdminContextProvider = ({ children }: AdminContextProviderProps) =>
   React.useEffect(() => {
     const fn = async () => {
       await refreshToken(history);
-      console.log("providerdayo");
       dispatch({ type: 'SET_HAS_TOKEN', payload: { hasToken: true } });
       // auto refresh
       const intervalId = setInterval(() => {
