@@ -63,6 +63,7 @@ const Media: React.FC = () => {
     window.open(imageUrl, "imgwindow")
   }
 
+
   const columns = [
     {
       title: 'name',

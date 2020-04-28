@@ -1,15 +1,16 @@
 import React from 'react';
 import { Router, Route } from 'react-router-dom'
-import { createMemoryHistory } from 'history'
+import { createBrowserHistory } from 'history'
 import { QueryParamProvider } from 'use-query-params';
 import { AdminContextProvider } from '../../../../context/adminContext';
-import { render, cleanup, fireEvent } from '@testing-library/react'
+import { render, cleanup, fireEvent, waitFor } from '@testing-library/react'
+import App from '../../../../App';
 // import { act } from '@testing-library/react-hooks'
 import { act } from 'react-dom/test-utils';
 import Index from '../../../../pages/admin/media/index'
 import "@testing-library/jest-dom/extend-expect";
 import { mocked } from 'ts-jest/utils'
-import { refreshToken } from '../../../../service/admin/auth'
+import { refreshToken, login } from '../../../../service/admin/auth'
 import { list } from '../../../../service/admin/media';
 import { AxiosResponse } from 'axios';
 import { listData } from '../../../../__mocks__/mediaData';
@@ -38,12 +39,15 @@ jest.mock('../../../../service/admin/media');
  */
 const spyReturns = (returnValue: any) => jest.fn(() => returnValue);
 
-describe("AdminMediaIndex", () => {
+describe("Admin-media", () => {
 
   beforeEach(() => {
     mocked(refreshToken).mockClear();
+    mocked(login).mockClear();
     mocked(list).mockClear()
   })
+  const history = createBrowserHistory()
+  history.push('/login')
   const axiosResponse: AxiosResponse = {
     data: listData,
     status: 200,
@@ -53,9 +57,18 @@ describe("AdminMediaIndex", () => {
   };
 
   it("renders media index", async () => {
+    mocked(login).mockImplementation(
+      (history, values): Promise<void> => {
+        return new Promise((resolve) => {
+          history.push('/admin/dashboard');
+          resolve();
+        })
+      }
+    )
     mocked(refreshToken).mockImplementation(
       (): Promise<void> => {
         return new Promise((resolve) => {
+          console.log("refreshdayo")
           resolve();
         })
       }
@@ -63,20 +76,29 @@ describe("AdminMediaIndex", () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(axiosResponse)
     );
-    const history = createMemoryHistory()
-    const MediaIndex = () => {
+
+    const Wrapper = () => {
       return (
         <Router history={history}>
-          <QueryParamProvider ReactRouterRoute={Route}>
-            <AdminContextProvider>
-              <Index />
-            </AdminContextProvider>
-          </QueryParamProvider>
+          <App />
         </Router>
       )
     }
-    const { container, findByText } = render(<MediaIndex />)
-    const name = await findByText(listData.results[0].name)
-    expect(name).toBeInTheDocument()
+    const utils = render(<Wrapper />)
+
+    const name = await utils.getAllByText("Login")
+    const inputEmail = utils.getByLabelText("email")
+    fireEvent.change(inputEmail, { target: { value: 'test@test.com' } })
+    fireEvent.change(utils.getByLabelText("password"), { target: { value: '123456' } })
+    act(() => {
+      fireEvent.submit(utils.getByLabelText("login-submit"))
+    })
+    await waitFor(() => expect(utils.getAllByText("Dashboard")).toBeTruthy())
+    console.log(utils.container.innerHTML)
+
+
+    // expect(name).toBeInTheDocument()
+    // fireEvent.click(name)
+    // console.log(container.innerHTML)
   })
 })

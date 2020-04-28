@@ -5,6 +5,7 @@ import LoginForm from '../components/login/form/LoginForm';
 
 const Login = () => {
   const { Content } = Layout;
+  console.log("logindayo")
   return (
     <Layout className="site-layout-background" style={{}}>
       <Content style={{ height: '100vh', padding: '20px' }}>

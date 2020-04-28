@@ -1,5 +1,6 @@
 import axios, { setClientToken } from '../../helper/client';
 import { get, set, remove } from 'local-storage';
+import toast from '../../components/common/toast';
 
 export const refreshToken = async (history: any): Promise<void> => {
   return new Promise(async (resolve, reject) => {
@@ -28,3 +29,16 @@ export const logout = (history: any): void => {
   remove('refresh');
   remove('username');
 };
+
+export const login = async (history: any, values: any): Promise<void> => {
+  try {
+    const res = await axios.post('/blog_auth/token/', values);
+    const { data } = res;
+    set<string>('token', data.access);
+    set<string>('refresh', data.refresh);
+    set<string>('username', data.username);
+    history.push('/admin/dashboard');
+  } catch {
+    toast({ type: "ERROR" });
+  }
+}
