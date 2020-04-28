@@ -16,6 +16,7 @@ import MediaEdit from '../pages/admin/media/edit';
 
 
 interface INavList {
+  id?: string;
   path: string;
   title: string;
   component: React.FC;
@@ -25,11 +26,13 @@ interface INavList {
 
 export const navList: INavList[] = [
   {
+    id: 'dashboard',
     path: '/admin/dashboard',
     title: 'Dashboard',
     component: Dashboard,
   },
   {
+    id: 'posts',
     path: '/admin/posts',
     title: 'Posts',
     component: Posts,
@@ -48,6 +51,7 @@ export const navList: INavList[] = [
     hiddenNav: true,
   },
   {
+    id: 'tags',
     path: '/admin/tags',
     title: 'Tags',
     component: Tags,
@@ -84,6 +88,7 @@ export const navList: INavList[] = [
     hiddenNav: true,
   },
   {
+    id: 'media',
     path: '/admin/media',
     title: 'Media',
     component: Media,
@@ -102,6 +107,7 @@ export const navList: INavList[] = [
     hiddenNav: true,
   },
   {
+    id: 'profile',
     path: '/admin/profile',
     title: 'Profile',
     component: Profile,

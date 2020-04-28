@@ -26,7 +26,6 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
   const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
   const [file, setFile] = React.useState<File | undefined>();
   const [removeFile, setRemoveFile] = React.useState<boolean>(false)
-  console.log({ data })
 
   React.useEffect(() => {
     if (data) {
@@ -120,29 +119,21 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
           help={error && error.name ? "This name already exists" : null}
           rules={[{ required: true, message: 'Please input title' }]}
         >
-          <Input placeholder="Title" />
+          <Input aria-label="media-form-name" placeholder="Title" />
         </Form.Item>
 
         <Form.Item
           label="File"
-          name="file"
           validateStatus={file ? "success" : "error"}
           help={removeFile ? "Please selected file" : null}
         // rules={[{ required: true, message: 'Please selected file' }]}
         >
           <Upload
             name="file"
+            aria-label="media-form-file"
             listType="picture-card"
             className="file-uploader"
             showUploadList={false}
-            fileList={[{
-              uid: "1",
-              url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-              status: "done",
-              size: 100,
-              name: "a",
-              type: "image/jpeg"
-            }]}
             beforeUpload={beforeUpload}
 
             // onPreview={handlePreview}
@@ -155,7 +146,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
         </Form.Item>
 
         <Form.Item colon={false}>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button aria-label="media-form-submit" type="primary" htmlType="submit" className="login-form-button">
             Submit
         </Button>
         </Form.Item>

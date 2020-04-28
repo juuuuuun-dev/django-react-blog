@@ -24,7 +24,7 @@ const SideNav = ({ background }: NavProps) => {
         breakpoint="md"
         collapsedWidth="0"
         trigger={null}
-        width="150"
+        width="200"
         style={{ background: background }}
         onBreakpoint={broken => {
           if (broken) {
@@ -51,7 +51,7 @@ const SideNav = ({ background }: NavProps) => {
             if (!item.hiddenNav) {
               return (
                 <Menu.Item key={index}>
-                  <Link to={item.path}>{item.title}</Link>
+                  <Link data-testid={`side-nav-${item.id}`} to={item.path}>{item.title}</Link>
                 </Menu.Item>
               );
             }

@@ -7,6 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { IMediaList, IMediaListResult } from '../../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
+import CreateAndSearchRow from '../../../components/admin/CreatAndSearchRow';
 
 const Media: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
@@ -110,14 +111,11 @@ const Media: React.FC = () => {
   ];
   return (
     <>
-      <Row className="create-search-row">
-        <Col flex="1 1 120px">
-          <Link to={`${location.pathname}/create`}><Button type="primary" style={{ marginBottom: "10px" }}>CREATE</Button></Link>
-        </Col>
-        <Col flex="0 1 300px">
-          <Search placeholder="search" defaultValue={`${query.search}`} onSearch={(value) => handleQuerySearch(value)} enterButton />
-        </Col>
-      </Row>
+      <CreateAndSearchRow
+        pathname={location.pathname}
+        search={query.search}
+        handleQuerySearch={handleQuerySearch}
+      />
       <Table
         data-testid="list-table"
         className="list-table"
