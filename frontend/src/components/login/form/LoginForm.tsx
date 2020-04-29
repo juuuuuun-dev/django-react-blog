@@ -7,7 +7,6 @@ const LoginForm: React.FC = () => {
   const history = useHistory();
 
   const onFinish = (values: any) => {
-    console.log("onFinishSita")
     login(history, values);
   };
 

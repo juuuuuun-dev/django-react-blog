@@ -26,7 +26,6 @@ export const adminSetUp = async () => {
   mocked(refreshToken).mockImplementation(
     (): Promise<void> => {
       return new Promise((resolve) => {
-        console.log("refreshdayo")
         resolve();
       })
     }

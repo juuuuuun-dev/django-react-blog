@@ -43,8 +43,10 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       setRemoveFile(true);
       return false;
     }
-    values.file = file;
+    // values.file = file;
+    console.log({ values })
     onSubmit(values)
+    console.log("onFinish")
   };
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
     console.log({ FileList })
@@ -75,7 +77,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
 
   const handleChange = (info: any) => {
     console.log('handle');
-    console.log({ info })
+    console.log(info.file)
     setFile(info.file)
     if (info.file.status === 'uploading') {
       setLoading(true);

@@ -21,6 +21,7 @@ const Create: React.FC = () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
   const onSubmit = async (values: any) => {
+    console.log("onSubmit")
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const params = new FormData();
