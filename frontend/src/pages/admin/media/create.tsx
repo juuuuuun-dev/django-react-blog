@@ -24,7 +24,7 @@ const Create: React.FC = () => {
     try {
       const params = new FormData();
       params.append('name', values.name);
-
+      params.append('file', values.file);
       const res = await create(params);
       if (res.status === 201) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });

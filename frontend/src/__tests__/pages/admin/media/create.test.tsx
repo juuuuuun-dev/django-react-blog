@@ -13,7 +13,7 @@ afterEach(() => cleanup());
 jest.mock('../../../../service/admin/media');
 jest.mock('../../../../helper/file');
 
-describe("Admin-media", () => {
+describe("Admin media create", () => {
   const base64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAoACgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJVAAAAAAAAAAAAAAAAAA//Z";
   const file = new File([base64], "tets.jpg", {
     type: "image/jpeg",
@@ -37,8 +37,7 @@ describe("Admin-media", () => {
     }
   )
 
-  // create
-  it("renders media create", async () => {
+  it("success", async () => {
     const { utils, history } = await adminSetUp();
     fireEvent.click(utils.getByTestId('side-nav-media'));
     await waitFor(() => {
@@ -57,6 +56,32 @@ describe("Admin-media", () => {
     fireEvent.submit(utils.getByLabelText("media-form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText("Success")).toBeTruthy();
+    });
+  })
+
+  it("uploading not image", async () => {
+    const { utils, history } = await adminSetUp();
+    fireEvent.click(utils.getByTestId('side-nav-media'));
+    await waitFor(() => {
+      expect(utils.getByTestId("create-btn")).toBeTruthy();
+      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+    })
+    fireEvent.click(utils.getByTestId("create-btn"));
+    console.log("click")
+    await waitFor(() => {
+      expect(utils.getAllByText("Media create")).toBeTruthy();
+    });
+    act(() => {
+      fireEvent.change(utils.getByLabelText("media-form-name"), { target: { value: 'createAbe' } });
+    })
+
+    const text = new File(['ate'], "tets.txt", {
+      type: "text/plain",
+    });
+    fireEvent.change(utils.getByLabelText("media-form-file"), { target: { files: [text] } });
+    fireEvent.submit(utils.getByLabelText("media-form-submit"))
+    await waitFor(() => {
+      expect(utils.getByText("You can only upload JPG/PNG file!")).toBeTruthy();
     });
   })
 })

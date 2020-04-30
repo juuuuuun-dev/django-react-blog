@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 
 export const resultData = {
   "id": 1,
@@ -33,6 +33,16 @@ export const listAxiosResponse: AxiosResponse = {
   config: {},
   headers: {},
 };
+
+export const errorListAxiosResponse: AxiosResponse = {
+  data: {},
+  status: 404,
+  statusText: 'ERROR',
+  config: {},
+  headers: {},
+
+};
+
 export const detailAxiosResponse: AxiosResponse = {
   data: resultData,
   status: 200,

@@ -38,12 +38,12 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       setRemoveFile(true);
       return false;
     }
-
+    console.log("onFinish")
     values.file = file;
     onSubmit(values)
   };
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
     if (!isJpgOrPng) {
       toast({ type: 'ERROR', text: 'You can only upload JPG/PNG file!' })
     }
@@ -53,6 +53,11 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
     }
     if (isJpgOrPng && isLt2M) {
       // move getBase64
+      getBase64(file, (imageUrl: string) => {
+        setLoading(true);
+        setRemoveFile(false);
+        setImageUrl(imageUrl);
+      });
     }
     return false;
   }
@@ -64,11 +69,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
   );
 
   const handleChange = (info: any) => {
-    getBase64(info.fileList[0].originFileObj, (imageUrl: string) => {
-      setLoading(true);
-      setRemoveFile(false);
-      setImageUrl(imageUrl);
-    });
+
     setFile(info.file)
     if (info.file.status === 'uploading') {
       setLoading(true);

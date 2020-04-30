@@ -8,6 +8,7 @@ import { IMediaList, IMediaListResult } from '../../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 import CreateAndSearchRow from '../../../components/admin/CreatAndSearchRow';
+import toast from '../../../components/common/toast';
 
 const Media: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
@@ -29,8 +30,8 @@ const Media: React.FC = () => {
     try {
       const res = await list({ page: query.page, search: query.search });
       setData(res.data);
-    } catch {
-      console.log("error")
+    } catch (e) {
+      toast({ type: "ERROR" })
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
