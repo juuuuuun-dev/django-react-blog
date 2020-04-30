@@ -1,16 +1,13 @@
-import React from 'react';
-import { render, cleanup, fireEvent, waitFor } from '@testing-library/react'
-import { act } from '@testing-library/react-hooks'
-// import { act } from 'react-dom/test-utils';
-import "@testing-library/jest-dom/extend-expect";
 import { mocked } from 'ts-jest/utils'
-import { list, retrieve, create, update, destroy } from '../../../../service/admin/media';
 import { AxiosResponse } from 'axios';
+import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
+import { list, retrieve, create, update, destroy } from '../../../../service/admin/media';
 import { listData, resultData, updateResultData } from '../../../../__mocks__/mediaData';
 import { adminSetUp } from '../../../../__mocks__/adminSetUp';
-import '../../../../__mocks__/windowMatchMedia';
 import testJpg from '../../../../__mocks__/test.jpg';
-import '../../../../__mocks__/fileMock';
+import '../../../../__mocks__/windowMatchMedia';
+// import "@testing-library/jest-dom/extend-expect";
+// import '../../../../__mocks__/fileMock';
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/media');
@@ -53,14 +50,13 @@ describe("Admin-media", () => {
     (): Promise<AxiosResponse<any>> => Promise.resolve(detailAxiosResponse)
   );
   mocked(create).mockImplementation(
-    (): Promise<AxiosResponse<any>> => {
-      console.log("creatadayo")
-      return Promise.resolve(detailAxiosResponse)
-    }
+    (): Promise<AxiosResponse<any>> => Promise.resolve(detailAxiosResponse)
   );
   mocked(update).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(updateAxiosResponse)
   );
+
+  // read update
   it("renders media read update", async () => {
     const { utils, history } = await adminSetUp();
     fireEvent.click(utils.getByTestId('side-nav-media'));
@@ -106,16 +102,28 @@ describe("Admin-media", () => {
     await waitFor(() => {
       expect(utils.getAllByText("Success")).toBeTruthy();
     });
-    // console.log(utils.container.innerHTML)
-    // act(() => {
-    //   fireEvent.submit(utils.getByLabelText("media-form-submit"))
-    // })
-    // fireEvent.change(utils.getByLabelText("media-form-name"), { target: { value: 'updateAbe' } });
-    // act(() => {
-    //   fireEvent.submit(utils.getByLabelText("media-form-submit"))
-    // })
-    // await waitFor(() => {
-    //   expect(utils.getByText("Success")).toBeTruthy();
-    // });
   })
+
+  // delete
+  it("renders media delete", async () => {
+    const { utils, history } = await adminSetUp();
+    fireEvent.click(utils.getByTestId('side-nav-media'));
+    await waitFor(() => {
+      expect(utils.getByTestId("create-btn")).toBeTruthy();
+      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+    })
+    fireEvent.click(utils.getByText(listData.results[0].name));
+    await waitFor(() => {
+      expect(utils.getAllByText("Media edit")).toBeTruthy();
+    });
+    fireEvent.click(utils.getByLabelText("delete-btn"));
+    await waitFor(() => {
+      expect(utils.getByLabelText("delete-submit")).toBeTruthy();
+    });
+    fireEvent.click(utils.getByLabelText("delete-submit"));
+    await waitFor(() => {
+      expect(utils.getAllByText("Success")).toBeTruthy();
+    });
+
+  });
 })

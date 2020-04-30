@@ -4,12 +4,7 @@ import { IMediaData } from '../../../types/media';
 import { RcFile } from 'antd/lib/upload';
 import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import toast from '../../../components/common/toast';
-
-const getBase64 = (img: any, callback?: any) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+import { getBase64 } from '../../../helper/file';
 
 interface IProps {
   data?: IMediaData;
@@ -43,13 +38,11 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       setRemoveFile(true);
       return false;
     }
-    // values.file = file;
-    console.log({ values })
+
+    values.file = file;
     onSubmit(values)
-    console.log("onFinish")
   };
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
-    console.log({ FileList })
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       toast({ type: 'ERROR', text: 'You can only upload JPG/PNG file!' })
@@ -59,12 +52,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       toast({ type: 'ERROR', text: 'Image must smaller than 2MB!' })
     }
     if (isJpgOrPng && isLt2M) {
-      console.log("ok")
-      getBase64(file, (imageUrl: string) => {
-        setLoading(true);
-        setRemoveFile(false);
-        setImageUrl(imageUrl);
-      });
+      // move getBase64
     }
     return false;
   }
@@ -76,8 +64,11 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
   );
 
   const handleChange = (info: any) => {
-    console.log('handle');
-    console.log(info.file)
+    getBase64(info.fileList[0].originFileObj, (imageUrl: string) => {
+      setLoading(true);
+      setRemoveFile(false);
+      setImageUrl(imageUrl);
+    });
     setFile(info.file)
     if (info.file.status === 'uploading') {
       setLoading(true);
@@ -126,16 +117,25 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
 
         <Form.Item
           label="File"
+          // name="file"
           validateStatus={file ? "success" : "error"}
           help={removeFile ? "Please selected file" : null}
         // rules={[{ required: true, message: 'Please selected file' }]}
         >
           <Upload
             name="file"
-            aria-label="media-form-file"
             listType="picture-card"
             className="file-uploader"
+            aria-label="media-form-file"
             showUploadList={false}
+            // fileList={[{
+            //   uid: "1",
+            //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            //   status: "done",
+            //   size: 100,
+            //   name: "a",
+            //   type: "image/jpeg"
+            // }]}
             beforeUpload={beforeUpload}
 
             // onPreview={handlePreview}

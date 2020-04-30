@@ -1,82 +1,41 @@
-import React from 'react';
-import { Router, Route } from 'react-router-dom'
-import { createMemoryHistory } from 'history'
-import { QueryParamProvider } from 'use-query-params';
-import { AdminContextProvider } from '../../../../context/adminContext';
-import { render, cleanup, fireEvent } from '@testing-library/react'
-// import { act } from '@testing-library/react-hooks'
-import { act } from 'react-dom/test-utils';
-import Index from '../../../../pages/admin/media/index'
-import "@testing-library/jest-dom/extend-expect";
 import { mocked } from 'ts-jest/utils'
-import { refreshToken } from '../../../../service/admin/auth'
-import { list } from '../../../../service/admin/media';
 import { AxiosResponse } from 'axios';
-import { listData } from '../../../../__mocks__/mediaData';
+import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
+import { list, retrieve, create, update, destroy } from '../../../../service/admin/media';
+import { listData, resultData, updateResultData } from '../../../../__mocks__/mediaData';
+import { adminSetUp } from '../../../../__mocks__/adminSetUp';
+import testJpg from '../../../../__mocks__/test.jpg';
+import '../../../../__mocks__/windowMatchMedia';
+// import "@testing-library/jest-dom/extend-expect";
+// import '../../../../__mocks__/fileMock';
 
 afterEach(() => cleanup());
-
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
-
-jest.mock('../../../../service/admin/auth');
 jest.mock('../../../../service/admin/media');
 
-/**
- * @todo getb token
- */
-const spyReturns = (returnValue: any) => jest.fn(() => returnValue);
-
-describe("AdminMediaIndex", () => {
+describe("Admin-media", () => {
 
   beforeEach(() => {
-    mocked(refreshToken).mockClear();
     mocked(list).mockClear()
   })
-  const axiosResponse: AxiosResponse = {
+
+  const listAxiosResponse: AxiosResponse = {
     data: listData,
     status: 200,
     statusText: 'OK',
     config: {},
     headers: {},
   };
+  mocked(list).mockImplementation(
+    (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
+  );
 
+  // read index
   it("renders media index", async () => {
-    mocked(refreshToken).mockImplementation(
-      (): Promise<void> => {
-        return new Promise((resolve) => {
-          resolve();
-        })
-      }
-    )
-    mocked(list).mockImplementation(
-      (): Promise<AxiosResponse<any>> => Promise.resolve(axiosResponse)
-    );
-    const history = createMemoryHistory()
-    const MediaIndex = () => {
-      return (
-        <Router history={history}>
-          <QueryParamProvider ReactRouterRoute={Route}>
-            <AdminContextProvider>
-              <Index />
-            </AdminContextProvider>
-          </QueryParamProvider>
-        </Router>
-      )
-    }
-    const { container, findByText } = render(<MediaIndex />)
-    const name = await findByText(listData.results[0].name)
-    expect(name).toBeInTheDocument()
+    const { utils, history } = await adminSetUp();
+    fireEvent.click(utils.getByTestId('side-nav-media'));
+    await waitFor(() => {
+      expect(utils.getAllByText("CREATE")).toBeTruthy();
+      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+    })
   })
 })
