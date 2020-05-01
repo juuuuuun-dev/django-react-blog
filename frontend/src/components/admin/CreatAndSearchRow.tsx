@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { SearchOutlined } from '@ant-design/icons';
 
 export interface IProps {
   pathname: string;
@@ -16,7 +17,7 @@ const CreateAndSearchRow = ({ pathname, search, handleQuerySearch }: IProps) => 
         <Link data-testid="create-btn" to={`${pathname}/create`}><Button type="primary" style={{ marginBottom: "10px" }}>CREATE</Button></Link>
       </Col>
       <Col flex="0 1 300px">
-        <Search placeholder="search" defaultValue={search || undefined} onSearch={(value) => handleQuerySearch(value)} enterButton />
+        <Search placeholder="search" aria-label="input-query-search" defaultValue={search || undefined} onSearch={(value) => handleQuerySearch(value)} enterButton={<SearchOutlined aria-label="submit-query-search" />} />
       </Col>
     </Row>
   );

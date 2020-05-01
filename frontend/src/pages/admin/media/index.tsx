@@ -9,6 +9,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 import CreateAndSearchRow from '../../../components/admin/CreatAndSearchRow';
 import toast from '../../../components/common/toast';
+import { sortDate } from '../../../helper/sort';
 
 const Media: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
@@ -65,7 +66,6 @@ const Media: React.FC = () => {
     window.open(imageUrl, "imgwindow")
   }
 
-
   const columns = [
     {
       title: 'name',
@@ -89,15 +89,16 @@ const Media: React.FC = () => {
       dataIndex: 'file',
       key: 'file',
       width: '10%',
-      render: (text: string, record: IMediaListResult) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
+      render: (text: string, record: IMediaListResult) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" data-testid={`list-thumb-${record.id}`} style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
     },
     {
       title: 'updated',
+      detaTestId: 'sort-updated',
       name: 'updated_at',
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '10%',
-      sorter: (a: IMediaListResult, b: IMediaListResult) => (a.updated_at > b.updated_at ? 1 : 0),
+      sorter: (a: IMediaListResult, b: IMediaListResult) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -106,7 +107,7 @@ const Media: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '10%',
-      sorter: (a: IMediaListResult, b: IMediaListResult) => (a.created_at > b.created_at ? 1 : 0),
+      sorter: (a: IMediaListResult, b: IMediaListResult) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];

@@ -5,15 +5,18 @@ interface IToastProps {
   text?: string;
 }
 
+export const DefaultSuccessText = 'Success';
+export const DefaultErrorText = 'Request error';
+
 const toast = (props: IToastProps) => {
   let text;
   switch (props.type) {
     case 'SUCCESS':
-      text = props.text || 'Success';
+      text = props.text || DefaultSuccessText;
       message.success(text);
       break;
     case 'ERROR':
-      text = props.text || 'Request error';
+      text = props.text || DefaultErrorText;
       message.error(text);
       break;
     default:

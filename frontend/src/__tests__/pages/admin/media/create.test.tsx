@@ -2,6 +2,7 @@ import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
 import { list, create } from '../../../../service/admin/media';
+import { DefaultSuccessText, DefaultErrorText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse, createAxiosResponse } from '../../../../__mocks__/mediaData';
 import { adminSetUp } from '../../../../__mocks__/adminSetUp';
 import { getBase64 } from '../../../../helper/file';
@@ -55,7 +56,7 @@ describe("Admin media create", () => {
     fireEvent.change(utils.getByLabelText("media-form-file"), { target: { files: [file] } });
     fireEvent.submit(utils.getByLabelText("media-form-submit"))
     await waitFor(() => {
-      expect(utils.getAllByText("Success")).toBeTruthy();
+      expect(utils.getAllByText(DefaultSuccessText)).toBeTruthy();
     });
   })
 

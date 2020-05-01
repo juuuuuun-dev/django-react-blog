@@ -26,6 +26,7 @@ const searchWithinPageColumn = ({ dataIndex, searchRef, handleSearch, handleRese
         ref={searchRef}
         placeholder={`Search within page`}
         value={selectedKeys[0]}
+        aria-label="input-filter-search"
         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
         onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
         style={{ width: 188, marginBottom: 8, display: 'block' }}
@@ -35,16 +36,17 @@ const searchWithinPageColumn = ({ dataIndex, searchRef, handleSearch, handleRese
         onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
         icon={<SearchOutlined />}
         size="small"
+        aria-label="submit-filter-search"
         style={{ width: 90, marginRight: 8 }}
       >
         Search
       </Button>
-      <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+      <Button aria-label="reset-filter-search" onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
         Reset
       </Button>
     </div>
   ),
-  filterIcon: (filtered: string) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+  filterIcon: (filtered: string) => <SearchOutlined aria-label="open-filter-serach" style={{ color: filtered ? '#1890ff' : undefined }} />,
   onFilter: (value: string | number | boolean, record: any) =>
     record[dataIndex]
       .toString()
