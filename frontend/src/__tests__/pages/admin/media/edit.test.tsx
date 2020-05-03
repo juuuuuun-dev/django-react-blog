@@ -1,10 +1,10 @@
 import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list, retrieve, update } from '../../../../service/admin/media';
-import { DefaultSuccessText, DefaultErrorText } from '../../../../components/common/toast'
+import { list, retrieve, update, destroy } from '../../../../service/admin/media';
+import { DefaultSuccessText, DefaultErrorText, DefaultDeleteText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/media';
-import { error404AxiosResponse } from '../../../../__mocks__/serviceResponse/common';
+import { error404AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
 import { adminSetUp } from '../../../../__mocks__/adminSetUp';
 import { getBase64 } from '../../../../helper/file';
 import '../../../../__mocks__/windowMatchMedia';
@@ -24,6 +24,7 @@ describe("Admin media edit", () => {
     mocked(list).mockClear()
     mocked(retrieve).mockClear();
     mocked(update).mockClear();
+    mocked(destroy).mockClear();
     mocked(getBase64).mockClear();
   })
 
@@ -35,6 +36,9 @@ describe("Admin media edit", () => {
   );
   mocked(retrieve).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(detailAxiosResponse)
+  );
+  mocked(destroy).mockImplementation(
+    (): Promise<AxiosResponse<any>> => Promise.resolve(deleteAxiosResponse)
   );
   mocked(getBase64).mockImplementation(
     (_img, callback): void => {
@@ -98,7 +102,6 @@ describe("Admin media edit", () => {
     mocked(retrieve).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.reject({ response: error404AxiosResponse })
     );
-
     const { utils } = await adminSetUp();
     fireEvent.click(utils.getByTestId('side-nav-media'));
     await waitFor(() => {
@@ -112,56 +115,39 @@ describe("Admin media edit", () => {
     });
   })
 
-  /**
-   * @todo delete test
-   */
+  // delete
+  it("Successful delete", async () => {
+    const { utils } = await adminSetUp();
+    fireEvent.click(utils.getByTestId('side-nav-media'));
+    await waitFor(() => {
+      expect(utils.getByTestId("create-btn")).toBeTruthy();
+      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+    })
+    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getByLabelText("delete-btn"));
+    fireEvent.click(utils.getByLabelText("delete-submit"));
+    await waitFor(() => {
+      expect(utils.getByTestId("create-btn")).toBeTruthy();
+      expect(utils.getByText(DefaultDeleteText)).toBeTruthy()
+    });
+  })
 
-  // it("uploading not image", async () => {
-  //   const { utils } = await adminSetUp();
-  //   fireEvent.click(utils.getByTestId('side-nav-media'));
-  //   await waitFor(() => {
-  //     expect(utils.getByTestId("create-btn")).toBeTruthy();
-  //     expect(utils.getByText(listData.results[0].name)).toBeTruthy()
-  //   })
-  //   fireEvent.click(utils.getByTestId("create-btn"));
-  //   await waitFor(() => {
-  //     expect(utils.getAllByText("Media create")).toBeTruthy();
-  //   });
-  //   act(() => {
-  //     fireEvent.change(utils.getByLabelText("media-form-name"), { target: { value: 'createAbe' } });
-  //   })
-
-  //   const text = new File(['ate'], "tets.txt", {
-  //     type: "text/plain",
-  //   });
-  //   fireEvent.change(utils.getByLabelText("media-form-file"), { target: { files: [text] } });
-  //   fireEvent.submit(utils.getByLabelText("media-form-submit"))
-  //   await waitFor(() => {
-  //     expect(utils.getByText("You can only upload JPG/PNG file!")).toBeTruthy();
-  //   });
-  // })
-
-  // // post error
-  // it("Post error", async () => {
-  //   mocked(create).mockImplementation(
-  //     (): Promise<AxiosResponse<any>> => Promise.reject({ response: error400AxiosResponse })
-  //   );
-  //   const { utils } = await adminSetUp();
-  //   fireEvent.click(utils.getByTestId('side-nav-media'));
-  //   await waitFor(() => {
-  //     expect(utils.getByTestId("create-btn")).toBeTruthy();
-  //     expect(utils.getByText(listData.results[0].name)).toBeTruthy()
-  //   })
-  //   fireEvent.click(utils.getByTestId("create-btn"));
-  //   await waitFor(() => {
-  //     expect(utils.getAllByText("Media create")).toBeTruthy();
-  //   });
-
-  //   fireEvent.change(utils.getByLabelText("media-form-name"), { target: { value: 'createAbe' } });
-  //   fireEvent.change(utils.getByLabelText("media-form-file"), { target: { files: [file] } });
-  //   fireEvent.submit(utils.getByLabelText("media-form-submit"))
-  //   await waitFor(() => {
-  //     expect(utils.getByText(DefaultErrorText)).toBeTruthy();
-  //   });
-  // })
+  // delete error
+  it("Delete error", async () => {
+    mocked(destroy).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.reject({ response: error404AxiosResponse })
+    );
+    const { utils } = await adminSetUp();
+    fireEvent.click(utils.getByTestId('side-nav-media'));
+    await waitFor(() => {
+      expect(utils.getByTestId("create-btn")).toBeTruthy();
+      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+    })
+    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getByLabelText("delete-btn"));
+    fireEvent.click(utils.getByLabelText("delete-submit"));
+    await waitFor(() => {
+      expect(utils.getAllByText(DefaultErrorText)).toBeTruthy()
+    });
+  })
 })

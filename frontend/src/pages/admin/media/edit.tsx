@@ -62,7 +62,7 @@ const MediaEdit: React.FC = () => {
       const res = await destroy(id);
       if (res.status === 204) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-        toast({ type: 'SUCCESS' });
+        toast({ type: 'DELETE' });
         history.push(redirectPath);
       }
     } catch {

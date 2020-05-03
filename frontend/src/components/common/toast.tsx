@@ -1,12 +1,13 @@
 import { message } from 'antd';
 
 interface IToastProps {
-  type: 'SUCCESS' | 'ERROR';
+  type: 'SUCCESS' | 'DELETE' | 'ERROR';
   text?: string;
 }
 
 export const DefaultSuccessText = 'Success';
 export const DefaultErrorText = 'Request error';
+export const DefaultDeleteText = 'Successful delete';
 
 const toast = (props: IToastProps) => {
   let text;
@@ -15,6 +16,9 @@ const toast = (props: IToastProps) => {
       text = props.text || DefaultSuccessText;
       message.success(text);
       break;
+    case 'DELETE':
+      text = props.text || DefaultDeleteText;
+      message.success(text);
     case 'ERROR':
       text = props.text || DefaultErrorText;
       message.error(text);
