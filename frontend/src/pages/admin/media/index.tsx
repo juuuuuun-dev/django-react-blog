@@ -1,9 +1,9 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/admin/media';
-import { Table, Input, Button, Row, Col } from 'antd';
+import { Table, Input } from 'antd';
 import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { IMediaList, IMediaListResult } from '../../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
@@ -19,7 +19,6 @@ const Media: React.FC = () => {
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const searchRef = React.useRef<null | Input>(null);
 
-  const { Search } = Input;
   const location = useLocation();
   React.useEffect(() => {
     if (state.hasToken) {
@@ -89,7 +88,7 @@ const Media: React.FC = () => {
       dataIndex: 'file',
       key: 'file',
       width: '10%',
-      render: (text: string, record: IMediaListResult) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" data-testid={`list-thumb-${record.id}`} style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
+      render: (_text: string, record: IMediaListResult) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" data-testid={`list-thumb-${record.id}`} style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
     },
     {
       title: 'updated',

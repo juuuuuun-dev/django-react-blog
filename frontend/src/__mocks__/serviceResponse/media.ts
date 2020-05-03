@@ -1,4 +1,4 @@
-import { AxiosResponse, AxiosError } from 'axios';
+import { AxiosResponse } from 'axios';
 
 export const resultData = {
   "id": 1,
@@ -44,13 +44,22 @@ export const listAxiosResponse: AxiosResponse = {
   headers: {},
 };
 
-export const errorListAxiosResponse: AxiosResponse = {
+export const error404AxiosResponse: AxiosResponse = {
   data: {},
   status: 404,
   statusText: 'ERROR',
   config: {},
   headers: {},
+};
 
+export const error400AxiosResponse: AxiosResponse = {
+  data: {
+    name: ["この項目は必須です。"]
+  },
+  status: 400,
+  statusText: '400 Bad Request',
+  config: {},
+  headers: {},
 };
 
 export const detailAxiosResponse: AxiosResponse = {
@@ -63,6 +72,14 @@ export const detailAxiosResponse: AxiosResponse = {
 export const createAxiosResponse: AxiosResponse = {
   data: resultData,
   status: 201,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+}
+
+export const updateAxiosResponse: AxiosResponse = {
+  data: updateResultData,
+  status: 200,
   statusText: 'OK',
   config: {},
   headers: {},

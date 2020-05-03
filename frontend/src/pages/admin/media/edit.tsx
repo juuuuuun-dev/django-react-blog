@@ -22,11 +22,13 @@ const MediaEdit: React.FC = () => {
   }, [state.hasToken]);
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await retrieve(id);
-    if (res.status === 200) {
+    try {
+      const res = await retrieve(id);
       setData(res.data);
+      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+    } catch (e) {
+      toast({ type: 'ERROR' });
     }
-    dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
 
   // edit

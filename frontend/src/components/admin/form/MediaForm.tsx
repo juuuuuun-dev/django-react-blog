@@ -38,7 +38,6 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       setRemoveFile(true);
       return false;
     }
-    console.log("onFinish")
     values.file = file;
     onSubmit(values)
   };
@@ -76,7 +75,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       return;
     }
     if (info.file.status === 'done') {
-      console.log("doneだよ")
+      console.log("done")
       // getBase64(info.file.originFileObj, (imageUrl: string) => {
       //   setLoading(true);
       //   setImageUrl(imageUrl);
@@ -86,7 +85,6 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
 
   const handlePreview = () => {
     setPreviewVisible(true);
-    // window.open(imageUrl, "imgwindow")
   }
 
   const handleRemove = async (file: any) => {
@@ -111,9 +109,9 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
           name="name"
           validateStatus={error && error.name ? "error" : "success"}
           help={error && error.name ? "This name already exists" : null}
-          rules={[{ required: true, message: 'Please input title' }]}
+          rules={[{ required: true, message: 'Please input name' }]}
         >
-          <Input aria-label="media-form-name" placeholder="Title" />
+          <Input aria-label="media-form-name" placeholder="Name" />
         </Form.Item>
 
         <Form.Item
@@ -129,23 +127,14 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
             className="file-uploader"
             aria-label="media-form-file"
             showUploadList={false}
-            // fileList={[{
-            //   uid: "1",
-            //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            //   status: "done",
-            //   size: 100,
-            //   name: "a",
-            //   type: "image/jpeg"
-            // }]}
             beforeUpload={beforeUpload}
-
             // onPreview={handlePreview}
             onChange={handleChange}
             onRemove={handleRemove}
           >
             {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
           </Upload>
-          {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} onClick={() => handlePreview()} /><DeleteOutlined onClick={handleRemove} /></> : <></>}
+          {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="media-form-preview" onClick={() => handlePreview()} /><DeleteOutlined aria-label="media-form-delete-image" onClick={handleRemove} /></> : <></>}
         </Form.Item>
 
         <Form.Item colon={false}>
@@ -155,7 +144,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
         </Form.Item>
       </Form>
       <Modal visible={previewVisible} footer={null} onCancel={() => setPreviewVisible(false)}>
-        <img alt="preview" style={{ width: '100%' }} src={imageUrl} />
+        <img data-testid="media-preview-modal" alt="preview" style={{ width: '100%' }} src={imageUrl} />
       </Modal>
     </>
   );

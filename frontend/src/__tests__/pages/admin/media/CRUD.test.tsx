@@ -2,7 +2,7 @@ import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
 import { list, retrieve, create, update, destroy } from '../../../../service/admin/media';
-import { listData, resultData, updateResultData } from '../../../../__mocks__/mediaData';
+import { listData, resultData, updateResultData } from '../../../../__mocks__/serviceResponse/media';
 import { adminSetUp } from '../../../../__mocks__/adminSetUp';
 import testJpg from '../../../../__mocks__/test.jpg';
 import '../../../../__mocks__/windowMatchMedia';

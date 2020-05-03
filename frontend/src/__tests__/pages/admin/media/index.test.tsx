@@ -3,7 +3,8 @@ import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
 import { list } from '../../../../service/admin/media';
 import { DefaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, errorListAxiosResponse } from '../../../../__mocks__/mediaData';
+import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/media';
+import { error404AxiosResponse } from '../../../../__mocks__/serviceResponse/common';
 import { sortDate } from '../../../../helper/sort';
 import { adminSetUp } from '../../../../__mocks__/adminSetUp';
 import '../../../../__mocks__/windowMatchMedia';
