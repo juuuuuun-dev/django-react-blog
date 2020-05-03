@@ -11,7 +11,6 @@ const Index = () => {
   const fetchData = async () => {
     const res = await list();
     if (res.status === 200) {
-      console.log({ res })
       setPosts(res.data.posts)
     }
   }

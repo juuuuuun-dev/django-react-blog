@@ -10,14 +10,14 @@ const DeleteBtn: React.FC<IProps> = ({ onDelete }) => {
   return (
     <>
       <div className="delete-btn">
-        <Button type="link" danger onClick={() => setShowModal(true)}>Delete</Button>
+        <Button type="link" aria-label="delete-btn" danger onClick={() => setShowModal(true)}>Delete</Button>
       </div>
       <Modal
         visible={showModal}
         onCancel={() => setShowModal(false)}
         onOk={onDelete}
         okText="Delete"
-        okButtonProps={{ danger: true, icon: <DeleteOutlined /> }}
+        okButtonProps={{ danger: true, icon: <DeleteOutlined aria-label="delete-submit" /> }}
       >
         <p>Can I delete it?</p>
       </Modal>

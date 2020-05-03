@@ -3,7 +3,8 @@ import { Menu, Layout, Popover, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { get } from 'local-storage';
 import { navList } from '../../config/admin';
-import { AdminContext, logout } from '../../context/adminContext';
+import { AdminContext } from '../../context/adminContext';
+import { logout } from '../../service/admin/auth';
 import { useHistory } from 'react-router-dom';
 
 import { UserOutlined } from '@ant-design/icons';
@@ -23,7 +24,7 @@ const SideNav = ({ background }: NavProps) => {
         breakpoint="md"
         collapsedWidth="0"
         trigger={null}
-        width="150"
+        width="200"
         style={{ background: background }}
         onBreakpoint={broken => {
           if (broken) {
@@ -50,7 +51,7 @@ const SideNav = ({ background }: NavProps) => {
             if (!item.hiddenNav) {
               return (
                 <Menu.Item key={index}>
-                  <Link to={item.path}>{item.title}</Link>
+                  <Link data-testid={`side-nav-${item.id}`} to={item.path}>{item.title}</Link>
                 </Menu.Item>
               );
             }

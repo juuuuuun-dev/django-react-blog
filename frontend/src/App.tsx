@@ -13,8 +13,6 @@ import { QueryParamProvider } from 'use-query-params';
 import './less/app.less';
 
 function App() {
-
-  console.log(mainPathList);
   return (
     <div className="App">
       <Layout>

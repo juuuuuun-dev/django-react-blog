@@ -4,12 +4,7 @@ import { IMediaData } from '../../../types/media';
 import { RcFile } from 'antd/lib/upload';
 import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import toast from '../../../components/common/toast';
-
-const getBase64 = (img: any, callback?: any) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+import { getBase64 } from '../../../helper/file';
 
 interface IProps {
   data?: IMediaData;
@@ -26,7 +21,6 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
   const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
   const [file, setFile] = React.useState<File | undefined>();
   const [removeFile, setRemoveFile] = React.useState<boolean>(false)
-  console.log({ data })
 
   React.useEffect(() => {
     if (data) {
@@ -48,8 +42,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
     onSubmit(values)
   };
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
-    console.log({ FileList })
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
     if (!isJpgOrPng) {
       toast({ type: 'ERROR', text: 'You can only upload JPG/PNG file!' })
     }
@@ -58,7 +51,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       toast({ type: 'ERROR', text: 'Image must smaller than 2MB!' })
     }
     if (isJpgOrPng && isLt2M) {
-      console.log("ok")
+      // move getBase64
       getBase64(file, (imageUrl: string) => {
         setLoading(true);
         setRemoveFile(false);
@@ -75,15 +68,14 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
   );
 
   const handleChange = (info: any) => {
-    console.log('handle');
-    console.log({ info })
+
     setFile(info.file)
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
     }
     if (info.file.status === 'done') {
-      console.log("doneだよ")
+      console.log("done")
       // getBase64(info.file.originFileObj, (imageUrl: string) => {
       //   setLoading(true);
       //   setImageUrl(imageUrl);
@@ -93,7 +85,6 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
 
   const handlePreview = () => {
     setPreviewVisible(true);
-    // window.open(imageUrl, "imgwindow")
   }
 
   const handleRemove = async (file: any) => {
@@ -118,14 +109,14 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
           name="name"
           validateStatus={error && error.name ? "error" : "success"}
           help={error && error.name ? "This name already exists" : null}
-          rules={[{ required: true, message: 'Please input title' }]}
+          rules={[{ required: true, message: 'Please input name' }]}
         >
-          <Input placeholder="Title" />
+          <Input aria-label="media-form-name" placeholder="Name" />
         </Form.Item>
 
         <Form.Item
           label="File"
-          name="file"
+          // name="file"
           validateStatus={file ? "success" : "error"}
           help={removeFile ? "Please selected file" : null}
         // rules={[{ required: true, message: 'Please selected file' }]}
@@ -134,34 +125,26 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
             name="file"
             listType="picture-card"
             className="file-uploader"
+            aria-label="media-form-file"
             showUploadList={false}
-            fileList={[{
-              uid: "1",
-              url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-              status: "done",
-              size: 100,
-              name: "a",
-              type: "image/jpeg"
-            }]}
             beforeUpload={beforeUpload}
-
             // onPreview={handlePreview}
             onChange={handleChange}
             onRemove={handleRemove}
           >
             {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
           </Upload>
-          {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} onClick={() => handlePreview()} /><DeleteOutlined onClick={handleRemove} /></> : <></>}
+          {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="media-form-preview" onClick={() => handlePreview()} /><DeleteOutlined aria-label="media-form-delete-image" onClick={handleRemove} /></> : <></>}
         </Form.Item>
 
         <Form.Item colon={false}>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button aria-label="media-form-submit" type="primary" htmlType="submit" className="login-form-button">
             Submit
         </Button>
         </Form.Item>
       </Form>
       <Modal visible={previewVisible} footer={null} onCancel={() => setPreviewVisible(false)}>
-        <img alt="preview" style={{ width: '100%' }} src={imageUrl} />
+        <img data-testid="media-preview-modal" alt="preview" style={{ width: '100%' }} src={imageUrl} />
       </Modal>
     </>
   );

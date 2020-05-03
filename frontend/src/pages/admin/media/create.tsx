@@ -17,7 +17,6 @@ const Create: React.FC = () => {
   }, [state.hasToken]);
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   };
   const onSubmit = async (values: any) => {
@@ -26,8 +25,6 @@ const Create: React.FC = () => {
       const params = new FormData();
       params.append('name', values.name);
       params.append('file', values.file);
-
-      console.log({ params })
       const res = await create(params);
       if (res.status === 201) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
@@ -43,9 +40,7 @@ const Create: React.FC = () => {
     }
   };
   return (
-    <>
-      <Form onSubmit={onSubmit} error={error} />
-    </>
+    <Form onSubmit={onSubmit} error={error} />
   );
 };
 

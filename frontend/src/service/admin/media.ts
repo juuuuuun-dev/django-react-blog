@@ -19,7 +19,6 @@ export const update = async (id: string | undefined, data: FormData) => {
 }
 
 export const create = async (data: FormData) => {
-  console.log("create")
   const headers = { "content-type": "multipart/form-data" };
   return axios.post(`${endPoint}`, data, { headers })
 }
