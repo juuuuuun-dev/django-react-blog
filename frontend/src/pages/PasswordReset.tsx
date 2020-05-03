@@ -2,6 +2,8 @@ import React from 'react';
 import { Layout, Card } from 'antd';
 import PasswordResetForm from '../components/login/form/PasswordResetForm';
 
+export const sendingText = "Sending password reset url! Check your email";
+
 const PasswordReset = () => {
   const { Content } = Layout;
   const [sending, setSending] = React.useState<boolean>(false)
@@ -17,7 +19,7 @@ const PasswordReset = () => {
         >
           <Card title="Forgot password" bordered={false}>
             {!sending && <PasswordResetForm setSending={setSending} />}
-            {sending && <p>Sending password reset url! Check your email</p>}
+            {sending && <p>{sendingText}</p>}
           </Card>
         </div>
       </Content>

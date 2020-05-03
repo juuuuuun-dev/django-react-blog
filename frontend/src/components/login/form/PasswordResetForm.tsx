@@ -1,37 +1,32 @@
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
-import axios from '../../../helper/client';
+import { Form, Input, Button } from 'antd';
+import { passwordReset } from '../../../service/admin/auth';
 import toast from '../../common/toast';
 interface PasswordResetFormProps {
   setSending: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PasswordResetForm = ({ setSending }: PasswordResetFormProps) => {
-  const onFinish = (values: any) => {
-    axios
-      .post('/users/password-reset/', values)
-      .then(res => {
-        const { data } = res;
-        if (data.sending) {
-          toast({ type: 'SUCCESS', text: 'sending email' });
-          setSending(true);
-        }
-        console.log(data);
-      })
-      .catch(e => {
-        console.log(e);
-        message.error('Request error');
-      });
+  const onFinish = async (values: any) => {
+    try {
+      const res = await passwordReset(values.email);
+      if (res.data.sending) {
+        toast({ type: 'SUCCESS', text: 'Sending email' });
+        setSending(true);
+      }
+    } catch (e) {
+      toast({ type: 'ERROR' });
+    }
   };
 
   return (
     <Form name="normal_login" className="login-form" onFinish={onFinish}>
       <Form.Item name="email" rules={[{ required: true, message: 'requreid email' }]}>
-        <Input placeholder="Your email" />
+        <Input aria-label="input-password-reset-email" placeholder="Your email" />
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button type="primary" aria-label="submit-password-reset-email" htmlType="submit" className="login-form-button">
           Send
         </Button>
       </Form.Item>

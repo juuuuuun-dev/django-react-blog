@@ -42,3 +42,7 @@ export const login = async (history: any, values: any): Promise<void> => {
     toast({ type: "ERROR" });
   }
 }
+
+export const passwordReset = async (email: string) => {
+  return axios.post('/users/password-reset/', { email });
+}
