@@ -2,7 +2,7 @@ import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
 import { list } from '../../../../service/admin/media';
-import { DefaultErrorText } from '../../../../components/common/toast'
+import { defaultErrorText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/media';
 import { sortDate } from '../../../../helper/sort';
 import { adminSetUp } from '../../../../__mocks__/adminSetUp';
@@ -127,7 +127,7 @@ describe("Admin media index", () => {
     const { utils } = await adminSetUp();
     fireEvent.click(utils.getByTestId('side-nav-media'));
     await waitFor(() => {
-      expect(utils.getByText(DefaultErrorText)).toBeTruthy();
+      expect(utils.getByText(defaultErrorText)).toBeTruthy();
     })
   })
 })

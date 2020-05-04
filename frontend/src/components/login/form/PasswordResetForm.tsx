@@ -13,6 +13,8 @@ const PasswordResetForm = ({ setSending }: PasswordResetFormProps) => {
       if (res.data.sending) {
         toast({ type: 'SUCCESS', text: 'Sending email' });
         setSending(true);
+      } else {
+        toast({ type: 'ERROR', text: "Email sending error" });
       }
     } catch (e) {
       toast({ type: 'ERROR' });

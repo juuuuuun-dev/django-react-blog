@@ -5,22 +5,22 @@ interface IToastProps {
   text?: string;
 }
 
-export const DefaultSuccessText = 'Success';
-export const DefaultErrorText = 'Request error';
-export const DefaultDeleteText = 'Successful delete';
+export const defaultSuccessText = 'Success';
+export const defaultErrorText = 'Request error';
+export const defaultDeleteText = 'Successful delete';
 
 const toast = (props: IToastProps) => {
   let text;
   switch (props.type) {
     case 'SUCCESS':
-      text = props.text || DefaultSuccessText;
+      text = props.text || defaultSuccessText;
       message.success(text);
       break;
     case 'DELETE':
-      text = props.text || DefaultDeleteText;
+      text = props.text || defaultDeleteText;
       message.success(text);
     case 'ERROR':
-      text = props.text || DefaultErrorText;
+      text = props.text || defaultErrorText;
       message.error(text);
       break;
     default:

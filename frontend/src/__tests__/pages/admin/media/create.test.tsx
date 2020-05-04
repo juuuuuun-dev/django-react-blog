@@ -2,7 +2,7 @@ import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
 import { list, create } from '../../../../service/admin/media';
-import { DefaultSuccessText, DefaultErrorText } from '../../../../components/common/toast'
+import { defaultSuccessText, defaultErrorText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse, createAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/media';
 import { adminSetUp } from '../../../../__mocks__/adminSetUp';
 import { getBase64 } from '../../../../helper/file';
@@ -56,7 +56,7 @@ describe("Admin media create", () => {
     fireEvent.change(utils.getByLabelText("media-form-file"), { target: { files: [file] } });
     fireEvent.submit(utils.getByLabelText("media-form-submit"))
     await waitFor(() => {
-      expect(utils.getAllByText(DefaultSuccessText)).toBeTruthy();
+      expect(utils.getAllByText(defaultSuccessText)).toBeTruthy();
     });
   })
 
@@ -105,7 +105,7 @@ describe("Admin media create", () => {
     fireEvent.change(utils.getByLabelText("media-form-file"), { target: { files: [file] } });
     fireEvent.submit(utils.getByLabelText("media-form-submit"))
     await waitFor(() => {
-      expect(utils.getByText(DefaultErrorText)).toBeTruthy();
+      expect(utils.getByText(defaultErrorText)).toBeTruthy();
     });
   })
 })

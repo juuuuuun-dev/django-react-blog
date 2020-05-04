@@ -2,7 +2,7 @@ import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
 import { list, retrieve, update, destroy } from '../../../../service/admin/media';
-import { DefaultSuccessText, DefaultErrorText, DefaultDeleteText } from '../../../../components/common/toast'
+import { defaultSuccessText, defaultErrorText, defaultDeleteText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/media';
 import { error404AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
 import { adminSetUp } from '../../../../__mocks__/adminSetUp';
@@ -68,7 +68,7 @@ describe("Admin media edit", () => {
     fireEvent.change(utils.getByLabelText("media-form-file"), { target: { files: [file] } });
     fireEvent.submit(utils.getByLabelText("media-form-submit"))
     await waitFor(() => {
-      expect(utils.getAllByText(DefaultSuccessText)).toBeTruthy();
+      expect(utils.getAllByText(defaultSuccessText)).toBeTruthy();
     });
   });
 
@@ -93,7 +93,7 @@ describe("Admin media edit", () => {
     });
     fireEvent.submit(utils.getByLabelText("media-form-submit"))
     await waitFor(() => {
-      expect(utils.getByText(DefaultErrorText)).toBeTruthy();
+      expect(utils.getByText(defaultErrorText)).toBeTruthy();
     });
   })
 
@@ -111,7 +111,7 @@ describe("Admin media edit", () => {
     fireEvent.click(utils.getByText(listData.results[0].name));
     await waitFor(() => {
       expect(utils.getAllByText("Media edit")).toBeTruthy();
-      expect(utils.getByText(DefaultErrorText)).toBeTruthy();
+      expect(utils.getByText(defaultErrorText)).toBeTruthy();
     });
   })
 
@@ -128,7 +128,7 @@ describe("Admin media edit", () => {
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(DefaultDeleteText)).toBeTruthy()
+      expect(utils.getByText(defaultDeleteText)).toBeTruthy()
     });
   })
 
@@ -147,7 +147,7 @@ describe("Admin media edit", () => {
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {
-      expect(utils.getAllByText(DefaultErrorText)).toBeTruthy()
+      expect(utils.getAllByText(defaultErrorText)).toBeTruthy()
     });
   })
 })

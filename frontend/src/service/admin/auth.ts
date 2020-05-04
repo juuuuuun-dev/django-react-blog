@@ -1,6 +1,7 @@
 import axios, { setClientToken } from '../../helper/client';
 import { get, set, remove } from 'local-storage';
 import toast from '../../components/common/toast';
+import { AxiosResponse } from 'axios';
 
 export const refreshToken = async (history: any): Promise<void> => {
   return new Promise(async (resolve, reject) => {
@@ -43,6 +44,19 @@ export const login = async (history: any, values: any): Promise<void> => {
   }
 }
 
-export const passwordReset = async (email: string) => {
+export const passwordReset = async (email: string): Promise<AxiosResponse<any>> => {
   return axios.post('/users/password-reset/', { email });
+}
+
+
+interface IPasswordResetConfirm {
+  uid: string | undefined;
+  token: string | undefined;
+  values: {
+    new_password: string;
+    new_password2: string;
+  };
+}
+export const passwordResetConfirm = async ({ uid, token, values }: IPasswordResetConfirm): Promise<AxiosResponse<any>> => {
+  return axios.post(`/users/password-reset-confirm/${uid}/${token}/`, values);
 }
