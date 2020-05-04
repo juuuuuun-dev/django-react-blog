@@ -21,6 +21,13 @@ export const successAxiosResponse: AxiosResponse = {
   config: {},
   headers: {},
 };
+export const sendingErrorAxiosResponse: AxiosResponse = {
+  data: {},
+  status: 200,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+};
 export const errorAxiosResponse: AxiosResponse = {
   data: {},
   status: 400,
@@ -70,6 +77,20 @@ describe("Password reset", () => {
     fireEvent.click(utils.getByLabelText("submit-password-reset-email"));
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
+    })
+  });
+
+  // email sending error
+  it("Email sending error", async () => {
+    mocked(passwordReset).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.resolve(sendingErrorAxiosResponse)
+    );
+    const utils = setUp();
+    expect(utils.getByText("Forgot password")).toBeTruthy();
+    fireEvent.change(utils.getByLabelText("input-password-reset-email"), { target: { value: "test@test.com" } });
+    fireEvent.click(utils.getByLabelText("submit-password-reset-email"));
+    await waitFor(() => {
+      expect(utils.getByText("Email sending error")).toBeTruthy();
     })
   });
 });
