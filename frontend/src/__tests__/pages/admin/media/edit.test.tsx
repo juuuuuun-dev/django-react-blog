@@ -5,7 +5,7 @@ import { list, retrieve, update, destroy } from '../../../../service/admin/media
 import { defaultSuccessText, defaultErrorText, defaultDeleteText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/media';
 import { error404AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
-import { adminSetUp } from '../../../../__mocks__/adminSetUp';
+import { setUp } from '../../../../__mocks__/adminSetUp';
 import { getBase64 } from '../../../../helper/file';
 import '../../../../__mocks__/windowMatchMedia';
 import '../../../../__mocks__/fileMock';
@@ -16,6 +16,7 @@ jest.mock('../../../../service/admin/media');
 jest.mock('../../../../helper/file');
 
 describe("Admin media edit", () => {
+  const initialPath = "/admin/media";
   const base64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAoACgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJVAAAAAAAAAAAAAAAAAA//Z";
   const file = new File([base64], "test.jpg", {
     type: "image/jpeg",
@@ -46,9 +47,8 @@ describe("Admin media edit", () => {
     }
   )
 
-  it("success", async () => {
-    const { utils } = await adminSetUp();
-    fireEvent.click(utils.getByTestId('side-nav-media'));
+  it("Request Successful", async () => {
+    const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
       expect(utils.getByText(listData.results[0].name)).toBeTruthy()
@@ -72,17 +72,14 @@ describe("Admin media edit", () => {
     });
   });
 
-  // update error
-  it("update error", async () => {
+  it("Update error", async () => {
     mocked(update).mockImplementation(
       (): Promise<AxiosResponse<any>> => {
-        console.log("updatedayo")
         return Promise.reject({ response: error400AxiosResponse })
       }
     );
 
-    const { utils } = await adminSetUp();
-    fireEvent.click(utils.getByTestId('side-nav-media'));
+    const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
       expect(utils.getByText(listData.results[0].name)).toBeTruthy()
@@ -97,13 +94,11 @@ describe("Admin media edit", () => {
     });
   })
 
-  // retrieve error
-  it("retrieve error", async () => {
+  it("Retrieve error", async () => {
     mocked(retrieve).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.reject({ response: error404AxiosResponse })
     );
-    const { utils } = await adminSetUp();
-    fireEvent.click(utils.getByTestId('side-nav-media'));
+    const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
       expect(utils.getByText(listData.results[0].name)).toBeTruthy()
@@ -115,10 +110,8 @@ describe("Admin media edit", () => {
     });
   })
 
-  // delete
-  it("Successful delete", async () => {
-    const { utils } = await adminSetUp();
-    fireEvent.click(utils.getByTestId('side-nav-media'));
+  it("Delete successful", async () => {
+    const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
       expect(utils.getByText(listData.results[0].name)).toBeTruthy()
@@ -137,8 +130,7 @@ describe("Admin media edit", () => {
     mocked(destroy).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.reject({ response: error404AxiosResponse })
     );
-    const { utils } = await adminSetUp();
-    fireEvent.click(utils.getByTestId('side-nav-media'));
+    const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
       expect(utils.getByText(listData.results[0].name)).toBeTruthy()
