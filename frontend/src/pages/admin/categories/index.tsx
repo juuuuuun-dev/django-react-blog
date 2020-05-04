@@ -3,7 +3,7 @@ import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/admin/categories';
 import { Table, Input } from 'antd';
 import { ICategoryList, ICategoryListResult } from '../../../types/categories';
-import CreateAndSearchRow from '../../../components/admin/CreatAndSearchRow';
+import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';

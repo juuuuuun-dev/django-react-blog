@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { login } from '../../../service/admin/auth';
 import { useHistory } from 'react-router-dom';
-import { get, set, remove } from 'local-storage';
+import { set } from 'local-storage';
 import toast from '../../../components/common/toast';
 
 const LoginForm: React.FC = () => {

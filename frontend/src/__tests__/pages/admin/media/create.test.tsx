@@ -4,7 +4,7 @@ import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
 import { list, create } from '../../../../service/admin/media';
 import { defaultSuccessText, defaultErrorText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse, createAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/media';
-import { adminSetUp } from '../../../../__mocks__/adminSetUp';
+import { setUp } from '../../../../__mocks__/adminSetUp';
 import { getBase64 } from '../../../../helper/file';
 import '../../../../__mocks__/windowMatchMedia';
 import '../../../../__mocks__/fileMock';
@@ -15,6 +15,7 @@ jest.mock('../../../../service/admin/media');
 jest.mock('../../../../helper/file');
 
 describe("Admin media create", () => {
+  const initialPath = "/admin/media";
   const base64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAoACgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJVAAAAAAAAAAAAAAAAAA//Z";
   const file = new File([base64], "tets.jpg", {
     type: "image/jpeg",
@@ -38,8 +39,8 @@ describe("Admin media create", () => {
     }
   )
 
-  it("success", async () => {
-    const { utils } = await adminSetUp();
+  it("Create Successful", async () => {
+    const { utils } = await setUp(initialPath);
     fireEvent.click(utils.getByTestId('side-nav-media'));
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
@@ -60,9 +61,8 @@ describe("Admin media create", () => {
     });
   })
 
-  it("uploading not image", async () => {
-    const { utils } = await adminSetUp();
-    fireEvent.click(utils.getByTestId('side-nav-media'));
+  it("Uploading not image", async () => {
+    const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
       expect(utils.getByText(listData.results[0].name)).toBeTruthy()
@@ -90,8 +90,7 @@ describe("Admin media create", () => {
     mocked(create).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.reject({ response: error400AxiosResponse })
     );
-    const { utils } = await adminSetUp();
-    fireEvent.click(utils.getByTestId('side-nav-media'));
+    const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
       expect(utils.getByText(listData.results[0].name)).toBeTruthy()

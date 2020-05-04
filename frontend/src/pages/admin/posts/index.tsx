@@ -4,7 +4,7 @@ import { list } from '../../../service/admin/posts';
 import { ITextValue, ITagListResult } from '../../../types/tags';
 import { Table, Input, Tag } from 'antd';
 import { IPostList, IPostListResult } from '../../../types/posts';
-import CreateAndSearchRow from '../../../components/admin/CreatAndSearchRow';
+import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
 import { CheckOutlined } from '@ant-design/icons';

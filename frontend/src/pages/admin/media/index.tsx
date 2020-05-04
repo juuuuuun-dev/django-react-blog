@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { IMediaList, IMediaListResult } from '../../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
-import CreateAndSearchRow from '../../../components/admin/CreatAndSearchRow';
+import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import toast from '../../../components/common/toast';
 import { sortDate } from '../../../helper/sort';
 
