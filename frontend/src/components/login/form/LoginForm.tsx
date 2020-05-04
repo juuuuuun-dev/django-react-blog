@@ -2,21 +2,31 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { login } from '../../../service/admin/auth';
 import { useHistory } from 'react-router-dom';
+import { get, set, remove } from 'local-storage';
+import toast from '../../../components/common/toast';
 
 const LoginForm: React.FC = () => {
   const history = useHistory();
 
-  const onFinish = (values: any) => {
-    login(history, values);
+  const onFinish = async (values: any) => {
+    try {
+      const { data } = await login(values);
+      set<string>('token', data.access);
+      set<string>('refresh', data.refresh);
+      set<string>('username', data.username);
+      history.push('/admin/dashboard');
+    } catch (e) {
+      toast({ type: "ERROR" });
+    }
   };
 
   return (
     <Form name="normal_login" className="login-form" onFinish={onFinish}>
       <Form.Item name="email" rules={[{ required: true, message: 'requreid email' }]}>
-        <Input aria-label="email" placeholder="Email" />
+        <Input aria-label="input-email" placeholder="Email" />
       </Form.Item>
       <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
-        <Input aria-label="password" type="password" placeholder="Password" />
+        <Input aria-label="input-password" type="password" placeholder="Password" />
       </Form.Item>
 
       <Form.Item>

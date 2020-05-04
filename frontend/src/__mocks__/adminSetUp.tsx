@@ -5,9 +5,20 @@ import { createBrowserHistory } from 'history'
 import { render, cleanup, fireEvent, waitFor, act } from '@testing-library/react'
 import { Router } from 'react-router-dom'
 import App from '../App';
+import { AxiosResponse } from 'axios';
 
 afterEach(() => cleanup());
 jest.mock('../service/admin/auth');
+
+
+export const successAxiosResponse: AxiosResponse = {
+  data: {},
+  status: 200,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+};
+
 export const adminSetUp = async () => {
   beforeEach(() => {
     mocked(refreshToken).mockClear();
@@ -15,10 +26,12 @@ export const adminSetUp = async () => {
   })
   const history = createBrowserHistory()
   history.push('/login')
+  /**
+   * @todo edit mock
+   */
   mocked(login).mockImplementation(
-    (history, values): Promise<void> => {
+    (values): Promise<AxiosResponse<any>> => {
       return new Promise((resolve) => {
-        history.push('/admin/dashboard');
         resolve();
       })
     }
@@ -38,9 +51,9 @@ export const adminSetUp = async () => {
     )
   }
   const utils = render(<Wrapper />)
-  const inputEmail = utils.getByLabelText("email")
+  const inputEmail = utils.getByLabelText("input-email")
   fireEvent.change(inputEmail, { target: { value: 'test@test.com' } })
-  fireEvent.change(utils.getByLabelText("password"), { target: { value: '123456' } })
+  fireEvent.change(utils.getByLabelText("input-password"), { target: { value: '123456' } })
   act(() => {
     fireEvent.submit(utils.getByLabelText("login-submit"))
   })
