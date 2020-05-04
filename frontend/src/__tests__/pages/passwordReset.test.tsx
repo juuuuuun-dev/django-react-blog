@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { createMemoryHistory } from 'history'
 import { render, cleanup, fireEvent, waitFor } from '@testing-library/react'
 import { Router } from 'react-router-dom';
-import { DefaultErrorText } from '../../components/common/toast'
+import { defaultErrorText } from '../../components/common/toast'
 import { sendingText } from '../../pages/PasswordReset';
 import { passwordReset } from '../../service/admin/auth';
 import LoginLayout from '../../components/login/layout/LoginLayout';
@@ -69,7 +69,7 @@ describe("Password reset", () => {
     fireEvent.change(utils.getByLabelText("input-password-reset-email"), { target: { value: "test@test.com" } });
     fireEvent.click(utils.getByLabelText("submit-password-reset-email"));
     await waitFor(() => {
-      expect(utils.getByText(DefaultErrorText)).toBeTruthy();
+      expect(utils.getByText(defaultErrorText)).toBeTruthy();
     })
   });
 });

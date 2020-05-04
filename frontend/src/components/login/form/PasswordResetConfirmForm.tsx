@@ -1,23 +1,19 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-
-import axios from '../../../helper/client';
 import { useHistory, useParams } from 'react-router-dom';
 import toast from '../../common/toast';
+import { passwordResetConfirm } from '../../../service/admin/auth';
+import config from '../../../config/auth.json';
 
 const PasswordResetConfirmForm = () => {
   const history = useHistory();
   const { uid, token } = useParams();
-  console.log(uid, token);
   const onFinish = async (values: any) => {
     try {
-      const endPoint = `/users/password-reset-confirm/${uid}/${token}/`;
-      const res = await axios.post(endPoint, values);
-      if (res.status === 200) {
-        toast({ type: 'SUCCESS', text: 'Success changed password' });
-        history.push('/login');
-      }
-    } catch {
+      await passwordResetConfirm({ uid, token, values })
+      toast({ type: 'SUCCESS', text: 'Successful changed password' });
+      history.push('/login');
+    } catch (e) {
       toast({ type: 'ERROR' });
     }
   };
@@ -35,10 +31,10 @@ const PasswordResetConfirmForm = () => {
         name="new_password"
         rules={[
           { required: true, message: 'requreid new password' },
-          { min: 6, message: '6 characters or more' },
+          { min: config.passwordMin, message: `${config.passwordMin} characters or more` },
         ]}
       >
-        <Input placeholder="new password" />
+        <Input aria-label="input-new-password" placeholder="new password" />
       </Form.Item>
 
       <Form.Item
@@ -56,11 +52,11 @@ const PasswordResetConfirmForm = () => {
           }),
         ]}
       >
-        <Input placeholder="Confirm Password" />
+        <Input aria-label="input-new-password2" placeholder="Confirm Password" />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button type="primary" aria-label="submit-new-password" htmlType="submit" className="login-form-button">
           Send
         </Button>
       </Form.Item>
