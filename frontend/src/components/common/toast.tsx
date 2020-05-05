@@ -19,6 +19,7 @@ const toast = (props: IToastProps) => {
     case 'DELETE':
       text = props.text || defaultDeleteText;
       message.success(text);
+      break;
     case 'ERROR':
       text = props.text || defaultErrorText;
       message.error(text);

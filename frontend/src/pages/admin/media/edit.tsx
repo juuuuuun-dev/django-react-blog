@@ -15,12 +15,8 @@ const MediaEdit: React.FC = () => {
 
   const { id } = useParams();
   const history = useHistory();
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken]);
-  const fetchData = async () => {
+
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const res = await retrieve(id);
@@ -29,7 +25,12 @@ const MediaEdit: React.FC = () => {
     } catch (e) {
       toast({ type: 'ERROR' });
     }
-  };
+  }, [dispatch, id]);
+
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken]);
+
 
   // edit
   const onSubmit = async (values: any) => {

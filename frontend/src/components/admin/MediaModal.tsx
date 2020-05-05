@@ -4,7 +4,7 @@ import { list } from '../../service/admin/media';
 import { AdminContext } from '../../context/adminContext';
 import { IMediaList, IMediaListResult } from '../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { EyeOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons'
+import { EyeOutlined, PlusOutlined } from '@ant-design/icons'
 
 interface IProps {
   content: string;
@@ -20,13 +20,8 @@ const MediaModal: React.FC<IProps> = ({ content, setContent, visible, setVisible
   const [page, setPage] = React.useState<number>(1);
   const [search, setSearch] = React.useState<string | undefined>();
   const [load, setLoad] = React.useState<boolean>(false);
-  React.useEffect(() => {
-    if (visible) {
-      fetchData();
-    }
-  }, [visible, page, search])
 
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     setLoad(true);
     try {
       const res = await list({ page, search });
@@ -35,7 +30,13 @@ const MediaModal: React.FC<IProps> = ({ content, setContent, visible, setVisible
       console.log("error")
     }
     setLoad(false)
-  };
+  }, [page, search]);
+
+  React.useEffect(() => {
+    if (visible) fetchData()
+  }, [fetchData, visible, page, search])
+
+
 
   const handleClick = (value: IMediaListResult) => {
 

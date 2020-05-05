@@ -40,7 +40,7 @@ const SideNav = ({ background }: NavProps) => {
           console.log(collapsed, type);
         }}
       >
-        <Popover content={<a onClick={() => logout(history)}>Logout</a>} placement="bottom" trigger="click">
+        <Popover content={<div style={{ cursor: "pointer" }} onClick={() => logout(history)}>Logout</div>} placement="bottom" trigger="click">
           <div className="username">
             <Avatar size="small" icon={<UserOutlined />} />
             <span className="username__text">{username}</span>
@@ -55,6 +55,7 @@ const SideNav = ({ background }: NavProps) => {
                 </Menu.Item>
               );
             }
+            return (<></>)
           })}
         </Menu>
       </Sider>

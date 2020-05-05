@@ -14,19 +14,17 @@ const TagEdit: React.FC = () => {
 
   const { id } = useParams();
   const history = useHistory();
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken]);
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     const res = await retrieve(id);
-    if (res.status === 200) {
-      setData(res.data);
-    }
+    setData(res.data);
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
+  }, [dispatch, id]);
+
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken]);
+
 
   // edit
   const onSubmit = async (values: any) => {

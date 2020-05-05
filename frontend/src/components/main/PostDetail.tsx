@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Typography } from 'antd';
+import { Card } from 'antd';
 import { IPostData } from '../../types/posts'
 import * as Showdown from "showdown";
 
@@ -17,7 +17,7 @@ const converter = new Showdown.Converter({
 
 const PostDetail: React.FC<IProps> = ({ post }) => {
   const { Meta } = Card;
-  const { Paragraph } = Typography;
+  // const { Paragraph } = Typography;
 
   return (
     <>

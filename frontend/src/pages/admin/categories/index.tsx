@@ -7,7 +7,7 @@ import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
-
+import toast from '../../../components/common/toast';
 
 const Categories: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
@@ -18,22 +18,21 @@ const Categories: React.FC = () => {
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
 
   const location = useLocation();
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken, query.page, query.search]);
 
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const res = await list({ page: query.page, search: query.search });
       setData(res.data);
     } catch {
-      console.log("not found")
+      toast({ type: 'ERROR' });
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
+  }, [dispatch, query.page, query.search]);
+
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken, query.page, query.search]);
 
   const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();

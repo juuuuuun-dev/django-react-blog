@@ -10,15 +10,14 @@ const Create: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [error, setError] = React.useState({});
   const history = useHistory();
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken]);
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
+  }, [dispatch]);
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken]);
+
   const onSubmit = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {

@@ -9,6 +9,7 @@ import searchWithinPageColumn from "../../../components/admin/SearchWithinPageCo
 import { useLocation } from 'react-router-dom';
 import { CheckOutlined } from '@ant-design/icons';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
+import toast from '../../../components/common/toast';
 
 const Posts: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
@@ -20,20 +21,13 @@ const Posts: React.FC = () => {
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
 
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken, query.page, query.search]);
-
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-
     try {
       const res = await list({ page: query.page, search: query.search });
       setData(res.data);
       const tags: ITextValue[] = [];
-      res.data.tags.map((value: ITagListResult) => {
+      res.data.tags.forEach((value: ITagListResult) => {
         tags.push({
           text: value.name,
           value: value.name,
@@ -41,10 +35,14 @@ const Posts: React.FC = () => {
       });
       setTags(tags);
     } catch {
-      console.log("not found")
+      toast({ type: 'ERROR' });
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
+  }, [dispatch, query.page, query.search]);
+
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken, query.page, query.search]);
 
   const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMde from "react-mde";
 import * as Showdown from "showdown";
-import { Form, Input, Button, Switch, Select, Modal } from 'antd';
+import { Form, Input, Button, Switch, Select } from 'antd';
 import { IPostData, IPostFormItem } from '../../../types/posts';
 import { CameraOutlined } from '@ant-design/icons';
 import MediaModal from "../../admin/MediaModal";
@@ -46,15 +46,12 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
       );
       setIsShow(data.is_show || false)
     }
-  }, [data]);
+  }, [data, form]);
   const onFinish = async (values: any) => {
     values.content = content;
     onSubmit(values)
   };
 
-  const handleMdeChange = (value: string) => {
-    console.log({ value })
-  }
   return (
     <>
       <Form
@@ -141,7 +138,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
           label="Show"
           name="is_show"
         >
-          <Switch checked={isShow} onClick={() => setIsShow(isShow != true)} />
+          <Switch checked={isShow} onClick={() => setIsShow(isShow !== true)} />
         </Form.Item>
 
         <Form.Item colon={false}>

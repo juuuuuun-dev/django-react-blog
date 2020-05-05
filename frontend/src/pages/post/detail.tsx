@@ -8,15 +8,16 @@ const Detail: React.FC = () => {
   const [post, setPost] = React.useState<IPostData>()
   const { id } = useParams();
 
-  React.useEffect(() => {
-    fetchData();
-  }, []);
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     const res = await retrieve(id);
     if (res.status === 200) {
       setPost(res.data.post)
     }
-  }
+  }, [id])
+  React.useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return (
     <>
       {post && <PostDetail post={post} />}

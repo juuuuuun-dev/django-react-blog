@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../Header';
-import { Layout, Breadcrumb, Row, Col } from 'antd';
+import { Layout, Row, Col } from 'antd';
 import { MainContextProvider } from '../../../context/mainContext';
 import Container from './Container';
 import '../../../less/main/main.less';

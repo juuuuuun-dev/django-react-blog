@@ -1,9 +1,7 @@
 import axios from '../../helper/client';
-import { IMediaData } from '../../types/media';
 import { IListQuery } from '../../types/pagination';
 import { queryStringify } from '../../helper/query';
 const endPoint = '/media/admin-media/';
-
 
 export const list = async (queries: IListQuery) => {
   const query = queryStringify(queries);

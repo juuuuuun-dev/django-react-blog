@@ -32,7 +32,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
         },
       );
     }
-  }, [data]);
+  }, [data, form]);
   const onFinish = async (values: any) => {
     if (!imageUrl) {
       setRemoveFile(true);
