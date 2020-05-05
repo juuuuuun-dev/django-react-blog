@@ -8,6 +8,7 @@ import searchWithinPageColumn from "../../../components/admin/SearchWithinPageCo
 import { useLocation } from 'react-router-dom';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 import toast from '../../../components/common/toast';
+import { sortDate } from '../../../helper/sort';
 
 
 const Tags: React.FC = () => {
@@ -79,21 +80,21 @@ const Tags: React.FC = () => {
       })
     },
     {
-      title: 'updated_at',
+      title: 'updated',
       name: 'updated_at',
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '20%',
-      sorter: (a: ITagListResult, b: ITagListResult) => (a.updated_at > b.updated_at ? 1 : 0),
+      sorter: (a: ITagListResult, b: ITagListResult) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
-      title: 'created_at',
+      title: 'created',
       name: 'created_at',
       dataIndex: 'created_at',
       key: 'created_at',
       width: '20%',
-      sorter: (a: ITagListResult, b: ITagListResult) => (a.created_at > b.created_at ? 1 : 0),
+      sorter: (a: ITagListResult, b: ITagListResult) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];

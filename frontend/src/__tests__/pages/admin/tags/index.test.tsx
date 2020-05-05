@@ -1,9 +1,9 @@
 import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list } from '../../../../service/admin/media';
+import { list } from '../../../../service/admin/tags';
 import { defaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/media';
+import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/tags';
 import { sortDate } from '../../../../helper/sort';
 import { setUp } from '../../../../__mocks__/adminSetUp';
 import '../../../../__mocks__/windowMatchMedia';
@@ -11,15 +11,14 @@ import '../../../../__mocks__/fileMock';
 import "@testing-library/jest-dom/extend-expect";
 
 afterEach(() => cleanup());
-jest.mock('../../../../service/admin/media');
+jest.mock('../../../../service/admin/tags');
 jest.mock('../../../../helper/sort')
-describe("Admin media index", () => {
-  const initialPath = "/admin/media";
+describe("Admin tags index", () => {
+  const initialPath = "/admin/tags";
   beforeEach(() => {
     mocked(list).mockClear();
     // mocked(sortDate).mockClear();
   })
-
 
   // success
   it("successful request", async () => {
@@ -77,21 +76,6 @@ describe("Admin media index", () => {
     expect(sortDate).toHaveBeenCalledTimes(4);
   });
 
-  // imgwindow open
-  it("imgwindow open", async () => {
-    mocked(list).mockImplementation(
-      (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
-    );
-    const { utils } = await setUp(initialPath);
-    await waitFor(() => {
-      expect(utils.getAllByText("CREATE")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
-    })
-    window.open = jest.fn();
-    fireEvent.click(utils.getByTestId('list-thumb-1'));
-    expect(window.open).toHaveBeenCalledTimes(1);
-  })
-
   // query search
   it("query search", async () => {
     mocked(list).mockImplementation(
@@ -118,14 +102,12 @@ describe("Admin media index", () => {
     })
   });
 
-
   // request error
   it("request error", async () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.reject()
     );
     const { utils } = await setUp(initialPath);
-    fireEvent.click(utils.getByTestId('side-nav-media'));
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
     })

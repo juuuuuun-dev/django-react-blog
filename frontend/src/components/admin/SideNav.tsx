@@ -55,7 +55,7 @@ const SideNav = ({ background }: NavProps) => {
                 </Menu.Item>
               );
             }
-            return (<></>)
+            return null
           })}
         </Menu>
       </Sider>
