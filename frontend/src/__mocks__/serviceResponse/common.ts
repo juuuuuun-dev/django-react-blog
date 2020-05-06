@@ -16,3 +16,11 @@ export const error404AxiosResponse: AxiosResponse = {
   config: {},
   headers: {},
 };
+
+export const error500AxiosResponse: AxiosResponse = {
+  data: {},
+  status: 500,
+  statusText: 'ERROR',
+  config: {},
+  headers: {},
+};

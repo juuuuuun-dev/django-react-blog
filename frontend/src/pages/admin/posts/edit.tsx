@@ -15,12 +15,8 @@ const Edit: React.FC = () => {
   const { id } = useParams();
   const history = useHistory();
   const redirectPath = "/admin/posts";
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken]);
-  const fetchData = async () => {
+
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     const res = await retrieve(id);
     if (res.status === 200) {
@@ -28,7 +24,12 @@ const Edit: React.FC = () => {
       setFormItem({ categories: res.data.categories, tags: res.data.tags });
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
+  }, [dispatch, id]);
+
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken]);
+
 
   // edit
   const onSubmit = async (values: any) => {

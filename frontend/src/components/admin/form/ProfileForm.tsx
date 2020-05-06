@@ -1,19 +1,36 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import axios from '../../../helper/client';
 import { AdminContext } from '../../../context/adminContext';
 import toast from '../../common/toast';
 import { set } from 'local-storage';
+import { retrieve, patch } from '../../../service/admin/profile';
 
 const ProfileForm: React.FC = () => {
-  const endPoint = '/users/user-profile/';
   const { state, dispatch } = React.useContext(AdminContext);
 
+  const fetchData = React.useCallback(async () => {
+    dispatch({ type: 'SET_LOADING', payload: { loading: true } });
+    const res = await retrieve();
+    setFields([
+      {
+        name: 'username',
+        value: res.data.username,
+      },
+      {
+        name: 'message',
+        value: res.data.profile.message,
+      },
+      {
+        name: 'url',
+        value: res.data.profile.url,
+      },
+    ]);
+    dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+  }, [dispatch]);
+
   React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken]);
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken]);
 
   const [fields, setFields] = React.useState([
     {
@@ -30,29 +47,6 @@ const ProfileForm: React.FC = () => {
     },
   ]);
 
-  const fetchData = async () => {
-    dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    // setToken(token);
-    const res = await axios.get(endPoint);
-    if (res.status === 200) {
-      console.log(res.data);
-      setFields([
-        {
-          name: 'username',
-          value: res.data.username,
-        },
-        {
-          name: 'message',
-          value: res.data.profile.message,
-        },
-        {
-          name: 'url',
-          value: res.data.profile.url,
-        },
-      ]);
-    }
-    dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
 
   const onFinish = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
@@ -64,14 +58,11 @@ const ProfileForm: React.FC = () => {
           url: values.url,
         },
       };
-      const res = await axios.patch(endPoint, data);
-      if (res.status === 200) {
-        dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-        set<string>('username', values.username);
-        toast({ type: 'SUCCESS' });
-      }
+      await patch(data);
+      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+      set<string>('username', values.username);
+      toast({ type: 'SUCCESS' });
     } catch {
-      console.log('error');
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'ERROR' });
     }

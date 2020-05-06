@@ -18,14 +18,9 @@ const Media: React.FC = () => {
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const searchRef = React.useRef<null | Input>(null);
-
   const location = useLocation();
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken, query.page, query.search]);
-  const fetchData = async () => {
+
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const res = await list({ page: query.page, search: query.search });
@@ -34,7 +29,11 @@ const Media: React.FC = () => {
       toast({ type: "ERROR" })
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
+  }, [dispatch, query.page, query.search]);
+
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken, query.page, query.search]);
 
   const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();

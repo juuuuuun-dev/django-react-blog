@@ -1,6 +1,6 @@
 import React from 'react';
 import { mainReducer, MainState, initState, Actions } from './mainReducer';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
 interface MainContextProviderProps {
   children: React.ReactNode;

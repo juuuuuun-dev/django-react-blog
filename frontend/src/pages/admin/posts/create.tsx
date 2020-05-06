@@ -11,19 +11,18 @@ const Create: React.FC = () => {
   const [formItem, setFormItem] = React.useState<IPostFormItem | undefined>();
   const [error, setError] = React.useState({});
   const history = useHistory();
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken]);
-  const fetchData = async () => {
+
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     const res = await postFormItem();
-    if (res.status === 200) {
-      setFormItem(res.data);
-    }
+    setFormItem(res.data);
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken]);
+
   const onSubmit = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {

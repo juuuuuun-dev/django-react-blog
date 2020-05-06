@@ -14,19 +14,22 @@ const TagEdit: React.FC = () => {
 
   const { id } = useParams();
   const history = useHistory();
-  React.useEffect(() => {
-    if (state.hasToken) {
-      fetchData();
-    }
-  }, [state.hasToken]);
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await retrieve(id);
-    if (res.status === 200) {
+    try {
+      const res = await retrieve(id);
       setData(res.data);
+      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+    } catch (e) {
+      toast({ type: 'ERROR' });
     }
-    dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  };
+
+  }, [dispatch, id]);
+
+  React.useEffect(() => {
+    if (state.hasToken) fetchData();
+  }, [fetchData, state.hasToken]);
+
 
   // edit
   const onSubmit = async (values: any) => {
@@ -56,7 +59,7 @@ const TagEdit: React.FC = () => {
       const res = await destroy(id);
       if (res.status === 204) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-        toast({ type: 'SUCCESS' });
+        toast({ type: 'DELETE' });
         history.push("/admin/tags");
       }
     } catch {

@@ -27,7 +27,6 @@ const TagForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
       ]);
     }
   }, [data]);
-  console.log({ error })
   const onFinish = async (values: any) => {
     onSubmit(values)
   };
@@ -47,11 +46,11 @@ const TagForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
         help={error && error.name ? "This name already exists" : null}
         rules={[{ required: true, message: 'Please input name' }]}
       >
-        <Input placeholder="name" />
+        <Input aria-label="input-name" placeholder="name" />
       </Form.Item>
 
       <Form.Item colon={false}>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button type="primary" aria-label="form-submit" htmlType="submit" className="login-form-button">
           Submit
         </Button>
       </Form.Item>
