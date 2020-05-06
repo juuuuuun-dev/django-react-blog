@@ -17,9 +17,13 @@ const Edit: React.FC = () => {
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await retrieve(id);
-    setData(res.data);
-    dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+    try {
+      const res = await retrieve(id);
+      setData(res.data);
+      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+    } catch (e) {
+      toast({ type: 'ERROR' });
+    }
   }, [dispatch, id]);
 
   React.useEffect(() => {
@@ -54,7 +58,7 @@ const Edit: React.FC = () => {
       const res = await destroy(id);
       if (res.status === 204) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-        toast({ type: 'SUCCESS' });
+        toast({ type: 'DELETE' });
         history.push("/admin/categories");
       }
     } catch {
