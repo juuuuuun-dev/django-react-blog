@@ -59,13 +59,13 @@ export const navList: INavList[] = [
   },
   {
     path: '/admin/tags/:id/edit',
-    title: 'TagEdit',
+    title: 'Tag edit',
     component: TagEdit,
     hiddenNav: true,
   },
   {
     path: '/admin/tags/create',
-    title: 'TagCreate',
+    title: 'Tag create',
     component: TagCreate,
     hiddenNav: true,
   },

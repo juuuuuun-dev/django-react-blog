@@ -48,13 +48,14 @@ export const error404AxiosResponse: AxiosResponse = {
 
 export const error400AxiosResponse: AxiosResponse = {
   data: {
-    name: ["この項目は必須です。"]
+    name: ["The name already exists"]
   },
   status: 400,
   statusText: '400 Bad Request',
   config: {},
   headers: {},
 };
+
 
 export const detailAxiosResponse: AxiosResponse = {
   data: resultData,
