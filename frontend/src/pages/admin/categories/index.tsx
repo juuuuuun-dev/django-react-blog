@@ -8,6 +8,7 @@ import searchWithinPageColumn from "../../../components/admin/SearchWithinPageCo
 import { useLocation } from 'react-router-dom';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 import toast from '../../../components/common/toast';
+import { sortDate } from '../../../helper/sort';
 
 const Categories: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
@@ -81,7 +82,7 @@ const Categories: React.FC = () => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '20%',
-      sorter: (a: ICategoryListResult, b: ICategoryListResult) => (a.updated_at > b.updated_at ? 1 : 0),
+      sorter: (a: ICategoryListResult, b: ICategoryListResult) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -90,7 +91,7 @@ const Categories: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '20%',
-      sorter: (a: ICategoryListResult, b: ICategoryListResult) => (a.created_at > b.created_at ? 1 : 0),
+      sorter: (a: ICategoryListResult, b: ICategoryListResult) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];

@@ -2,14 +2,14 @@ import React from 'react';
 import { retrieve, update, destroy } from '../../../service/admin/categories';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/CategoryForm'
-import { ITagData } from '../../../types/tags';
+import { ICategoriesData } from '../../../types/categories';
 import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const Edit: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<ITagData | undefined>();
+  const [data, setData] = React.useState<ICategoriesData | undefined>();
   const [error, setError] = React.useState({})
 
   const { id } = useParams();
@@ -17,9 +17,13 @@ const Edit: React.FC = () => {
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await retrieve(id);
-    setData(res.data);
-    dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+    try {
+      const res = await retrieve(id);
+      setData(res.data);
+      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+    } catch (e) {
+      toast({ type: 'ERROR' });
+    }
   }, [dispatch, id]);
 
   React.useEffect(() => {
@@ -54,7 +58,7 @@ const Edit: React.FC = () => {
       const res = await destroy(id);
       if (res.status === 204) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-        toast({ type: 'SUCCESS' });
+        toast({ type: 'DELETE' });
         history.push("/admin/categories");
       }
     } catch {

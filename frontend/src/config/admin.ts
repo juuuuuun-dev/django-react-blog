@@ -83,7 +83,7 @@ export const navList: INavList[] = [
   },
   {
     path: '/admin/categories/create',
-    title: 'Categoreis create',
+    title: 'Category create',
     component: CategoryCreate,
     hiddenNav: true,
   },
