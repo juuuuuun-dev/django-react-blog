@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { CheckOutlined } from '@ant-design/icons';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 import toast from '../../../components/common/toast';
+import { sortDate, sortBoolean, sortTextLength } from '../../../helper/sort';
 
 const Posts: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
@@ -91,7 +92,7 @@ const Posts: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       width: '20%',
-      sorter: (a: IPostListResult, b: IPostListResult) => (a.is_show > b.is_show ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => sortTextLength(a.category.name, b.category.name),
       render: (text: { id: number, name: string }) =>
         (<>{text.name}</>)
     },
@@ -115,7 +116,6 @@ const Posts: React.FC = () => {
           return false;
         }
       },
-      sorter: (a: IPostListResult, b: IPostListResult) => (a.is_show > b.is_show ? 1 : 0),
       render: (text: Array<any>) =>
         (<>{text.map((value, index) => {
           return <Tag key={index}>{value.name}</Tag>
@@ -130,11 +130,9 @@ const Posts: React.FC = () => {
       render: (text: boolean) =>
         text === true ? (
           <CheckOutlined style={{ color: '#243a82' }} />
-        ) : (
-            <></>
-          ),
+        ) : null,
       width: '10%',
-      sorter: (a: IPostListResult, b: IPostListResult) => (a.is_show > b.is_show ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => sortBoolean(a.is_show, b.is_show),
     },
     {
       title: 'updated',
@@ -142,7 +140,7 @@ const Posts: React.FC = () => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '10%',
-      sorter: (a: IPostListResult, b: IPostListResult) => (a.updated_at > b.updated_at ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -151,7 +149,7 @@ const Posts: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '10%',
-      sorter: (a: IPostListResult, b: IPostListResult) => (a.created_at > b.created_at ? 1 : 0),
+      sorter: (a: IPostListResult, b: IPostListResult) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];
