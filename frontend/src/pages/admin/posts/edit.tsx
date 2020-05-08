@@ -18,11 +18,14 @@ const Edit: React.FC = () => {
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await retrieve(id);
-    if (res.status === 200) {
+    try {
+      const res = await retrieve(id);
       setData(res.data.post);
       setFormItem({ categories: res.data.categories, tags: res.data.tags });
+    } catch (e) {
+      toast({ type: 'ERROR' });
     }
+
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
   }, [dispatch, id]);
 
@@ -64,7 +67,7 @@ const Edit: React.FC = () => {
       const res = await destroy(id);
       if (res.status === 204) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-        toast({ type: 'SUCCESS' });
+        toast({ type: 'DELETE' });
         history.push(redirectPath);
       }
     } catch {

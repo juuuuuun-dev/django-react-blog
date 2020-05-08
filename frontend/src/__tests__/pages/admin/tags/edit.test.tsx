@@ -6,9 +6,6 @@ import { defaultSuccessText, defaultErrorText, defaultDeleteText } from '../../.
 import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/tags';
 import { error404AxiosResponse, error500AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
 import { setUp } from '../../../../__mocks__/adminSetUp';
-import '../../../../__mocks__/windowMatchMedia';
-import '../../../../__mocks__/fileMock';
-import "@testing-library/jest-dom/extend-expect";
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/tags');

@@ -9,7 +9,6 @@ export const retrieve = async (id: string | undefined) => {
   return axios.get(`${endPoint}/${id}`)
 }
 
-
 export const postFormItem = async () => {
   return axios.get(`${endPoint}/form-item`);
 }

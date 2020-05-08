@@ -7,7 +7,6 @@ import { Router } from 'react-router-dom';
 import { defaultErrorText } from '../../components/common/toast'
 import { passwordResetConfirm } from '../../service/admin/auth';
 import LoginLayout from '../../components/login/layout/LoginLayout';
-import '../../__mocks__/windowMatchMedia';
 
 afterEach(() => cleanup());
 jest.mock('../../service/admin/auth');

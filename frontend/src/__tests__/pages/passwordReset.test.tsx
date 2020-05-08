@@ -8,7 +8,6 @@ import { defaultErrorText } from '../../components/common/toast'
 import { sendingText } from '../../pages/PasswordReset';
 import { passwordReset } from '../../service/admin/auth';
 import LoginLayout from '../../components/login/layout/LoginLayout';
-import '../../__mocks__/windowMatchMedia';
 
 afterEach(() => cleanup());
 jest.mock('../../service/admin/auth');

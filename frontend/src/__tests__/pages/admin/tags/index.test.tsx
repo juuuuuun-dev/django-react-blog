@@ -6,9 +6,6 @@ import { defaultErrorText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/tags';
 import { sortDate } from '../../../../helper/sort';
 import { setUp } from '../../../../__mocks__/adminSetUp';
-import '../../../../__mocks__/windowMatchMedia';
-import '../../../../__mocks__/fileMock';
-import "@testing-library/jest-dom/extend-expect";
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/tags');

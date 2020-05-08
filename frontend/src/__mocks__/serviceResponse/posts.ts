@@ -10,16 +10,24 @@ export const tagList = [
     "name": "test tag2",
   }
 ];
+export const categoryList = [
+  {
+    id: 1,
+    name: "category test",
+  },
+  {
+    id: 2,
+    name: "category test2",
+  },
+]
+
 export const resultData = {
   "id": 1,
   "key": 1,
   "title": "test Abe",
   "content": "content Abe",
   "is_show": true,
-  "category": {
-    "id": 1,
-    "name": "test category"
-  },
+  "category": categoryList[0],
   "tag": [
     tagList[0],
   ],
@@ -33,10 +41,7 @@ export const resultData2 = {
   "title": "test Asou",
   "content": "content Asou",
   "is_show": true,
-  "category": {
-    "id": 2,
-    "name": "test category2"
-  },
+  "category": categoryList[1],
   "tag": [
     tagList[1],
   ],
@@ -76,7 +81,7 @@ export const error404AxiosResponse: AxiosResponse = {
 
 export const error400AxiosResponse: AxiosResponse = {
   data: {
-    name: ["The name already exists"]
+    title: ["The title already exists"]
   },
   status: 400,
   statusText: '400 Bad Request',
@@ -86,7 +91,11 @@ export const error400AxiosResponse: AxiosResponse = {
 
 
 export const detailAxiosResponse: AxiosResponse = {
-  data: resultData,
+  data: {
+    post: resultData,
+    tags: tagList,
+    categories: categoryList,
+  },
   status: 200,
   statusText: 'OK',
   config: {},
@@ -94,6 +103,16 @@ export const detailAxiosResponse: AxiosResponse = {
 }
 export const createAxiosResponse: AxiosResponse = {
   data: resultData,
+  status: 201,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+}
+export const formItemAxiosResponse: AxiosResponse = {
+  data: {
+    categories: categoryList,
+    tags: tagList,
+  },
   status: 201,
   statusText: 'OK',
   config: {},

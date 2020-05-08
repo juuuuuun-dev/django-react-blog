@@ -1,29 +1,23 @@
 import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list, retrieve, update, destroy } from '../../../../service/admin/media';
+import { list, retrieve, update, destroy } from '../../../../service/admin/posts';
 import { defaultSuccessText, defaultErrorText, defaultDeleteText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/media';
-import { error404AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
+import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/posts';
+import { error404AxiosResponse, error500AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
 import { setUp } from '../../../../__mocks__/adminSetUp';
-import { getBase64 } from '../../../../helper/file';
 
 afterEach(() => cleanup());
-jest.mock('../../../../service/admin/media');
-jest.mock('../../../../helper/file');
+jest.mock('../../../../service/admin/posts');
 
-describe("Admin media edit", () => {
-  const initialPath = "/admin/media";
-  const base64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAoACgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJVAAAAAAAAAAAAAAAAAA//Z";
-  const file = new File([base64], "test.jpg", {
-    type: "image/jpeg",
-  });
+describe("Admin posts edit", () => {
+  const initialPath = "/admin/posts";
+
   beforeEach(() => {
     mocked(list).mockClear()
     mocked(retrieve).mockClear();
     mocked(update).mockClear();
     mocked(destroy).mockClear();
-    mocked(getBase64).mockClear();
   })
 
   mocked(list).mockImplementation(
@@ -38,82 +32,71 @@ describe("Admin media edit", () => {
   mocked(destroy).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(deleteAxiosResponse)
   );
-  mocked(getBase64).mockImplementation(
-    (_img, callback): void => {
-      callback(base64)
-    }
-  )
 
-  it("Request Successful", async () => {
+  it("Request successful", async () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getByText(listData.results[0].title));
     await waitFor(() => {
-      expect(utils.getAllByText("Media edit")).toBeTruthy();
+      expect(utils.getAllByText("Post edit")).toBeTruthy();
     });
     act(() => {
-      fireEvent.change(utils.getByLabelText("media-form-name"), { target: { value: 'updateAbe' } });
+      fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'Update Abe' } });
     })
-    fireEvent.click(utils.getByLabelText("media-form-preview"));
-    expect(await utils.findByTestId("media-preview-modal")).toBeTruthy();
-    fireEvent.click(utils.getByLabelText("media-form-delete-image"));
-    expect(await utils.findByText("Please selected file")).toBeTruthy();
-
-    fireEvent.change(utils.getByLabelText("media-form-file"), { target: { files: [file] } });
-    fireEvent.submit(utils.getByLabelText("media-form-submit"))
+    fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText(defaultSuccessText)).toBeTruthy();
     });
   });
 
-  it("Update error", async () => {
+  it("500 put error", async () => {
     mocked(update).mockImplementation(
       (): Promise<AxiosResponse<any>> => {
-        return Promise.reject({ response: error400AxiosResponse })
+        return Promise.reject({ response: error500AxiosResponse })
       }
     );
 
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getByText(listData.results[0].title));
     await waitFor(() => {
-      expect(utils.getAllByText("Media edit")).toBeTruthy();
+      expect(utils.getByText("Post edit")).toBeTruthy();
     });
-    fireEvent.submit(utils.getByLabelText("media-form-submit"))
+    fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
     });
-  })
+  });
 
-  it("Retrieve error", async () => {
+  it("404 retrieve error", async () => {
     mocked(retrieve).mockImplementation(
-      (): Promise<AxiosResponse<any>> => Promise.reject({ response: error404AxiosResponse })
+      (id): Promise<AxiosResponse<any>> => Promise.reject({ response: error404AxiosResponse })
     );
+
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getByText(listData.results[0].title));
     await waitFor(() => {
-      expect(utils.getAllByText("Media edit")).toBeTruthy();
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
     });
-  })
+  });
 
   it("Delete successful", async () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getByText(listData.results[0].title));
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {
@@ -130,9 +113,9 @@ describe("Admin media edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getByText(listData.results[0].title));
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {

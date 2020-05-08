@@ -33,24 +33,23 @@ const MediaModal: React.FC<IProps> = ({ content, setContent, visible, setVisible
   }, [page, search]);
 
   React.useEffect(() => {
-    if (visible) fetchData()
+    if (visible) fetchData();
   }, [fetchData, visible, page, search])
-
-
-
-  const handleClick = (value: IMediaListResult) => {
-
-  }
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
     setPage(page);
   }
 
   const handleAdd = (value: IMediaListResult): void => {
+    console.log("handleAdd");
     const start = target.textAreaRef.selectionStart;
     const text = `![${value.name}](${value.file})`;
     const newContent = content.substr(0, start) + text + content.substr(start);
     setContent(newContent);
+    setVisible(false);
+  }
+
+  const handleClose = () => {
     setVisible(false);
   }
 
@@ -66,7 +65,7 @@ const MediaModal: React.FC<IProps> = ({ content, setContent, visible, setVisible
       width={"90%"}
       visible={visible}
       footer={null}
-      onCancel={() => setVisible(false)}
+      onCancel={() => handleClose()}
     >
       <Search
         style={{ marginBottom: 15 }}
@@ -81,11 +80,11 @@ const MediaModal: React.FC<IProps> = ({ content, setContent, visible, setVisible
             return <div className="media-thumbs__item" key={index}>
               <Popover title={value.name} content={
                 <>
-                  <Button style={{ marginRight: 10 }} shape="circle" onClick={() => handleAdd(value)} icon={<PlusOutlined />} size="middle" />
+                  <Button data-testid="add-media-code-btn" style={{ marginRight: 10 }} shape="circle" onClick={() => handleAdd(value)} icon={<PlusOutlined />} size="middle" />
                   <Button style={{ marginRight: 10 }} shape="circle" onClick={() => handlePreview(value.file)} icon={<EyeOutlined />} size="middle" />
                 </>
               }>
-                <LazyLoadImage onClick={() => handleClick(value)} src={value.thumb} alt={value.name}></LazyLoadImage>
+                <LazyLoadImage data-testid={`media-list-${value.id}`} src={value.thumb} alt={value.name}></LazyLoadImage>
               </Popover>
             </div>
           })}
