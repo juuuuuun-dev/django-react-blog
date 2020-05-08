@@ -1,43 +1,44 @@
 import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
 import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list } from '../../../../service/admin/tags';
+import { list } from '../../../../service/admin/posts';
 import { defaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/tags';
-import { sortDate } from '../../../../helper/sort';
+import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/posts';
+import { sortDate, sortBoolean, sortTextLength } from '../../../../helper/sort';
 import { setUp } from '../../../../__mocks__/adminSetUp';
 
 afterEach(() => cleanup());
-jest.mock('../../../../service/admin/tags');
+jest.mock('../../../../service/admin/posts');
 jest.mock('../../../../helper/sort')
-describe("Admin tags index", () => {
-  const initialPath = "/admin/tags";
+describe("Admin posts index", () => {
+  const initialPath = "/admin/posts";
   beforeEach(() => {
     mocked(list).mockClear();
-    // mocked(sortDate).mockClear();
   })
 
   // success
-  it("successful request", async () => {
+  it("Request successful", async () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getAllByText("CREATE")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy();
+      expect(utils.getByText(listData.results[0].category.name)).toBeTruthy();
+      expect(utils.getByText(listData.results[0].tag[0].name)).toBeTruthy()
     })
   })
 
   // filter search
-  it("filter search", async () => {
+  it("Filter search", async () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getAllByText("CREATE")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
     fireEvent.click(utils.getByLabelText('open-filter-serach'));
     await waitFor(() => {
@@ -52,36 +53,45 @@ describe("Admin tags index", () => {
     fireEvent.click(utils.getByLabelText('open-filter-serach'));
     fireEvent.click(utils.getByLabelText('reset-filter-search'));
     await waitFor(() => {
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
   })
 
   // sort
-  it("sort", async () => {
+  it("Sort", async () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getAllByText("CREATE")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
+    // date
     fireEvent.click(utils.getByText('created'));
     fireEvent.click(utils.getByText('created'));
     fireEvent.click(utils.getByText('updated'));
     fireEvent.click(utils.getByText('updated'));
     expect(sortDate).toHaveBeenCalledTimes(4);
+    // boolean
+    fireEvent.click(utils.getByText('show'));
+    fireEvent.click(utils.getByText('show'));
+    expect(sortBoolean).toHaveBeenCalledTimes(2);
+    // text
+    fireEvent.click(utils.getByText('category'));
+    fireEvent.click(utils.getByText('category'));
+    expect(sortTextLength).toHaveBeenCalledTimes(2);
   });
 
   // query search
-  it("query search", async () => {
+  it("Query search", async () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
     );
     const { utils, history } = await setUp(initialPath);
 
     expect(await utils.findAllByText("CREATE")).toBeTruthy();
-    expect(await utils.findByText(listData.results[0].name)).toBeTruthy()
+    expect(await utils.findByText(listData.results[0].title)).toBeTruthy()
 
     const searchText = 'STAY-HOME';
     expect(utils.queryByTestId('result-query-search-text')).toBeNull();
@@ -100,13 +110,13 @@ describe("Admin tags index", () => {
   });
 
   // request error
-  it("request error", async () => {
+  it("Request error", async () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.reject()
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
-      expect(utils.getByText(defaultErrorText)).toBeTruthy();
+      expect(utils.getAllByText(defaultErrorText)).toBeTruthy();
     })
   })
 })

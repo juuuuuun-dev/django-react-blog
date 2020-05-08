@@ -71,5 +71,6 @@
     "ts-import-plugin": "^1.6.5",
     "ts-jest": "^25.4.0",
     "use-query-params": "^1.1.1"
-  }
+  },
+  "jest": {}
 }

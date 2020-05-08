@@ -6,9 +6,6 @@ import { defaultSuccessText, defaultErrorText } from '../../../../components/com
 import { listData, listAxiosResponse, createAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/media';
 import { setUp } from '../../../../__mocks__/adminSetUp';
 import { getBase64 } from '../../../../helper/file';
-import '../../../../__mocks__/windowMatchMedia';
-import '../../../../__mocks__/fileMock';
-import "@testing-library/jest-dom/extend-expect";
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/media');
