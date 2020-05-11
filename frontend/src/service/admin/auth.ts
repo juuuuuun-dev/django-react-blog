@@ -1,5 +1,5 @@
 import axios, { setClientToken } from '../../helper/client';
-import { get, set, remove } from 'local-storage';
+import { get, set, clear } from 'local-storage';
 // import toast from '../../components/common/toast';
 import { AxiosResponse } from 'axios';
 
@@ -25,9 +25,7 @@ export const refreshToken = async (history: any): Promise<void> => {
 
 export const logout = (history: any): void => {
   history.push('/login');
-  remove('token');
-  remove('refresh');
-  remove('username');
+  clear();
 };
 
 export const login = async (values: any): Promise<AxiosResponse<any>> => {

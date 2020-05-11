@@ -9,4 +9,9 @@ class MediaFactory(factory.django.DjangoModelFactory):
         model = Media
 
     name = 'test_file'
-    file = factory.django.ImageField(filename="test.jpg", color='black')
+    file = factory.django.ImageField(
+        filename="test.jpg",
+        color='black',
+        width=10,
+        height=10,
+    )

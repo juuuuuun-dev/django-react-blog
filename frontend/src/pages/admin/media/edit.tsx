@@ -2,7 +2,7 @@ import React from 'react';
 import { retrieve, update, destroy } from '../../../service/admin/media';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/MediaForm'
-import { IMediaData } from '../../../types/media';
+import { MediaDetail } from '../../../types/media';
 import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
@@ -10,7 +10,7 @@ import DeleteBtn from '../../../components/admin/DeleteBtn';
 const MediaEdit: React.FC = () => {
   const redirectPath = "/admin/media";
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IMediaData | undefined>();
+  const [data, setData] = React.useState<MediaDetail | undefined>();
   const [error, setError] = React.useState({})
 
   const { id } = useParams();

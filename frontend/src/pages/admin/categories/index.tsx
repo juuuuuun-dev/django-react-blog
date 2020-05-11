@@ -2,7 +2,7 @@ import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/admin/categories';
 import { Table, Input } from 'antd';
-import { ICategoryList, ICategoryListResult } from '../../../types/categories';
+import { CategoryList, CategoryDetail } from '../../../types/categories';
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
@@ -13,7 +13,7 @@ import { sortDate } from '../../../helper/sort';
 const Categories: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
-  const [data, setData] = React.useState<ICategoryList>();
+  const [data, setData] = React.useState<CategoryList>();
   const searchRef = React.useRef<null | Input>(null);
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
@@ -82,7 +82,7 @@ const Categories: React.FC = () => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '20%',
-      sorter: (a: ICategoryListResult, b: ICategoryListResult) => sortDate(a.updated_at, b.updated_at),
+      sorter: (a: CategoryDetail, b: CategoryDetail) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -91,7 +91,7 @@ const Categories: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '20%',
-      sorter: (a: ICategoryListResult, b: ICategoryListResult) => sortDate(a.created_at, b.created_at),
+      sorter: (a: CategoryDetail, b: CategoryDetail) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];

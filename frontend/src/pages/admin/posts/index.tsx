@@ -1,9 +1,9 @@
 import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/admin/posts';
-import { ITextValue, ITagListResult } from '../../../types/tags';
+import { TagListItem, TagDetail } from '../../../types/tags';
 import { Table, Input, Tag } from 'antd';
-import { IPostList, IPostListResult } from '../../../types/posts';
+import { PostList, PostDetail } from '../../../types/posts';
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
@@ -17,8 +17,8 @@ const Posts: React.FC = () => {
   const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
-  const [data, setData] = React.useState<IPostList | undefined>();
-  const [tags, setTags] = React.useState<ITextValue[]>([]);
+  const [data, setData] = React.useState<PostList | undefined>();
+  const [tags, setTags] = React.useState<TagListItem[]>([]);
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
 
@@ -27,8 +27,8 @@ const Posts: React.FC = () => {
     try {
       const res = await list({ page: query.page, search: query.search });
       setData(res.data);
-      const tags: ITextValue[] = [];
-      res.data.tags.forEach((value: ITagListResult) => {
+      const tags: TagListItem[] = [];
+      res.data.tags.forEach((value: TagDetail) => {
         tags.push({
           text: value.name,
           value: value.name,
@@ -92,7 +92,7 @@ const Posts: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       width: '20%',
-      sorter: (a: IPostListResult, b: IPostListResult) => sortTextLength(a.category.name, b.category.name),
+      sorter: (a: PostDetail, b: PostDetail) => sortTextLength(a.category.name, b.category.name),
       render: (text: { id: number, name: string }) =>
         (<>{text.name}</>)
     },
@@ -103,7 +103,7 @@ const Posts: React.FC = () => {
       key: 'tag',
       width: '20%',
       filters: tags,
-      onFilter: (value: string | number | boolean, record: IPostListResult) => {
+      onFilter: (value: string | number | boolean, record: PostDetail) => {
         if (record.tag.length) {
           let includeFlag: boolean = false;
           record.tag.forEach((obj: any) => {
@@ -132,7 +132,7 @@ const Posts: React.FC = () => {
           <CheckOutlined style={{ color: '#243a82' }} />
         ) : null,
       width: '10%',
-      sorter: (a: IPostListResult, b: IPostListResult) => sortBoolean(a.is_show, b.is_show),
+      sorter: (a: PostDetail, b: PostDetail) => sortBoolean(a.is_show, b.is_show),
     },
     {
       title: 'updated',
@@ -140,7 +140,7 @@ const Posts: React.FC = () => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '10%',
-      sorter: (a: IPostListResult, b: IPostListResult) => sortDate(a.updated_at, b.updated_at),
+      sorter: (a: PostDetail, b: PostDetail) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -149,7 +149,7 @@ const Posts: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '10%',
-      sorter: (a: IPostListResult, b: IPostListResult) => sortDate(a.created_at, b.created_at),
+      sorter: (a: PostDetail, b: PostDetail) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];

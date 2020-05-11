@@ -2,7 +2,7 @@ import React from 'react';
 import { AdminContext } from '../../../context/adminContext';
 import { list } from '../../../service/admin/tags';
 import { Table, Input } from 'antd';
-import { ITagList, ITagListResult } from '../../../types/tags';
+import { TagList, TagDetail } from '../../../types/tags';
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
@@ -14,7 +14,7 @@ import { sortDate } from '../../../helper/sort';
 const Tags: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
-  const [data, setData] = React.useState<ITagList>();
+  const [data, setData] = React.useState<TagList>();
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const searchRef = React.useRef<null | Input>(null);
@@ -85,7 +85,7 @@ const Tags: React.FC = () => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '20%',
-      sorter: (a: ITagListResult, b: ITagListResult) => sortDate(a.updated_at, b.updated_at),
+      sorter: (a: TagDetail, b: TagDetail) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -94,7 +94,7 @@ const Tags: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '20%',
-      sorter: (a: ITagListResult, b: ITagListResult) => sortDate(a.created_at, b.created_at),
+      sorter: (a: TagDetail, b: TagDetail) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];

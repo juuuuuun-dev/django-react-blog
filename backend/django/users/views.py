@@ -1,45 +1,51 @@
-from pprint import pprint
-from django.http import Http404
 from rest_framework import views, status
 from rest_framework.response import Response
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework.permissions import IsAuthenticated, AllowAny
 # from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view, permission_classes
-from .parmission import UserIsOwnerUserProfile
-
+# from rest_framework.decorators import api_view, permission_classes
+# from .parmission import UserIsOwnerUserProfile
+from django.shortcuts import get_object_or_404
 from .models import UserProfile, User
 from .serializers import UserProfileSerializer, UserSerializer, \
     PasswordResetSerializer, PasswordResetConfirmSerializer
+from utils.file import delete_thumb
 
 
 class UserProfileView(views.APIView):
     permission_classes = (IsAuthenticated, AllowAny)
-    # authentication_classes = (TokenAuthentication)
-    # authentication_classes = [TokenAuthentication]
 
     def get(self, request):
-        user = User.objects.get(id=self.request.user.id)
-        serializer = UserSerializer(user)
+        queryset = UserProfile.objects.all()
+        user_profile = get_object_or_404(
+            queryset, user_id=self.request.user.id)
+        serializer = UserProfileSerializer(user_profile, context={
+            "request": request})
         return Response(serializer.data)
 
-    # def post(self, request):
-    #     serializer = UserProfileSerializer(data=self.request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save(user=self.request.user)
-    #     return Response(serializer.data)
-
-    def patch(self, request):
-        serializer = UserSerializer(data=request.data)
-
-        # serializer = UserProfileSerializer(data=self.request.data)
-        if serializer.is_valid(raise_exception=True):
-            user = User.objects.get(id=self.request.user.id)
-            serializer.update(instance=user,
-                              validated_data=request.data)
-            serializer = UserSerializer(user)
+    def put(self, request):
+        queryset = UserProfile.objects.all()
+        user_profile = get_object_or_404(
+            queryset, user_id=self.request.user.id)
+        serializer = UserProfileSerializer(
+            user_profile, data=request.data, context={
+                "request": request})
+        if serializer.is_valid():
+            if "avator" in self.request.data:
+                delete_thumb(user_profile.avator.name)
+            serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def patch(self, request):
+    #     serializer = UserSerializer(data=request.data)
+    #     if serializer.is_valid(raise_exception=True):
+    #         user = User.objects.get(id=self.request.user.id)
+    #         serializer.update(instance=user,
+    #                           validated_data=request.data)
+    #         serializer = UserSerializer(user)
+    #         return Response(serializer.data)
+    # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordResetView(views.APIView):
@@ -89,15 +95,13 @@ class PasswordResetConfirmationView(views.APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# Create your views here.
-@api_view(["GET"])
-@permission_classes([AllowAny])
-def verify_auth_view(request):
-    if request.method == "GET":
-        existing_user = User.objects.get(id=request.user.id)
-        print(existing_user)
-        if existing_user:
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+# @api_view(["GET"])
+# @permission_classes([AllowAny])
+# def verify_auth_view(request):
+#     if request.method == "GET":
+#         existing_user = User.objects.get(id=request.user.id)
+#         print(existing_user)
+#         if existing_user:
+#             return Response(status=status.HTTP_200_OK)
+#         else:
+#             return Response(status=status.HTTP_404_NOT_FOUND)

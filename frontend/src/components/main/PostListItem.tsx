@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card, Typography } from 'antd';
-import { IPostListResult } from '../../types/posts'
+import { PostDetail } from '../../types/posts'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useHistory } from 'react-router-dom';
 
 interface IProps {
-  post: IPostListResult;
+  post: PostDetail;
 }
 
 const PostListItem: React.FC<IProps> = ({ post }) => {

@@ -6,6 +6,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from ..pagination import MediaPagination
 from rest_framework import filters
+from utils.file import delete_thumb
 
 
 class AdminMediaViewSet(viewsets.ModelViewSet):
@@ -21,7 +22,7 @@ class AdminMediaViewSet(viewsets.ModelViewSet):
         """
         if "file" in self.request.data:
             media = Media.objects.get(id=self.kwargs['pk'])
-            Media.deleteThumb(media.file)
+            delete_thumb(media.file.name)
         serializer.save()
 
 

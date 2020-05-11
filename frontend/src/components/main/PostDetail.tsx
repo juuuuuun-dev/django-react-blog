@@ -1,12 +1,8 @@
 import React from 'react';
 import { Card } from 'antd';
-import { IPostData } from '../../types/posts'
+import { PostDetailProps } from '../../types/posts'
 import * as Showdown from "showdown";
-
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-interface IProps {
-  post: IPostData;
-}
 
 const converter = new Showdown.Converter({
   tables: true,
@@ -15,7 +11,7 @@ const converter = new Showdown.Converter({
   tasklists: true
 });
 
-const PostDetail: React.FC<IProps> = ({ post }) => {
+const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
   const { Meta } = Card;
   // const { Paragraph } = Typography;
 

@@ -1,5 +1,11 @@
+import os
+import re
+import uuid
 from django.db import models
 from django.conf import settings
+from utils.file import delete_thumb
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 from django.db.models.signals import post_save
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
@@ -49,6 +55,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ("username",)
 
 
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('user/', filename)
+
+
 class UserProfile(models.Model):
     class Meta:
         db_table = 'user_profiles'
@@ -57,13 +69,21 @@ class UserProfile(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="profile",
-        primary_key=True)
+        primary_key=True
+    )
+    public_name = models.CharField(unique=True, max_length=64)
     avator = models.FileField(
-        upload_to="media/avatars/",
+        upload_to=get_file_path,
         null=True,
-        blank=True)
+        blank=True
+    )
+    thumb = ImageSpecField(
+        source='avator',
+        processors=[ResizeToFill(60, 60)],
+        format='JPEG',
+        options={'quality': 90}
+    )
     url = models.TextField(null=True, blank=True)
-
     message = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -103,7 +123,10 @@ class UserProfile(models.Model):
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        profile, created = UserProfile.objects.get_or_create(user=instance)
+        profile, created = UserProfile.objects.get_or_create(
+            user=instance,
+            public_name=instance.username
+        )
 
 
 post_save.connect(create_user_profile, sender=User)

@@ -1,16 +1,8 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import { ITagData } from '../../../types/tags';
+import { TagFormProps } from '../../../types/tags';
 
-
-interface IProps {
-  data?: ITagData;
-  onSubmit: (values: any) => Promise<void>;
-  error?: {
-    name?: Array<string>
-  }
-}
-const TagForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
+const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, error }) => {
   const [fields, setFields] = React.useState([
     {
       name: 'name',

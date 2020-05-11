@@ -1,15 +1,8 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import { ICategoriesData } from '../../../types/categories';
+import { CategoryFormProps } from '../../../types/categories';
 
-interface IProps {
-  data?: ICategoriesData;
-  onSubmit: (values: any) => Promise<void>;
-  error?: {
-    name?: Array<string>
-  }
-}
-const CategoryForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) => {
   const [fields, setFields] = React.useState([
     {
       name: 'name',

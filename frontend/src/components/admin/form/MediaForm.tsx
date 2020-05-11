@@ -1,20 +1,12 @@
 import React from 'react';
 import { Form, Input, Button, Upload, Modal } from 'antd';
-import { IMediaData } from '../../../types/media';
+import { MediaFormProps } from '../../../types/media';
 import { RcFile } from 'antd/lib/upload';
 import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import toast from '../../../components/common/toast';
 import { getBase64 } from '../../../helper/file';
 
-interface IProps {
-  data?: IMediaData;
-  onSubmit: (values: any) => Promise<void>;
-  error?: {
-    name?: Array<string>,
-    file?: Array<string>,
-  }
-}
-const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
+const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [imageUrl, setImageUrl] = React.useState<string>('');
@@ -42,6 +34,7 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
     onSubmit(values)
   };
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
+    console.log("beforeUpload")
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
     if (!isJpgOrPng) {
       toast({ type: 'ERROR', text: 'You can only upload JPG/PNG file!' })
@@ -68,18 +61,14 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
   );
 
   const handleChange = (info: any) => {
-
     setFile(info.file)
+    console.log(info.file)
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
     }
     if (info.file.status === 'done') {
       console.log("done")
-      // getBase64(info.file.originFileObj, (imageUrl: string) => {
-      //   setLoading(true);
-      //   setImageUrl(imageUrl);
-      // });
     }
   };
 
@@ -116,10 +105,8 @@ const MediaForm: React.FC<IProps> = ({ data, onSubmit, error }) => {
 
         <Form.Item
           label="File"
-          // name="file"
           validateStatus={file ? "success" : "error"}
           help={removeFile ? "Please selected file" : null}
-        // rules={[{ required: true, message: 'Please selected file' }]}
         >
           <Upload
             name="file"

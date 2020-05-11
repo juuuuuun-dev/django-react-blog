@@ -4,7 +4,7 @@ import { list } from '../../../service/admin/media';
 import { Table, Input } from 'antd';
 import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
-import { IMediaList, IMediaListResult } from '../../../types/media'
+import { MediaList, MediaDetail } from '../../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
@@ -14,7 +14,7 @@ import { sortDate } from '../../../helper/sort';
 const Media: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
-  const [data, setData] = React.useState<IMediaList | undefined>();
+  const [data, setData] = React.useState<MediaList | undefined>();
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const searchRef = React.useRef<null | Input>(null);
@@ -87,7 +87,7 @@ const Media: React.FC = () => {
       dataIndex: 'file',
       key: 'file',
       width: '10%',
-      render: (_text: string, record: IMediaListResult) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" data-testid={`list-thumb-${record.id}`} style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
+      render: (_text: string, record: MediaDetail) => (<LazyLoadImage onClick={() => handlePreview(record.file)} alt="thumb" data-testid={`list-thumb-${record.id}`} style={{ cursor: "pointer" }} width={40} src={record.thumb} />)
     },
     {
       title: 'updated',
@@ -96,7 +96,7 @@ const Media: React.FC = () => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       width: '10%',
-      sorter: (a: IMediaListResult, b: IMediaListResult) => sortDate(a.updated_at, b.updated_at),
+      sorter: (a: MediaDetail, b: MediaDetail) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
     {
@@ -105,7 +105,7 @@ const Media: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       width: '10%',
-      sorter: (a: IMediaListResult, b: IMediaListResult) => sortDate(a.created_at, b.created_at),
+      sorter: (a: MediaDetail, b: MediaDetail) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
   ];
