@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'posts',
     'users',
     'media',
+    'utils',
     'blog_auth',
     'django.contrib.sites',
     'django.contrib.admin',
@@ -76,8 +77,8 @@ INSTALLED_APPS = [
     'imagekit',
 ]
 SITE_ID = 1
-SITE_NAME = "My blog!"
-URL = "http://localhost:8000"
+SITE_NAME = "Django and React blog"
+BACKEND_URL = env('BACKEND_URL')
 FRONT_URL = env('FRONT_URL')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

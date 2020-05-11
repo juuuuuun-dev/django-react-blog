@@ -1,22 +1,21 @@
 from rest_framework import serializers
 from .models import User, UserProfile
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        read_only=True, source="profile")
+    avator = serializers.FileField(
+        required=False)
+    thumb = serializers.ImageField(read_only=True)
 
     class Meta:
         model = UserProfile
         fields = (
-            "user",
             "avator",
+            "public_name",
             "url",
             "message",
+            "thumb",
         )
 
 

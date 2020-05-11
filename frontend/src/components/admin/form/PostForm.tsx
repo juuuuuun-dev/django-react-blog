@@ -2,7 +2,7 @@ import React from 'react';
 import ReactMde from "react-mde";
 import * as Showdown from "showdown";
 import { Form, Input, Button, Switch, Select } from 'antd';
-import { IPostData, IPostFormItem } from '../../../types/posts';
+import { PostFormProps } from '../../../types/posts';
 import { CameraOutlined } from '@ant-design/icons';
 import MediaModal from "../../admin/MediaModal";
 import "react-mde/lib/styles/css/react-mde-all.css";
@@ -13,15 +13,8 @@ const converter = new Showdown.Converter({
   strikethrough: true,
   tasklists: true
 });
-interface IProps {
-  data?: IPostData;
-  formItem?: IPostFormItem;
-  onSubmit: (values: any) => Promise<void>;
-  error?: {
-    title?: Array<string>
-  }
-}
-const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
+
+const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) => {
   const contentRef = React.useRef(null);
   const { Option } = Select;
   const [form] = Form.useForm();
@@ -57,7 +50,7 @@ const PostForm: React.FC<IProps> = ({ data, formItem, onSubmit, error }) => {
       <Form
         labelCol={{ span: 3 }}
         wrapperCol={{ span: 14 }}
-        name="tag"
+        name="post"
         // fields={fields}
         form={form}
         onFinish={onFinish}

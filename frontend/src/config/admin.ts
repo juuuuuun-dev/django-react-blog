@@ -109,7 +109,7 @@ export const navList: INavList[] = [
   {
     id: 'profile',
     path: '/admin/profile',
-    title: 'Profile',
+    title: 'Public profile',
     component: Profile,
   },
 ];

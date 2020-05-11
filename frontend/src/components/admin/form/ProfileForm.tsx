@@ -1,99 +1,150 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
-import { AdminContext } from '../../../context/adminContext';
-import toast from '../../common/toast';
-import { set } from 'local-storage';
-import { retrieve, patch } from '../../../service/admin/profile';
+import { RcFile } from 'antd/lib/upload';
+import { Form, Input, Upload, Modal, Button } from 'antd';
+import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ProfileFormProps } from '../../../types/profile';
+import toast from '../../../components/common/toast';
+import { getBase64 } from '../../../helper/file';
+// import ImgCrop from 'antd-img-crop';
 
-const ProfileForm: React.FC = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
 
-  const fetchData = React.useCallback(async () => {
-    dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    const res = await retrieve();
-    setFields([
-      {
-        name: 'username',
-        value: res.data.username,
-      },
-      {
-        name: 'message',
-        value: res.data.profile.message,
-      },
-      {
-        name: 'url',
-        value: res.data.profile.url,
-      },
-    ]);
-    dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  }, [dispatch]);
+const ProfileForm: React.FC<ProfileFormProps> = (props) => {
+  const { data, onSubmit } = props;
+  const [form] = Form.useForm();
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [imageUrl, setImageUrl] = React.useState<string>('');
+  const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
+  const [file, setFile] = React.useState<File | undefined>();
+  const [removeFile, setRemoveFile] = React.useState<boolean>(false)
+  const [showModal, setShowModal] = React.useState<boolean>(false)
 
   React.useEffect(() => {
-    if (state.hasToken) fetchData();
-  }, [fetchData, state.hasToken]);
+    if (data) {
+      setImageUrl(data.avator);
+      form.setFieldsValue({
+        public_name: data.public_name,
+        message: data.message,
+        url: data.url,
+      });
+    }
+  }, [data, form]);
 
-  const [fields, setFields] = React.useState([
-    {
-      name: 'username',
-      value: '',
-    },
-    {
-      name: 'message',
-      value: '',
-    },
-    {
-      name: 'url',
-      value: '',
-    },
-  ]);
-
-
+  const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
+    if (!isJpgOrPng) {
+      toast({ type: 'ERROR', text: 'You can only upload JPG/PNG file!' })
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      toast({ type: 'ERROR', text: 'Image must smaller than 2MB!' })
+    }
+    if (isJpgOrPng && isLt2M) {
+      getBase64(file, (imageUrl: string) => {
+        setLoading(true);
+        setRemoveFile(false);
+        setImageUrl(imageUrl);
+      });
+      // cropp用
+      // setFile(new File([file], file.name))
+    }
+    return false;
+  }
   const onFinish = async (values: any) => {
-    dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    try {
-      const data = {
-        username: values.username,
-        profile: {
-          message: values.message,
-          url: values.url,
-        },
-      };
-      await patch(data);
-      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-      set<string>('username', values.username);
-      toast({ type: 'SUCCESS' });
-    } catch {
-      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-      toast({ type: 'ERROR' });
+    if (!imageUrl) {
+      setRemoveFile(true);
+      return false;
+    }
+    values.avator = file;
+    onSubmit(values);
+  };
+
+  const handleChange = (info: any) => {
+    setFile(info.file)
+    if (info.file.status === 'uploading') {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      console.log("done")
     }
   };
 
-  return (
-    <Form
-      labelCol={{ span: 3 }}
-      wrapperCol={{ span: 14 }}
-      name="normal_login"
-      className="login-form"
-      fields={fields}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-    >
-      <Form.Item label="username" name="username" rules={[{ required: true, message: 'Please input your username' }]}>
-        <Input placeholder="username" />
-      </Form.Item>
-      <Form.Item label="url" name="url" rules={[{ required: false, message: '' }]}>
-        <Input placeholder="url" />
-      </Form.Item>
-      <Form.Item label="message" name="message" rules={[{ required: false, message: 'requreid email' }]}>
-        <Input.TextArea rows={6} placeholder="message" />
-      </Form.Item>
+  const handlePreview = () => {
+    setPreviewVisible(true);
+  }
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          Submit
+  const handleRemove = async (file: any) => {
+    setImageUrl('')
+    setFile(undefined);
+    setLoading(false);
+    setRemoveFile(true);
+  }
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div className="ant-upload-text">Upload</div>
+    </div>
+  );
+  return (
+    <>
+      <Form
+        labelCol={{ span: 5 }}
+        wrapperCol={{ span: 13 }}
+        name="public_profile"
+        className="login-form"
+        form={form}
+        onFinish={onFinish}
+      >
+        {/* <Form.Item label="username" name="username" rules={[{ required: true, message: 'Please input your username' }]}>
+        <Input data-testid="input-username" placeholder="username" />
+      </Form.Item> */}
+        <Form.Item label="Public name" name="public_name" rules={[{ required: true, message: 'Please input your username' }]}>
+          <Input aria-label="input-public_name" placeholder="public name" />
+        </Form.Item>
+        <Form.Item
+          label="Avator"
+          validateStatus={file ? "success" : "error"}
+          help={removeFile ? "Please selected file" : null}
+        >
+          {/* <ImgCrop rotate > */}
+          <Upload
+            name="avator"
+            listType="picture-card"
+            className="file-uploader"
+            aria-label="input-avator"
+            showUploadList={false}
+            beforeUpload={beforeUpload}
+            // onPreview={handlePreview}
+            onChange={handleChange}
+            onRemove={handleRemove}
+          >
+            {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
+          </Upload>
+          {/* </ImgCrop> */}
+          {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview()} /><DeleteOutlined aria-label="delete-image" onClick={handleRemove} /></> : <></>}
+
+        </Form.Item>
+        <Form.Item label="Url" name="url" rules={[{ required: false, message: '' }]}>
+          <Input aria-label="input-url" placeholder="url" />
+        </Form.Item>
+        <Form.Item label="Message" name="message" rules={[{ required: false, message: 'requreid email' }]}>
+          <Input.TextArea aria-label="textarea-message" rows={6} placeholder="message" />
+        </Form.Item>
+
+        <Form.Item>
+          <Button aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
+            Submit
         </Button>
-      </Form.Item>
-    </Form>
+        </Form.Item>
+      </Form>
+      <Modal visible={previewVisible} footer={null} onCancel={() => setPreviewVisible(false)}>
+        <img data-testid="preview-modal" alt="preview" style={{ width: '100%' }} src={imageUrl} />
+      </Modal>
+      <Modal visible={showModal} onCancel={() => setShowModal(false)} footer={null}>
+        <img data-testid="cropp-image" src={imageUrl} alt="preview" style={{ maxWidth: '100%' }} />
+      </Modal>
+    </>
   );
 };
 

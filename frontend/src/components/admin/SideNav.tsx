@@ -14,10 +14,34 @@ export interface NavProps {
 }
 
 const SideNav = ({ background }: NavProps) => {
+  console.log("SideNav");
   const { Sider } = Layout;
   const { state, dispatch } = React.useContext(AdminContext);
   const username: string = get('username');
+  const thumb: string = get('thumb');
   const history = useHistory();
+  // @todo 配列に
+  const [selectedKey, setSelectedKey] = React.useState<string>('0');
+
+  const curretSelectedKey = React.useCallback((): void => {
+    const pathname = history.location.pathname;
+    navList.forEach((value, index) => {
+      if (!value.hiddenNav) {
+        const reg = new RegExp(value.path);
+        const found = pathname.match(reg);
+        if (found) {
+          console.log({ index })
+          setSelectedKey('1');
+          return;
+        }
+      }
+    })
+    // setSelectedKey(1);
+  }, []);
+  React.useEffect(() => {
+    curretSelectedKey();
+  }, [curretSelectedKey]);
+  console.log({ selectedKey })
   return (
     <>
       <Sider
@@ -42,11 +66,11 @@ const SideNav = ({ background }: NavProps) => {
       >
         <Popover content={<div style={{ cursor: "pointer" }} onClick={() => logout(history)}>Logout</div>} placement="bottom" trigger="click">
           <div className="username">
-            <Avatar size="small" icon={<UserOutlined />} />
+            <Avatar size="small" src={thumb} icon={<UserOutlined />} />
             <span className="username__text">{username}</span>
           </div>
         </Popover>
-        <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={['0']}>
+        <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={["0"]}>
           {navList.map((item, index) => {
             if (!item.hiddenNav) {
               return (

@@ -4,6 +4,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from users.factories import UserFactory
 from ..factories import MediaFactory
 from ..models import Media
+from utils.file import delete_thumb
 from django.urls import reverse
 from urllib.parse import urlencode
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -18,10 +19,15 @@ class AdminMediaViewSetTestCase(APITestCase):
         self.client.credentials(
             HTTP_AUTHORIZATION="Bearer {}".format(refresh.access_token))
 
+    def tearDown(self):
+        media = Media.objects.all()
+        for value in media:
+            delete_thumb(value.file.name)
+            value.file.delete()
+
     def test_get(self):
         media = MediaFactory.create(name='test abe')
-        media2 = MediaFactory.create(name='abe')
-        # api = reverse("media:admin-media-list")
+        MediaFactory.create(name='abe2')
         api = "".join([
             reverse("media:admin-media-list"),
             "?",
@@ -31,12 +37,9 @@ class AdminMediaViewSetTestCase(APITestCase):
             }),
         ])
         response = self.client.get(api)
-        print(response.data['results'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.data['results'][0]['name'], media.name)
-        Media.deleteThumb(media.file)
-        media.file.delete()
 
     def test_retrieve(self):
         media = MediaFactory.create(name='test')
@@ -46,8 +49,6 @@ class AdminMediaViewSetTestCase(APITestCase):
         self.assertEqual(response.data['name'], media.name)
         self.assertTrue(response.data['file'])
         self.assertTrue(response.data['thumb'])
-        Media.deleteThumb(media.file)
-        media.file.delete()
 
     def test_post(self):
         api = reverse("media:admin-media-list")
@@ -66,13 +67,13 @@ class AdminMediaViewSetTestCase(APITestCase):
         self.assertTrue(response.data['file'])
         self.assertTrue(response.data['thumb'])
         media = Media.objects.get(id=response.data['id'])
-        Media.deleteThumb(media.file)
+        delete_thumb(media.file.name)
         media.file.delete()
 
     def test_put(self):
         media = MediaFactory.create(name='test')
-        Media.deleteThumb(media.file)
-        print(media.file)
+        # delete_thumb(media.file.name)
+        # print(media.file)
         api = reverse("media:admin-media-detail", kwargs={"pk": media.id})
         post_data = {
             "name": "put",
@@ -87,7 +88,7 @@ class AdminMediaViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], post_data['name'])
         update_media = Media.objects.get(id=media.id)
-        Media.deleteThumb(update_media.file)
+        delete_thumb(update_media.file.name)
         update_media.file.delete()
         media.file.delete()
 
@@ -96,7 +97,7 @@ class AdminMediaViewSetTestCase(APITestCase):
         api = reverse("media:admin-media-detail", kwargs={"pk": media.id})
         response = self.client.delete(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        Media.deleteThumb(media.file)
+        delete_thumb(media.file.name)
         media.file.delete()
 
 
@@ -117,9 +118,10 @@ class AdminPostPageMediaViewTestCase(APITestCase):
             "?",
             urlencode({"page": 1}),
         ])
-        print(api)
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         print(response.data)
-        Media.deleteThumb(media.file)
+        delete_thumb(media.file.name)
+        delete_thumb(media2.file.name)
         media.file.delete()
+        media2.file.delete()

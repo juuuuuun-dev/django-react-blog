@@ -14,6 +14,7 @@ const LoginForm: React.FC = () => {
       set<string>('token', data.access);
       set<string>('refresh', data.refresh);
       set<string>('username', data.username);
+      set<string>('thumb', data.thumb);
       history.push('/admin/dashboard');
     } catch (e) {
       toast({ type: "ERROR" });

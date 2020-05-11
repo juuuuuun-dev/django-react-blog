@@ -1,0 +1,38 @@
+import { Pagination } from './pagination';
+import { TagDetail, TagList } from './tags';
+import { CategoryList, CategorySimpleList, CategoryDetail } from './categories';
+
+export type PostDetail = {
+  id?: number;
+  key?: number;
+  title: string;
+  content: string;
+  is_show?: boolean;
+  plain_content?: string;
+  category: CategoryDetail;
+  tag: TagDetail[],
+  updated_at?: string;
+  created_at?: string;
+}
+
+export type PostList = Pagination & {
+  results: PostDetail[]
+}
+
+export type PostFormItem = {
+  tags: TagDetail[];
+  categories: CategoryDetail[]
+}
+
+export type PostFormProps = {
+  data?: PostDetail;
+  formItem?: PostFormItem;
+  onSubmit: (values: any) => Promise<void>;
+  error?: {
+    title?: Array<string>
+  }
+}
+
+export type PostDetailProps = {
+  post: PostDetail;
+}

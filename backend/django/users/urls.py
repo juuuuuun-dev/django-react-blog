@@ -1,11 +1,11 @@
-from django.urls import path, include
+from django.urls import path
 from .views import UserProfileView, PasswordResetView, \
     PasswordResetConfirmationView
 app_name = 'users'
 
 urlpatterns = [
     # path('verify-auth/', verify_auth_view),
-    path('user-profile/', UserProfileView.as_view(), name='userprofile'),
+    path('user-profile/', UserProfileView.as_view(), name='user-profile'),
     path(
         'password-reset/',
         PasswordResetView.as_view(),

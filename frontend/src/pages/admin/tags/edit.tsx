@@ -2,14 +2,14 @@ import React from 'react';
 import { retrieve, update, destroy } from '../../../service/admin/tags';
 import { AdminContext } from '../../../context/adminContext';
 import TagForm from '../../../components/admin/form/TagForm'
-import { ITagData } from '../../../types/tags';
+import { TagDetail } from '../../../types/tags';
 import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const TagEdit: React.FC = () => {
   const { state, dispatch } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<ITagData | undefined>();
+  const [data, setData] = React.useState<TagDetail | undefined>();
   const [error, setError] = React.useState({})
 
   const { id } = useParams();

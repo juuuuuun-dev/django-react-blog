@@ -1,10 +1,10 @@
 import React from 'react';
 import PostListItem from '../components/main/PostListItem'
-import { IPostListResult } from '../types/posts'
+import { PostDetail } from '../types/posts'
 import { list } from '../service/main/posts'
 
 const Index = () => {
-  const [posts, setPosts] = React.useState<IPostListResult[]>()
+  const [posts, setPosts] = React.useState<PostDetail[]>()
   React.useEffect(() => {
     fetchData();
   }, []);

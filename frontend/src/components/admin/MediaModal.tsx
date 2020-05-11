@@ -2,21 +2,14 @@ import React from "react"
 import { Input, Pagination, Modal, Popover, Spin, Button } from 'antd';
 import { list } from '../../service/admin/media';
 import { AdminContext } from '../../context/adminContext';
-import { IMediaList, IMediaListResult } from '../../types/media'
+import { MediaList, MediaDetail, MediaModalProps } from '../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { EyeOutlined, PlusOutlined } from '@ant-design/icons'
 
-interface IProps {
-  content: string;
-  setContent: React.Dispatch<React.SetStateAction<string>>;
-  visible: boolean;
-  setVisible: (bool: boolean) => void;
-  target: any;
-}
-const MediaModal: React.FC<IProps> = ({ content, setContent, visible, setVisible, target }) => {
+const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, setVisible, target }) => {
   const { Search } = Input;
   const { state } = React.useContext(AdminContext);
-  const [data, setData] = React.useState<IMediaList | undefined>();
+  const [data, setData] = React.useState<MediaList | undefined>();
   const [page, setPage] = React.useState<number>(1);
   const [search, setSearch] = React.useState<string | undefined>();
   const [load, setLoad] = React.useState<boolean>(false);
@@ -40,7 +33,7 @@ const MediaModal: React.FC<IProps> = ({ content, setContent, visible, setVisible
     setPage(page);
   }
 
-  const handleAdd = (value: IMediaListResult): void => {
+  const handleAdd = (value: MediaDetail): void => {
     console.log("handleAdd");
     const start = target.textAreaRef.selectionStart;
     const text = `![${value.name}](${value.file})`;

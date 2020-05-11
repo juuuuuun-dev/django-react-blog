@@ -1,11 +1,11 @@
 import React from 'react';
-import { IPostData } from '../../types/posts'
+import { PostDetail as TypePostDetail } from '../../types/posts'
 import { useParams } from 'react-router-dom';
 import { retrieve } from '../../service/main/posts'
 import PostDetail from '../../components/main/PostDetail'
 
 const Detail: React.FC = () => {
-  const [post, setPost] = React.useState<IPostData>()
+  const [post, setPost] = React.useState<TypePostDetail>()
   const { id } = useParams();
 
   const fetchData = React.useCallback(async () => {
