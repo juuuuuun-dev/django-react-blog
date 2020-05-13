@@ -8,7 +8,7 @@ import { EyeOutlined, PlusOutlined } from '@ant-design/icons'
 
 const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, setVisible, target }) => {
   const { Search } = Input;
-  const { state } = React.useContext(AdminContext);
+  const [{ pageSize }] = React.useContext(AdminContext);
   const [data, setData] = React.useState<MediaList | undefined>();
   const [page, setPage] = React.useState<number>(1);
   const [search, setSearch] = React.useState<string | undefined>();
@@ -85,7 +85,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, s
       </Spin>
       <Pagination
         defaultCurrent={page}
-        pageSize={state.pageSize}
+        pageSize={pageSize}
         total={data?.count}
         onChange={handlePageChange}
       />

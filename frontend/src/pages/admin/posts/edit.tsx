@@ -8,7 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const Edit: React.FC = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [data, setData] = React.useState<PostDetail | undefined>();
   const [formItem, setFormItem] = React.useState<PostFormItem | undefined>();
   const [error, setError] = React.useState({})

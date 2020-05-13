@@ -1,32 +1,23 @@
-import axios, { setClientToken } from '../../helper/client';
-import { get, set, clear } from 'local-storage';
+import React from 'react';
+import axios from '../../helper/client';
+import { clear } from 'local-storage';
 // import toast from '../../components/common/toast';
 import { AxiosResponse } from 'axios';
+import { useHistory } from 'react-router-dom';
 
-export const refreshToken = async (history: any): Promise<void> => {
-  return new Promise(async (resolve, reject) => {
-    const refresh: string = get('refresh');
-    if (refresh) {
-      try {
-        const res = await axios.post('/blog_auth/token/refresh/', { refresh });
-        const { access } = res.data;
-        set<string>('token', access);
-        setClientToken(access);
-        resolve();
-      } catch {
-        logout(history);
-      }
-    } else {
-      logout(history);
-      reject();
-    }
-  });
-};
 
-export const logout = (history: any): void => {
-  history.push('/login');
-  clear();
-};
+export const refreshAuthToken = async (refresh: string) => {
+  return axios.post('/blog_auth/token/refresh/', { refresh });
+}
+
+export const useLogout = () => {
+  const history = useHistory();
+  const logout = React.useCallback(() => {
+    history.push('/login');
+    clear();
+  }, [history]);
+  return [logout]
+}
 
 export const login = async (values: any): Promise<AxiosResponse<any>> => {
   return axios.post('/blog_auth/token/', values);

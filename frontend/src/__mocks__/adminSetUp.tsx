@@ -1,26 +1,33 @@
 import React from 'react';
-import { mocked } from 'ts-jest/utils'
+import { AxiosResponse } from 'axios';
+import { mocked } from 'ts-jest/utils';
 import { Router, Route } from 'react-router-dom';
-import { createMemoryHistory } from 'history'
+import { createMemoryHistory } from 'history';
 import { QueryParamProvider } from 'use-query-params';
-import { render, cleanup, act } from '@testing-library/react'
-import { refreshToken } from '../service/admin/auth'
+import { renderHook } from '@testing-library/react-hooks'
+import { render, cleanup, act } from '@testing-library/react';
+import { refreshAuthToken, useLogout } from '../service/admin/auth';
+import { refreshTokenAxiosResponse } from './serviceResponse/auth';
 import AdminLayout from '../components/admin/layout/AdminLayout';
 import "@testing-library/jest-dom/extend-expect";
 
 afterEach(() => cleanup());
 jest.mock('../service/admin/auth');
 
-
 export const setUp = async (initialPath: string) => {
+  const { result } = renderHook(() => useLogout());
+
   beforeEach(() => {
-    mocked(refreshToken).mockClear();
+    mocked(refreshAuthToken).mockClear();
   })
-  mocked(refreshToken).mockImplementation(
-    (): Promise<void> => {
-      return new Promise((resolve) => {
-        resolve();
-      })
+  mocked(refreshAuthToken).mockImplementation(
+    (): Promise<AxiosResponse<any>> => Promise.resolve(refreshTokenAxiosResponse)
+  )
+  mocked(useLogout).mockImplementation(
+    () => {
+      const logout = React.useCallback(() => {
+      }, []);
+      return [logout]
     }
   )
   const history = createMemoryHistory();

@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 
 const Create: React.FC = () => {
   const redirectPath = '/admin/media';
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [error, setError] = React.useState({});
   const history = useHistory();
   const fetchData = React.useCallback(async () => {

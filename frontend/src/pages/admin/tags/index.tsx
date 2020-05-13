@@ -12,7 +12,7 @@ import { sortDate } from '../../../helper/sort';
 
 
 const Tags: React.FC = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
   const [data, setData] = React.useState<TagList>();
   const [searchText, setSearchText] = React.useState<string>('');

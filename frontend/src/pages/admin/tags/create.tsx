@@ -6,7 +6,7 @@ import toast from '../../../components/common/toast';
 import { useHistory } from 'react-router-dom';
 
 const TagCreate: React.FC = () => {
-  const { dispatch } = React.useContext(AdminContext);
+  const dispatch = React.useContext(AdminContext)[1];
   const [error, setError] = React.useState({})
   const history = useHistory();
 
