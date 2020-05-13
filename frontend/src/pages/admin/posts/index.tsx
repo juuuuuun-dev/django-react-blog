@@ -13,7 +13,7 @@ import toast from '../../../components/common/toast';
 import { sortDate, sortBoolean, sortTextLength } from '../../../helper/sort';
 
 const Posts: React.FC = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');

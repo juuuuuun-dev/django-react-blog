@@ -1,49 +1,37 @@
 import React from 'react';
-import { Menu, Layout, Popover, Avatar } from 'antd';
+import { Menu, Layout } from 'antd';
 import { Link } from 'react-router-dom';
-import { get } from 'local-storage';
 import { navList } from '../../config/admin';
 import { AdminContext } from '../../context/adminContext';
-import { logout } from '../../service/admin/auth';
 import { useHistory } from 'react-router-dom';
+import SideNavAvator from './SideNavAvator';
 
-import { UserOutlined } from '@ant-design/icons';
-
-export interface NavProps {
-  background: string;
-}
-
-const SideNav = ({ background }: NavProps) => {
-  console.log("SideNav");
+const SideNav = ({ background }: { background: string; }) => {
   const { Sider } = Layout;
-  const { state, dispatch } = React.useContext(AdminContext);
-  const username: string = get('username');
-  const thumb: string = get('thumb');
+  const [{ isSiderShow }, dispatch] = React.useContext(AdminContext);
   const history = useHistory();
-  // @todo 配列に
-  const [selectedKey, setSelectedKey] = React.useState<string>('0');
+  const pathname = history.location.pathname;
 
-  const curretSelectedKey = React.useCallback((): void => {
-    const pathname = history.location.pathname;
+  const curretSelectedKey = React.useMemo(() => {
+    const [res] = navList.filter(value => value.path === pathname);
+    let id = '';
+    if (res && res.id) {
+      id = res.id;
+    } else if (res && res.parentId) {
+      id = res.parentId;
+    }
+    let keyIndex = 0;
     navList.forEach((value, index) => {
-      if (!value.hiddenNav) {
-        const reg = new RegExp(value.path);
-        const found = pathname.match(reg);
-        if (found) {
-          console.log({ index })
-          setSelectedKey('1');
-          return;
-        }
-      }
+      if (value.id === id) {
+        keyIndex = index;
+        return
+      };
     })
-    // setSelectedKey(1);
-  }, []);
-  React.useEffect(() => {
-    curretSelectedKey();
-  }, [curretSelectedKey]);
-  console.log({ selectedKey })
-  return (
-    <>
+    return keyIndex.toString();
+  }, [pathname]);
+
+  return React.useMemo(() => {
+    return <>
       <Sider
         breakpoint="md"
         collapsedWidth="0"
@@ -57,20 +45,10 @@ const SideNav = ({ background }: NavProps) => {
             dispatch({ type: 'SIDER_SHOW' });
           }
         }}
-        // state
-        collapsed={!state.isSiderShow}
-        onCollapse={(collapsed, type) => {
-          // callback
-          console.log(collapsed, type);
-        }}
+        collapsed={!isSiderShow}
       >
-        <Popover content={<div style={{ cursor: "pointer" }} onClick={() => logout(history)}>Logout</div>} placement="bottom" trigger="click">
-          <div className="username">
-            <Avatar size="small" src={thumb} icon={<UserOutlined />} />
-            <span className="username__text">{username}</span>
-          </div>
-        </Popover>
-        <Menu theme="dark" style={{ background: background }} mode="inline" defaultSelectedKeys={["0"]}>
+        <SideNavAvator />
+        <Menu theme="dark" style={{ background: background }} mode="inline" selectedKeys={[curretSelectedKey]}>
           {navList.map((item, index) => {
             if (!item.hiddenNav) {
               return (
@@ -84,7 +62,7 @@ const SideNav = ({ background }: NavProps) => {
         </Menu>
       </Sider>
     </>
-  );
+  }, [isSiderShow, curretSelectedKey, background, dispatch])
 };
 
 export default SideNav;

@@ -5,9 +5,10 @@ from .serializers import MyTokenObtainPairSerializer
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = MyTokenObtainPairSerializer(data=request.data, context={
+        serializer = self.get_serializer(data=request.data, context={
             "request": request})
         if serializer.is_valid():
             return super().post(request, *args, **kwargs)

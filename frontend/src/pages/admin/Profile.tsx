@@ -7,7 +7,7 @@ import { ProfileDetail } from '../../types/profile';
 import { set } from 'local-storage';
 
 const Profile: React.FC = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [data, setData] = React.useState<ProfileDetail | undefined>();
 
   const fetchData = React.useCallback(async () => {

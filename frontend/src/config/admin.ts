@@ -22,6 +22,7 @@ interface INavList {
   component: React.FC;
   exact?: boolean;
   hiddenNav?: boolean;
+  parentId?: string;
 }
 
 export const navList: INavList[] = [
@@ -43,12 +44,14 @@ export const navList: INavList[] = [
     title: 'Post edit',
     component: PostEdit,
     hiddenNav: true,
+    parentId: 'posts',
   },
   {
     path: '/admin/posts/create',
     title: 'Post create',
     component: PostCreate,
     hiddenNav: true,
+    parentId: 'posts',
   },
   {
     id: 'tags',
@@ -62,14 +65,17 @@ export const navList: INavList[] = [
     title: 'Tag edit',
     component: TagEdit,
     hiddenNav: true,
+    parentId: 'tags',
   },
   {
     path: '/admin/tags/create',
     title: 'Tag create',
     component: TagCreate,
     hiddenNav: true,
+    parentId: 'tags',
   },
   {
+    id: 'categories',
     path: '/admin/categories',
     title: 'Categories',
     component: Categories,
@@ -80,12 +86,14 @@ export const navList: INavList[] = [
     title: 'Category edit',
     component: CategoryEdit,
     hiddenNav: true,
+    parentId: 'categories',
   },
   {
     path: '/admin/categories/create',
     title: 'Category create',
     component: CategoryCreate,
     hiddenNav: true,
+    parentId: 'categories',
   },
   {
     id: 'media',
@@ -99,12 +107,14 @@ export const navList: INavList[] = [
     title: 'Media create',
     component: MediaCreate,
     hiddenNav: true,
+    parentId: 'media',
   },
   {
     path: '/admin/media/:id/edit',
     title: 'Media edit',
     component: MediaEdit,
     hiddenNav: true,
+    parentId: 'media',
   },
   {
     id: 'profile',

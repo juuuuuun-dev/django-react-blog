@@ -9,7 +9,7 @@ import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const MediaEdit: React.FC = () => {
   const redirectPath = "/admin/media";
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [data, setData] = React.useState<MediaDetail | undefined>();
   const [error, setError] = React.useState({})
 

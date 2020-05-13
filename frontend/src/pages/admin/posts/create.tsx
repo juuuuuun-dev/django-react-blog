@@ -7,7 +7,7 @@ import { PostFormItem } from '../../../types/posts'
 import { useHistory } from 'react-router-dom';
 
 const Create: React.FC = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [formItem, setFormItem] = React.useState<PostFormItem | undefined>();
   const [error, setError] = React.useState({});
   const history = useHistory();

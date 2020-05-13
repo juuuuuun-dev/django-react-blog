@@ -11,7 +11,7 @@ import toast from '../../../components/common/toast';
 import { sortDate } from '../../../helper/sort';
 
 const Categories: React.FC = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
   const [data, setData] = React.useState<CategoryList>();
   const searchRef = React.useRef<null | Input>(null);

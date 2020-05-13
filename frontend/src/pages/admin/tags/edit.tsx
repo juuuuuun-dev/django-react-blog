@@ -8,7 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
 
 const TagEdit: React.FC = () => {
-  const { state, dispatch } = React.useContext(AdminContext);
+  const [state, dispatch] = React.useContext(AdminContext);
   const [data, setData] = React.useState<TagDetail | undefined>();
   const [error, setError] = React.useState({})
 

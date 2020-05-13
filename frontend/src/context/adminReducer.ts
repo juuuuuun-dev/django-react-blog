@@ -1,19 +1,4 @@
-export interface AdminState {
-  isSiderShow: boolean;
-  loading: boolean;
-  hasToken: boolean;
-  username: string;
-  thumb: string;
-  pageSize: number;
-}
-export const initState: AdminState = {
-  isSiderShow: true,
-  loading: false,
-  hasToken: false,
-  username: '',
-  thumb: '',
-  pageSize: parseInt(process.env.pageSize || "20"),
-};
+import { AdminState } from '../types/adminContext';
 
 const SIDER_SHOW = 'SIDER_SHOW' as const;
 const SIDER_HIDE = 'SIDER_HIDE' as const;
@@ -81,7 +66,7 @@ export const adminReducer = (state: AdminState, action: Actions) => {
     case SET_USERNAME:
       return { ...state, username: action.payload.username };
     case SET_THUMB:
-      return { ...state, username: action.payload.thumb };
+      return { ...state, thumb: action.payload.thumb };
     case SET_LOADING:
       return { ...state, loading: action.payload.loading };
   }

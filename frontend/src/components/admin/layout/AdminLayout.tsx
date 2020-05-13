@@ -11,6 +11,7 @@ export interface MainLayoutProps {
 }
 
 const AdminLayout = () => {
+  console.log("AdminLayout")
   const { Content } = Layout;
   return (
     <>

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Route } from 'react-router-dom';
-import { navList } from '../../../config/admin';
 import { Spin } from 'antd';
+import { navList } from '../../../config/admin';
 import { AdminContext } from '../../../context/adminContext';
 
 const RouteContentList = navList.map((item, index) => (
@@ -13,13 +13,15 @@ const RouteContentList = navList.map((item, index) => (
   </Route>
 ));
 
-const Container = () => {
-  const { state } = React.useContext(AdminContext);
-  return (
-    <Spin spinning={state.loading} tip="Loading..." >
-      {RouteContentList}
-    </Spin>
-  );
+const Container: React.FC = () => {
+  const [{ loading }] = React.useContext(AdminContext);
+  return useMemo(() => {
+    return (
+      <Spin spinning={loading} tip="Loading..." >
+        {RouteContentList}
+      </Spin>
+    );
+  }, [loading]);
 };
 
 export default Container
