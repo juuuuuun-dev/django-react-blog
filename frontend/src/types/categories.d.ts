@@ -12,7 +12,7 @@ export type CategoryList = Pagination & {
   results: CategoryDetail[]
 }
 
-export type CategorySimpleList = {
+export type CategorySimpleDetail = {
   id: number;
   name: string;
 }
