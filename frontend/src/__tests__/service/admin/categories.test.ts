@@ -1,16 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
 import { list, retrieve, update, create, destroy } from '../../../service/admin/categories'
-import { renderHook } from '@testing-library/react-hooks'
 import axios from '../../../service/client';
 
-const mockHistoryPush = jest.fn();
 jest.mock('../../../service/client');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: mockHistoryPush,
-  }),
-}));
 
 describe("Service categories", () => {
   const mockedAxios = axios as jest.Mocked<typeof axios>;
