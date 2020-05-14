@@ -1,9 +1,9 @@
-import { list, retrieve, update, create, destroy } from '../../../service/admin/categories'
+import { list, retrieve, update, create, destroy } from '../../../service/admin/tags'
 import axios from '../../../service/client';
 
 jest.mock('../../../service/client');
 
-describe("Service categories", () => {
+describe("Service tags", () => {
   const mockedAxios = axios as jest.Mocked<typeof axios>;
   const expectedResult = 'result';
 

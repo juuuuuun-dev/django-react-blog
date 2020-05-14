@@ -24,3 +24,7 @@ export type TagFormProps = {
     name?: Array<string>
   }
 }
+
+export type RequestData = {
+  name: string;
+}

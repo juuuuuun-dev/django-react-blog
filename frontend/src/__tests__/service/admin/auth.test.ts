@@ -1,5 +1,3 @@
-import React from 'react'
-import '@testing-library/jest-dom/extend-expect'
 import { refreshAuthToken, login, useLogout, passwordReset, passwordResetConfirm } from '../../../service/admin/auth'
 import { renderHook } from '@testing-library/react-hooks'
 import axios from '../../../service/client';
