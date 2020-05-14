@@ -1,4 +1,4 @@
-import axios from '../../helper/client';
+import axios from '../client';
 const endPoint = '/users/user-profile/';
 
 

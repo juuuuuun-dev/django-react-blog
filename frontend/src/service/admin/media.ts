@@ -1,4 +1,4 @@
-import axios from '../../helper/client';
+import axios from '../client';
 import { ListQuery } from '../../types/pagination';
 import { queryStringify } from '../../helper/query';
 const endPoint = '/media/admin-media/';

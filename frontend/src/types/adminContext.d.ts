@@ -7,7 +7,6 @@ export type AdminState = {
   pageSize: number;
 }
 
-
 export type providerProps = [
   AdminState,
   React.Dispatch<Actions>,

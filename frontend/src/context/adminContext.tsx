@@ -4,7 +4,7 @@ import { AdminState, providerProps } from '../types/adminContext';
 import { refreshAuthToken, useLogout } from '../service/admin/auth'
 import { useHistory } from 'react-router-dom';
 import { get, set } from 'local-storage';
-import { setClientToken } from '../helper/client';
+import { setClientToken } from '../service/client';
 
 
 const initState: AdminState = {
