@@ -1,13 +1,12 @@
 import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
+import { fireEvent, waitFor, act } from '@testing-library/react'
 import { list } from '../../../../service/admin/tags';
 import { defaultErrorText } from '../../../../components/common/toast'
 import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/tags';
 import { sortDate } from '../../../../helper/sort';
 import { setUp } from '../../../../__mocks__/adminSetUp';
 
-afterEach(() => cleanup());
 jest.mock('../../../../service/admin/tags');
 jest.mock('../../../../helper/sort')
 describe("Admin tags index", () => {
