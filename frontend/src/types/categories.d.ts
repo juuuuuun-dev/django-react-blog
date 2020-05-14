@@ -24,3 +24,6 @@ export type CategoryFormProps = {
     name?: Array<string>
   }
 }
+export type RequestData = {
+  name: string;
+}
