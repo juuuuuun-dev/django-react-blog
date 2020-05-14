@@ -1,6 +1,6 @@
 import { Pagination } from './pagination';
 import { TagDetail, TagList } from './tags';
-import { CategoryList, CategorySimpleList, CategoryDetail } from './categories';
+import { CategoryList, CategorySimpleDetail, CategoryDetail } from './categories';
 
 export type PostDetail = {
   id?: number;
@@ -9,7 +9,7 @@ export type PostDetail = {
   content: string;
   is_show?: boolean;
   plain_content?: string;
-  category: CategoryDetail;
+  category: CategorySimpleDetail;
   tag: TagDetail[],
   updated_at?: string;
   created_at?: string;

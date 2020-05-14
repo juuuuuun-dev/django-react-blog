@@ -1,4 +1,4 @@
-import axios from '../../helper/client';
+import axios from '../client';
 const endPoint = '/posts/';
 
 export const list = async () => {

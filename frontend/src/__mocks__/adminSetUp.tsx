@@ -15,7 +15,7 @@ afterEach(() => cleanup());
 jest.mock('../service/admin/auth');
 
 export const setUp = async (initialPath: string) => {
-  const { result } = renderHook(() => useLogout());
+
 
   beforeEach(() => {
     mocked(refreshAuthToken).mockClear();
@@ -42,5 +42,6 @@ export const setUp = async (initialPath: string) => {
       </Router>
     )
   })
+
   return { utils, history };
 }

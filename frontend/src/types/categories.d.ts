@@ -12,7 +12,7 @@ export type CategoryList = Pagination & {
   results: CategoryDetail[]
 }
 
-export type CategorySimpleList = {
+export type CategorySimpleDetail = {
   id: number;
   name: string;
 }
@@ -23,4 +23,7 @@ export type CategoryFormProps = {
   error?: {
     name?: Array<string>
   }
+}
+export type RequestData = {
+  name: string;
 }
