@@ -75,7 +75,7 @@ const Posts: React.FC = () => {
       name: 'title',
       dataIndex: 'title',
       key: 'title',
-      width: '33%',
+      width: '43%',
       ...searchWithinPageColumn({
         dataIndex: 'title',
         searchRef: searchRef,
@@ -91,7 +91,7 @@ const Posts: React.FC = () => {
       name: 'category',
       dataIndex: 'category',
       key: 'category',
-      width: '20%',
+      width: '15%',
       sorter: (a: PostDetail, b: PostDetail) => sortTextLength(a.category.name, b.category.name),
       render: (text: { id: number, name: string }) =>
         (<>{text.name}</>)
@@ -101,7 +101,7 @@ const Posts: React.FC = () => {
       name: 'tag',
       dataIndex: 'tag',
       key: 'tag',
-      width: '20%',
+      width: '15%',
       filters: tags,
       onFilter: (value: string | number | boolean, record: PostDetail) => {
         if (record.tag.length) {
@@ -131,7 +131,7 @@ const Posts: React.FC = () => {
         text === true ? (
           <CheckOutlined style={{ color: '#243a82' }} />
         ) : null,
-      width: '10%',
+      width: '6%',
       sorter: (a: PostDetail, b: PostDetail) => sortBoolean(a.is_show, b.is_show),
     },
     {

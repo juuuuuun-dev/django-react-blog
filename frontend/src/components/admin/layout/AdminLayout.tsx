@@ -18,7 +18,7 @@ const AdminLayout = () => {
       <AdminContextProvider>
         <div>
           <Layout className="contents site-layout-background" style={{ padding: '0px 0' }}>
-            <SideNav background={'#222f5b'} />
+            <SideNav background={'#444'} />
             <Content style={{ padding: '0 0px', minHeight: 280 }}>
               <Header headerHeight="60px" />
               <Content style={{ padding: '30px' }}>

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 from django.utils.translation import ugettext_lazy
 from datetime import timedelta
+from django.conf import settings
 import environ
 import sys
 import re
@@ -28,12 +29,10 @@ TEST_RUNNER = 'my_project.runner.PytestTestRunner'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'v5brmsg&*d&u((wk6bxpj48-tp)5&n19*45%7e#44&=6vo2j)i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-env = environ.Env()
+env = environ.Env(DEBUG=(bool, False),)
 env.read_env(os.path.join(BASE_DIR, '.env'))
 DEBUG = env('DEBUG')
 sysStr = str(sys.argv[0])
@@ -42,7 +41,13 @@ if len(sys.argv) > 1 and re.match(r'.*test$', sysStr):
 else:
     TESTING = False
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('SECRET_KEY')
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ORIGIN_WHITELIST is not working
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 # API
 API_VERSION = "api/v1/"
@@ -104,11 +109,7 @@ REST_FRAMEWORK = {
 }
 
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    env('CORS_ORIGIN_WHITELIST').split(',')
-)
-
+# help(env)
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),

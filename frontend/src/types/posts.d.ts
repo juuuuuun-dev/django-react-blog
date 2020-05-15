@@ -36,3 +36,7 @@ export type PostFormProps = {
 export type PostDetailProps = {
   post: PostDetail;
 }
+
+export type PostListProps = {
+  posts: PostDetail[] | undefined;
+}

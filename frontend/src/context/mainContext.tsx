@@ -1,19 +1,11 @@
 import React from 'react';
-import { mainReducer, MainState, initState, Actions } from './mainReducer';
-// import { useHistory } from 'react-router-dom';
+import { mainReducer, initState } from './mainReducer';
+import { ProviderProps } from '../types/mainContext';
 
-interface MainContextProviderProps {
-  children: React.ReactNode;
-}
-interface IContextProps {
-  state: MainState;
-  dispatch: React.Dispatch<Actions>;
-}
-export const MainContext = React.createContext({} as IContextProps);
-
-export const MainContextProvider = ({ children }: MainContextProviderProps) => {
+export const MainContext = React.createContext({} as ProviderProps);
+export const MainContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = React.useReducer(mainReducer, initState);
-  const value = { state, dispatch };
+  const providerValue = React.useMemo((): ProviderProps => [state, dispatch], [state, dispatch]);
 
   React.useEffect(() => {
     const fn = async () => {
@@ -22,10 +14,12 @@ export const MainContextProvider = ({ children }: MainContextProviderProps) => {
     fn();
   }, []);
 
-  return (
-    <>
-      <MainContext.Provider value={value}>{children}</MainContext.Provider>
-    </>
-  );
+  return React.useMemo(() => {
+    return (
+      <>
+        <MainContext.Provider value={providerValue}>{children}</MainContext.Provider>
+      </>
+    )
+  }, [providerValue, children])
 };
 

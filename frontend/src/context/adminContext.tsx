@@ -52,8 +52,7 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
       await setAuthToken();
       const intervalId = setInterval(() => {
         fetchToken();
-        // 400000
-      }, 40000);
+      }, 400000);
       return () => {
         clearInterval(intervalId);
       };

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Layout } from 'antd';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -15,23 +14,21 @@ import './less/app.less';
 function App() {
   return (
     <div className="App">
-      <Layout>
-        <Router>
-          <QueryParamProvider ReactRouterRoute={Route}>
-            <Switch>
-              <Route exact path={mainPathList}>
-                <MainLayout />
-              </Route>
-              <Route exact path={adminPathList}>
-                <AdminLayout />
-              </Route>
-              <Route path={['/login', '/password-reset', '/password-reset-confirm/:uid/:token/']}>
-                <LoginLayout />
-              </Route>
-            </Switch>
-          </QueryParamProvider>
-        </Router>
-      </Layout>
+      <Router>
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <Switch>
+            <Route exact path={mainPathList}>
+              <MainLayout />
+            </Route>
+            <Route exact path={adminPathList}>
+              <AdminLayout />
+            </Route>
+            <Route path={['/login', '/password-reset', '/password-reset-confirm/:uid/:token/']}>
+              <LoginLayout />
+            </Route>
+          </Switch>
+        </QueryParamProvider>
+      </Router>
     </div>
   );
 }

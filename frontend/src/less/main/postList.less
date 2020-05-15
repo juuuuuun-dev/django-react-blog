@@ -1,0 +1,37 @@
+@import './variable.less';
+//////////////
+// postList
+//////////////
+
+.post-list {
+  &__title {
+    font-size: 1.2rem;
+    margin-right: 10px;
+  }
+  .ant-typography {
+    color: #111;
+  }
+  &__description.ant-typography{
+    margin-right: 10px;
+    a {
+      color: #666;
+    }
+  }
+  &__thumb {
+    margin-top: -40px;
+  }
+}
+// .post-list .ant-typography {
+//   line-height: 1rem;
+//   font-size: .7rem;
+//   margin-bottom: 0;
+// }
+
+
+@media screen and (max-width: @break-point) {
+  .post-list {
+    &__thumb {
+      margin-top: -55px;
+    }
+  }
+}

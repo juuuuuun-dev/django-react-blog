@@ -18,32 +18,11 @@
   margin-left: @global-margin;
 }
 
-//////////////
-// post
-//////////////
-.post {
-  margin-bottom: @global-padding;
-}
-.post .ant-card-meta-title {
-  font-size: 1.2rem;
-  line-height: 1.4rem;
-}
-.post .ant-card-meta-detail > div:not(:last-child) {
-  margin-bottom: 0px;
-}
-.post .ant-card-meta-description {
-  font-size: .7rem;
-  margin-bottom: 15px;
-}
-.post-list .ant-typography {
-  line-height: 1rem;
-  font-size: .7rem;
-  margin-bottom: 0;
-}
-
-
 // sm
 @media screen and (max-width: @break-point) {
+  .ant-card-body {
+    padding: 10px;
+  }
   .header-container {
     padding: 0 @global-padding / 2;
   }

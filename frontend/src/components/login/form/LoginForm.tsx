@@ -7,7 +7,6 @@ import toast from '../../../components/common/toast';
 
 const LoginForm: React.FC = () => {
   const history = useHistory();
-
   const onFinish = async (values: any) => {
     try {
       const { data } = await login(values);
@@ -17,25 +16,27 @@ const LoginForm: React.FC = () => {
       set<string>('thumb', data.thumb);
       history.push('/admin/dashboard');
     } catch (e) {
-      toast({ type: "ERROR" });
+      toast({ type: "ERROR", text: JSON.stringify(e.response.data) });
     }
   };
 
   return (
-    <Form name="normal_login" className="login-form" onFinish={onFinish}>
-      <Form.Item name="email" rules={[{ required: true, message: 'requreid email' }]}>
-        <Input aria-label="input-email" placeholder="Email" />
-      </Form.Item>
-      <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
-        <Input aria-label="input-password" type="password" placeholder="Password" />
-      </Form.Item>
+    <>
+      <Form name="normal_login" className="login-form" onFinish={onFinish}>
+        <Form.Item name="email" rules={[{ required: true, message: 'requreid email' }]}>
+          <Input aria-label="input-email" placeholder="Email" />
+        </Form.Item>
+        <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
+          <Input aria-label="input-password" type="password" placeholder="Password" />
+        </Form.Item>
 
-      <Form.Item>
-        <Button type="primary" aria-label="login-submit" htmlType="submit" className="login-form-button">
-          Login
+        <Form.Item>
+          <Button type="primary" aria-label="login-submit" htmlType="submit" className="login-form-button">
+            Login
         </Button>
-      </Form.Item>
-    </Form>
+        </Form.Item>
+      </Form>
+    </>
   );
 };
 

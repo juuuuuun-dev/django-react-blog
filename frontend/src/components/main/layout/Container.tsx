@@ -7,20 +7,18 @@ import { MainContext } from '../../../context/mainContext';
 const RouteContentList = navList.map((item, index) => (
   <Route path={item.path} exact={item.exact} key={index} >
     <item.component />
-    {/* <div className="container" >
-      <h3 className="container__h3" > {item.title} </h3>
-      <item.component />
-    </div> */}
   </Route>
 ));
 
 const Container = () => {
-  const { state } = React.useContext(MainContext);
-  return (
-    <Spin spinning={state.loading} tip="Loading..." >
-      {RouteContentList}
-    </Spin>
-  );
+  const [{ loading }] = React.useContext(MainContext);
+  return React.useMemo(() => {
+    return (
+      <Spin spinning={loading} tip="Loading..." >
+        {RouteContentList}
+      </Spin>
+    );
+  }, [loading]);
 };
 
 export default Container

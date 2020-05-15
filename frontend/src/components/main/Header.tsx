@@ -17,6 +17,7 @@ const Header: React.FC = () => {
         style={{
           height: headerHeight,
           background: '#ffffff',
+          boxShadow: "0 4px 12px 0 rgba(0, 0, 0, 0.05)",
           // position: 'fixed',
           // top: 0,
           // left: 0,
