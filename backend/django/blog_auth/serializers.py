@@ -14,6 +14,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
         data['username'] = self.user.username
+        # @todo f-strings
+        # a = 'a'
+        # print(f'a is {a}')
+
         data['thumb'] = "{}{}".format(settings.BACKEND_URL,
                                       self.user.profile.thumb.url)
         return data

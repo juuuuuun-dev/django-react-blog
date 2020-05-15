@@ -1,6 +1,5 @@
 import axios from 'axios';
 export const endPoint = `${process.env.REACT_APP_BACKEND}/api/v1`;
-
 const client = axios.create({
   baseURL: endPoint,
 });

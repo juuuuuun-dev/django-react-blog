@@ -1,24 +1,24 @@
 import React from 'react';
-import PostListItem from '../components/main/PostListItem'
 import { PostDetail } from '../types/posts'
 import { list } from '../service/main/posts'
+import PostList from '../components/main/PostList'
 
 const Index = () => {
-  const [posts, setPosts] = React.useState<PostDetail[]>()
-  React.useEffect(() => {
-    fetchData();
-  }, []);
-  const fetchData = async () => {
+  const [posts, setPosts] = React.useState<PostDetail[]>([])
+
+  const fetchData = React.useCallback(async () => {
     const res = await list();
     if (res.status === 200) {
       setPosts(res.data.posts)
     }
-  }
+  }, []);
+  React.useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return (
     <>
-      {posts?.map((value, index) => {
-        return <PostListItem post={value} key={index} />
-      })}
+      <PostList posts={posts} />
     </>
   );
 };
