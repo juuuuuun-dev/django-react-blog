@@ -3,6 +3,8 @@ import Header from '../Header';
 import { Layout, Row, Col } from 'antd';
 import { MainContextProvider } from '../../../context/mainContext';
 import Container from './Container';
+import RightContainer from './RightContainer';
+
 import '../../../less/main/main.less';
 
 const MainLayout = () => {
@@ -21,8 +23,8 @@ const MainLayout = () => {
                 </div>
               </Col>
               <Col className="right-contents" flex="0 1 300px">
-                right
-            </Col>
+                <RightContainer />
+              </Col>
             </Row>
           </div>
 

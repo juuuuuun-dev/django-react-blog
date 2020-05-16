@@ -1,0 +1,20 @@
+
+@import './main/variable.less';
+.hljs {
+  width: 100%;
+  max-width: 700px;
+  padding: @global-padding / 2;
+  border-radius: 4px;
+}
+
+@media screen and (max-width: @max-width) {
+  .hljs {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: @break-point) {
+  .hljs {
+    padding: @global-padding / 3;
+  }
+}

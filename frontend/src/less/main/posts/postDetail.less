@@ -1,0 +1,25 @@
+@import '../variable.less';
+@import './postCommon.less';
+
+//////////////
+// postDetail
+//////////////
+
+.post-detail {
+  &__cover {
+    margin-bottom: @global-margin / 2;
+    border-radius: 4px;
+  }
+  &__title {
+    font-size: 1.6rem;
+  }
+  &__content {
+    margin-top: @global-margin;
+    font-size: .9rem;
+    line-height: 1.8rem;
+    color: #333;
+    p {
+      margin-bottom: 1.8rem;
+    }
+  }
+}
