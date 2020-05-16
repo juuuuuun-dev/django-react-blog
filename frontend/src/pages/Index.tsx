@@ -1,7 +1,7 @@
 import React from 'react';
 import { PostDetail } from '../types/posts'
 import { list } from '../service/main/posts'
-import PostList from '../components/main/PostList'
+import PostList from '../components/main/posts/PostList'
 
 const Index = () => {
   const [posts, setPosts] = React.useState<PostDetail[]>([])

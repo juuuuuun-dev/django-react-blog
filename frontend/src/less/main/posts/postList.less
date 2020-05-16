@@ -1,31 +1,38 @@
-@import './variable.less';
+@import '../variable.less';
+@import './postCommon.less';
 //////////////
 // postList
 //////////////
 
 .post-list {
   &__title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-right: 10px;
+    font-weight: 600;
+    font-family:  Roboto, 'Helvetica Neue',
   }
   .ant-typography {
     color: #111;
   }
   &__description.ant-typography{
     margin-right: 10px;
+    font-size: .8rem;
     a {
       color: #666;
     }
   }
   &__thumb {
     margin-top: -40px;
+    img {
+      border-radius: 4px;
+    }
+  }
+  .ant-list-items {
+    .ant-list-item:first-child {
+      padding-top: 0;
+    }
   }
 }
-// .post-list .ant-typography {
-//   line-height: 1rem;
-//   font-size: .7rem;
-//   margin-bottom: 0;
-// }
 
 
 @media screen and (max-width: @break-point) {
