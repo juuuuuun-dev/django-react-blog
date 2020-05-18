@@ -6,7 +6,7 @@ import { MediaList, MediaDetail, MediaModalProps } from '../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { EyeOutlined, PlusOutlined } from '@ant-design/icons'
 
-const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, setVisible, target }) => {
+const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddMedia }) => {
   const { Search } = Input;
   const [{ pageSize }] = React.useContext(AdminContext);
   const [data, setData] = React.useState<MediaList | undefined>();
@@ -34,11 +34,9 @@ const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, s
   }
 
   const handleAdd = (value: MediaDetail): void => {
-    console.log("handleAdd");
-    const start = target.textAreaRef.selectionStart;
     const text = `![${value.name}](${value.file})`;
-    const newContent = content.substr(0, start) + text + content.substr(start);
-    setContent(newContent);
+    handleAddMedia(text);
+
     setVisible(false);
   }
 

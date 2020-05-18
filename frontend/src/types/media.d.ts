@@ -25,9 +25,7 @@ export type MediaFormProps = {
 
 
 export type MediaModalProps = {
-  content: string;
-  setContent: React.Dispatch<React.SetStateAction<string>>;
   visible: boolean;
   setVisible: (bool: boolean) => void;
-  target: any;
+  handleAddMedia: any;
 }

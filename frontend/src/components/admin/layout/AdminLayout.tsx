@@ -21,7 +21,7 @@ const AdminLayout = () => {
             <SideNav background={'#444'} />
             <Content style={{ padding: '0 0px', minHeight: 280 }}>
               <Header headerHeight="60px" />
-              <Content style={{ padding: '30px' }}>
+              <Content>
                 <Container />
               </Content>
             </Content>

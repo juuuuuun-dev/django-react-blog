@@ -28,6 +28,7 @@ export type PostFormProps = {
   data?: PostDetail;
   formItem?: PostFormItem;
   onSubmit: (values: any) => Promise<void>;
+  onChange: (values: any) => void;
   error?: {
     title?: Array<string>
   }
@@ -39,4 +40,10 @@ export type PostDetailProps = {
 
 export type PostListProps = {
   posts: PostDetail[] | undefined;
+}
+
+export type PostPreviewProps = {
+  title: string;
+  content: string;
+  cover: string;
 }

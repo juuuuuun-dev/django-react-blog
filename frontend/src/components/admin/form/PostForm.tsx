@@ -1,30 +1,49 @@
-import React from 'react';
-import ReactMde from "react-mde";
-import * as Showdown from "showdown";
+import React, { useState } from 'react';
+import ReactDOMServer from "react-dom/server";
 import { Form, Input, Button, Switch, Select } from 'antd';
 import { PostFormProps } from '../../../types/posts';
 import { CameraOutlined } from '@ant-design/icons';
 import MediaModal from "../../admin/MediaModal";
-import "react-mde/lib/styles/css/react-mde-all.css";
+import PostDetailContent from "../../../components/main/posts/PostDetailContent"
+import { get } from 'local-storage';
 
-const converter = new Showdown.Converter({
-  tables: true,
-  simplifiedAutoLink: true,
-  strikethrough: true,
-  tasklists: true
-});
+import SimpleMDE from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
 
-const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) => {
+const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, onChange, error }) => {
+  const autoSaveId = String(data?.id) || "create-post";
   const contentRef = React.useRef(null);
   const { Option } = Select;
   const [form] = Form.useForm();
+  // const [autoSaveId, setAutoSaveId] = useState<string>(String(data?.id) || "create-post");
+  const [title, setTitle] = useState<string | undefined>(data?.title)
   const [isShow, setIsShow] = React.useState<boolean>(false)
   const [mediaModalVisible, setMediaModalVisible] = React.useState<boolean>(false)
-  const [selectedTab, setSelectedTab] = React.useState<"write" | "preview">("write");
   const [content, setContent] = React.useState<string>("");
+  const [cursor, setCursor] = useState({})
+  const [codemirror, setCodeMirror] = useState<any>();
+  const triggerChange = (changedValue: any) => {
+    if (onChange) {
+      onChange({ title, isShow, ...data, ...changedValue });
+    }
+  };
+
+  const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const title = event.target.value;
+    triggerChange({ title: title });
+  }
+
+  const onContentChange = (content: string): void => {
+    setContent(content)
+    triggerChange({ content: content });
+
+  }
 
   React.useEffect(() => {
     if (data) {
+      const autoSaveData = get('')
+      console.log(String(data.id))
+      // setAutoSaveId(`post-${String(data.id)}`)
       setContent(data.content)
       form.setFieldsValue(
         {
@@ -44,12 +63,27 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
     values.content = content;
     onSubmit(values)
   };
+  const setMillor = async (val: any) => {
+
+  }
+  const handleAddMedia = (text: string) => {
+    console.log("handleAddMedia")
+    if (codemirror) {
+      console.log("あるy")
+      console.log({ codemirror })
+      const { line, ch } = codemirror.getCursor();
+      codemirror.replaceRange(text, { line: line, ch: ch })
+      onContentChange(codemirror.getValue())
+    } else {
+      console.log('ないよ')
+    }
+  }
 
   return (
     <>
       <Form
-        labelCol={{ span: 3 }}
-        wrapperCol={{ span: 14 }}
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 24 }}
         name="post"
         // fields={fields}
         form={form}
@@ -63,7 +97,10 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
           rules={[{ required: true, message: 'Please input title' }]}
         >
 
-          <Input aria-label="input-title" placeholder="Title" />
+          <Input
+            onChange={onTitleChange}
+            aria-label="input-title"
+            placeholder="Title" />
         </Form.Item>
         <Button
           style={{ marginBottom: 10 }}
@@ -79,17 +116,32 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
         // name="content"
         // rules={[{ required: true, message: 'Please input content' }]}
         >
-          <ReactMde
+          <SimpleMDE
             ref={contentRef}
+            onChange={onContentChange}
             value={content}
-            onChange={setContent}
-            selectedTab={selectedTab}
-            onTabChange={setSelectedTab}
-            generateMarkdownPreview={markdown =>
-              Promise.resolve(converter.makeHtml(markdown))
-            }
+            options={{
+              previewRender(text) {
+                return ReactDOMServer.renderToString(
+                  <PostDetailContent content={text} />
+                )
+              },
+              toolbar: ["bold", "italic", "heading", "|", "quote", {
+                name: "custom",
+                action: async function customFunction(editor) {
+                  await new Promise((resolve) => {
+                    setCodeMirror(editor.codemirror)
+                    resolve();
+                  })
+                  // await setCodeMirror(editor.codemirror)
+                  setCursor(editor.codemirror.getCursor());
+                  setMediaModalVisible(true)
+                },
+                className: "fa fa-image",
+                title: "Custom Button",
+              }],
+            }}
           />
-          {/* <Input.TextArea rows={16} placeholder="Content" /> */}
         </Form.Item>
         <Form.Item
           label="Category"
@@ -115,7 +167,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
 
           </Select>
         </Form.Item>
-
         <Form.Item
           label="Tag"
           name="tag"
@@ -141,14 +192,13 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
         <Form.Item colon={false}>
           <Button aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
             Submit
-        </Button>
+          </Button>
         </Form.Item>
       </Form>
+
       {mediaModalVisible &&
         <MediaModal
-          content={content}
-          setContent={setContent}
-          target={contentRef.current}
+          handleAddMedia={handleAddMedia}
           visible={mediaModalVisible}
           setVisible={setMediaModalVisible}
         />

@@ -3,6 +3,7 @@ import { PostDetail as TypePostDetail } from '../../types/posts'
 import { useParams } from 'react-router-dom';
 import { retrieve } from '../../service/main/posts'
 import PostDetail from '../../components/main/posts/PostDetail'
+import '../../less/admin/postForm.less';
 
 const Detail: React.FC = () => {
   const [post, setPost] = React.useState<TypePostDetail>()

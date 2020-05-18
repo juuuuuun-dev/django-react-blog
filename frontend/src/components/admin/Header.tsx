@@ -23,6 +23,7 @@ const Header: React.FC<HeaderProps> = ({ headerHeight }) => {
             height: headerHeight,
             background: '#ffffff',
             padding: '0 20px',
+            borderBottom: '1px solid #eee'
           }}
         >
           <Row>

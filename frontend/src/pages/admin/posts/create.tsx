@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, Suspense } from 'react';
 import { create, postFormItem } from '../../../service/admin/posts';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/PostForm';
@@ -47,9 +47,15 @@ const Create: React.FC = () => {
       toast({ type: 'ERROR' });
     }
   };
+  const onChange = (value: any) => {
+    console.log("onChange")
+    console.log(value);
+  }
   return (
     <>
-      <Form onSubmit={onSubmit} formItem={formItem} error={error} />
+      <Suspense fallback={<h1>Loading profile...</h1>}>
+        <Form onSubmit={onSubmit} onChange={onChange} formItem={formItem} error={error} />
+      </Suspense>
     </>
   );
 };
