@@ -15,6 +15,32 @@ afterEach(() => cleanup());
 jest.mock('../../../../service/admin/posts');
 jest.mock('../../../../service/admin/media');
 
+// @ts-ignore
+global.document.createRange = () => ({
+  setStart: () => { },
+  setEnd: () => { },
+  collapsed: true,
+  getBoundingClientRect: function () {
+    return {
+      width: 0,
+      height: 0,
+      top: 0,
+      left: 0
+    }
+  },
+  getClientRects: function () {
+    return {
+      width: 0,
+      height: 0,
+    }
+  },
+  // @ts-ignore
+  commonAncestorContainer: {
+    nodeName: 'BODY',
+    ownerDocument: document,
+  },
+});
+
 describe("Admin posts create", () => {
   const initialPath = "/admin/posts";
   beforeEach(() => {
@@ -41,6 +67,7 @@ describe("Admin posts create", () => {
     mocked(postFormItem).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(formItemAxiosResponse)
     );
+
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
@@ -54,7 +81,10 @@ describe("Admin posts create", () => {
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
     // content
     const contentTitle = "create";
-    fireEvent.change(utils.getByTestId("text-area"), { target: { value: `#${contentTitle}\n` } });
+    await waitFor(() => {
+      utils.getByTestId('text-area').firstElementChild.value = `#${contentTitle}\n`;
+    })
+
     // category
     fireEvent.mouseDown(utils.getByLabelText("select-category").firstElementChild);
     fireEvent.click(utils.getByLabelText(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
@@ -66,21 +96,16 @@ describe("Admin posts create", () => {
     fireEvent.click(utils.getByTestId("switch-is_show"));
 
     // media modal
-    fireEvent.click(utils.getByTestId('add-media-btn'));
+    fireEvent.click(utils.getByTitle('Add media'));
+    expect(await utils.findByTestId("media-modal")).toBeTruthy();
     fireEvent.mouseOver(await utils.findByTestId(`media-list-${mediaListAxiosResponse.data.results[0].id}`));
     fireEvent.click(await utils.findByTestId('add-media-code-btn'));
+
     await waitFor(() => {
-      const mediaStr = `[${mediaListAxiosResponse.data.results[0].name}](${mediaListAxiosResponse.data.results[0].file})`;
+      const mediaStr = `${mediaListAxiosResponse.data.results[0].file}`;
       const match = new RegExp(escapeRegExp(mediaStr));
-      expect(utils.getByTestId("text-area").innerHTML).toMatch(match);
+      expect(utils.getByTestId("post-md-content").innerHTML).toMatch(match)
     });
-    // preview
-    fireEvent.click(utils.getByText("Preview"));
-    await waitFor(() => {
-      const h1 = `<h1 id="${contentTitle}">${contentTitle}</h1>`;
-      const match = new RegExp(escapeRegExp(h1));
-      expect(utils.getByTestId("mde-preview").innerHTML).toMatch(match)
-    })
 
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
@@ -106,8 +131,7 @@ describe("Admin posts create", () => {
     // title
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
     // content
-    fireEvent.change(utils.getByTestId("text-area"), { target: { value: 'create context' } });
-    // category
+    utils.getByTestId('text-area').firstElementChild.value = 'test';
     fireEvent.mouseDown(utils.getByLabelText("select-category").firstElementChild);
     fireEvent.click(utils.getByLabelText(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
     fireEvent.submit(utils.getByLabelText("form-submit"))
@@ -133,8 +157,6 @@ describe("Admin posts create", () => {
 
     // title
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
-    // content
-    fireEvent.change(utils.getByTestId("text-area"), { target: { value: 'create context' } });
     // category
     fireEvent.mouseDown(utils.getByLabelText("select-category").firstElementChild);
     fireEvent.click(utils.getByLabelText(`option-category-${formItemAxiosResponse.data.categories[0].id}`));

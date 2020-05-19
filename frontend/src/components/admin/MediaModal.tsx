@@ -6,7 +6,7 @@ import { MediaList, MediaDetail, MediaModalProps } from '../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { EyeOutlined, PlusOutlined } from '@ant-design/icons'
 
-const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, setVisible, target }) => {
+const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddMedia }) => {
   const { Search } = Input;
   const [{ pageSize }] = React.useContext(AdminContext);
   const [data, setData] = React.useState<MediaList | undefined>();
@@ -34,11 +34,9 @@ const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, s
   }
 
   const handleAdd = (value: MediaDetail): void => {
-    console.log("handleAdd");
-    const start = target.textAreaRef.selectionStart;
     const text = `![${value.name}](${value.file})`;
-    const newContent = content.substr(0, start) + text + content.substr(start);
-    setContent(newContent);
+    handleAddMedia(text);
+
     setVisible(false);
   }
 
@@ -68,7 +66,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, s
         allowClear
       />
       <Spin spinning={load}>
-        <div className="media-thumbs clearfix">
+        <div className="media-thumbs clearfix" data-testid="media-modal">
           {data?.results.map((value, index) => {
             return <div className="media-thumbs__item" key={index}>
               <Popover title={value.name} content={
@@ -77,7 +75,9 @@ const MediaModal: React.FC<MediaModalProps> = ({ content, setContent, visible, s
                   <Button style={{ marginRight: 10 }} shape="circle" onClick={() => handlePreview(value.file)} icon={<EyeOutlined />} size="middle" />
                 </>
               }>
-                <LazyLoadImage data-testid={`media-list-${value.id}`} src={value.thumb} alt={value.name}></LazyLoadImage>
+                <div data-testid={`media-list-${value.id}`}>
+                  <LazyLoadImage src={value.thumb} alt={value.name}></LazyLoadImage>
+                </div>
               </Popover>
             </div>
           })}

@@ -40,3 +40,9 @@ export type PostDetailProps = {
 export type PostListProps = {
   posts: PostDetail[] | undefined;
 }
+
+export type PostPreviewProps = {
+  title: string;
+  content: string;
+  cover: string;
+}

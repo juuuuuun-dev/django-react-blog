@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { retrieve, update, destroy } from '../../../service/admin/posts';
 import { AdminContext } from '../../../context/adminContext';
 import Form from '../../../components/admin/form/PostForm'
@@ -7,11 +7,12 @@ import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
 import DeleteBtn from '../../../components/admin/DeleteBtn';
 
+
 const Edit: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
-  const [data, setData] = React.useState<PostDetail | undefined>();
-  const [formItem, setFormItem] = React.useState<PostFormItem | undefined>();
-  const [error, setError] = React.useState({})
+  const [data, setData] = useState<PostDetail | undefined>();
+  const [formItem, setFormItem] = useState<PostFormItem | undefined>();
+  const [error, setError] = useState({})
   const { id } = useParams();
   const history = useHistory();
   const redirectPath = "/admin/posts";
@@ -75,6 +76,7 @@ const Edit: React.FC = () => {
       toast({ type: 'ERROR' });
     }
   }
+
   return (
     <>
       <DeleteBtn onDelete={onDelete} />

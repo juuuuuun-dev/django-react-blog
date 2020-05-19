@@ -89,8 +89,8 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
   return (
     <>
       <Form
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 13 }}
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 18 }}
         name="public_profile"
         className="login-form"
         form={form}

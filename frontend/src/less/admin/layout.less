@@ -14,7 +14,7 @@
   padding: @global-padding;
   background: #fff;
   border-radius: 3px;
-  &__h3 {
+  &__title {
     margin-bottom: @global-margin;
   }
 }
@@ -22,8 +22,6 @@
   position: absolute;
   top: 25px;
   right: 20px;
-}
-body {
 }
 
 .font-size-07 {
@@ -45,6 +43,10 @@ body {
   margin-bottom: 15px;
 }
 
-@media screen and (min-width: @break-point) {
-  
+
+// sm
+@media screen and (max-width: @break-point) {
+  .container {
+    padding: @global-padding / 2;
+  }
 }

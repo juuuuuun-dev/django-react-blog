@@ -74,7 +74,7 @@ describe("Login", () => {
     fireEvent.change(utils.getByLabelText("input-password"), { target: { value: '123456' } })
     fireEvent.submit(utils.getByLabelText("login-submit"))
     await waitFor(() => {
-      expect(utils.getByText(defaultErrorText)).toBeTruthy();
+      expect(utils.getByText("No active account found with the given credentials")).toBeTruthy();
       expect(history.location.pathname).toBe('/login');
     })
   })

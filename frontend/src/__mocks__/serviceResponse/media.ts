@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 export const resultData = {
   "id": 1,
   "key": 1,
-  "name": "testAbe",
+  "name": "test Abe",
   "file": "http://localhost:3000/image.jpg",
   "thumb": "http://localhost:3000/thumb.jpg",
   "created_at": "2020-02-02",

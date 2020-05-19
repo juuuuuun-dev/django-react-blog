@@ -26,7 +26,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) =>
 
   return (
     <Form
-      labelCol={{ span: 3 }}
+      labelCol={{ span: 24 }}
       wrapperCol={{ span: 14 }}
       name="tag"
       fields={fields}

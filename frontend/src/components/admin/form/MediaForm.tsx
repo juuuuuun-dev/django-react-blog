@@ -87,7 +87,7 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
   return (
     <>
       <Form
-        labelCol={{ span: 3 }}
+        labelCol={{ span: 24 }}
         wrapperCol={{ span: 14 }}
         name="media"
         form={form}
