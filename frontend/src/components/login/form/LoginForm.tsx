@@ -16,7 +16,11 @@ const LoginForm: React.FC = () => {
       set<string>('thumb', data.thumb);
       history.push('/admin/dashboard');
     } catch (e) {
-      toast({ type: "ERROR", text: JSON.stringify(e.response.data) });
+      if (e.response.data.detail) {
+        toast({ type: "ERROR", text: e.response.data.detail })
+      } else {
+        toast({ type: "ERROR" });
+      }
     }
   };
 

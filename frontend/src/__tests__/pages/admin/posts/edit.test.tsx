@@ -10,6 +10,32 @@ import { setUp } from '../../../../__mocks__/adminSetUp';
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/posts');
 
+// @ts-ignore
+global.document.createRange = () => ({
+  setStart: () => { },
+  setEnd: () => { },
+  collapsed: true,
+  getBoundingClientRect: function () {
+    return {
+      width: 0,
+      height: 0,
+      top: 0,
+      left: 0
+    }
+  },
+  getClientRects: function () {
+    return {
+      width: 0,
+      height: 0,
+    }
+  },
+  // @ts-ignore
+  commonAncestorContainer: {
+    nodeName: 'BODY',
+    ownerDocument: document,
+  },
+});
+
 describe("Admin posts edit", () => {
   const initialPath = "/admin/posts";
 
@@ -42,7 +68,9 @@ describe("Admin posts edit", () => {
     fireEvent.click(utils.getByText(listData.results[0].title));
     await waitFor(() => {
       expect(utils.getAllByText("Post edit")).toBeTruthy();
+      expect(utils.getByTestId('post-preview')).toBeTruthy();
     });
+    console.log(detailAxiosResponse.data.post.content)
     act(() => {
       fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'Update Abe' } });
     })

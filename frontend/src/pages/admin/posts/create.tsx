@@ -47,14 +47,11 @@ const Create: React.FC = () => {
       toast({ type: 'ERROR' });
     }
   };
-  const onChange = (value: any) => {
-    console.log("onChange")
-    console.log(value);
-  }
+
   return (
     <>
       <Suspense fallback={<h1>Loading profile...</h1>}>
-        <Form onSubmit={onSubmit} onChange={onChange} formItem={formItem} error={error} />
+        <Form onSubmit={onSubmit} formItem={formItem} error={error} />
       </Suspense>
     </>
   );

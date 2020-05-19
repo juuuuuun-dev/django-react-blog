@@ -66,7 +66,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
         allowClear
       />
       <Spin spinning={load}>
-        <div className="media-thumbs clearfix">
+        <div className="media-thumbs clearfix" data-testid="media-modal">
           {data?.results.map((value, index) => {
             return <div className="media-thumbs__item" key={index}>
               <Popover title={value.name} content={
@@ -75,7 +75,9 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
                   <Button style={{ marginRight: 10 }} shape="circle" onClick={() => handlePreview(value.file)} icon={<EyeOutlined />} size="middle" />
                 </>
               }>
-                <LazyLoadImage data-testid={`media-list-${value.id}`} src={value.thumb} alt={value.name}></LazyLoadImage>
+                <div data-testid={`media-list-${value.id}`}>
+                  <LazyLoadImage src={value.thumb} alt={value.name}></LazyLoadImage>
+                </div>
               </Popover>
             </div>
           })}

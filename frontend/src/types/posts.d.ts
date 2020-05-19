@@ -28,7 +28,6 @@ export type PostFormProps = {
   data?: PostDetail;
   formItem?: PostFormItem;
   onSubmit: (values: any) => Promise<void>;
-  onChange: (values: any) => void;
   error?: {
     title?: Array<string>
   }

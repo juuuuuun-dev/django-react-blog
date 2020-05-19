@@ -1,50 +1,40 @@
 import React, { useState } from 'react';
+import { RcFile } from 'antd/lib/upload';
 import ReactDOMServer from "react-dom/server";
-import { Form, Input, Button, Switch, Select } from 'antd';
+import { Form, Input, Button, Switch, Select, Upload, Row, Col } from 'antd';
 import { PostFormProps } from '../../../types/posts';
-import { CameraOutlined } from '@ant-design/icons';
 import MediaModal from "../../admin/MediaModal";
 import PostDetailContent from "../../../components/main/posts/PostDetailContent"
 import { get } from 'local-storage';
-
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
+import { getBase64 } from '../../../helper/file';
+import toast from '../../../components/common/toast';
+import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import PostPreview from '../../../components/admin/PostPreview';
 
-const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, onChange, error }) => {
-  const autoSaveId = String(data?.id) || "create-post";
-  const contentRef = React.useRef(null);
+
+const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) => {
   const { Option } = Select;
   const [form] = Form.useForm();
-  // const [autoSaveId, setAutoSaveId] = useState<string>(String(data?.id) || "create-post");
-  const [title, setTitle] = useState<string | undefined>(data?.title)
+  const [title, setTitle] = useState<string>('')
   const [isShow, setIsShow] = React.useState<boolean>(false)
   const [mediaModalVisible, setMediaModalVisible] = React.useState<boolean>(false)
   const [content, setContent] = React.useState<string>("");
-  const [cursor, setCursor] = useState({})
   const [codemirror, setCodeMirror] = useState<any>();
-  const triggerChange = (changedValue: any) => {
-    if (onChange) {
-      onChange({ title, isShow, ...data, ...changedValue });
-    }
-  };
+  const [loading, setLoading] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [file, setFile] = React.useState<File | undefined>();
+  const [removeFile, setRemoveFile] = React.useState<boolean>(false)
+  const [editorSpan, setEditorSpan] = useState<number>(12);
+  const [previewSpan, setPreviewSpan] = useState<number>(12);
 
-  const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const title = event.target.value;
-    triggerChange({ title: title });
-  }
-
-  const onContentChange = (content: string): void => {
-    setContent(content)
-    triggerChange({ content: content });
-
-  }
 
   React.useEffect(() => {
     if (data) {
-      const autoSaveData = get('')
-      console.log(String(data.id))
-      // setAutoSaveId(`post-${String(data.id)}`)
       setContent(data.content)
+      setTitle(data.title)
+      // setImageUrl(data.cover)
       form.setFieldsValue(
         {
           title: data.title,
@@ -59,144 +49,207 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, onChange,
       setIsShow(data.is_show || false)
     }
   }, [data, form]);
+
   const onFinish = async (values: any) => {
     values.content = content;
     onSubmit(values)
   };
-  const setMillor = async (val: any) => {
 
-  }
   const handleAddMedia = (text: string) => {
-    console.log("handleAddMedia")
     if (codemirror) {
-      console.log("あるy")
-      console.log({ codemirror })
       const { line, ch } = codemirror.getCursor();
       codemirror.replaceRange(text, { line: line, ch: ch })
-      onContentChange(codemirror.getValue())
-    } else {
-      console.log('ないよ')
+      setContent(codemirror.getValue())
     }
   }
 
+  const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
+    if (!isJpgOrPng) {
+      toast({ type: 'ERROR', text: 'You can only upload JPG/PNG file!' })
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      toast({ type: 'ERROR', text: 'Image must smaller than 2MB!' })
+    }
+    if (isJpgOrPng && isLt2M) {
+      getBase64(file, (imageUrl: string) => {
+        setLoading(true);
+        setRemoveFile(false);
+        setImageUrl(imageUrl);
+      });
+      // cropp用
+      // setFile(new File([file], file.name))
+    }
+    return false;
+  }
+
+  const handleCoverChange = (info: any) => {
+    setFile(info.file)
+    if (info.file.status === 'uploading') {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      console.log("done")
+    }
+  };
+
+  const handleCoverRemove = async (file: any) => {
+    setImageUrl('')
+    setFile(undefined);
+    setLoading(false);
+    setRemoveFile(true);
+  }
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div className="ant-upload-text">Upload</div>
+    </div>
+  );
+
   return (
     <>
-      <Form
-        labelCol={{ span: 24 }}
-        wrapperCol={{ span: 24 }}
-        name="post"
-        // fields={fields}
-        form={form}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          label="Title"
-          name="title"
-          validateStatus={error && error.title ? "error" : "success"}
-          help={error && error.title ? "This title already exists" : null}
-          rules={[{ required: true, message: 'Please input title' }]}
-        >
+      <div style={{ marginBottom: 15 }}>
+        <Switch size="small" style={{ marginRight: 10 }} checkedChildren={<EditOutlined />} unCheckedChildren={<EditOutlined />} onClick={() => setEditorSpan(editorSpan === 12 ? 0 : 12)} defaultChecked />
+        <Switch size="small" checkedChildren={<EyeOutlined />} unCheckedChildren={<EyeOutlined />} onClick={() => setPreviewSpan(previewSpan === 12 ? 0 : 12)} defaultChecked />
+      </div>
+      <Row gutter={[30, 20]}>
+        <Col span={previewSpan === 0 && editorSpan !== 0 ? 24 : editorSpan}>
 
-          <Input
-            onChange={onTitleChange}
-            aria-label="input-title"
-            placeholder="Title" />
-        </Form.Item>
-        <Button
-          style={{ marginBottom: 10 }}
-          size="small"
-          data-testid="add-media-btn"
-          icon={<CameraOutlined />}
-          onClick={() => setMediaModalVisible(true)}
-        >
-          Add Media
-        </Button>
-        <Form.Item
-          label="Content"
-        // name="content"
-        // rules={[{ required: true, message: 'Please input content' }]}
-        >
-          <SimpleMDE
-            ref={contentRef}
-            onChange={onContentChange}
-            value={content}
-            options={{
-              previewRender(text) {
-                return ReactDOMServer.renderToString(
-                  <PostDetailContent content={text} />
-                )
-              },
-              toolbar: ["bold", "italic", "heading", "|", "quote", {
-                name: "custom",
-                action: async function customFunction(editor) {
-                  await new Promise((resolve) => {
-                    setCodeMirror(editor.codemirror)
-                    resolve();
-                  })
-                  // await setCodeMirror(editor.codemirror)
-                  setCursor(editor.codemirror.getCursor());
-                  setMediaModalVisible(true)
-                },
-                className: "fa fa-image",
-                title: "Custom Button",
-              }],
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Category"
-          name="category"
-          rules={[{ required: true, message: 'Please select category' }]}
-        >
-          <Select
-            showSearch
-            aria-label="select-category"
-            style={{ width: 200 }}
-            placeholder="Select a category"
-            optionFilterProp="children"
-            filterOption={(input, option) => {
-              if (option) {
-                return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              return false
-            }}
+          <Form
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            name="post"
+            // fields={fields}
+            form={form}
+            onFinish={onFinish}
           >
-            {formItem?.categories?.map((value, index) => {
-              return <Option aria-label={`option-category-${value.id}`} key={index} value={value.id}>{value.name}</Option>
-            })}
+            <Form.Item
+              label="Title"
+              name="title"
+              validateStatus={error && error.title ? "error" : "success"}
+              help={error && error.title ? "This title already exists" : null}
+              rules={[{ required: true, message: 'Please input title' }]}
+            >
+              <Input
+                onChange={(e) => setTitle(e.target.value)}
+                aria-label="input-title"
+                placeholder="Title" />
+            </Form.Item>
+            <Form.Item
+              label="Cover"
+            // validateStatus={error && error.coer ? "error" : "success"}
+            // help={error && error.title ? "This title already exists" : null}
+            // rules={[{ required: true, message: 'Please input title' }]}
+            >
+              <Upload
+                name="cover"
+                listType="picture-card"
+                className="file-uploader"
+                aria-label="input-avator"
+                showUploadList={false}
+                beforeUpload={beforeUpload}
+                // onPreview={handlePreview}
+                onChange={handleCoverChange}
+                onRemove={handleCoverRemove}
+              >
+                {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
+              </Upload>
+              {/* </ImgCrop> */}
+              {imageUrl ? <><DeleteOutlined aria-label="delete-image" onClick={handleCoverRemove} /></> : <></>}
+            </Form.Item>
+            <Form.Item
+              label="Content"
+            // name="content"
+            // rules={[{ required: true, message: 'Please input content' }]}
+            >
+              <SimpleMDE
+                data-testid="text-area"
+                onChange={setContent}
+                value={content}
+                options={{
+                  previewRender(text) {
+                    return ReactDOMServer.renderToString(
+                      <PostDetailContent content={text} />
+                    )
+                  },
+                  toolbar: ["bold", "italic", "heading", "|", "quote", "code", "table", "|", "preview", "side-by-side", "fullscreen", {
+                    name: "custom",
+                    action: async function customFunction(editor) {
+                      await new Promise((resolve) => {
+                        setCodeMirror(editor.codemirror)
+                        resolve();
+                      })
+                      setMediaModalVisible(true)
+                    },
+                    className: "fa fa-image",
+                    title: "Add media",
 
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Tag"
-          name="tag"
-        >
-          <Select
-            mode="multiple"
-            style={{ width: '100%' }}
-            placeholder="Please select"
-            aria-label="select-tag"
-          >
-            {formItem?.tags.map((value, index) => {
-              return <Option aria-label={`option-tag-${value.id}`} key={index} value={value.id}>{value.name}</Option>
-            })}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Show"
-          name="is_show"
-        >
-          <Switch data-testid="switch-is_show" checked={isShow} onClick={() => setIsShow(isShow !== true)} />
-        </Form.Item>
+                  }],
+                }}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Category"
+              name="category"
+              rules={[{ required: true, message: 'Please select category' }]}
+            >
+              <Select
+                showSearch
+                aria-label="select-category"
+                style={{ width: 200 }}
+                placeholder="Select a category"
+                optionFilterProp="children"
+                filterOption={(input, option) => {
+                  if (option) {
+                    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  return false
+                }}
+              >
+                {formItem?.categories?.map((value, index) => {
+                  return <Option aria-label={`option-category-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+                })}
 
-        <Form.Item colon={false}>
-          <Button aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
-            Submit
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Tag"
+              name="tag"
+            >
+              <Select
+                mode="multiple"
+                style={{ width: '100%' }}
+                placeholder="Please select"
+                aria-label="select-tag"
+              >
+                {formItem?.tags.map((value, index) => {
+                  return <Option aria-label={`option-tag-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+                })}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Show"
+              name="is_show"
+            >
+              <Switch data-testid="switch-is_show" checkedChildren="show" unCheckedChildren="show" checked={isShow} onClick={() => setIsShow(isShow !== true)} />
+            </Form.Item>
+
+            <Form.Item colon={false}>
+              <Button aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
+                Submit
           </Button>
-        </Form.Item>
-      </Form>
-
-      {mediaModalVisible &&
+            </Form.Item>
+          </Form>
+        </Col>
+        <Col span={editorSpan === 0 && previewSpan !== 0 ? 24 : previewSpan}>
+          <PostPreview title={title} content={content} cover={imageUrl} />
+        </Col>
+      </Row>
+      {
+        mediaModalVisible &&
         <MediaModal
           handleAddMedia={handleAddMedia}
           visible={mediaModalVisible}

@@ -25,7 +25,7 @@ marked.setOptions({
 const PostDetailContent = ({ content }: { content: string }) => {
 
   return (
-    <div className="post-detail__content" dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
+    <div className="post-detail__content" data-testid="post-md-content" dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
   )
 }
 
