@@ -2,22 +2,24 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  build-and-test:
-    - restore_cache:
-      name: Yarn cache restore
-      keys:
-        - yarn-packages-{{ checksum "yarn.lock" }}
-    - run:
-      name: yarn install
-      command: yarn install --frozen-lockfile
-    - save_cache:
-      name: Saving yarn cache
-      key: yarn-packages-{{ checksum "yarn.lock" }}
-      paths:
-        - ~/.cache/yarn
-    - run:
-      name: test
-      command: yarn test
+  frontend-build-test:
+    steps:
+      - checkout
+      - restore_cache:
+        name: Yarn cache restore
+        keys:
+          - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+        name: yarn install
+        command: yarn install --frozen-lockfile
+      - save_cache:
+        name: Saving yarn cache
+        key: yarn-packages-{{ checksum "yarn.lock" }}
+        paths:
+          - ~/.cache/yarn
+      - run:
+        name: test
+        command: yarn test
     # executor:
     #   name: node/default
     # steps:
@@ -27,7 +29,6 @@ jobs:
     #         - run: yarn install
     #         - run: yarn test
 workflows:
-    build-and-test:
-      jobs:
-        - build-and-test
-        
+  frontend-build-test:
+    jobs:
+      - frontend-build-test
