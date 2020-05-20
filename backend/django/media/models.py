@@ -7,9 +7,8 @@ from imagekit.processors import ResizeToFill
 
 
 def get_file_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (uuid.uuid4(), ext)
-    return os.path.join('media/', filename)
+    name, ext = os.path.splitext(filename)
+    return os.path.join('media/', str(uuid.uuid4()) + ext)
 
 
 class Media(models.Model):

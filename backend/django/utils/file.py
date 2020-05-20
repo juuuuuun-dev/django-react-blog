@@ -1,6 +1,5 @@
 import os
 import re
-import uuid
 import shutil
 from django.conf import settings
 

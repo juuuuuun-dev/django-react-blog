@@ -10,11 +10,11 @@ export const list = async (queries: ListQuery) => {
 };
 
 export const retrieve = async (id: string | undefined) => {
-  return axios.get(`${endPoint}/${id}`)
+  return axios.get(`${endPoint}${id}`)
 }
 
 export const update = async (id: string | undefined, data: FormData) => {
-  return axios.put(`${endPoint}/${id}/`, data)
+  return axios.put(`${endPoint}${id}/`, data)
 }
 
 export const create = async (data: FormData) => {
@@ -23,5 +23,5 @@ export const create = async (data: FormData) => {
 }
 
 export const destroy = async (id: string | undefined) => {
-  return axios.delete(`${endPoint}/${id}`)
+  return axios.delete(`${endPoint}${id}`)
 }

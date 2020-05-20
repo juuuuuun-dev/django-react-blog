@@ -1,62 +1,57 @@
-from django.test import TestCase
+from django.urls import reverse
 from rest_framework import status
-from django.conf import settings
 from rest_framework.test import APITestCase
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
-from users.factories import UserFactory
 from rest_framework_simplejwt.tokens import RefreshToken
 from tags.factories import TagFactory
+from users.factories import UserFactory
 
 
-class TagTestViewSetTestCase(APITestCase):
+class AdminTagTestViewSetTestCase(APITestCase):
     def setUp(self):
-        self.base_api = "/{}tags/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
         self.user.set_password("test1234")
         self.user.save()
         refresh = RefreshToken.for_user(self.user)
         self.client.credentials(
-            HTTP_AUTHORIZATION="Bearer {}".format(refresh.access_token))
+            HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
 
-    def test_admin_get(self):
+    def test_get(self):
         tag = TagFactory.create(name="test")
-        response = self.client.get(
-            "{}admin-tag/".format(self.base_api))
+        api = reverse("tags:admin-tag-list")
+        response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['name'], tag.name)
+        self.assertEqual(len(response.data["results"]), 1)
+        self.assertEqual(response.data["results"][0]["name"], tag.name)
 
-    def test_admin_retrieve(self):
+    def test_retrieve(self):
         tag = TagFactory.create(name="test")
-        response = self.client.get(
-            "{0}admin-tag/{1}/".format(self.base_api, tag.id), format="json")
+        api = reverse("tags:admin-tag-detail", kwargs={"pk": tag.id})
+        response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], tag.name)
 
-    def test_admin_post(self):
+    def test_post(self):
         post_data = {
             "name": "postname"
         }
-        response = self.client.post(
-            "{}admin-tag/".format(self.base_api), post_data, format="json")
+        api = reverse("tags:admin-tag-list")
+        response = self.client.post(api, post_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], post_data['name'])
 
-    def test_admin_put(self):
+    def test_put(self):
         tag = TagFactory.create(name="test")
         post_data = {
             "name": "postname"
         }
-        response = self.client.put(
-            "{0}admin-tag/{1}/".format(self.base_api, tag.id), post_data, format="json")
+        api = reverse("tags:admin-tag-detail", kwargs={"pk": tag.id})
+        response = self.client.put(api, post_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], post_data['name'])
 
-    def test_admin_delete(self):
+    def test_delete(self):
         tag = TagFactory.create(name="test")
-
-        response = self.client.delete(
-            "{0}admin-tag/{1}/".format(self.base_api, tag.id), format="json")
+        api = reverse("tags:admin-tag-detail", kwargs={"pk": tag.id})
+        response = self.client.delete(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

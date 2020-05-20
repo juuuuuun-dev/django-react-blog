@@ -1,12 +1,17 @@
+from urllib.parse import urlencode
+
+from categories.factories import CategoryFactory
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+from posts.factories import PostFactory
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
-from users.factories import UserFactory
 from tags.factories import TagFactory
-from categories.factories import CategoryFactory
-from posts.factories import PostFactory
-from django.urls import reverse
-from urllib.parse import urlencode
+from users.factories import UserFactory
+from utils.file import delete_thumb
+
+from ..models import Post
 
 
 class AdminPostViewSetTestCase(APITestCase):
@@ -16,7 +21,13 @@ class AdminPostViewSetTestCase(APITestCase):
         self.user.save()
         refresh = RefreshToken.for_user(self.user)
         self.client.credentials(
-            HTTP_AUTHORIZATION="Bearer {}".format(refresh.access_token))
+            HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
+
+    def tearDown(self):
+        posts = Post.objects.all()
+        for value in posts:
+            delete_thumb(value.cover.name)
+            value.cover.delete()
 
     def test_get(self):
         tag = TagFactory.create(name="tagdayo")
@@ -79,10 +90,16 @@ class AdminPostViewSetTestCase(APITestCase):
             "content": "content test",
             "is_show": True,
             "category": category.id,
-            "tag": [tag.id, tag2.id],
+            "tag[]": [tag.id, tag2.id],
+            "cover": SimpleUploadedFile(
+                name='test_image.jpg',
+                content=open(
+                    "media/tests/test.jpg",
+                    'rb').read(),
+                content_type='image/jpeg')
         }
         api = reverse("posts:admin-post-list")
-        response = self.client.post(api, post_data, format="json")
+        response = self.client.post(api, post_data, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], post_data['title'])
         self.assertEqual(response.data['content'], post_data['content'])
@@ -90,9 +107,12 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.data['category']['id'], category.id)
         self.assertEqual(response.data['tag'][0]['id'], tag.id)
         self.assertEqual(response.data['tag'][1]['id'], tag2.id)
+        self.assertTrue(response.data['thumb'])
+        self.assertTrue(response.data['cover'])
 
     def test_put(self):
         tag = TagFactory.create(name="tag")
+        tag2 = TagFactory.create(name="tag2")
         post = PostFactory.create(user=self.user, tag=[tag])
         category = CategoryFactory.create(name="test")
         api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
@@ -102,21 +122,28 @@ class AdminPostViewSetTestCase(APITestCase):
             "content": "#title\n##body\n<img src=\"/img.jpg\" />\n<a href=\"./link/\">lidayo</a>",
             "is_show": False,
             "category": category.id,
-            "tag": [
-                tag.id]}
-        response = self.client.put(api, post_data, format="json")
+            "tag[]": [tag.id, tag2.id],
+            "cover": SimpleUploadedFile(
+                name='test_image.jpg',
+                content=open(
+                    "media/tests/test.jpg",
+                    'rb').read(),
+                content_type='image/jpeg')}
+
+        response = self.client.put(api, post_data, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], post_data['title'])
         self.assertEqual(response.data['content'], post_data['content'])
         self.assertEqual(response.data['is_show'], post_data['is_show'])
         self.assertEqual(response.data['category']['id'], category.id)
         self.assertEqual(response.data['tag'][0]['id'], tag.id)
+        self.assertTrue(response.data['thumb'])
+        self.assertTrue(response.data['cover'])
 
     def test_delete(self):
         tag = TagFactory.create(name="tag")
         post = PostFactory.create(user=self.user, tag=[tag])
         api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
-
         response = self.client.delete(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 

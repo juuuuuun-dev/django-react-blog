@@ -1,11 +1,11 @@
 from ..models import Post
-from ..serializers.admin_serializers import AdminPostSerializer
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-from categories.models import Category
 from tags.models import Tag
 from users.models import User
+from categories.models import Category
+from rest_framework import viewsets
+from ..serializers.admin_serializers import AdminPostSerializer
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from categories.serializers import CategoryListSerializer
 from tags.serializers import TagListSerializer
@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from markdown import markdown
 from rest_framework import filters
 from ..paginatin import PostPagination
+from utils.file import delete_thumb
 
 
 class AdminPostViewSet(viewsets.ModelViewSet):
@@ -27,14 +28,16 @@ class AdminPostViewSet(viewsets.ModelViewSet):
         # queryset = Post.objects.all().order_by('-id')
         queryset = self.filter_queryset(self.queryset.filter())
         page = self.paginate_queryset(queryset)
-        serializer = self.get_serializer(page, many=True)
+        serializer = self.get_serializer(page, many=True, context={
+            "request": request})
         return self.get_paginated_response(
             serializer.data)
 
     def retrieve(self, request, pk=None):
         queryset = self.queryset
         post = get_object_or_404(queryset, pk=pk)
-        serializer = AdminPostSerializer(post)
+        serializer = AdminPostSerializer(post, context={
+            "request": request})
         data = self.getTagAndCategoryList()
         data["post"] = serializer.data
         return Response(data)
@@ -46,9 +49,15 @@ class AdminPostViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         user = User.objects.get(id=self.request.user.id)
         category = Category.objects.get(id=self.request.data['category'])
-        tags = Tag.objects.filter(id__in=self.request.data['tag'])
+        tags = Tag.objects.filter(
+            id__in=self.request.data.getlist(
+                'tag[]', None))
         html = markdown(self.request.data['content'])
-        plain = ''.join(BeautifulSoup(html).findAll(text=True))
+        plain = ''.join(
+            BeautifulSoup(
+                html,
+                features="html.parser").findAll(
+                text=True))
         serializer.save(
             user=user,
             plain_content=plain,
@@ -57,9 +66,20 @@ class AdminPostViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         category = Category.objects.get(id=self.request.data['category'])
-        tags = Tag.objects.filter(id__in=self.request.data['tag'])
         html = markdown(self.request.data['content'])
-        plain = ''.join(BeautifulSoup(html).findAll(text=True))
+        plain = ''.join(
+            BeautifulSoup(
+                html,
+                features="html.parser").findAll(
+                text=True))
+        tags = Tag.objects.filter(
+            id__in=self.request.data.getlist(
+                'tag[]', None))
+        # cover
+        if 'cover' in self.request.data:
+            post = Post.objects.get(id=self.kwargs['pk'])
+            delete_thumb(post.cover.name)
+
         serializer.save(plain_content=plain, category=category, tag=tags)
 
     def getTagAndCategoryList(self):

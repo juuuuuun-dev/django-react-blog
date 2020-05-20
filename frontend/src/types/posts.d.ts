@@ -7,6 +7,8 @@ export type PostDetail = {
   key?: number;
   title: string;
   content: string;
+  cover?: string;
+  thumb?: string;
   is_show?: boolean;
   plain_content?: string;
   category: CategorySimpleDetail;
@@ -44,5 +46,5 @@ export type PostListProps = {
 export type PostPreviewProps = {
   title: string;
   content: string;
-  cover: string;
+  cover?: string;
 }
