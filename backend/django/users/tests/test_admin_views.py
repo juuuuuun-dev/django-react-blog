@@ -1,18 +1,19 @@
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase, APIRequestFactory
-from django.conf import settings
-from ..models import UserProfile
-from utils.file import delete_thumb
-from users.factories import UserFactory
+from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.core.files.uploadedfile import SimpleUploadedFile
+from users.factories import UserFactory
+from utils.file import delete_thumb
+
+from ..models import UserProfile
 
 
-class RestUserProfileTestCase(APITestCase):
+class AdminUserProfileTestCase(APITestCase):
     def setUp(self):
+        self.api_basename = "users:user-profile"
         self.factory = APIRequestFactory()
-        self.base_api = "/{}users/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
         self.user.set_password("testtest1234")
@@ -28,8 +29,8 @@ class RestUserProfileTestCase(APITestCase):
             value.avator.delete()
 
     def test_profile_get(self):
-        response = self.client.get(
-            "{}user-profile/".format(self.base_api))
+        api = reverse(self.api_basename)
+        response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data['public_name'],
@@ -46,11 +47,11 @@ class RestUserProfileTestCase(APITestCase):
             "avator": SimpleUploadedFile(
                 name='test_image.jpg',
                 content=open(
-                    "users/tests/test.jpg",
+                    "media/tests/test.jpg",
                     'rb').read(),
                 content_type='image/jpeg')
         }
-        api = reverse("users:user-profile")
+        api = reverse(self.api_basename)
         response = self.client.put(api, post_data, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -58,33 +59,11 @@ class RestUserProfileTestCase(APITestCase):
             post_data['public_name'])
         self.assertEqual(response.data['message'], post_data['message'])
 
-    # def test_profile_patch(self):
-    #     post_data = {
-    #         "profile": {
-    #             "url": "test",
-    #             "message": "testtest"
-    #         },
-    #         "username": "test-man"
-    #     }
-    #     response = self.client.patch(
-    #         "{}user-profile/".format(self.base_api), post_data, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertTrue(response.data['profile'])
-    #     self.assertEqual(
-    #         response.data['profile']['message'], str(
-    #             post_data['profile']['message']))
-    #     self.assertEqual(
-    #         response.data['profile']['url'], str(
-    #             post_data['profile']['url']))
-    #     self.assertEqual(
-    #         response.data['username'], str(
-    #             post_data['username']))
-
 
 class PasswordResetViewTestCase(APITestCase):
     def setUp(self):
+        self.api_basename = "users:password-reset"
         self.factory = APIRequestFactory()
-        self.base_api = "/{}users/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
         self.user.set_password("testtest1234")
@@ -94,9 +73,8 @@ class PasswordResetViewTestCase(APITestCase):
         post_data = {
             "email": "test@test.com"
         }
-
-        response = self.client.post(
-            "{}password-reset/".format(self.base_api), post_data, format='json')
+        api = reverse(self.api_basename)
+        response = self.client.post(api, post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['sending'])
 
@@ -104,15 +82,15 @@ class PasswordResetViewTestCase(APITestCase):
         post_data = {
             "email": "aaa@test.com"
         }
-        response = self.client.post(
-            "{}password-reset/".format(self.base_api), post_data, format='json')
+        api = reverse(self.api_basename)
+        response = self.client.post(api, post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordResetConfirmationViewTestCase(APITestCase):
     def setUp(self):
+        self.api_basename = "users:password-reset"
         self.factory = APIRequestFactory()
-        self.base_api = "/{}users/".format(settings.API_VERSION)
         self.auth_api = "/{}blog_auth/".format(settings.API_VERSION)
         # user
         self.user = UserFactory.create()
@@ -123,9 +101,8 @@ class PasswordResetConfirmationViewTestCase(APITestCase):
         post_data = {
             "email": "test@test.com"
         }
-
-        response = self.client.post(
-            "{}password-reset/".format(self.base_api), post_data, format='json')
+        api = reverse(self.api_basename)
+        response = self.client.post(api, post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['sending'])
 
@@ -147,7 +124,7 @@ class PasswordResetConfirmationViewTestCase(APITestCase):
                 "email": self.user.email,
                 "password": newpassword
             }
-            response = self.client.post(
-                "{}token/".format(self.auth_api), login_data, format='json')
+            token_api = reverse("auth:token_obtain_pair")
+            response = self.client.post(token_api, login_data, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertTrue(response.data["access"])

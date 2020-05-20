@@ -1,6 +1,6 @@
+from django.conf import settings
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.conf import settings
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -14,12 +14,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
         data['username'] = self.user.username
-        # @todo f-strings
-        # a = 'a'
-        # print(f'a is {a}')
-
-        data['thumb'] = "{}{}".format(settings.BACKEND_URL,
-                                      self.user.profile.thumb.url)
+        if self.user.profile.thumb:
+            data['thumb'] = f"{settings.BACKEND_URL}\
+                {self.user.profile.thumb.url}"
         return data
 
     @classmethod

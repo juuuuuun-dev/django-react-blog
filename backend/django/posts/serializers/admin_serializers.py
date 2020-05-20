@@ -12,6 +12,8 @@ class AdminPostSerializer(serializers.ModelSerializer):
     tag = TagListSerializer(read_only=True, many=True)
     category = CategoryListSerializer(read_only=True)
     key = serializers.IntegerField(source='id', read_only=True)
+    cover = serializers.FileField(required=False)
+    thumb = serializers.ImageField(read_only=True)
     created_at = serializers.DateTimeField(
         format="%Y-%m-%d %H:%M:%S", read_only=True)
     updated_at = serializers.DateTimeField(
@@ -19,6 +21,7 @@ class AdminPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
+        # fields = '__all__'
         fields = [
             "user",
             "username",
@@ -27,6 +30,7 @@ class AdminPostSerializer(serializers.ModelSerializer):
             "title",
             "content",
             "cover",
+            "thumb",
             "is_show",
             "category",
             "tag",

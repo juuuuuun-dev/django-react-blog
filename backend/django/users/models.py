@@ -56,9 +56,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 def get_file_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (uuid.uuid4(), ext)
-    return os.path.join('user/', filename)
+    name, ext = os.path.splitext(filename)
+    return os.path.join('user/', str(uuid.uuid4()) + ext)
 
 
 class UserProfile(models.Model):

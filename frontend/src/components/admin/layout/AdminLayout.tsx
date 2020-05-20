@@ -1,10 +1,13 @@
+import '../../../less/admin/admin.less';
+
+import { Layout } from 'antd';
 import React from 'react';
+
+import { AdminContextProvider } from '../../../context/adminContext';
 import Header from '../Header';
 import SideNav from '../SideNav';
-import { AdminContextProvider } from '../../../context/adminContext';
-import { Layout } from 'antd';
 import Container from './Container';
-import '../../../less/admin/admin.less';
+
 export interface MainLayoutProps {
   children: React.ReactNode;
   match: any;

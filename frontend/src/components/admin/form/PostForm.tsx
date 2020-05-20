@@ -23,23 +23,27 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   const [content, setContent] = React.useState<string>("");
   const [codemirror, setCodeMirror] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [imageUrl, setImageUrl] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [file, setFile] = React.useState<File | undefined>();
   const [removeFile, setRemoveFile] = React.useState<boolean>(false)
   const [editorSpan, setEditorSpan] = useState<number>(12);
   const [previewSpan, setPreviewSpan] = useState<number>(12);
 
+  /**
+   * @todo
+   * https://github.com/ant-design/ant-design/blob/a820046130df85184e53c4aa6edb15a78ae65b87/components/upload/utils.tsx
+   */
 
   React.useEffect(() => {
     if (data) {
       setContent(data.content)
       setTitle(data.title)
-      // setImageUrl(data.cover)
+      setImageUrl(data.cover)
       form.setFieldsValue(
         {
           title: data.title,
           content: data.content,
-          is_show: data.is_show,
+          is_show: data.is_show || false,
           category: data.category.id,
           tag: data.tag.map((value) => {
             return value.id
@@ -51,7 +55,9 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   }, [data, form]);
 
   const onFinish = async (values: any) => {
+    values.is_show = isShow;
     values.content = content;
+    values.cover = file;
     onSubmit(values)
   };
 

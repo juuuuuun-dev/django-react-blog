@@ -3,7 +3,7 @@ from .views.admin_views import AdminTagViewSet
 from rest_framework.routers import DefaultRouter
 app_name = 'tags'
 router = DefaultRouter()
-router.register(r'admin-tag', AdminTagViewSet)
+router.register(r'admin-tag', AdminTagViewSet, basename="admin-tag")
 
 urlpatterns = [
     path('', include(router.urls)),

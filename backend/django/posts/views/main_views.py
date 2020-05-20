@@ -1,9 +1,10 @@
-from ..models import Post
-from ..serializers.main_serializers import MainPostSerializer,\
-    MainPostListSerializer
-from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from ..models import Post
+from ..serializers.main_serializers import (MainPostListSerializer,
+                                            MainPostSerializer)
 
 
 class PostList(APIView):
@@ -28,7 +29,6 @@ class PostDetail(APIView):
         post = get_object_or_404(queryset, pk=pk, is_show=True)
         serializer = MainPostSerializer(post)
 
-        print("detaildayo")
         result = {
             "post": serializer.data,
         }
