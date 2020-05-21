@@ -1,8 +1,6 @@
 version: "3.3"
 
 volumes:
-  django-blog.db.volume:
-    name: django-blog.db.volume
   redisdata:
 
 services:
