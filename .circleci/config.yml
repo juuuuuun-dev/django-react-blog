@@ -9,7 +9,6 @@ executors:
     working_directory: ~/project
     machine:
       image: circleci/classic:edge
-    docker_layer_caching: true
     environment:
       SECRET_KEY: test
       ALLOWED_HOSTS: http://localhost:8000,
