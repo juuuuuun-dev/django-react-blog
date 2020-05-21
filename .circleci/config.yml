@@ -1,7 +1,7 @@
 version: 2.1
 executors:
   my-executor:
-    working_directory: frontend
+    working_directory: ~/project/frontend
     docker:
       - image: circleci/python:3-node
 jobs:
