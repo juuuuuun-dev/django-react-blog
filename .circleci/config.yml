@@ -8,6 +8,9 @@ jobs:
     executor: my-executor
     steps:
       - checkout
+      - run:
+          name: pwd
+          command: pwd && ls -la
       - restore_cache:
           name: Yarn cache restore
           keys:
