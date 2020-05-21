@@ -10,22 +10,24 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-pip-cache-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
       - run:
           name: pip install
           command: |
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+          working_directory: backend/django
       - save_cache:
           paths:
             - "venv"
-          key: v1-pip-cache-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
       - run:
           name: pytest
           command: |
             . venv/bin/activate
             pytest --cov
+          working_directory: backend/django
       - store_artifacts:
           path: test-reports/
           destination: python_app
