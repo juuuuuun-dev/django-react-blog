@@ -1,11 +1,11 @@
 version: 2.1
 executors:
   my-executor:
+    working_directory: frontend
     docker:
       - image: circleci/python:3-node
 jobs:
   frontend-test:
-    working_directory: ~/project
     executor: my-executor
     steps:
       - checkout
@@ -20,7 +20,7 @@ jobs:
       - run:
           name: yarn install
           command: yarn install --frozen-lockfile
-          working_directory: frontend
+          # working_directory: frontend
       - save_cache:
           name: Save yarn cache
           key: yarn-packages-{{ checksum "frontend/yarn.lock" }}
@@ -31,7 +31,7 @@ jobs:
       - run:
           name: test
           command: yarn test
-          working_directory: frontend
+          # working_directory: frontend
 workflows:
   version: 2
   frontend-build-and-test:
