@@ -1,23 +1,51 @@
 version: 2.1
 executors:
-  my-executor:
+  frontend-excutor:
     working_directory: ~/project
     docker:
-      - image: circleci/python:3-node
+      - image: circleci/node
+
+  backend-executor:
+    working_directory: ~/project
+    machine:
+      image: circleci/classic:edge
+    # docker_layer_caching: true
+    environment:
+      SECRET_KEY: test
+      ALLOWED_HOSTS: http://localhost:8000,
+      BACKEND_URL: http://localhost:8000
+      FRONTEND_URL: http://localhost:8000
+      EMAIL_PORT: "1025"
+      EMAIL_HOST: smtp
+      LANGUAGE_CODE: ja
+      TIME_ZONE: Asia/Tokyo
+      PAGE_SIZE: "20"
 jobs:
   backend-test:
-    executor: my-executor
+    executor: backend-executor
     steps:
       - checkout
-      - restore_cache:
-          key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
       - run:
-          name: pip install
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-          working_directory: backend/django
+          name: docker-compose build
+          command: docker-compose build
+      - run:
+          name: docker-compose up
+          command: docker-compose up -d
+      - run:
+          name: sleep for waiting launch db
+          command: sleep 1
+      - run:
+          name: "before_test: setup db"
+          command: docker-compose run web pm makemigrations pm migrate
+          # - restore_cache:
+      #     key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
+      # - run:
+      #     name: pip install
+      #     command: |
+      #       python3 -m venv venv
+      #       . venv/bin/activate
+      #       pip install -r requirements.txt
+      #     working_directory: backend/django
       - save_cache:
           paths:
             - "venv"
@@ -26,13 +54,13 @@ jobs:
           name: pytest
           command: |
             . venv/bin/activate
-            pytest --cov
+            pytest
           working_directory: backend/django
-      - store_artifacts:
-          path: test-reports/
-          destination: python_app
+      # - store_artifacts:
+      #     path: test-reports/
+      #     destination: python_app
   frontend-test:
-    executor: my-executor
+    executor: frontend-excutor
     steps:
       - checkout
       - restore_cache:
