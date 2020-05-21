@@ -9,7 +9,7 @@ executors:
     working_directory: ~/project
     machine:
       image: circleci/classic:edge
-    # docker_layer_caching: true
+    docker_layer_caching: true
     environment:
       SECRET_KEY: test
       ALLOWED_HOSTS: http://localhost:8000,
@@ -25,6 +25,8 @@ jobs:
     executor: backend-executor
     steps:
       - checkout
+      - restore_cache:
+          key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
       - run:
           name: docker-compose build
           command: docker-compose build
@@ -35,8 +37,18 @@ jobs:
           name: sleep for waiting launch db
           command: sleep 1
       - run:
-          name: "before_test: setup db"
-          command: docker-compose run web pm makemigrations pm migrate
+          name: "before_test: makemigrations"
+          command: docker-compose run backend python manage.py makemigrations
+      - run:
+          name: "before_test: migrate"
+          command: docker-compose run backend python manage.py migrate
+      - run:
+          name: "test pytest"
+          command: docker-compose run backend pytest
+      - save_cache:
+          key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
+          paths:
+            - ~/project/.cache/docker
           # - restore_cache:
       #     key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
       # - run:
