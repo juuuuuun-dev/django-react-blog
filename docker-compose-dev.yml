@@ -3,12 +3,12 @@ version: "3.3"
 volumes:
   sync-blog-backend:
     external: true
-  sync-blog-frontend:
-    external: true
+  # sync-blog-frontend:
+  #   external: true
 services:
   backend:
     volumes:
       - sync-blog-backend:/app:consistent
-  frontend:
-    volumes:
-      - sync-blog-frontend:/app:consistent
+  # frontend:
+  #   volumes:
+  #     - sync-blog-frontend:/app:consistent

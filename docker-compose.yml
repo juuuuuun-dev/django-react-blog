@@ -48,19 +48,19 @@ services:
     #   EMAIL_HOST: smtp
     depends_on:
       - db
-  frontend:
-    build:
-      context: ./frontend
-    tty: true
-    environment:
-      TZ: "Asia/Tokyo"
-    volumes:
-      - ./frontend:/app
-    ports:
-      - "3030:3030"
-    depends_on:
-      - backend
-      - redis
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   tty: true
+  #   environment:
+  #     TZ: "Asia/Tokyo"
+  #   volumes:
+  #     - ./frontend:/app
+  #   ports:
+  #     - "3030:3030"
+  #   depends_on:
+  #     - backend
+  #     - redis
   smtp:
     container_name: smtp
     image: mailhog/mailhog:v1.0.0
