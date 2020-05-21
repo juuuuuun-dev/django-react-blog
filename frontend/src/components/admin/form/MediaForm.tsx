@@ -1,10 +1,12 @@
-import React from 'react';
-import { Form, Input, Button, Upload, Modal } from 'antd';
-import { MediaFormProps } from '../../../types/media';
+import { Button, Form, Input, Modal, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload';
-import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
+import React from 'react';
+
+import { DeleteOutlined, EyeOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+
 import toast from '../../../components/common/toast';
 import { getBase64 } from '../../../helper/file';
+import { MediaFormProps } from '../../../types/media';
 
 const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
   const [form] = Form.useForm();
@@ -34,7 +36,6 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
     onSubmit(values)
   };
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
-    console.log("beforeUpload")
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
     if (!isJpgOrPng) {
       toast({ type: 'ERROR', text: 'You can only upload JPG/PNG file!' })
@@ -62,7 +63,6 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
 
   const handleChange = (info: any) => {
     setFile(info.file)
-    console.log(info.file)
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;

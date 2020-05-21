@@ -5,6 +5,7 @@ executors:
       - image: circleci/python:3-node
 jobs:
   frontend-test:
+    working_directory: ~/frontend
     executor: my-executor
     steps:
       - checkout
@@ -22,7 +23,8 @@ jobs:
           name: Save yarn cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - ~/frontend/.cache/yarn
+            - ~/.cache/yarn
+            - ~/frontend/node_modules
             # - ~/.cache/yarn
       - run:
           name: test

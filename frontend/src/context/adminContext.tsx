@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
-import { adminReducer } from './adminReducer';
-import { AdminState, providerProps } from '../types/adminContext';
-import { refreshAuthToken, useLogout } from '../service/admin/auth'
-import { useHistory } from 'react-router-dom';
 import { get, set } from 'local-storage';
-import { setClientToken } from '../service/client';
+import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 
+import { refreshAuthToken, useLogout } from '../service/admin/auth';
+import { setClientToken } from '../service/client';
+import { AdminState, providerProps } from '../types/adminContext';
+import { adminReducer } from './adminReducer';
 
 const initState: AdminState = {
   isSiderShow: true,
@@ -25,7 +25,6 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
   const providerValue = React.useMemo((): providerProps => [state, dispatch], [state, dispatch]);
   const [logout] = useLogout();
   const fetchToken = React.useCallback(async () => {
-    console.log("fetchToken")
     try {
       const res = await refreshAuthToken(refresh);
       const { access } = res.data;

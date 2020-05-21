@@ -25,7 +25,6 @@ const toast = (props: IToastProps) => {
       message.error(text);
       break;
     default:
-      console.log('type error');
   }
 };
 

@@ -8,13 +8,7 @@ import Header from '../Header';
 import SideNav from '../SideNav';
 import Container from './Container';
 
-export interface MainLayoutProps {
-  children: React.ReactNode;
-  match: any;
-}
-
 const AdminLayout = () => {
-  console.log("AdminLayout")
   const { Content } = Layout;
   return (
     <>
