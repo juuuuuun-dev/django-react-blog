@@ -1,8 +1,14 @@
 version: 2.1
-orbs:
-  node: circleci/node@1.1.6
+executors:
+  my-executor:
+    docker:
+      - image: circleci/python:3-node
+# orbs:
+#   node: circleci/python:3-node 
 jobs:
-  frontend-build-test:
+  frontend-test:
+    executor:
+      name: my-executor
     steps:
       - checkout
       - restore_cache:
@@ -13,7 +19,7 @@ jobs:
         name: yarn install
         command: yarn install --frozen-lockfile
       - save_cache:
-        name: Saving yarn cache
+        name: Save yarn cache
         key: yarn-packages-{{ checksum "yarn.lock" }}
         paths:
           - ~/.cache/yarn
@@ -29,6 +35,7 @@ jobs:
     #         - run: yarn install
     #         - run: yarn test
 workflows:
-  frontend-build-test:
+  version: 2.1
+  frontend-build-and-test:
     jobs:
-      - frontend-build-test
+      - frontend-test
