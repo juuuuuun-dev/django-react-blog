@@ -54,6 +54,7 @@ jobs:
           working_directory: frontend
 workflows:
   version: 2
-  frontend-build-and-test:
+  build-and-test:
     jobs:
+      - backend-test
       - frontend-test
