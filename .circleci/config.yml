@@ -23,7 +23,7 @@ jobs:
           command: docker-compose up -d
       - run:
           name: sleep for waiting launch db
-          command: sleep 1
+          command: sleep 10
       - run:
           name: ".env copy"
           command: docker-compose run backend cp .env.example .env
