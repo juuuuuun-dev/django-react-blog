@@ -4,21 +4,10 @@ executors:
     working_directory: ~/project
     docker:
       - image: circleci/node
-
   backend-executor:
     working_directory: ~/project
     machine:
       image: circleci/classic:edge
-    environment:
-      SECRET_KEY: test
-      ALLOWED_HOSTS: http://localhost:8000,
-      BACKEND_URL: http://localhost:8000
-      FRONTEND_URL: http://localhost:8000
-      EMAIL_PORT: "1025"
-      EMAIL_HOST: smtp
-      LANGUAGE_CODE: ja
-      TIME_ZONE: Asia/Tokyo
-      PAGE_SIZE: "20"
 jobs:
   backend-test:
     executor: backend-executor
@@ -36,14 +25,31 @@ jobs:
           name: sleep for waiting launch db
           command: sleep 1
       - run:
+          name: ".env copy"
+          command: docker-compose run backend cp .env.example .env
+      - run:
           name: "before_test: makemigrations"
           command: docker-compose run backend python manage.py makemigrations
+          environment:
+            SECRET_KEY: test
       - run:
           name: "before_test: migrate"
           command: docker-compose run backend python manage.py migrate
+          environment:
+            SECRET_KEY: test
       - run:
           name: "test pytest"
           command: docker-compose run backend pytest
+          environment:
+            SECRET_KEY: test
+            ALLOWED_HOSTS: http://localhost:8000,
+            BACKEND_URL: http://localhost:8000
+            FRONTEND_URL: http://localhost:8000
+            EMAIL_PORT: "1025"
+            EMAIL_HOST: smtp
+            LANGUAGE_CODE: ja
+            TIME_ZONE: Asia/Tokyo
+            PAGE_SIZE: "20"
       - save_cache:
           key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
