@@ -5,7 +5,7 @@ executors:
       - image: circleci/python:3-node
 jobs:
   frontend-test:
-    working_directory: ~/frontend
+    working_directory: ~/project/frontend
     executor: my-executor
     steps:
       - checkout
@@ -18,17 +18,17 @@ jobs:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: yarn install
-          command: cd frontend && yarn install --frozen-lockfile
+          command: yarn install --frozen-lockfile
       - save_cache:
           name: Save yarn cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - ~/.cache/yarn
-            - ~/frontend/node_modules
+            - ~/project/.cache/yarn
+            - ~/project/frontend/node_modules
             # - ~/.cache/yarn
       - run:
           name: test
-          command: cd frontend && yarn test
+          command: yarn test
 workflows:
   version: 2
   frontend-build-and-test:
