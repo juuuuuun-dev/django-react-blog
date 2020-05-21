@@ -14,15 +14,16 @@ jobs:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: yarn install
-          command: yarn install --frozen-lockfile
+          command: cd frontend && yarn install --frozen-lockfile
       - save_cache:
           name: Save yarn cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - ~/.cache/yarn
+            - ~/frontend/.cache/yarn
+            # - ~/.cache/yarn
       - run:
           name: test
-          command: yarn test
+          command: cd frontend && yarn test
 workflows:
   version: 2
   frontend-build-and-test:
