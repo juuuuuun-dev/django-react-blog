@@ -62,11 +62,11 @@ jobs:
       #     name: docker-compose up
       #     command: docker-compose up -d
       - run:
-          name: sleep for waiting launch db
-          command: sleep 10
-      - run:
           name: ".env copy"
           command: docker-compose run backend cp .env.example .env
+      - run:
+          name: sleep for waiting launch db
+          command: sleep 10
       - run:
           name: "before_test: makemigrations"
           command: docker-compose run backend python manage.py makemigrations
@@ -147,4 +147,4 @@ workflows:
       - backend-test:
           requires:
             - docker-compose-cache
-      - frontend-test
+      # - frontend-test
