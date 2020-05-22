@@ -27,7 +27,6 @@ jobs:
           key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
             - ~/project/.cache/docker.tar
-
   backend-test:
     executor: backend-executor
     steps:
