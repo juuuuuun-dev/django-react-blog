@@ -16,23 +16,13 @@ jobs:
       - restore_cache:
           key: v1-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
       - run:
-          name: ls
-          command: |
-            pwd
-            ls -la
-            ls -la ~/project/
-      - run:
           name: docker build
           command: |
-            ls -la
-            ls -la ~/project/
             if [ ! -f ~/caches/docker.tar ]; then
               docker-compose build
               mkdir -p ~/caches
               docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/caches/docker.tar
             fi
-            ls -la
-            ls -la ~/caches
       - save_cache:
           key: v1-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
@@ -44,23 +34,9 @@ jobs:
       - restore_cache:
           key: v1-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
       - run:
-          name: ls
-          command: |
-            pwd
-            ls -la
-      - run:
           name: docker load
           command: |
             docker load -i ~/caches/docker.tar
-            # if [[ -e ~/caches/docker.tar ]]; then
-            #   docker load -i ~/caches/docker.tar
-            # fi
-      # - run:
-      #     name: docker-compose build
-      #     command: docker-compose build
-      # - run:
-      #     name: docker-compose up
-      #     command: docker-compose up -d
       - run:
           name: ".env copy"
           command: docker-compose run backend cp .env.example .env
@@ -70,52 +46,16 @@ jobs:
       - run:
           name: "before_test: makemigrations"
           command: docker-compose run backend python manage.py makemigrations
-          environment:
-            SECRET_KEY: test
       - run:
           name: "before_test: migrate"
           command: docker-compose run backend python manage.py migrate
-          environment:
-            SECRET_KEY: test
       - run:
           name: "test pytest"
           command: docker-compose run backend pytest
-          environment:
-            SECRET_KEY: test
-            ALLOWED_HOSTS: http://localhost:8000,
-            BACKEND_URL: http://localhost:8000
-            FRONTEND_URL: http://localhost:8000
-            EMAIL_PORT: "1025"
-            EMAIL_HOST: smtp
-            LANGUAGE_CODE: ja
-            TIME_ZONE: Asia/Tokyo
-            PAGE_SIZE: "20"
       - save_cache:
           key: v1-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
             - ~/caches/docker.tar
-          # - restore_cache:
-      #     key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
-      # - run:
-      #     name: pip install
-      #     command: |
-      #       python3 -m venv venv
-      #       . venv/bin/activate
-      #       pip install -r requirements.txt
-      #     working_directory: backend/django
-      # - save_cache:
-      #     paths:
-      #       - "venv"
-      #     key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
-      # - run:
-      #     name: pytest
-      #     command: |
-      #       . venv/bin/activate
-      #       pytest
-      #     working_directory: backend/django
-      # - store_artifacts:
-      #     path: test-reports/
-      #     destination: python_app
   frontend-test:
     executor: frontend-excutor
     steps:
@@ -123,18 +63,16 @@ jobs:
       - restore_cache:
           name: Yarn cache restore
           keys:
-            - v1-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
+            - v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
       - run:
           name: yarn install
           command: yarn install --frozen-lockfile
           working_directory: frontend
       - save_cache:
           name: Save yarn cache
-          key: v1-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
+          key: v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
           paths:
-            - ~/project/.cache/yarn
-            - ~/project/frontend/node_modules
-            # - ~/.cache/yarn
+            - ~/caches/yarn
       - run:
           name: yarn test
           command: yarn test
@@ -147,4 +85,4 @@ workflows:
       - backend-test:
           requires:
             - docker-compose-cache
-      # - frontend-test
+      - frontend-test
