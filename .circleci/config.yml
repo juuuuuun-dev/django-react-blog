@@ -48,7 +48,6 @@ jobs:
           command: |
             pwd
             ls -la
-            ls -la ~/caches
       - run:
           name: docker load
           command: |
@@ -94,7 +93,7 @@ jobs:
       - save_cache:
           key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
-            - ~/project/.cache/docker
+            - ~/caches/docker.tar
           # - restore_cache:
       #     key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
       # - run:
