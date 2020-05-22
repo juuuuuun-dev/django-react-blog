@@ -16,13 +16,26 @@ jobs:
       - restore_cache:
           key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
       - run:
+          name: ls
+          command: |
+            pwd
+            ls -la
+            ls -la ~/project/
+            ls -la ~/project/.cache
+      - run:
           name: docker build
           command: |
+            ls -la
+            ls -la ~/project/
+            ls -la ~/project/.cache
             if [ ! -f ~/project/.cache/docker.tar ]; then
               docker-compose build
               mkdir -p ~/project/.cache
               docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/project/.cache/docker.tar
             fi
+            ls -la
+            ls -la ~/project/
+            ls -la ~/project/.cache
       - save_cache:
           key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
@@ -33,6 +46,13 @@ jobs:
       - checkout
       - restore_cache:
           key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
+      - run:
+          name: ls
+          command: |
+            pwd
+            ls -la
+            ls -la ~/project/
+            ls -la ~/project/.cache
       - run:
           name: docker load
           command: |
