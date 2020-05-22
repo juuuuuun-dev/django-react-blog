@@ -26,18 +26,17 @@ jobs:
           command: |
             ls -la
             ls -la ~/project/
-            if [ ! -f ~/project/.cache/docker.tar ]; then
+            if [ ! -f ~/caches/docker.tar ]; then
               docker-compose build
-              mkdir -p ~/project/.cache
-              docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/project/.cache/docker.tar
+              mkdir -p ~/caches
+              docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/caches/docker.tar
             fi
             ls -la
-            ls -la ~/project/
-            ls -la ~/project/.cache
+            ls -la ~/caches
       - save_cache:
           key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
-            - ~/project/.cache/docker.tar
+            - ~/caches/docker.tar
   backend-test:
     executor: backend-executor
     steps:
@@ -49,14 +48,14 @@ jobs:
           command: |
             pwd
             ls -la
-            ls -la ~/project/
-            ls -la ~/project/.cache
+            ls -la ~/caches
       - run:
           name: docker load
           command: |
-            if [[ -e ~/project/.cache/docker.tar ]]; then
-              docker load -i ~/project/.cache/docker.tar
-            fi
+            docker load -i ~/caches/docker.tar
+            # if [[ -e ~/caches/docker.tar ]]; then
+            #   docker load -i ~/caches/docker.tar
+            # fi
       # - run:
       #     name: docker-compose build
       #     command: docker-compose build
