@@ -21,13 +21,11 @@ jobs:
             pwd
             ls -la
             ls -la ~/project/
-            ls -la ~/project/.cache
       - run:
           name: docker build
           command: |
             ls -la
             ls -la ~/project/
-            ls -la ~/project/.cache
             if [ ! -f ~/project/.cache/docker.tar ]; then
               docker-compose build
               mkdir -p ~/project/.cache
