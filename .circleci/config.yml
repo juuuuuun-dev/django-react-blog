@@ -9,6 +9,25 @@ executors:
     machine:
       image: circleci/classic:edge
 jobs:
+  docker-compose-cache:
+    executor: backend-executor
+    steps:
+      - checkout
+      - restore_cache:
+          key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
+      - run:
+          name: docker build
+          command: |
+            if [ ! -f ~/project/.cache/docker.tar ]; then
+              docker-compose build
+              mkdir -p ~/project/.cache
+              docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/project/.cache/docker.tar
+            fi
+      - save_cache:
+          key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
+          paths:
+            - ~/project/.cache/docker.tar
+
   backend-test:
     executor: backend-executor
     steps:
@@ -16,11 +35,17 @@ jobs:
       - restore_cache:
           key: docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
       - run:
-          name: docker-compose build
-          command: docker-compose build
-      - run:
-          name: docker-compose up
-          command: docker-compose up -d
+          name: docker load
+          command: |
+            if [[ -e ~/project/.cache/docker.tar ]]; then
+              docker load -i ~/project/.cache/docker.tar
+            fi
+      # - run:
+      #     name: docker-compose build
+      #     command: docker-compose build
+      # - run:
+      #     name: docker-compose up
+      #     command: docker-compose up -d
       - run:
           name: sleep for waiting launch db
           command: sleep 10
@@ -63,16 +88,16 @@ jobs:
       #       . venv/bin/activate
       #       pip install -r requirements.txt
       #     working_directory: backend/django
-      - save_cache:
-          paths:
-            - "venv"
-          key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
-      - run:
-          name: pytest
-          command: |
-            . venv/bin/activate
-            pytest
-          working_directory: backend/django
+      # - save_cache:
+      #     paths:
+      #       - "venv"
+      #     key: v1-pip-cache-{{ .Branch }}-{{ checksum "backend/django/requirements.txt" }}
+      # - run:
+      #     name: pytest
+      #     command: |
+      #       . venv/bin/activate
+      #       pytest
+      #     working_directory: backend/django
       # - store_artifacts:
       #     path: test-reports/
       #     destination: python_app
@@ -103,5 +128,8 @@ workflows:
   version: 2
   build-and-test:
     jobs:
-      - backend-test
+      - docker-compose-cache
+      - backend-test:
+          requires:
+            - docker-compose-cache
       - frontend-test
