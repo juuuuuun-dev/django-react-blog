@@ -1,14 +1,14 @@
+import '../../../less/main/main.less';
+
+import { Col, Layout, Row } from 'antd';
 import React from 'react';
-import Header from '../Header';
-import { Layout, Row, Col } from 'antd';
+
 import { MainContextProvider } from '../../../context/mainContext';
+import Header from '../Header';
 import Container from './Container';
 import RightContainer from './RightContainer';
 
-import '../../../less/main/main.less';
-
 const MainLayout = () => {
-  console.log("mainLayout")
   const { Content } = Layout;
   return (
     <>

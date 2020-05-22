@@ -1,16 +1,18 @@
 import os
 import re
 import uuid
-from django.db import models
+
 from django.conf import settings
-from utils.file import delete_thumb
-from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMultiAlternatives
+from django.db import models
 from django.db.models.signals import post_save
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
+from utils.file import delete_thumb
 
 
 class CustomUserManager(BaseUserManager):
@@ -91,7 +93,7 @@ class UserProfile(models.Model):
     def send_password_reset_email(self, site):
         token = default_token_generator.make_token(self.user)
         uid = self.user.pk
-        url = getattr(settings, 'FRONT_URL', None)
+        url = getattr(settings, 'FRONTEND_URL', None)
         api = getattr(settings, 'API_VERSION', None)
         reset_api = "/password-reset-confirm/{0}/{1}".format(uid, token)
 

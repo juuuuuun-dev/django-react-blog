@@ -1,6 +1,7 @@
-import React from 'react';
 import { Menu } from 'antd';
+import React from 'react';
 import { Link } from 'react-router-dom';
+
 import { ApartmentOutlined } from '@ant-design/icons';
 
 export interface NavProps {
@@ -11,7 +12,6 @@ export interface NavProps {
 
 const Nav = ({ mode, styles, handleClick }: NavProps) => {
   const { SubMenu } = Menu;
-  console.log('nav');
   return (
     <>
       <Menu mode={mode} defaultSelectedKeys={['1']} style={styles}>

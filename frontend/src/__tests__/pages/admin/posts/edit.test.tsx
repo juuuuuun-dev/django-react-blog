@@ -1,11 +1,19 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list, retrieve, update, destroy } from '../../../../service/admin/posts';
-import { defaultSuccessText, defaultErrorText, defaultDeleteText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/posts';
-import { error404AxiosResponse, error500AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
+import { mocked } from 'ts-jest/utils';
+
+import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+
 import { setUp } from '../../../../__mocks__/adminSetUp';
+import {
+    deleteAxiosResponse, error404AxiosResponse, error500AxiosResponse
+} from '../../../../__mocks__/serviceResponse/common';
+import {
+    detailAxiosResponse, error400AxiosResponse, listAxiosResponse, listData, updateAxiosResponse
+} from '../../../../__mocks__/serviceResponse/posts';
+import {
+    defaultDeleteText, defaultErrorText, defaultSuccessText
+} from '../../../../components/common/toast';
+import { destroy, list, retrieve, update } from '../../../../service/admin/posts';
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/posts');
@@ -70,7 +78,6 @@ describe("Admin posts edit", () => {
       expect(utils.getAllByText("Post edit")).toBeTruthy();
       expect(utils.getByTestId('post-preview')).toBeTruthy();
     });
-    console.log(detailAxiosResponse.data.post.content)
     act(() => {
       fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'Update Abe' } });
     })

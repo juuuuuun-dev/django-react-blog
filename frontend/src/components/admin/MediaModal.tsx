@@ -1,10 +1,13 @@
-import React from "react"
-import { Input, Pagination, Modal, Popover, Spin, Button } from 'antd';
-import { list } from '../../service/admin/media';
-import { AdminContext } from '../../context/adminContext';
-import { MediaList, MediaDetail, MediaModalProps } from '../../types/media'
+import { Button, Input, Modal, Pagination, Popover, Spin } from 'antd';
+import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { EyeOutlined, PlusOutlined } from '@ant-design/icons'
+
+import { EyeOutlined, PlusOutlined } from '@ant-design/icons';
+
+import toast from '../../components/common/toast';
+import { AdminContext } from '../../context/adminContext';
+import { list } from '../../service/admin/media';
+import { MediaDetail, MediaList, MediaModalProps } from '../../types/media';
 
 const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddMedia }) => {
   const { Search } = Input;
@@ -20,7 +23,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
       const res = await list({ page, search });
       setData(res.data);
     } catch {
-      console.log("error")
+      toast({ type: 'ERROR' })
     }
     setLoad(false)
   }, [page, search]);

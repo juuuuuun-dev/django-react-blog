@@ -10,13 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-from django.utils.translation import ugettext_lazy
-from datetime import timedelta
-from django.conf import settings
-import environ
-import sys
-import re
 import os
+import re
+import sys
+from datetime import timedelta
+
+import environ
+from django.utils.translation import ugettext_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -84,7 +84,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 SITE_NAME = "Django and React blog"
 BACKEND_URL = env('BACKEND_URL')
-FRONT_URL = env('FRONT_URL')
+FRONTEND_URL = env('FRONTEND_URL')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -121,8 +121,8 @@ SIMPLE_JWT = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT', None)
+EMAIL_HOST = env('EMAIL_HOST', None)
 
 EMAIL_USE_TLS = False
 
