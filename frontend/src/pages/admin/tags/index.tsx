@@ -1,15 +1,15 @@
+import { Input, Table } from 'antd';
 import React from 'react';
-import { AdminContext } from '../../../context/adminContext';
-import { list } from '../../../service/admin/tags';
-import { Table, Input } from 'antd';
-import { TagList, TagDetail } from '../../../types/tags';
-import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
-import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
-import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
-import toast from '../../../components/common/toast';
-import { sortDate } from '../../../helper/sort';
+import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
+import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
+import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
+import toast from '../../../components/common/toast';
+import { AdminContext } from '../../../context/adminContext';
+import { sortDate } from '../../../helper/sort';
+import { list } from '../../../service/admin/tags';
+import { TagDetail, TagList } from '../../../types/tags';
 
 const Tags: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
@@ -19,7 +19,7 @@ const Tags: React.FC = () => {
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
-
+  console.log(state.pageSize)
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {

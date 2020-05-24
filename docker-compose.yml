@@ -1,8 +1,5 @@
 version: "3.3"
 
-volumes:
-  redisdata:
-
 services:
   nginx:
     image: nginx:1.13
@@ -15,6 +12,8 @@ services:
       - ./backend/django/static:/static
     depends_on:
       - backend
+  cache:
+    image: memcached:alpine
   db:
     image: mysql:5.7
     container_name: django-blog.mysql
@@ -28,11 +27,6 @@ services:
       - .dbdata:/var/lib/mysql
       - ./backend/sql:/docker-entrypoint-initdb.d
       - ./backend/my.cnf:/etc/mysql/conf.d/my.cnf
-  redis:
-    restart: always
-    image: redis
-    volumes:
-      - redisdata:/data
   backend:
     build:
       context: ./backend/django
@@ -48,6 +42,7 @@ services:
     #   EMAIL_HOST: smtp
     depends_on:
       - db
+      - cache
   # frontend:
   #   build:
   #     context: ./frontend
@@ -60,7 +55,6 @@ services:
   #     - "3030:3030"
   #   depends_on:
   #     - backend
-  #     - redis
   smtp:
     container_name: smtp
     image: mailhog/mailhog:v1.0.0

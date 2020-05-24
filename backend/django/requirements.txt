@@ -9,6 +9,8 @@ django-environ==0.4.5
 djangorestframework-simplejwt==4.4.0
 beautifulsoup4==4.9.0
 Markdown==3.2.1
+python-memcached==1.59
+pylibmc==1.6.1
 
 # file
 Pillow==7.1.1
