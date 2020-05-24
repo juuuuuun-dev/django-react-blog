@@ -13,7 +13,7 @@ const initState: AdminState = {
   hasToken: false,
   username: '',
   thumb: '',
-  pageSize: parseInt(process.env.pageSize || "20"),
+  pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
 };
 
 export const AdminContext = React.createContext({} as providerProps);

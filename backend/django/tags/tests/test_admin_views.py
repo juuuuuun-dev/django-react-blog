@@ -1,13 +1,19 @@
+from urllib.parse import urlencode
+
+from django.core.cache import cache
+from django.db import connection
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 from tags.factories import TagFactory
 from users.factories import UserFactory
+from utils.cache_views import get_detail_key
 
 
 class AdminTagTestViewSetTestCase(APITestCase):
     def setUp(self):
+        self.base_cache_key = "tags"
         # user
         self.user = UserFactory.create()
         self.user.set_password("test1234")
@@ -18,11 +24,20 @@ class AdminTagTestViewSetTestCase(APITestCase):
 
     def test_get(self):
         tag = TagFactory.create(name="test")
-        api = reverse("tags:admin-tag-list")
+        api = "".join([
+            reverse("tags:admin-tag-list"),
+            "?",
+            urlencode({
+                "page": 1,
+                # "search": "test"
+            })
+        ])
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 1)
         self.assertEqual(response.data["results"][0]["name"], tag.name)
+        page_cache = cache.get(f"{self.base_cache_key}:page-1")
+        self.assertIsNotNone(page_cache)
 
     def test_retrieve(self):
         tag = TagFactory.create(name="test")
@@ -30,6 +45,12 @@ class AdminTagTestViewSetTestCase(APITestCase):
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], tag.name)
+        cache_key = get_detail_key(
+            base_key=self.base_cache_key, pk=str(tag.id))
+        cache_data = cache.get(cache_key)
+        self.assertIsNotNone(cache_data)
+        self.assertEqual(cache_data.id, tag.id)
+        self.assertEqual(cache_data.name, tag.name)
 
     def test_post(self):
         post_data = {

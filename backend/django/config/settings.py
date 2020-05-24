@@ -25,7 +25,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
 MEDIA_URL = '/storage/'
 
 TEST_RUNNER = 'my_project.runner.PytestTestRunner'
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -43,7 +42,6 @@ else:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
-
 CORS_ORIGIN_ALLOW_ALL = True
 
 # CORS_ORIGIN_WHITELIST is not working
@@ -96,6 +94,13 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'cache:11211',
+    }
+}
+
 ROOT_URLCONF = 'config.urls'
 
 # REST
@@ -103,9 +108,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
     ],
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'django_filters.rest_framework.DjangoFilterBackend',
+    # ],
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': env.int('PAGE_SIZE', 20)
+    'PAGE_SIZE': 1,
 }
 
 
