@@ -1,8 +1,9 @@
-import React from 'react';
 import { Card, Typography } from 'antd';
-import { PostDetail } from '../../types/posts'
+import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useHistory } from 'react-router-dom';
+
+import { PostDetail } from '../../types/posts';
 
 interface IProps {
   post: PostDetail;
@@ -28,7 +29,7 @@ const PostListItem: React.FC<IProps> = ({ post }) => {
         >
           <Meta
             title={post.title}
-            description={`${post.created_at} | ${post.category.name} | `}
+            description={`${post.created_at} | ${post.category} | `}
           />
           <Paragraph
             ellipsis={{

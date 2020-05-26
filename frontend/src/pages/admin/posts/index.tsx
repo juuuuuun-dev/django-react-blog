@@ -1,16 +1,19 @@
+import { Input, Table, Tag } from 'antd';
+import { keyBy } from 'lodash';
 import React from 'react';
-import { AdminContext } from '../../../context/adminContext';
-import { list } from '../../../service/admin/posts';
-import { TagListItem, TagDetail } from '../../../types/tags';
-import { Table, Input, Tag } from 'antd';
-import { PostList, PostDetail } from '../../../types/posts';
-import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
-import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
+import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
+
 import { CheckOutlined } from '@ant-design/icons';
-import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
+
+import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
+import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import toast from '../../../components/common/toast';
-import { sortDate, sortBoolean, sortTextLength } from '../../../helper/sort';
+import { AdminContext } from '../../../context/adminContext';
+import { sortBoolean, sortDate, sortTextLength } from '../../../helper/sort';
+import { list } from '../../../service/admin/posts';
+import { PostDetail, PostList } from '../../../types/posts';
+import { TagDetail, TagListItem } from '../../../types/tags';
 
 const Posts: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
@@ -19,14 +22,20 @@ const Posts: React.FC = () => {
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const [data, setData] = React.useState<PostList | undefined>();
   const [tags, setTags] = React.useState<TagListItem[]>([]);
+  const [tagById, setTagById] = React.useState<any>({})
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
 
+  // @todo ここは出来るのか
+  const getTagById = React.useMemo(() => {
+    console.log('getTagById')
+  }, [data?.tags])
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const res = await list({ page: query.page, search: query.search });
       setData(res.data);
+      console.log(res.data)
       const tags: TagListItem[] = [];
       res.data.tags.forEach((value: TagDetail) => {
         tags.push({
@@ -34,7 +43,9 @@ const Posts: React.FC = () => {
           value: value.name,
         })
       });
+      const tagById = keyBy(res.data.tags, 'id')
       setTags(tags);
+      setTagById(tagById);
     } catch {
       toast({ type: 'ERROR' });
     }
@@ -44,7 +55,7 @@ const Posts: React.FC = () => {
   React.useEffect(() => {
     if (state.hasToken) fetchData();
   }, [fetchData, state.hasToken, query.page, query.search]);
-
+  console.log(tagById)
   const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -92,9 +103,9 @@ const Posts: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       width: '15%',
-      sorter: (a: PostDetail, b: PostDetail) => sortTextLength(a.category.name, b.category.name),
+      // sorter: (a: PostDetail, b: PostDetail) => sortTextLength(a.category, b.category),
       render: (text: { id: number, name: string }) =>
-        (<>{text.name}</>)
+        (<>{text}</>)
     },
     {
       title: 'tag',
@@ -117,8 +128,10 @@ const Posts: React.FC = () => {
         }
       },
       render: (text: Array<any>) =>
-        (<>{text.map((value, index) => {
-          return <Tag key={index}>{value.name}</Tag>
+        (<>{tagById && text.map((value, index) => {
+          if (tagById[value]) {
+            return <Tag key={index}>{tagById[value].name}</Tag>
+          }
         })}</>
         )
     },

@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import { RcFile } from 'antd/lib/upload';
-import ReactDOMServer from "react-dom/server";
-import { Form, Input, Button, Switch, Select, Upload, Row, Col } from 'antd';
-import { PostFormProps } from '../../../types/posts';
-import MediaModal from "../../admin/MediaModal";
-import PostDetailContent from "../../../components/main/posts/PostDetailContent"
-import { get } from 'local-storage';
-import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
-import { getBase64 } from '../../../helper/file';
-import toast from '../../../components/common/toast';
-import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import PostPreview from '../../../components/admin/PostPreview';
 
+import { Button, Col, Form, Input, Row, Select, Switch, Upload } from 'antd';
+import { RcFile } from 'antd/lib/upload';
+import React, { useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
+import SimpleMDE from 'react-simplemde-editor';
+
+import {
+    DeleteOutlined, EditOutlined, EyeOutlined, LoadingOutlined, PlusOutlined
+} from '@ant-design/icons';
+
+import PostPreview from '../../../components/admin/PostPreview';
+import toast from '../../../components/common/toast';
+import PostDetailContent from '../../../components/main/posts/PostDetailContent';
+import { getBase64 } from '../../../helper/file';
+import { PostFormProps } from '../../../types/posts';
+import MediaModal from '../../admin/MediaModal';
 
 const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) => {
   const { Option } = Select;
@@ -44,17 +47,16 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
           title: data.title,
           content: data.content,
           is_show: data.is_show || false,
-          category: data.category.id,
-          tag: data.tag.map((value) => {
-            return value.id
-          })
+          category: data.category,
+          tag: data.tag,
         },
       );
       setIsShow(data.is_show || false)
     }
-  }, [data, form]);
+  }, [data, form, formItem]);
 
   const onFinish = async (values: any) => {
+    console.log({ values })
     values.is_show = isShow;
     values.content = content;
     values.cover = file;
@@ -207,7 +209,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 aria-label="select-category"
                 style={{ width: 200 }}
                 placeholder="Select a category"
-                optionFilterProp="children"
+                // optionLabelProp="label"
                 filterOption={(input, option) => {
                   if (option) {
                     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -216,9 +218,8 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 }}
               >
                 {formItem?.categories?.map((value, index) => {
-                  return <Option aria-label={`option-category-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+                  return <Option label={value.name} aria-label={`option-category-${value}`} key={index} value={value.id}>{value.name}</Option>
                 })}
-
               </Select>
             </Form.Item>
             <Form.Item
@@ -232,7 +233,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 aria-label="select-tag"
               >
                 {formItem?.tags.map((value, index) => {
-                  return <Option aria-label={`option-tag-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+                  return <Option label={value.name} aria-label={`option-tag-${value.id}`} key={index} value={value.id}>{value.name}</Option>
                 })}
               </Select>
             </Form.Item>

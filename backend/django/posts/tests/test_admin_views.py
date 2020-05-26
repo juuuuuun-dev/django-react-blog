@@ -91,6 +91,7 @@ class AdminPostViewSetTestCase(APITestCase):
             "is_show": True,
             "category": category.id,
             "tag[]": [tag.id, tag2.id],
+            "tag": "1,2",
             "cover": SimpleUploadedFile(
                 name='test_image.jpg',
                 content=open(
@@ -116,13 +117,12 @@ class AdminPostViewSetTestCase(APITestCase):
         post = PostFactory.create(user=self.user, tag=[tag])
         category = CategoryFactory.create(name="test")
         api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
-
         post_data = {
             "title": "testtest",
             "content": "#title\n##body\n<img src=\"/img.jpg\" />\n<a href=\"./link/\">lidayo</a>",
             "is_show": False,
             "category": category.id,
-            "tag[]": [tag.id, tag2.id],
+            "tag[]": [1, 2],
             "cover": SimpleUploadedFile(
                 name='test_image.jpg',
                 content=open(
@@ -131,12 +131,13 @@ class AdminPostViewSetTestCase(APITestCase):
                 content_type='image/jpeg')}
 
         response = self.client.put(api, post_data, format="multipart")
+        print("## result ##")
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], post_data['title'])
         self.assertEqual(response.data['content'], post_data['content'])
         self.assertEqual(response.data['is_show'], post_data['is_show'])
-        self.assertEqual(response.data['category']['id'], category.id)
-        self.assertEqual(response.data['tag'][0]['id'], tag.id)
+        self.assertEqual(response.data['category'], category.id)
         self.assertTrue(response.data['thumb'])
         self.assertTrue(response.data['cover'])
 
