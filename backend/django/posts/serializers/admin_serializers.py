@@ -28,7 +28,6 @@ class AdminPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        # fields = '__all__'
         fields = [
             "user",
             "username",
@@ -45,17 +44,3 @@ class AdminPostSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ("user", "key", "created_at", "updated_at",)
-
-    def update(self, instance, validated_data):
-        """
-        Do tag validation here
-        """
-        tags = Tag.objects.filter(
-            id__in=validated_data['tag'])
-        instance.save()
-        instance.tag.set(tags)
-        return instance
-
-    # def validate_tag(self, value):
-    #     print("~~ validate tag ~~")
-    #     print(value)

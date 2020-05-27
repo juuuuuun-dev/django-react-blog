@@ -19,7 +19,7 @@ export type PostDetail = {
 
 export type PostList = Pagination & {
   results: PostDetail[],
-  tags: TagList,
+  tags: TagDetail[],
 }
 
 export type PostFormItem = {

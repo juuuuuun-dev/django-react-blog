@@ -10,7 +10,7 @@ import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import toast from '../../../components/common/toast';
 import { AdminContext } from '../../../context/adminContext';
-import { sortBoolean, sortDate, sortTextLength } from '../../../helper/sort';
+import { sortBoolean, sortDate } from '../../../helper/sort';
 import { list } from '../../../service/admin/posts';
 import { PostDetail, PostList } from '../../../types/posts';
 import { TagDetail, TagListItem } from '../../../types/tags';
@@ -21,31 +21,28 @@ const Posts: React.FC = () => {
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const [data, setData] = React.useState<PostList | undefined>();
-  const [tags, setTags] = React.useState<TagListItem[]>([]);
-  const [tagById, setTagById] = React.useState<any>({})
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
+  const tagById: any = React.useMemo(() => {
+    return keyBy(data?.tags, 'id')
+  }, [data])
 
-  // @todo ここは出来るのか
-  const getTagById = React.useMemo(() => {
-    console.log('getTagById')
-  }, [data?.tags])
+  const tags: TagListItem[] = React.useMemo(() => {
+    const arr: TagListItem[] = [];
+    data?.tags.forEach((value: TagDetail) => {
+      arr.push({
+        text: value.name,
+        value: value.name,
+      })
+    });
+    return arr;
+  }, [data])
+
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const res = await list({ page: query.page, search: query.search });
       setData(res.data);
-      console.log(res.data)
-      const tags: TagListItem[] = [];
-      res.data.tags.forEach((value: TagDetail) => {
-        tags.push({
-          text: value.name,
-          value: value.name,
-        })
-      });
-      const tagById = keyBy(res.data.tags, 'id')
-      setTags(tags);
-      setTagById(tagById);
     } catch {
       toast({ type: 'ERROR' });
     }
@@ -132,6 +129,7 @@ const Posts: React.FC = () => {
           if (tagById[value]) {
             return <Tag key={index}>{tagById[value].name}</Tag>
           }
+          return null
         })}</>
         )
     },

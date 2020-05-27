@@ -59,7 +59,10 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
     console.log({ values })
     values.is_show = isShow;
     values.content = content;
-    values.cover = file;
+    // values.cover = file;
+    if (imageUrl) {
+      values.cover = imageUrl;
+    }
     onSubmit(values)
   };
 

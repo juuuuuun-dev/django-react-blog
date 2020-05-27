@@ -3,14 +3,14 @@ from categories.models import Category, get_all_categories
 from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
 from markdown import markdown
-from rest_framework import filters, viewsets
+from rest_framework import filters, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from tags.models import Tag, get_all_tags
 from tags.serializers import TagListSerializer
 from users.models import User
 from utils.cache_views import CacheModelViewSet
-from utils.file import delete_thumb
+from utils.file import base64decode, delete_thumb
 
 from ..models import Post
 from ..paginatin import PostPagination
@@ -67,47 +67,36 @@ class AdminPostViewSet(CacheModelViewSet):
             category=category,
             tag=tags)
 
+    def create(self, request, *args, **kwargs):
+        user = User.objects.get(id=self.request.user.id)
+        cp = request.data.copy()
+        if 'cover' in self.request.data:
+            cp['cover'] = base64decode(self.request.data['cover'])
+        serializer = self.get_serializer(data=cp, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        print("通った")
+        serializer.save(user=user)
+        self.delete_page_cache(base_key=self.base_cache_key)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     def update(self, request, pk=None):
         queryset = self.queryset
         instance = get_object_or_404(queryset, pk=pk)
-        # cover
+        cp = request.data.copy()
+
         if 'cover' in self.request.data:
             post = Post.objects.get(id=self.kwargs['pk'])
             delete_thumb(post.cover.name)
-        # copy
-        cp = request.data.copy()
-        # for validation
-        tag = self.request.data.getlist('tag[]', None)
-        # if "tag[]" in cp:
-        #     cp['tag'] = self.request.data.get("tag[]")
+            cp['cover'] = base64decode(self.request.data['cover'])
 
         serializer = self.get_serializer(
             instance, data=cp)
         serializer.is_valid(raise_exception=True)
-        serializer.save(tag=tag)
+        serializer.save()
         # delete cache
         self.delete_page_cache(base_key=self.base_cache_key)
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
         return Response(serializer.data)
-
-    # def perform_update(self, serializer):
-    #     print("preform")
-    #     category = Category.objects.get(id=self.request.data['category'])
-    #     html = markdown(self.request.data['content'])
-    #     plain = ''.join(
-    #         BeautifulSoup(
-    #             html,
-    #             features="html.parser").findAll(
-    #             text=True))
-    #     tags = Tag.objects.filter(
-    #         id__in=self.request.data.getlist(
-    #             'tag[]', None))
-    #     # cover
-    #     if 'cover' in self.request.data:
-    #         post = Post.objects.get(id=self.kwargs['pk'])
-    #         delete_thumb(post.cover.name)
-
-    #     serializer.save(plain_content=plain, category=category, tag=tags)
 
     def getTagAndCategoryList(self):
         tagSerializer = TagListSerializer(get_all_tags(), many=True)

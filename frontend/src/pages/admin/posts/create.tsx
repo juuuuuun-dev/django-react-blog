@@ -1,10 +1,11 @@
-import React, { useState, Suspense } from 'react';
-import { create, postFormItem } from '../../../service/admin/posts';
-import { AdminContext } from '../../../context/adminContext';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+
 import Form from '../../../components/admin/form/PostForm';
 import toast from '../../../components/common/toast';
-import { PostFormItem } from '../../../types/posts'
-import { useHistory } from 'react-router-dom';
+import { AdminContext } from '../../../context/adminContext';
+import { create, postFormItem } from '../../../service/admin/posts';
+import { PostFormItem } from '../../../types/posts';
 
 const Create: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
@@ -52,9 +53,7 @@ const Create: React.FC = () => {
 
   return (
     <>
-      <Suspense fallback={<h1>Loading profile...</h1>}>
-        <Form onSubmit={onSubmit} formItem={formItem} error={error} />
-      </Suspense>
+      <Form onSubmit={onSubmit} formItem={formItem} error={error} />
     </>
   );
 };

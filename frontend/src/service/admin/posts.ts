@@ -1,7 +1,8 @@
-import axios from '../client';
-import { ListQuery } from '../../types/pagination';
 import { queryStringify } from '../../helper/query';
-import { PostDetail } from '../../types/posts'
+import { ListQuery } from '../../types/pagination';
+import { PostDetail } from '../../types/posts';
+import axios from '../client';
+
 const endPoint = '/posts/admin-post/';
 
 export const list = async (queries: ListQuery) => {
@@ -13,9 +14,10 @@ export const retrieve = async (id: string | undefined) => {
   return axios.get(`${endPoint}${id}`)
 }
 
-export const update = async (id: string | undefined, data: FormData) => {
-  const headers = { "content-type": "multipart/form-data" };
-  return axios.put(`${endPoint}${id}/`, data, { headers })
+export const update = async (id: string | undefined, data: PostDetail) => {
+  return axios.put(`${endPoint}${id}/`, data)
+  // const headers = { "content-type": "multipart/form-data" };
+  // return axios.put(`${endPoint}${id}/`, data, { headers })
 }
 
 export const create = async (data: FormData) => {
