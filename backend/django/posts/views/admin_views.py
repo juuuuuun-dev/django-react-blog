@@ -1,12 +1,12 @@
 from bs4 import BeautifulSoup
-from categories.models import Category, get_all_categories
+from categories.models import get_all_categories
 from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
 from markdown import markdown
-from rest_framework import filters, status, viewsets
+from rest_framework import filters, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from tags.models import Tag, get_all_tags
+from tags.models import get_all_tags
 from tags.serializers import TagListSerializer
 from users.models import User
 from utils.cache_views import CacheModelViewSet
@@ -27,8 +27,6 @@ class AdminPostViewSet(CacheModelViewSet):
     base_cache_key = 'posts'
 
     def list(self, request):
-        # queryset = Post.objects.all().order_by('-id')
-        print("listdayo")
         queryset = self.filter_queryset(self.queryset.filter())
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, context={
@@ -41,41 +39,27 @@ class AdminPostViewSet(CacheModelViewSet):
         post = get_object_or_404(queryset, pk=pk)
         serializer = AdminPostSerializer(post, context={
             "request": request})
-        data = self.getTagAndCategoryList()
+        data = self.get_tag_and_category_list()
         data["post"] = serializer.data
         return Response(data)
 
     def form_item(self, serializser):
-        data = self.getTagAndCategoryList()
+        data = self.get_tag_and_category_list()
         return Response(data)
-
-    def perform_create(self, serializer):
-        user = User.objects.get(id=self.request.user.id)
-        category = Category.objects.get(id=self.request.data['category'])
-        tags = Tag.objects.filter(
-            id__in=self.request.data.getlist(
-                'tag[]', None))
-        html = markdown(self.request.data['content'])
-        plain = ''.join(
-            BeautifulSoup(
-                html,
-                features="html.parser").findAll(
-                text=True))
-        serializer.save(
-            user=user,
-            plain_content=plain,
-            category=category,
-            tag=tags)
 
     def create(self, request, *args, **kwargs):
         user = User.objects.get(id=self.request.user.id)
         cp = request.data.copy()
         if 'cover' in self.request.data:
             cp['cover'] = base64decode(self.request.data['cover'])
-        serializer = self.get_serializer(data=cp, context={'request': request})
+        if 'content' in self.request.data:
+            plain = self.make_plain_content(self.request.data['content'])
+
+        serializer = self.get_serializer(
+            data=cp, context={
+                'request': request})
         serializer.is_valid(raise_exception=True)
-        print("通った")
-        serializer.save(user=user)
+        serializer.save(user=user, plain_content=plain)
         self.delete_page_cache(base_key=self.base_cache_key)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -88,25 +72,29 @@ class AdminPostViewSet(CacheModelViewSet):
             post = Post.objects.get(id=self.kwargs['pk'])
             delete_thumb(post.cover.name)
             cp['cover'] = base64decode(self.request.data['cover'])
+        if 'content' in self.request.data:
+            plain = self.make_plain_content(self.request.data['content'])
 
         serializer = self.get_serializer(
             instance, data=cp)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(plain_content=plain)
         # delete cache
         self.delete_page_cache(base_key=self.base_cache_key)
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
         return Response(serializer.data)
 
-    def getTagAndCategoryList(self):
+    def make_plain_content(self, content):
+        html = markdown(content)
+        plain = ''.join(BeautifulSoup(
+            html, features="html.parser").findAll(
+            text=True))
+        return plain
+
+    def get_tag_and_category_list(self):
         tagSerializer = TagListSerializer(get_all_tags(), many=True)
         categorySerializer = CategoryListSerializer(
             get_all_categories(), many=True)
-
-        # categories = {}
-        # for val in obj.values():
-        #     categories[val['id']] = val
-
         return {
             "tags": tagSerializer.data,
             "categories": categorySerializer.data
