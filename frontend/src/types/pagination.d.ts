@@ -7,5 +7,6 @@ export type Pagination = {
 export type ListQuery = {
   page: number | null | undefined;
   search?: string | null | undefined;
-  categories?: number[];
+  category?: number | null | undefined;
+  tag?: number | null | undefined;
 }

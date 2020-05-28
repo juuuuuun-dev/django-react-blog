@@ -12,27 +12,43 @@ import toast from '../../../components/common/toast';
 import { AdminContext } from '../../../context/adminContext';
 import { sortBoolean, sortDate } from '../../../helper/sort';
 import { list } from '../../../service/admin/posts';
+import { FilterList } from '../../../types/common';
 import { PostDetail, PostList } from '../../../types/posts';
-import { TagDetail, TagListItem } from '../../../types/tags';
+import { TagDetail } from '../../../types/tags';
 
 const Posts: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
-  const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
+  const [query, setQuery] = useQueryParams({ page: NumberParam, category: NumberParam, search: StringParam });
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const [data, setData] = React.useState<PostList | undefined>();
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
+  const categoryById: any = React.useMemo(() => {
+    return keyBy(data?.categories, 'id')
+  }, [data])
+  const categoryFilterList: FilterList[] = React.useMemo(() => {
+    const arr: FilterList[] = [];
+    data?.categories.forEach((value: TagDetail) => {
+      arr.push({
+        text: value.name,
+        value: value.id,
+      })
+    });
+    return arr;
+  }, [data]);
+
+
   const tagById: any = React.useMemo(() => {
     return keyBy(data?.tags, 'id')
   }, [data])
 
-  const tags: TagListItem[] = React.useMemo(() => {
-    const arr: TagListItem[] = [];
+  const tags: FilterList[] = React.useMemo(() => {
+    const arr: FilterList[] = [];
     data?.tags.forEach((value: TagDetail) => {
       arr.push({
         text: value.name,
-        value: value.name,
+        value: value.id,
       })
     });
     return arr;
@@ -41,18 +57,18 @@ const Posts: React.FC = () => {
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await list({ page: query.page, search: query.search });
+      const res = await list({ page: query.page, category: query.category, search: query.search });
       setData(res.data);
     } catch {
       toast({ type: 'ERROR' });
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  }, [dispatch, query.page, query.search]);
+  }, [dispatch, query]);
 
   React.useEffect(() => {
     if (state.hasToken) fetchData();
-  }, [fetchData, state.hasToken, query.page, query.search]);
-  console.log(tagById)
+  }, [fetchData, state.hasToken, query]);
+
   const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -62,14 +78,27 @@ const Posts: React.FC = () => {
   const handleQuerySearch = (search: string): void => {
     setQuery({
       page: 1,
-      search: search
+      search: search,
+      category: null,
     }, 'push');
+  }
+
+  const handleCategoryChange = (value: string | number | boolean) => {
+    const category = typeof value === 'number' ? value : null;
+    // setQuery({
+    //   page: 1,
+    //   category: category,
+    //   search: '',
+    // }, 'push');
+    console.log({ category })
+    return true;
   }
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
     setQuery({
       page: page,
-      search: query.search
+      search: query.search,
+      category: null,
     }, 'push')
   }
   const handleReset = (clearFilters: () => void) => {
@@ -100,9 +129,16 @@ const Posts: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       width: '15%',
-      // sorter: (a: PostDetail, b: PostDetail) => sortTextLength(a.category, b.category),
-      render: (text: { id: number, name: string }) =>
-        (<>{text}</>)
+      filters: categoryFilterList,
+      filterMultiple: false,
+      onFilter: handleCategoryChange,
+      onFilterDropdownVisibleChange: () => console.log("onFilterDropdownVisibleChange	"),
+      render: (text: number) => {
+        if (categoryById) {
+          return <>{categoryById[text].name}</>
+        }
+        return <>{text}</>
+      }
     },
     {
       title: 'tag',

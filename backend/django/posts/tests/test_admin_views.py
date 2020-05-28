@@ -44,6 +44,50 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(len(response.data['results'][0]['tag']), 1)
         self.assertEqual(len(response.data['tags']), 2)
 
+    def test_get_filter_category(self):
+        tag = TagFactory.create(name="tagdayo")
+        TagFactory.create(name="tag2")
+        category = CategoryFactory.create(name="test")
+        category2 = CategoryFactory.create(name="category2")
+        post = PostFactory.create(user=self.user, tag=[tag], category=category)
+        post2 = PostFactory.create(
+            user=self.user, tag=[tag], category=category2)
+        api = "".join([
+            reverse("posts:admin-post-list"),
+            "?",
+            urlencode({"category": category2.id}),
+        ])
+        print(api)
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print(response.data)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['title'], post2.title)
+        self.assertEqual(response.data['results'][0]['category'], category2.id)
+        self.assertNotEqual(response.data['results'][0]['title'], post.title)
+
+    def test_get_filter_serach_title(self):
+        tag = TagFactory.create(name="tagdayo")
+        TagFactory.create(name="tag2")
+        category = CategoryFactory.create(name="test")
+        category2 = CategoryFactory.create(name="category2")
+        post = PostFactory.create(user=self.user, tag=[tag], category=category)
+        post2 = PostFactory.create(
+            user=self.user, tag=[tag], category=category2)
+        api = "".join([
+            reverse("posts:admin-post-list"),
+            "?",
+            urlencode({"search": post2.title}),
+        ])
+        print(api)
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print(response.data)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['title'], post2.title)
+        self.assertEqual(response.data['results'][0]['category'], category2.id)
+        self.assertNotEqual(response.data['results'][0]['title'], post.title)
+
     def test_get_not_found(self):
         tag = TagFactory.create(name="tagdayo")
         TagFactory.create(name="tag2")

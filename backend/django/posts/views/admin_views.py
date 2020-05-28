@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from categories.models import get_all_categories
 from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from markdown import markdown
 from rest_framework import filters, status
 from rest_framework.permissions import IsAuthenticated
@@ -21,8 +22,9 @@ class AdminPostViewSet(CacheModelViewSet):
     queryset = Post.objects.all().order_by('-id')
     permission_classes = (IsAuthenticated,)
     serializer_class = AdminPostSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['title', 'plain_content']
+    filterset_fields = ['category']
     pagination_class = PostPagination
     base_cache_key = 'posts'
 
