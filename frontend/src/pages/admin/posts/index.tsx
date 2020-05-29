@@ -1,4 +1,4 @@
-import { Input, Table, Tag } from 'antd';
+import { Col, Input, Row, Select, Table, Tag } from 'antd';
 import { keyBy } from 'lodash';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 import { CheckOutlined } from '@ant-design/icons';
 
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
+import FilterSelectColumn from '../../../components/admin/FilterSelectColumn';
 import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import toast from '../../../components/common/toast';
 import { AdminContext } from '../../../context/adminContext';
@@ -17,6 +18,7 @@ import { PostDetail, PostList } from '../../../types/posts';
 import { TagDetail } from '../../../types/tags';
 
 const Posts: React.FC = () => {
+  const { Option } = Select;
   const [state, dispatch] = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ page: NumberParam, category: NumberParam, search: StringParam });
   const [searchText, setSearchText] = React.useState<string>('');
@@ -63,7 +65,7 @@ const Posts: React.FC = () => {
       toast({ type: 'ERROR' });
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  }, [dispatch, query]);
+  }, [dispatch, query.category, query.page, query.search]);
 
   React.useEffect(() => {
     if (state.hasToken) fetchData();
@@ -83,22 +85,22 @@ const Posts: React.FC = () => {
     }, 'push');
   }
 
-  const handleCategoryChange = (value: string | number | boolean) => {
-    const category = typeof value === 'number' ? value : null;
-    // setQuery({
-    //   page: 1,
-    //   category: category,
-    //   search: '',
-    // }, 'push');
-    console.log({ category })
-    return true;
+  const handleCategoryChange = async (value: number | undefined, confirm: any): Promise<any> => {
+    // @todo confirm()
+    // confirm();
+    setQuery({
+      category: value,
+      page: 1,
+      search: '',
+    }, 'push');
   }
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
+    console.log("handlePageChange");
     setQuery({
       page: page,
       search: query.search,
-      category: null,
+      category: query.category,
     }, 'push')
   }
   const handleReset = (clearFilters: () => void) => {
@@ -129,10 +131,20 @@ const Posts: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       width: '15%',
-      filters: categoryFilterList,
-      filterMultiple: false,
-      onFilter: handleCategoryChange,
-      onFilterDropdownVisibleChange: () => console.log("onFilterDropdownVisibleChange	"),
+      // filters: categoryFilterList,
+      // filterMultiple: false,
+      // onFilter: handleCategoryChange,
+      ...FilterSelectColumn({
+        dataIndex: 'category',
+        selected: query.category,
+        listItem: data?.categories,
+        handleChange: handleCategoryChange,
+        handleSearch: handleFilterSearch,
+        handleReset: handleReset,
+        searchedColumn: searchedColumn,
+        searchText: searchText,
+        path: location.pathname,
+      }),
       render: (text: number) => {
         if (categoryById) {
           return <>{categoryById[text].name}</>
@@ -207,6 +219,60 @@ const Posts: React.FC = () => {
         search={query.search}
         handleQuerySearch={handleQuerySearch}
       />
+      <Row gutter={24}>
+        <Col xs={{ span: 0, offset: 0 }} lg={{ span: 18, offset: 0 }}>
+        </Col>
+        <Col xs={{ span: 24, offset: 0 }} lg={{ span: 6, offset: 0 }}>
+          <Row gutter={24}>
+            <Col span={3}>
+              Category
+              </Col>
+            <Col span={9}>
+              <Select
+                allowClear
+                placeholder="Category"
+                style={{ width: "100%" }}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option: any) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {data?.categories.map((value, index) => (
+                  <Option key={index} value={value.id}>{value.name}</Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Row gutter={24}>
+        <Col xs={{ span: 0, offset: 0 }} lg={{ span: 12, offset: 0 }}>
+        </Col>
+        <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 0 }}>
+          <Row gutter={24}>
+            <Col span={3}>
+              Tag
+            </Col>
+            <Col span={9}>
+              <Select
+                allowClear
+                placeholder="Tag"
+                style={{ width: "100%", margin: "0 0 15px 0" }}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option: any) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {data?.categories.map((value, index) => (
+                  <Option key={index} value={value.id}>{value.name}</Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
       <Table
         className="table"
         columns={columns}
@@ -215,6 +281,7 @@ const Posts: React.FC = () => {
           total: data?.count,
           pageSize: state.pageSize,
           defaultCurrent: query.page || 1,
+          current: query.page || 1,
           onChange: handlePageChange,
         }} />
     </>
