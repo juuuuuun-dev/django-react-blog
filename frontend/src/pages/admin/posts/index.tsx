@@ -1,4 +1,4 @@
-import { Col, Input, Row, Select, Table, Tag } from 'antd';
+import { Input, Table, Tag } from 'antd';
 import { keyBy } from 'lodash';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
@@ -18,7 +18,6 @@ import { PostDetail, PostList } from '../../../types/posts';
 import { TagDetail } from '../../../types/tags';
 
 const Posts: React.FC = () => {
-  const { Option } = Select;
   const [state, dispatch] = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ page: NumberParam, category: NumberParam, search: StringParam });
   const [searchText, setSearchText] = React.useState<string>('');
@@ -26,6 +25,7 @@ const Posts: React.FC = () => {
   const [data, setData] = React.useState<PostList | undefined>();
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
+
   const categoryById: any = React.useMemo(() => {
     return keyBy(data?.categories, 'id')
   }, [data])
@@ -35,16 +35,16 @@ const Posts: React.FC = () => {
     return keyBy(data?.tags, 'id')
   }, [data])
 
-  const tags: FilterList[] = React.useMemo(() => {
-    const arr: FilterList[] = [];
-    data?.tags.forEach((value: TagDetail) => {
-      arr.push({
-        text: value.name,
-        value: value.id,
-      })
-    });
-    return arr;
-  }, [data])
+  // const tags: FilterList[] = React.useMemo(() => {
+  //   const arr: FilterList[] = [];
+  //   data?.tags.forEach((value: TagDetail) => {
+  //     arr.push({
+  //       text: value.name,
+  //       value: value.id,
+  //     })
+  //   });
+  //   return arr;
+  // }, [data])
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
@@ -84,7 +84,6 @@ const Posts: React.FC = () => {
   }
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
-    console.log("handlePageChange");
     setQuery({
       page: page,
       search: query.search,
@@ -126,7 +125,7 @@ const Posts: React.FC = () => {
         handleChange: handleCategoryChange,
       }),
       render: (text: number) => {
-        if (categoryById) {
+        if (categoryById && categoryById[text]) {
           return <>{categoryById[text].name}</>
         }
         return <>{text}</>
@@ -138,20 +137,20 @@ const Posts: React.FC = () => {
       dataIndex: 'tag',
       key: 'tag',
       width: '15%',
-      filters: tags,
-      onFilter: (value: string | number | boolean, record: PostDetail) => {
-        if (record.tag.length) {
-          let includeFlag: boolean = false;
-          record.tag.forEach((obj: any) => {
-            if (obj.name.includes(value)) {
-              includeFlag = true;
-            }
-          })
-          return includeFlag;
-        } else {
-          return false;
-        }
-      },
+      // filters: tags,
+      // onFilter: (value: string | number | boolean, record: PostDetail) => {
+      //   if (record.tag.length) {
+      //     let includeFlag: boolean = false;
+      //     record.tag.forEach((obj: any) => {
+      //       if (obj.name.includes(value)) {
+      //         includeFlag = true;
+      //       }
+      //     })
+      //     return includeFlag;
+      //   } else {
+      //     return false;
+      //   }
+      // },
       render: (text: Array<any>) =>
         (<>{tagById && text.map((value, index) => {
           if (tagById[value]) {

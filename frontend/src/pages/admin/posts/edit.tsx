@@ -5,7 +5,6 @@ import DeleteBtn from '../../../components/admin/DeleteBtn';
 import Form from '../../../components/admin/form/PostForm';
 import toast from '../../../components/common/toast';
 import { AdminContext } from '../../../context/adminContext';
-import { createFormData } from '../../../helper/form';
 import { destroy, retrieve, update } from '../../../service/admin/posts';
 import { PostDetail, PostFormItem } from '../../../types/posts';
 
@@ -40,9 +39,6 @@ const Edit: React.FC = () => {
   const onSubmit = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      // if (!values.cover) delete values.cover;
-      // const formData = createFormData(values);
-
       const res = await update(id, values);
       if (res.status === 200) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
