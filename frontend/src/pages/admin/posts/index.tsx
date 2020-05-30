@@ -29,16 +29,6 @@ const Posts: React.FC = () => {
   const categoryById: any = React.useMemo(() => {
     return keyBy(data?.categories, 'id')
   }, [data])
-  const categoryFilterList: FilterList[] = React.useMemo(() => {
-    const arr: FilterList[] = [];
-    data?.categories.forEach((value: TagDetail) => {
-      arr.push({
-        text: value.name,
-        value: value.id,
-      })
-    });
-    return arr;
-  }, [data]);
 
 
   const tagById: any = React.useMemo(() => {
@@ -85,9 +75,7 @@ const Posts: React.FC = () => {
     }, 'push');
   }
 
-  const handleCategoryChange = async (value: number | undefined, confirm: any): Promise<any> => {
-    // @todo confirm()
-    // confirm();
+  const handleCategoryChange = (value: number | undefined): void => {
     setQuery({
       category: value,
       page: 1,
@@ -131,19 +119,11 @@ const Posts: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       width: '15%',
-      // filters: categoryFilterList,
-      // filterMultiple: false,
-      // onFilter: handleCategoryChange,
       ...FilterSelectColumn({
         dataIndex: 'category',
         selected: query.category,
         listItem: data?.categories,
         handleChange: handleCategoryChange,
-        handleSearch: handleFilterSearch,
-        handleReset: handleReset,
-        searchedColumn: searchedColumn,
-        searchText: searchText,
-        path: location.pathname,
       }),
       render: (text: number) => {
         if (categoryById) {
@@ -219,60 +199,7 @@ const Posts: React.FC = () => {
         search={query.search}
         handleQuerySearch={handleQuerySearch}
       />
-      <Row gutter={24}>
-        <Col xs={{ span: 0, offset: 0 }} lg={{ span: 18, offset: 0 }}>
-        </Col>
-        <Col xs={{ span: 24, offset: 0 }} lg={{ span: 6, offset: 0 }}>
-          <Row gutter={24}>
-            <Col span={3}>
-              Category
-              </Col>
-            <Col span={9}>
-              <Select
-                allowClear
-                placeholder="Category"
-                style={{ width: "100%" }}
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option: any) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-              >
-                {data?.categories.map((value, index) => (
-                  <Option key={index} value={value.id}>{value.name}</Option>
-                ))}
-              </Select>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <Row gutter={24}>
-        <Col xs={{ span: 0, offset: 0 }} lg={{ span: 12, offset: 0 }}>
-        </Col>
-        <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 0 }}>
-          <Row gutter={24}>
-            <Col span={3}>
-              Tag
-            </Col>
-            <Col span={9}>
-              <Select
-                allowClear
-                placeholder="Tag"
-                style={{ width: "100%", margin: "0 0 15px 0" }}
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option: any) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-              >
-                {data?.categories.map((value, index) => (
-                  <Option key={index} value={value.id}>{value.name}</Option>
-                ))}
-              </Select>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+
       <Table
         className="table"
         columns={columns}
