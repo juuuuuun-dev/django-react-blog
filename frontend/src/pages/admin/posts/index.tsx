@@ -69,7 +69,7 @@ const Posts: React.FC = () => {
     setQuery({
       page: 1,
       search: search,
-      category: null,
+      category: undefined,
     }, 'push');
   }
 
@@ -77,15 +77,15 @@ const Posts: React.FC = () => {
     setQuery({
       category: value,
       page: 1,
-      search: '',
+      search: undefined,
     }, 'push');
   }
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
     setQuery({
       page: page,
-      search: query.search,
-      category: query.category,
+      search: query.search || undefined,
+      category: query.category || undefined,
     }, 'push')
   }
   const handleReset = (clearFilters: () => void) => {

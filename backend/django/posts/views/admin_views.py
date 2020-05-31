@@ -4,7 +4,7 @@ from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from markdown import markdown
-from rest_framework import filters, status
+from rest_framework import filters, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from tags.models import get_all_tags
@@ -29,7 +29,10 @@ class AdminPostViewSet(CacheModelViewSet):
     base_cache_key = 'posts'
 
     def list(self, request):
-        queryset = self.filter_queryset(self.queryset.filter())
+        # queryset = self.filter_queryset(self.queryset.filter())
+        queryset = self.get_list_queryset(
+            request=request, base_key=self.base_cache_key)
+
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, context={
             "request": request})
@@ -62,7 +65,8 @@ class AdminPostViewSet(CacheModelViewSet):
                 'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save(user=user, plain_content=plain)
-        self.delete_page_cache(base_key=self.base_cache_key)
+        # cache
+        self.delete_list_query_cache(base_key=self.base_cache_key)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None):
@@ -82,7 +86,7 @@ class AdminPostViewSet(CacheModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(plain_content=plain)
         # delete cache
-        self.delete_page_cache(base_key=self.base_cache_key)
+        self.delete_list_query_cache(base_key=self.base_cache_key)
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
         return Response(serializer.data)
 
