@@ -32,11 +32,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   const [editorSpan, setEditorSpan] = useState<number>(12);
   const [previewSpan, setPreviewSpan] = useState<number>(12);
 
-  /**
-   * @todo
-   * https://github.com/ant-design/ant-design/blob/a820046130df85184e53c4aa6edb15a78ae65b87/components/upload/utils.tsx
-   */
-
   React.useEffect(() => {
     if (data) {
       setContent(data.content)
@@ -56,7 +51,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   }, [data, form, formItem]);
 
   const onFinish = async (values: any) => {
-    console.log({ values })
     values.is_show = isShow;
     values.content = content;
     // values.cover = file;
@@ -97,13 +91,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
 
   const handleCoverChange = (info: any) => {
     setFile(info.file)
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      console.log("done")
-    }
   };
 
   const handleCoverRemove = async (file: any) => {
@@ -123,12 +110,11 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   return (
     <>
       <div style={{ marginBottom: 15 }}>
-        <Switch size="small" style={{ marginRight: 10 }} checkedChildren={<EditOutlined />} unCheckedChildren={<EditOutlined />} onClick={() => setEditorSpan(editorSpan === 12 ? 0 : 12)} defaultChecked />
-        <Switch size="small" checkedChildren={<EyeOutlined />} unCheckedChildren={<EyeOutlined />} onClick={() => setPreviewSpan(previewSpan === 12 ? 0 : 12)} defaultChecked />
+        <Switch size="small" data-testid="switch-editor" style={{ marginRight: 10 }} checkedChildren={<EditOutlined />} unCheckedChildren={<EditOutlined />} onClick={() => setEditorSpan(editorSpan === 12 ? 0 : 12)} defaultChecked />
+        <Switch size="small" data-testid="switch-preview" checkedChildren={<EyeOutlined />} unCheckedChildren={<EyeOutlined />} onClick={() => setPreviewSpan(previewSpan === 12 ? 0 : 12)} defaultChecked />
       </div>
       <Row gutter={[30, 20]}>
-        <Col span={previewSpan === 0 && editorSpan !== 0 ? 24 : editorSpan}>
-
+        {editorSpan ? <Col data-testid="col-editor" span={previewSpan === 0 && editorSpan !== 0 ? 24 : editorSpan}>
           <Form
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
@@ -159,7 +145,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 name="cover"
                 listType="picture-card"
                 className="file-uploader"
-                aria-label="input-avator"
+                aria-label="input-cover"
                 showUploadList={false}
                 beforeUpload={beforeUpload}
                 // onPreview={handlePreview}
@@ -169,7 +155,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
               </Upload>
               {/* </ImgCrop> */}
-              {imageUrl ? <><DeleteOutlined aria-label="delete-image" onClick={handleCoverRemove} /></> : <></>}
+              {imageUrl ? <><DeleteOutlined aria-label="delete-cover" onClick={handleCoverRemove} /></> : <></>}
             </Form.Item>
             <Form.Item
               label="Content"
@@ -221,7 +207,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 }}
               >
                 {formItem?.categories?.map((value, index) => {
-                  return <Option label={value.name} aria-label={`option-category-${value}`} key={index} value={value.id}>{value.name}</Option>
+                  return <Option label={value.name} aria-label={`option-category-${value.id}`} key={index} value={value.id}>{value.name}</Option>
                 })}
               </Select>
             </Form.Item>
@@ -253,10 +239,10 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
           </Button>
             </Form.Item>
           </Form>
-        </Col>
-        <Col span={editorSpan === 0 && previewSpan !== 0 ? 24 : previewSpan}>
+        </Col> : null}
+        {previewSpan ? <Col data-testid="col-preview" span={editorSpan === 0 && previewSpan !== 0 ? 24 : previewSpan}>
           <PostPreview title={title} content={content} cover={imageUrl} />
-        </Col>
+        </Col> : null}
       </Row>
       {
         mediaModalVisible &&

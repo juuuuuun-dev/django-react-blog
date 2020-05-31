@@ -21,10 +21,7 @@ describe("Admin posts index", () => {
   // success
   it("Request successful", async () => {
     mocked(list).mockImplementation(
-      (): Promise<AxiosResponse<any>> => {
-        console.log("mock")
-        return Promise.resolve(listAxiosResponse)
-      }
+      (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
@@ -65,7 +62,7 @@ describe("Admin posts index", () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
     );
-    const { utils } = await setUp(initialPath);
+    const { utils, history } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getAllByText("CREATE")).toBeTruthy();
       expect(utils.getByText(listData.results[0].title)).toBeTruthy()
@@ -80,6 +77,8 @@ describe("Admin posts index", () => {
 
     await waitFor(() => {
       expect(utils.getAllByText(listData.categories[0].name)).toBeTruthy();
+      const reg = new RegExp(`category=${listData.categories[0].id}`)
+      expect(history.location.search).toMatch(reg)
     })
   })
 

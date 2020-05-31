@@ -27,16 +27,7 @@ const Create: React.FC = () => {
   const onSubmit = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const params = new FormData();
-      params.append('title', values.title);
-      params.append('content', values.content);
-      params.append('is_show', values.is_show);
-      params.append('category', values.category);
-      params.append('tag', values.tag);
-      if (values.cover) {
-        params.append('cover', values.cover);
-      }
-      const res = await create(params);
+      const res = await create(values);
       if (res.status === 201) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });

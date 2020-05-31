@@ -25,6 +25,7 @@ export const resultData = {
   "id": 1,
   "key": 1,
   "title": "test Abe",
+  "cover": "http://localhost:3000/image.jpg",
   "content": "content Abe",
   "is_show": true,
   "category": categoryList[0].id,

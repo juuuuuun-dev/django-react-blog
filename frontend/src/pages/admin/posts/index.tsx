@@ -13,9 +13,7 @@ import toast from '../../../components/common/toast';
 import { AdminContext } from '../../../context/adminContext';
 import { sortBoolean, sortDate } from '../../../helper/sort';
 import { list } from '../../../service/admin/posts';
-import { FilterList } from '../../../types/common';
 import { PostDetail, PostList } from '../../../types/posts';
-import { TagDetail } from '../../../types/tags';
 
 const Posts: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
