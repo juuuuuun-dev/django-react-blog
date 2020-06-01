@@ -13,10 +13,12 @@ import {
 import {
     defaultDeleteText, defaultErrorText, defaultSuccessText
 } from '../../../../components/common/toast';
+import { getBase64 } from '../../../../helper/file';
 import { destroy, list, retrieve, update } from '../../../../service/admin/posts';
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/posts');
+jest.mock('../../../../helper/file');
 
 // @ts-ignore
 global.document.createRange = () => ({
@@ -46,12 +48,16 @@ global.document.createRange = () => ({
 
 describe("Admin posts edit", () => {
   const initialPath = "/admin/posts";
-
+  const base64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAoACgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJVAAAAAAAAAAAAAAAAAA//Z";
+  const file = new File([base64], "test.jpg", {
+    type: "image/jpeg",
+  });
   beforeEach(() => {
     mocked(list).mockClear()
     mocked(retrieve).mockClear();
     mocked(update).mockClear();
     mocked(destroy).mockClear();
+    mocked(getBase64).mockClear();
   })
 
   mocked(list).mockImplementation(
@@ -66,6 +72,11 @@ describe("Admin posts edit", () => {
   mocked(destroy).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(deleteAxiosResponse)
   );
+  mocked(getBase64).mockImplementation(
+    (_img, callback): void => {
+      callback(base64)
+    }
+  )
 
   it("Request successful", async () => {
     const { utils } = await setUp(initialPath);
@@ -81,6 +92,11 @@ describe("Admin posts edit", () => {
     act(() => {
       fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'Update Abe' } });
     })
+    expect(await utils.findByTestId("post-preview-cover")).toBeTruthy();
+    fireEvent.click(utils.getByLabelText("delete-cover"));
+    fireEvent.change(utils.getByLabelText("input-cover"), { target: { files: [file] } });
+    expect(await utils.findByTestId("post-preview-cover")).toBeTruthy();
+
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText(defaultSuccessText)).toBeTruthy();

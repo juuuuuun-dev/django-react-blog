@@ -1,4 +1,4 @@
-import { Pagination } from "./pagination"
+import { Pagination } from './pagination';
 
 export type TagDetail = {
   id: number;
@@ -12,10 +12,6 @@ export type TagList = Pagination & {
   results: TagDetail[]
 }
 
-export type TagListItem = {
-  text: string;
-  value: string;
-}
 
 export type TagFormProps = {
   data?: TagDetail;

@@ -1,12 +1,13 @@
 import os
 import uuid
-from tags.models import Tag
-from django.db import models
-from users.models import User
-from utils.file import delete_thumb
+
 from categories.models import Category
+from django.db import models
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from tags.models import Tag
+from users.models import User
+from utils.file import delete_thumb
 
 
 def get_file_path(instance, filename):

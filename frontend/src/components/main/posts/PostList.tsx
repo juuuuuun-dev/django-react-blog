@@ -1,10 +1,13 @@
+import '../../../less/main/posts/postList.less';
+
+import { List, Typography } from 'antd';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
-import { List, Typography } from 'antd'
+
+import { ApartmentOutlined, ClockCircleOutlined } from '@ant-design/icons';
+
 import { PostListProps } from '../../../types/posts';
-import { ClockCircleOutlined, ApartmentOutlined } from '@ant-design/icons';
-import '../../../less/main/posts/postList.less'
 
 const PostList: React.FC<PostListProps> = ({ posts }) => {
   const { Paragraph } = Typography;
@@ -40,7 +43,7 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
               </Paragraph>
               <div className="entry-date">
                 <span className="entry-date__item"><ClockCircleOutlined />{item.created_at}</span>
-                <span className="entry-date__item"><ApartmentOutlined />{item.category.name}</span>
+                <span className="entry-date__item"><ApartmentOutlined />{item.category}</span>
               </div>
             </>}
           />

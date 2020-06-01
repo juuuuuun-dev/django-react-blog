@@ -1,6 +1,9 @@
-from rest_framework import serializers
-from tags.serializers import TagListSerializer
+from categories.models import Category
 from categories.serializers import CategoryListSerializer
+from rest_framework import serializers
+from tags.models import Tag, get_all_tags
+from tags.serializers import TagListSerializer
+
 from ..models import Post
 
 
@@ -10,7 +13,11 @@ class AdminPostSerializer(serializers.ModelSerializer):
     username = serializers.PrimaryKeyRelatedField(
         source='user.username', read_only=True)
     tag = TagListSerializer(read_only=True, many=True)
-    category = CategoryListSerializer(read_only=True)
+    # category = CategoryListSerializer(read_only=True)
+    tag = serializers.PrimaryKeyRelatedField(many=True,
+                                             queryset=Tag.objects.all())
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all())
     key = serializers.IntegerField(source='id', read_only=True)
     cover = serializers.FileField(required=False)
     thumb = serializers.ImageField(read_only=True)
@@ -21,7 +28,6 @@ class AdminPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        # fields = '__all__'
         fields = [
             "user",
             "username",

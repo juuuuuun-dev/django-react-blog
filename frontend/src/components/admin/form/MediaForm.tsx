@@ -63,13 +63,6 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
 
   const handleChange = (info: any) => {
     setFile(info.file)
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      console.log("done")
-    }
   };
 
   const handlePreview = () => {

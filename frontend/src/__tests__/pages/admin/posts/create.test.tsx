@@ -1,19 +1,26 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { escapeRegExp } from '../../../../helper/str';
-import { list, create, postFormItem } from '../../../../service/admin/posts';
-import { list as mediaList } from '../../../../service/admin/media';
-import { defaultSuccessText, defaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, createAxiosResponse, formItemAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/posts';
-import { listAxiosResponse as mediaListAxiosResponse } from '../../../../__mocks__/serviceResponse/media';
-import { error500AxiosResponse } from '../../../../__mocks__/serviceResponse/common';
-import { setUp } from '../../../../__mocks__/adminSetUp';
+import { mocked } from 'ts-jest/utils';
 
+import { act, cleanup, findByTestId, fireEvent, waitFor } from '@testing-library/react';
+
+import { setUp } from '../../../../__mocks__/adminSetUp';
+import { error500AxiosResponse } from '../../../../__mocks__/serviceResponse/common';
+import {
+    listAxiosResponse as mediaListAxiosResponse
+} from '../../../../__mocks__/serviceResponse/media';
+import {
+    createAxiosResponse, error400AxiosResponse, formItemAxiosResponse, listAxiosResponse, listData
+} from '../../../../__mocks__/serviceResponse/posts';
+import { defaultErrorText, defaultSuccessText } from '../../../../components/common/toast';
+import { getBase64 } from '../../../../helper/file';
+import { escapeRegExp } from '../../../../helper/str';
+import { list as mediaList } from '../../../../service/admin/media';
+import { create, list, postFormItem } from '../../../../service/admin/posts';
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/posts');
 jest.mock('../../../../service/admin/media');
+jest.mock('../../../../helper/file');
 
 // @ts-ignore
 global.document.createRange = () => ({
@@ -43,11 +50,17 @@ global.document.createRange = () => ({
 
 describe("Admin posts create", () => {
   const initialPath = "/admin/posts";
+  const base64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAoACgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJVAAAAAAAAAAAAAAAAAA//Z";
+  const file = new File([base64], "tets.jpg", {
+    type: "image/jpeg",
+  });
+
   beforeEach(() => {
     mocked(list).mockClear()
     mocked(create).mockClear();
     mocked(postFormItem).mockClear();
     mocked(mediaList).mockClear();
+    mocked(getBase64).mockClear();
   })
 
   mocked(list).mockImplementation(
@@ -62,6 +75,11 @@ describe("Admin posts create", () => {
   mocked(mediaList).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(mediaListAxiosResponse)
   );
+  mocked(getBase64).mockImplementation(
+    (_img, callback): void => {
+      callback(base64)
+    }
+  )
 
   it("Create Successful", async () => {
     mocked(postFormItem).mockImplementation(
@@ -79,6 +97,8 @@ describe("Admin posts create", () => {
     });
     // title
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
+    // cover
+    fireEvent.change(utils.getByLabelText("input-cover"), { target: { files: [file] } });
     // content
     const contentTitle = "create";
     await waitFor(() => {
@@ -111,6 +131,45 @@ describe("Admin posts create", () => {
     await waitFor(() => {
       expect(utils.getAllByText(defaultSuccessText)).toBeTruthy();
     });
+  })
+
+  it("Uploading not image", async () => {
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId("create-btn")).toBeTruthy();
+    })
+    fireEvent.click(utils.getByTestId("create-btn"));
+    await waitFor(() => {
+      expect(utils.getAllByText("Post create")).toBeTruthy();
+    });
+
+    const text = new File(['abe'], "test.txt", {
+      type: "text/plain",
+    });
+    fireEvent.change(utils.getByLabelText("input-cover"), { target: { files: [text] } });
+    await waitFor(() => {
+      expect(utils.getByText("You can only upload JPG/PNG file!")).toBeTruthy();
+    });
+  })
+
+  it("Swich preview", async () => {
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId("create-btn")).toBeTruthy();
+    })
+    fireEvent.click(utils.getByTestId("create-btn"));
+    await waitFor(() => {
+      expect(utils.getAllByText("Post create")).toBeTruthy();
+    });
+
+    fireEvent.click(utils.getByTestId("switch-editor"));
+    expect(await utils.queryAllByTestId('col-editor').length).toBe(0)
+    fireEvent.click(utils.getByTestId("switch-editor"));
+    expect(await utils.queryAllByTestId('col-editor').length).toBe(1)
+    fireEvent.click(utils.getByTestId("switch-preview"));
+    expect(await utils.queryAllByTestId('col-preview').length).toBe(0)
+    fireEvent.click(utils.getByTestId("switch-preview"));
+    expect(await utils.queryAllByTestId('col-preview').length).toBe(1)
   })
 
   // 500 error

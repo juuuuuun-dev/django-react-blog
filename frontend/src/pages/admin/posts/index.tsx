@@ -1,49 +1,63 @@
+import { Input, Table, Tag } from 'antd';
+import { keyBy } from 'lodash';
 import React from 'react';
-import { AdminContext } from '../../../context/adminContext';
-import { list } from '../../../service/admin/posts';
-import { TagListItem, TagDetail } from '../../../types/tags';
-import { Table, Input, Tag } from 'antd';
-import { PostList, PostDetail } from '../../../types/posts';
-import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
-import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
 import { useLocation } from 'react-router-dom';
+import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
+
 import { CheckOutlined } from '@ant-design/icons';
-import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
+
+import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
+import FilterSelectColumn from '../../../components/admin/FilterSelectColumn';
+import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import toast from '../../../components/common/toast';
-import { sortDate, sortBoolean, sortTextLength } from '../../../helper/sort';
+import { AdminContext } from '../../../context/adminContext';
+import { sortBoolean, sortDate } from '../../../helper/sort';
+import { list } from '../../../service/admin/posts';
+import { PostDetail, PostList } from '../../../types/posts';
 
 const Posts: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
-  const [query, setQuery] = useQueryParams({ page: NumberParam, search: StringParam });
+  const [query, setQuery] = useQueryParams({ page: NumberParam, category: NumberParam, search: StringParam });
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const [data, setData] = React.useState<PostList | undefined>();
-  const [tags, setTags] = React.useState<TagListItem[]>([]);
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
+
+  const categoryById: any = React.useMemo(() => {
+    return keyBy(data?.categories, 'id')
+  }, [data])
+
+
+  const tagById: any = React.useMemo(() => {
+    return keyBy(data?.tags, 'id')
+  }, [data])
+
+  // const tags: FilterList[] = React.useMemo(() => {
+  //   const arr: FilterList[] = [];
+  //   data?.tags.forEach((value: TagDetail) => {
+  //     arr.push({
+  //       text: value.name,
+  //       value: value.id,
+  //     })
+  //   });
+  //   return arr;
+  // }, [data])
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await list({ page: query.page, search: query.search });
+      const res = await list({ page: query.page, category: query.category, search: query.search });
       setData(res.data);
-      const tags: TagListItem[] = [];
-      res.data.tags.forEach((value: TagDetail) => {
-        tags.push({
-          text: value.name,
-          value: value.name,
-        })
-      });
-      setTags(tags);
     } catch {
       toast({ type: 'ERROR' });
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  }, [dispatch, query.page, query.search]);
+  }, [dispatch, query.category, query.page, query.search]);
 
   React.useEffect(() => {
     if (state.hasToken) fetchData();
-  }, [fetchData, state.hasToken, query.page, query.search]);
+  }, [fetchData, state.hasToken, query]);
 
   const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
     confirm();
@@ -54,14 +68,24 @@ const Posts: React.FC = () => {
   const handleQuerySearch = (search: string): void => {
     setQuery({
       page: 1,
-      search: search
+      search: search,
+      category: undefined,
+    }, 'push');
+  }
+
+  const handleCategoryChange = (value: number | undefined): void => {
+    setQuery({
+      category: value,
+      page: 1,
+      search: undefined,
     }, 'push');
   }
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
     setQuery({
       page: page,
-      search: query.search
+      search: query.search || undefined,
+      category: query.category || undefined,
     }, 'push')
   }
   const handleReset = (clearFilters: () => void) => {
@@ -92,9 +116,18 @@ const Posts: React.FC = () => {
       dataIndex: 'category',
       key: 'category',
       width: '15%',
-      sorter: (a: PostDetail, b: PostDetail) => sortTextLength(a.category.name, b.category.name),
-      render: (text: { id: number, name: string }) =>
-        (<>{text.name}</>)
+      ...FilterSelectColumn({
+        dataIndex: 'category',
+        selected: query.category,
+        listItem: data?.categories,
+        handleChange: handleCategoryChange,
+      }),
+      render: (text: number) => {
+        if (categoryById && categoryById[text]) {
+          return <>{categoryById[text].name}</>
+        }
+        return <>{text}</>
+      }
     },
     {
       title: 'tag',
@@ -102,23 +135,26 @@ const Posts: React.FC = () => {
       dataIndex: 'tag',
       key: 'tag',
       width: '15%',
-      filters: tags,
-      onFilter: (value: string | number | boolean, record: PostDetail) => {
-        if (record.tag.length) {
-          let includeFlag: boolean = false;
-          record.tag.forEach((obj: any) => {
-            if (obj.name.includes(value)) {
-              includeFlag = true;
-            }
-          })
-          return includeFlag;
-        } else {
-          return false;
-        }
-      },
+      // filters: tags,
+      // onFilter: (value: string | number | boolean, record: PostDetail) => {
+      //   if (record.tag.length) {
+      //     let includeFlag: boolean = false;
+      //     record.tag.forEach((obj: any) => {
+      //       if (obj.name.includes(value)) {
+      //         includeFlag = true;
+      //       }
+      //     })
+      //     return includeFlag;
+      //   } else {
+      //     return false;
+      //   }
+      // },
       render: (text: Array<any>) =>
-        (<>{text.map((value, index) => {
-          return <Tag key={index}>{value.name}</Tag>
+        (<>{tagById && text.map((value, index) => {
+          if (tagById[value]) {
+            return <Tag key={index}>{tagById[value].name}</Tag>
+          }
+          return null
         })}</>
         )
     },
@@ -160,6 +196,7 @@ const Posts: React.FC = () => {
         search={query.search}
         handleQuerySearch={handleQuerySearch}
       />
+
       <Table
         className="table"
         columns={columns}
@@ -168,6 +205,7 @@ const Posts: React.FC = () => {
           total: data?.count,
           pageSize: state.pageSize,
           defaultCurrent: query.page || 1,
+          current: query.page || 1,
           onChange: handlePageChange,
         }} />
     </>

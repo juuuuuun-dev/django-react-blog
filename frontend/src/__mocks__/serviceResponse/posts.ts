@@ -25,11 +25,12 @@ export const resultData = {
   "id": 1,
   "key": 1,
   "title": "test Abe",
+  "cover": "http://localhost:3000/image.jpg",
   "content": "content Abe",
   "is_show": true,
-  "category": categoryList[0],
+  "category": categoryList[0].id,
   "tag": [
-    tagList[0],
+    tagList[0].id,
   ],
   "created_at": "2020-02-02",
   "updated_at": "2020-02-02",
@@ -41,9 +42,9 @@ export const resultData2 = {
   "title": "test Asou",
   "content": "content Asou",
   "is_show": true,
-  "category": categoryList[1],
+  "category": categoryList[1].id,
   "tag": [
-    tagList[1],
+    tagList[1].id,
   ],
   "created_at": "2020-02-03",
   "updated_at": "2020-02-03",
@@ -53,6 +54,7 @@ export const listData = {
   "count": 1,
   "results": [resultData, resultData2],
   "tags": tagList,
+  "categories": categoryList,
 }
 
 export const updateResultData = {

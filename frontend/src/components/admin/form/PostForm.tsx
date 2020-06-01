@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import { RcFile } from 'antd/lib/upload';
-import ReactDOMServer from "react-dom/server";
-import { Form, Input, Button, Switch, Select, Upload, Row, Col } from 'antd';
-import { PostFormProps } from '../../../types/posts';
-import MediaModal from "../../admin/MediaModal";
-import PostDetailContent from "../../../components/main/posts/PostDetailContent"
-import { get } from 'local-storage';
-import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
-import { getBase64 } from '../../../helper/file';
-import toast from '../../../components/common/toast';
-import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import PostPreview from '../../../components/admin/PostPreview';
 
+import { Button, Col, Form, Input, Row, Select, Switch, Upload } from 'antd';
+import { RcFile } from 'antd/lib/upload';
+import React, { useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
+import SimpleMDE from 'react-simplemde-editor';
+
+import {
+    DeleteOutlined, EditOutlined, EyeOutlined, LoadingOutlined, PlusOutlined
+} from '@ant-design/icons';
+
+import PostPreview from '../../../components/admin/PostPreview';
+import toast from '../../../components/common/toast';
+import PostDetailContent from '../../../components/main/posts/PostDetailContent';
+import { getBase64 } from '../../../helper/file';
+import { PostFormProps } from '../../../types/posts';
+import MediaModal from '../../admin/MediaModal';
 
 const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) => {
   const { Option } = Select;
@@ -29,11 +32,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   const [editorSpan, setEditorSpan] = useState<number>(12);
   const [previewSpan, setPreviewSpan] = useState<number>(12);
 
-  /**
-   * @todo
-   * https://github.com/ant-design/ant-design/blob/a820046130df85184e53c4aa6edb15a78ae65b87/components/upload/utils.tsx
-   */
-
   React.useEffect(() => {
     if (data) {
       setContent(data.content)
@@ -44,20 +42,21 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
           title: data.title,
           content: data.content,
           is_show: data.is_show || false,
-          category: data.category.id,
-          tag: data.tag.map((value) => {
-            return value.id
-          })
+          category: data.category,
+          tag: data.tag,
         },
       );
       setIsShow(data.is_show || false)
     }
-  }, [data, form]);
+  }, [data, form, formItem]);
 
   const onFinish = async (values: any) => {
     values.is_show = isShow;
     values.content = content;
-    values.cover = file;
+    // values.cover = file;
+    if (file) {
+      values.cover = imageUrl;
+    }
     onSubmit(values)
   };
 
@@ -92,13 +91,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
 
   const handleCoverChange = (info: any) => {
     setFile(info.file)
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      console.log("done")
-    }
   };
 
   const handleCoverRemove = async (file: any) => {
@@ -118,12 +110,11 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   return (
     <>
       <div style={{ marginBottom: 15 }}>
-        <Switch size="small" style={{ marginRight: 10 }} checkedChildren={<EditOutlined />} unCheckedChildren={<EditOutlined />} onClick={() => setEditorSpan(editorSpan === 12 ? 0 : 12)} defaultChecked />
-        <Switch size="small" checkedChildren={<EyeOutlined />} unCheckedChildren={<EyeOutlined />} onClick={() => setPreviewSpan(previewSpan === 12 ? 0 : 12)} defaultChecked />
+        <Switch size="small" data-testid="switch-editor" style={{ marginRight: 10 }} checkedChildren={<EditOutlined />} unCheckedChildren={<EditOutlined />} onClick={() => setEditorSpan(editorSpan === 12 ? 0 : 12)} defaultChecked />
+        <Switch size="small" data-testid="switch-preview" checkedChildren={<EyeOutlined />} unCheckedChildren={<EyeOutlined />} onClick={() => setPreviewSpan(previewSpan === 12 ? 0 : 12)} defaultChecked />
       </div>
       <Row gutter={[30, 20]}>
-        <Col span={previewSpan === 0 && editorSpan !== 0 ? 24 : editorSpan}>
-
+        {editorSpan ? <Col data-testid="col-editor" span={previewSpan === 0 && editorSpan !== 0 ? 24 : editorSpan}>
           <Form
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
@@ -154,7 +145,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 name="cover"
                 listType="picture-card"
                 className="file-uploader"
-                aria-label="input-avator"
+                aria-label="input-cover"
                 showUploadList={false}
                 beforeUpload={beforeUpload}
                 // onPreview={handlePreview}
@@ -164,7 +155,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
               </Upload>
               {/* </ImgCrop> */}
-              {imageUrl ? <><DeleteOutlined aria-label="delete-image" onClick={handleCoverRemove} /></> : <></>}
+              {imageUrl ? <><DeleteOutlined aria-label="delete-cover" onClick={handleCoverRemove} /></> : <></>}
             </Form.Item>
             <Form.Item
               label="Content"
@@ -207,7 +198,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 aria-label="select-category"
                 style={{ width: 200 }}
                 placeholder="Select a category"
-                optionFilterProp="children"
+                // optionLabelProp="label"
                 filterOption={(input, option) => {
                   if (option) {
                     return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -216,9 +207,8 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 }}
               >
                 {formItem?.categories?.map((value, index) => {
-                  return <Option aria-label={`option-category-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+                  return <Option label={value.name} aria-label={`option-category-${value.id}`} key={index} value={value.id}>{value.name}</Option>
                 })}
-
               </Select>
             </Form.Item>
             <Form.Item
@@ -232,7 +222,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 aria-label="select-tag"
               >
                 {formItem?.tags.map((value, index) => {
-                  return <Option aria-label={`option-tag-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+                  return <Option label={value.name} aria-label={`option-tag-${value.id}`} key={index} value={value.id}>{value.name}</Option>
                 })}
               </Select>
             </Form.Item>
@@ -249,10 +239,10 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
           </Button>
             </Form.Item>
           </Form>
-        </Col>
-        <Col span={editorSpan === 0 && previewSpan !== 0 ? 24 : previewSpan}>
+        </Col> : null}
+        {previewSpan ? <Col data-testid="col-preview" span={editorSpan === 0 && previewSpan !== 0 ? 24 : previewSpan}>
           <PostPreview title={title} content={content} cover={imageUrl} />
-        </Col>
+        </Col> : null}
       </Row>
       {
         mediaModalVisible &&
