@@ -2,16 +2,17 @@ import re
 
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 
-def cache_key_stringfiy(base_key, query_dict):
+def cache_key_stringfiy(base_key, query_dict=None):
     result = [base_key]
-    for key, value in query_dict.items():
-        if isinstance(value, str):
-            value = re.sub(' |　', '_', value)
-        result.append(f'{key}-{value}')
+    if query_dict:
+        for key, value in query_dict.items():
+            if isinstance(value, str):
+                value = re.sub(' |　', '_', value)
+            result.append(f'{key}-{value}')
     return ':'.join(result)
 
 
@@ -33,7 +34,7 @@ class CacheModelViewSet(viewsets.ModelViewSet):
     - category=1&tag=1&page=1 # not working
     """
     default_cache_time = 60
-    query_sort_order = ['category', 'tag', 'search', 'page']
+    query_param_list = ['category', 'tag', 'page']
 
     def list(self, request):
         queryset = self.get_list_queryset(
@@ -62,6 +63,17 @@ class CacheModelViewSet(viewsets.ModelViewSet):
         cache.set(key_name, instance, self.default_cache_time)
         return instance
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data, context={
+                'request': request})
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        # cache
+        self.delete_index_cache(base_key=self.base_cache_key)
+        self.delete_list_query_cache(base_key=self.base_cache_key)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     def update(self, request, pk=None):
         queryset = self.queryset
         instance = get_object_or_404(queryset, pk=pk)
@@ -69,6 +81,7 @@ class CacheModelViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         # delete cache
+        self.delete_index_cache(base_key=self.base_cache_key)
         self.delete_list_query_cache(base_key=self.base_cache_key)
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
         return Response(serializer.data)
@@ -92,7 +105,7 @@ class CacheModelViewSet(viewsets.ModelViewSet):
 
     def sort_query_dict(self, query_dict):
         sorted_dict = {}
-        for key in self.query_sort_order:
+        for key in self.query_param_list:
             if key in query_dict:
                 sorted_dict[key] = query_dict[key]
         return sorted_dict
@@ -126,18 +139,23 @@ class CacheModelViewSet(viewsets.ModelViewSet):
         page_max = cache.get(page_max_key)
         if not page_max:
             return
-        for key in self.query_sort_order:
+        for key in self.query_param_list:
             if key == 'page':
-                self.delete_page_only_cache(base_key, page_max)
+                self.delete_page_only_cache(base_key, int(page_max))
             else:
                 max_key = get_max_num_key(base_key, key)
                 max = cache.get(max_key)
                 if max:
-                    self.delete_cache_max_number(base_key, key, max, page_max)
+                    self.delete_cache_max_number(
+                        base_key, key, int(max), int(page_max))
+
+    def delete_index_cache(self, base_key):
+        key_name = cache_key_stringfiy(base_key)
+        cache.delete(key_name)
 
     def delete_page_only_cache(self, base_key, max):
         count = 1
-        while int(max) >= count:
+        while max >= count:
             key_name = cache_key_stringfiy(base_key, query_dict={
                 'page': count,
             })
@@ -146,17 +164,21 @@ class CacheModelViewSet(viewsets.ModelViewSet):
 
     def delete_cache_max_number(self, base_key, query_key, max, page_max):
         count = 1
-        page_count = 1
-        while int(max) >= count:
-            print(f"count: {count}")
-            while int(page_max) >= page_count:
-                key_name = cache_key_stringfiy(base_key, query_dict={
-                    query_key: count,
-                    'page': page_count,
-                })
-                print(key_name)
-                cache.delete(key_name)
-                page_count += 1
+        while max >= count:
+            page_count = 1
+            key_name = cache_key_stringfiy(base_key, query_dict={
+                query_key: count,
+                'page': page_count,
+            })
+            cache.delete(key_name)
+            if page_max > 1:
+                while int(page_max) >= page_count:
+                    key_name = cache_key_stringfiy(base_key, query_dict={
+                        query_key: count,
+                        'page': page_count,
+                    })
+                    cache.delete(key_name)
+                    page_count += 1
             count += 1
 
     def delete_detail_cache(self, base_key, pk):

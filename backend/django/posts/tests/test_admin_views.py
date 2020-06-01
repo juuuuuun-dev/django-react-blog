@@ -9,6 +9,7 @@ from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 from tags.factories import TagFactory
 from users.factories import UserFactory
+from utils.cache_views import cache_key_stringfiy
 from utils.file import delete_thumb
 
 from ..models import Post
@@ -56,15 +57,59 @@ class AdminPostViewSetTestCase(APITestCase):
             reverse("posts:admin-post-list"),
             "?",
             urlencode({"category": category2.id}),
+            "&",
+            urlencode({"page": 1}),
         ])
-        print(api)
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.data['results'][0]['title'], post2.title)
         self.assertEqual(response.data['results'][0]['category'], category2.id)
         self.assertNotEqual(response.data['results'][0]['title'], post.title)
+
+    def test_get_filter_category_with_cache(self):
+        tag = TagFactory.create(name="tagdayo")
+        TagFactory.create(name="tag2")
+        category = CategoryFactory.create(name="test")
+        category2 = CategoryFactory.create(name="category2")
+        post = PostFactory.create(user=self.user, tag=[tag], category=category)
+        post2 = PostFactory.create(
+            user=self.user, tag=[tag], category=category2)
+        api = "".join([
+            reverse("posts:admin-post-list"),
+            "?",
+            urlencode({"category": category2.id}),
+            "&",
+            urlencode({"page": 1}),
+        ])
+        cache_key = cache_key_stringfiy(base_key='posts', query_dict={
+            'category': category2.id,
+            'page': 1,
+        })
+        cache_data = cache.get(cache_key)
+        self.assertIsNone(cache_data)
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['title'], post2.title)
+        # cache
+        cache_data = cache.get(cache_key)
+        self.assertTrue(cache_data.exists())
+        # Update and delete cache
+        post_data = {
+            "title": "update",
+            "content": "  # update",
+            "is_show": False,
+            "category": category2.id,
+        }
+        update_api = reverse(
+            "posts:admin-post-detail",
+            kwargs={
+                "pk": post2.id})
+        update_response = self.client.put(update_api, post_data)
+        self.assertEqual(update_response.status_code, status.HTTP_200_OK)
+        after_cache_data = cache.get(cache_key)
+        self.assertIsNone(after_cache_data)
 
     def test_get_filter_serach_title(self):
         tag = TagFactory.create(name="tagdayo")
@@ -79,10 +124,8 @@ class AdminPostViewSetTestCase(APITestCase):
             "?",
             urlencode({"search": post2.title}),
         ])
-        print(api)
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.data['results'][0]['title'], post2.title)
         self.assertEqual(response.data['results'][0]['category'], category2.id)
@@ -128,7 +171,6 @@ class AdminPostViewSetTestCase(APITestCase):
             category2.name)
 
     def test_post(self):
-        cache.clear()
         category = CategoryFactory.create(name="test")
         tag = TagFactory.create(name="test")
         tag2 = TagFactory.create(name="test2")

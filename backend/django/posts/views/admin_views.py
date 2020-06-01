@@ -4,7 +4,7 @@ from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from markdown import markdown
-from rest_framework import filters, status, viewsets
+from rest_framework import filters, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from tags.models import get_all_tags
@@ -66,6 +66,7 @@ class AdminPostViewSet(CacheModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(user=user, plain_content=plain)
         # cache
+        self.delete_index_cache(base_key=self.base_cache_key)
         self.delete_list_query_cache(base_key=self.base_cache_key)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -73,7 +74,6 @@ class AdminPostViewSet(CacheModelViewSet):
         queryset = self.queryset
         instance = get_object_or_404(queryset, pk=pk)
         cp = request.data.copy()
-
         if 'cover' in self.request.data:
             post = Post.objects.get(id=self.kwargs['pk'])
             delete_thumb(post.cover.name)
@@ -86,6 +86,7 @@ class AdminPostViewSet(CacheModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(plain_content=plain)
         # delete cache
+        self.delete_index_cache(base_key=self.base_cache_key)
         self.delete_list_query_cache(base_key=self.base_cache_key)
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
         return Response(serializer.data)

@@ -20,9 +20,8 @@ export const update = async (id: string | undefined, data: PostDetail) => {
   // return axios.put(`${endPoint}${id}/`, data, { headers })
 }
 
-export const create = async (data: FormData) => {
-  const headers = { "content-type": "multipart/form-data" };
-  return axios.post(`${endPoint}`, data, { headers })
+export const create = async (data: PostDetail) => {
+  return axios.post(`${endPoint}`, data)
 }
 
 export const postFormItem = async () => {
