@@ -1,8 +1,7 @@
 from categories.models import Category
+from posts.models import Post
 from rest_framework import serializers
-from tags.models import Tag, get_all_tags
-
-from ..models import Post
+from tags.models import Tag
 
 
 class AdminPostSerializer(serializers.ModelSerializer):
@@ -11,7 +10,7 @@ class AdminPostSerializer(serializers.ModelSerializer):
     # username = serializers.PrimaryKeyRelatedField(
     #     source='user.username', read_only=True)
     tag = serializers.PrimaryKeyRelatedField(many=True,
-                                             queryset=get_all_tags())
+                                             queryset=Tag.objects.all())
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all())
     key = serializers.IntegerField(source='id', read_only=True)
