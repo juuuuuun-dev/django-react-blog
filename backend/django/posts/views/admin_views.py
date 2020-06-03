@@ -4,32 +4,30 @@ from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from markdown import markdown
+from posts.models import Post
+from posts.paginatin import PostPagination
+from posts.serializers.admin_serializers import AdminPostSerializer
 from rest_framework import filters, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from tags.models import get_all_tags
 from tags.serializers import TagListSerializer
 from users.models import User
-from utils.cache_views import CacheModelViewSet
+from utils import cache_views
 from utils.file import base64decode, delete_thumb
 
-from ..models import Post
-from ..paginatin import PostPagination
-from ..serializers.admin_serializers import AdminPostSerializer
 
-
-class AdminPostViewSet(CacheModelViewSet):
+class AdminPostViewSet(cache_views.CacheModelViewSet):
     queryset = Post.objects.all().order_by('-id')
     permission_classes = (IsAuthenticated,)
     serializer_class = AdminPostSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['title', 'plain_content']
-    filterset_fields = ['category']
+    filterset_fields = ['category', 'tag']
     pagination_class = PostPagination
     base_cache_key = 'posts'
 
     def list(self, request):
-        # queryset = self.filter_queryset(self.queryset.filter())
         queryset = self.get_list_queryset(
             request=request, base_key=self.base_cache_key)
 
@@ -40,9 +38,9 @@ class AdminPostViewSet(CacheModelViewSet):
             serializer.data)
 
     def retrieve(self, request, pk=None):
-        queryset = self.queryset
-        post = get_object_or_404(queryset, pk=pk)
-        serializer = AdminPostSerializer(post, context={
+        queryset = self.get_detail_queryset(
+            base_key=self.base_cache_key, request=request, pk=pk)
+        serializer = AdminPostSerializer(queryset, context={
             "request": request})
         data = self.get_tag_and_category_list()
         data["post"] = serializer.data
