@@ -9,11 +9,12 @@ from utils import file
 
 
 def get_all_media():
-    result = cache.get(Media.base_cache_key)
+    base_cache_key = 'media'
+    result = cache.get(base_cache_key)
     if result:
         return result
     instance = Media.objects.all().order_by('-id')
-    cache.set(Media.base_cache_key, instance)
+    cache.set(base_cache_key, instance)
     return instance
 
 
@@ -23,7 +24,6 @@ def get_file_path(instance, filename):
 
 
 class Media(models.Model):
-    base_cache_key = 'media'
 
     class Meta:
         db_table = 'media'
