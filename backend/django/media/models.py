@@ -1,21 +1,10 @@
 import os
 import uuid
 
-from django.core.cache import cache
 from django.db import models
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from utils import file
-
-
-def get_all_media():
-    base_cache_key = 'media'
-    result = cache.get(base_cache_key)
-    if result:
-        return result
-    instance = Media.objects.all().order_by('-id')
-    cache.set(base_cache_key, instance)
-    return instance
 
 
 def get_file_path(instance, filename):
