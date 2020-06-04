@@ -1,19 +1,14 @@
 from categories.models import Category
-from categories.serializers import CategoryListSerializer
+from posts.models import Post
 from rest_framework import serializers
-from tags.models import Tag, get_all_tags
-from tags.serializers import TagListSerializer
-
-from ..models import Post
+from tags.models import Tag
 
 
 class AdminPostSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
-        read_only=True, source="post")
-    username = serializers.PrimaryKeyRelatedField(
-        source='user.username', read_only=True)
-    tag = TagListSerializer(read_only=True, many=True)
-    # category = CategoryListSerializer(read_only=True)
+        read_only=True)
+    # username = serializers.PrimaryKeyRelatedField(
+    #     source='user.username', read_only=True)
     tag = serializers.PrimaryKeyRelatedField(many=True,
                                              queryset=Tag.objects.all())
     category = serializers.PrimaryKeyRelatedField(
@@ -30,7 +25,6 @@ class AdminPostSerializer(serializers.ModelSerializer):
         model = Post
         fields = [
             "user",
-            "username",
             "id",
             "key",
             "title",

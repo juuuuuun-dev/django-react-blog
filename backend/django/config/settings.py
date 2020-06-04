@@ -104,7 +104,8 @@ CACHES = {
 
 ROOT_URLCONF = 'config.urls'
 
-# REST
+# testing page_size is 1
+PAGE_SIZE = env.int('PAGE_SIZE', 20) if not TESTING else 1
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
@@ -114,7 +115,7 @@ REST_FRAMEWORK = {
     # ],
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': env.int('PAGE_SIZE', 20),
+    'PAGE_SIZE': PAGE_SIZE,
 }
 
 

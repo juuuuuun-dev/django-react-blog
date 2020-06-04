@@ -17,7 +17,7 @@ import { PostDetail, PostList } from '../../../types/posts';
 
 const Posts: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
-  const [query, setQuery] = useQueryParams({ page: NumberParam, category: NumberParam, search: StringParam });
+  const [query, setQuery] = useQueryParams({ category: NumberParam, tag: NumberParam, search: StringParam, page: NumberParam });
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const [data, setData] = React.useState<PostList | undefined>();
@@ -33,27 +33,16 @@ const Posts: React.FC = () => {
     return keyBy(data?.tags, 'id')
   }, [data])
 
-  // const tags: FilterList[] = React.useMemo(() => {
-  //   const arr: FilterList[] = [];
-  //   data?.tags.forEach((value: TagDetail) => {
-  //     arr.push({
-  //       text: value.name,
-  //       value: value.id,
-  //     })
-  //   });
-  //   return arr;
-  // }, [data])
-
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await list({ page: query.page, category: query.category, search: query.search });
+      const res = await list({ page: query.page, category: query.category, tag: query.tag, search: query.search });
       setData(res.data);
     } catch {
       toast({ type: 'ERROR' });
     }
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  }, [dispatch, query.category, query.page, query.search]);
+  }, [dispatch, query.category, query.tag, query.page, query.search]);
 
   React.useEffect(() => {
     if (state.hasToken) fetchData();
@@ -67,25 +56,37 @@ const Posts: React.FC = () => {
 
   const handleQuerySearch = (search: string): void => {
     setQuery({
-      page: 1,
-      search: search,
       category: undefined,
+      tag: undefined,
+      search: search,
+      page: 1,
     }, 'push');
   }
 
   const handleCategoryChange = (value: number | undefined): void => {
     setQuery({
       category: value,
-      page: 1,
+      tag: undefined,
       search: undefined,
+      page: 1,
+    }, 'push');
+  }
+
+  const handleTagChange = (value: number | undefined): void => {
+    setQuery({
+      category: undefined,
+      tag: value,
+      search: undefined,
+      page: 1,
     }, 'push');
   }
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
     setQuery({
+      category: query.category || undefined,
+      tag: query.tag || undefined,
       page: page,
       search: query.search || undefined,
-      category: query.category || undefined,
     }, 'push')
   }
   const handleReset = (clearFilters: () => void) => {
@@ -135,20 +136,12 @@ const Posts: React.FC = () => {
       dataIndex: 'tag',
       key: 'tag',
       width: '15%',
-      // filters: tags,
-      // onFilter: (value: string | number | boolean, record: PostDetail) => {
-      //   if (record.tag.length) {
-      //     let includeFlag: boolean = false;
-      //     record.tag.forEach((obj: any) => {
-      //       if (obj.name.includes(value)) {
-      //         includeFlag = true;
-      //       }
-      //     })
-      //     return includeFlag;
-      //   } else {
-      //     return false;
-      //   }
-      // },
+      ...FilterSelectColumn({
+        dataIndex: 'tag',
+        selected: query.tag,
+        listItem: data?.tags,
+        handleChange: handleTagChange,
+      }),
       render: (text: Array<any>) =>
         (<>{tagById && text.map((value, index) => {
           if (tagById[value]) {

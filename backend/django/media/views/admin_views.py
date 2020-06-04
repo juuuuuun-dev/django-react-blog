@@ -1,20 +1,20 @@
-from ..models import Media
-from ..serializers.admin_serializers import AdminMediaSerializer
-from rest_framework import viewsets
-from rest_framework import generics
-
+from rest_framework import filters, generics, viewsets
 from rest_framework.permissions import IsAuthenticated
-from ..pagination import MediaPagination
-from rest_framework import filters
+from utils import cache_views
 from utils.file import delete_thumb
 
+from ..models import Media
+from ..pagination import MediaPagination
+from ..serializers.admin_serializers import AdminMediaSerializer
 
-class AdminMediaViewSet(viewsets.ModelViewSet):
+
+class AdminMediaViewSet(cache_views.CacheModelViewSet):
     queryset = Media.objects.all().order_by('-id')
     permission_classes = (IsAuthenticated,)
     serializer_class = AdminMediaSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
+    base_cache_key = 'media'
 
     def perform_update(self, serializer):
         """
