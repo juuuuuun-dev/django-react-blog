@@ -45,6 +45,6 @@ class Media(models.Model):
         result = cache.get(cls.base_cache_key)
         if result:
             return result
-        instance = Media.objects.all().order_by('-id')
+        instance = Media.objects.all()
         cache.set(cls.base_cache_key, instance)
         return instance
