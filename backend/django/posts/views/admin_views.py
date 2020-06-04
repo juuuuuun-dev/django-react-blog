@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from categories.models import get_all_categories
+from categories.models import Category
 from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -8,7 +8,7 @@ from posts.models import Post
 from posts.paginatin import PostPagination
 from posts.serializers import admin_serializers
 from rest_framework import filters, permissions, response, status
-from tags.models import get_all_tags
+from tags.models import Tag
 from tags.serializers import TagListSerializer
 from users.models import User
 from utils import cache_views, file
@@ -96,9 +96,9 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         return plain
 
     def get_tag_and_category_list(self):
-        tagSerializer = TagListSerializer(get_all_tags(), many=True)
+        tagSerializer = TagListSerializer(Tag.get_all(), many=True)
         categorySerializer = CategoryListSerializer(
-            get_all_categories(), many=True)
+            Category.get_all(), many=True)
         return {
             "tags": tagSerializer.data,
             "categories": categorySerializer.data

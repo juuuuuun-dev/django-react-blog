@@ -1,16 +1,16 @@
-from categories.models import get_all_categories
+from categories.models import Category
 from categories.serializers import CategoryListSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from tags.models import get_all_tags
+from tags.models import Tag
 from tags.serializers import TagListSerializer
 
 
 class PostPagination(PageNumberPagination):
     def get_paginated_response(self, data):
-        tagSerializer = TagListSerializer(get_all_tags(), many=True)
+        tagSerializer = TagListSerializer(Tag.get_all(), many=True)
         categorySerializer = CategoryListSerializer(
-            get_all_categories(), many=True)
+            Category.get_all(), many=True)
         return Response({
             'links': {
                 'next': self.get_next_link(),

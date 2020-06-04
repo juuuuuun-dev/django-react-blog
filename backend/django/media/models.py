@@ -41,10 +41,10 @@ class Media(models.Model):
         super().delete(*args, **kwargs)
 
     @classmethod
-    def get_all(self):
-        result = cache.get(self.base_cache_key)
+    def get_all(cls):
+        result = cache.get(cls.base_cache_key)
         if result:
             return result
         instance = Media.objects.all().order_by('-id')
-        cache.set(self.base_cache_key, instance)
+        cache.set(cls.base_cache_key, instance)
         return instance
