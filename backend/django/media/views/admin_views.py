@@ -1,4 +1,3 @@
-from django.core.cache import cache
 from media.models import Media
 from media.serializers import admin_serializers
 from rest_framework import filters, generics, permissions
@@ -23,17 +22,7 @@ class AdminMediaViewSet(cache_views.CacheModelViewSet):
         serializer.save()
 
 
-def get_all_media():
-    base_cache_key = 'media'
-    result = cache.get(base_cache_key)
-    if result:
-        return result
-    instance = Media.objects.all().order_by('-id')
-    cache.set(base_cache_key, instance)
-    return instance
-
-
 class AdminPostPageMediaView(generics.ListCreateAPIView):
-    queryset = get_all_media()
+    queryset = Media.get_all()
     serializer_class = admin_serializers.AdminMediaSerializer
     permission_classes = (permissions.IsAuthenticated,)

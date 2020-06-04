@@ -1,6 +1,7 @@
 import os
 import uuid
 
+from django.core.cache import cache
 from django.db import models
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
@@ -13,6 +14,7 @@ def get_file_path(instance, filename):
 
 
 class Media(models.Model):
+    base_cache_key = 'media'
 
     class Meta:
         db_table = 'media'
@@ -37,3 +39,12 @@ class Media(models.Model):
         except BaseException:
             pass
         super().delete(*args, **kwargs)
+
+    @classmethod
+    def get_all(self):
+        result = cache.get(self.base_cache_key)
+        if result:
+            return result
+        instance = Media.objects.all().order_by('-id')
+        cache.set(self.base_cache_key, instance)
+        return instance
