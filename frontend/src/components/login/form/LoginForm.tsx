@@ -18,7 +18,6 @@ const LoginForm: React.FC = () => {
       history.push('/admin/dashboard');
     } catch (e) {
       if (e.response.data.detail) {
-        console.log(e.response)
         if (e.response.status === 429) {
           toast({ type: "ERROR", text: 'Restricting requests' })
         } else {
