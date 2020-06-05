@@ -148,7 +148,6 @@ class CacheModelViewSet(viewsets.ModelViewSet):
             else:
                 max_key = get_max_num_key(base_key, key)
                 max = cache.get(max_key)
-                print(f'max: {max}')
                 if max:
                     self.delete_cache_max_number(
                         base_key, key, int(max), int(page_max))

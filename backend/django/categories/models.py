@@ -17,9 +17,4 @@ class Category(models.Model):
 
     @classmethod
     def get_all(cls):
-        result = cache.get(cls.base_cache_key)
-        if result:
-            return result
-        instance = Category.objects.all()
-        cache.set(cls.base_cache_key, instance)
-        return instance
+        return cache.get_or_set(cls.base_cache_key, Category.objects.all())
