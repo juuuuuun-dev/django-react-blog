@@ -42,7 +42,12 @@ class Media(models.Model):
 
     @classmethod
     def get_all(cls):
-        return cache.get_or_set('media', Media.objects.all())
+        result = cache.get(cls.base_cache_key, None)
+        if result:
+            return result
+        return Media.objects.all()
+        # circle ci testでsetがエラーになる なぜ？
+        # return cache.get_or_set('media', Media.objects.all())
 
         # result = cache.get(cls.base_cache_key, None)
         # return Media.objects.all()
