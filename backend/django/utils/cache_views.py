@@ -79,7 +79,8 @@ class CacheModelViewSet(viewsets.ModelViewSet):
         instance = get_object_or_404(queryset, pk=pk)
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self.perform_update(serializer)
+        # serializer.save()
         # delete cache
         self.delete_index_cache(base_key=self.base_cache_key)
         self.delete_list_query_cache(base_key=self.base_cache_key)
@@ -87,6 +88,8 @@ class CacheModelViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def get_list_queryset(self, request, base_key, time=None):
+        if 'search' in request.query_params:
+            return self.filter_queryset(super().get_queryset().filter())
         query_dict = self.sort_query_dict(request.query_params)
         self.list_cache_key_save(
             query_dict=query_dict,

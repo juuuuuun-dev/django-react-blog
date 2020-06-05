@@ -1,17 +1,13 @@
-from rest_framework import filters, generics, viewsets
-from rest_framework.permissions import IsAuthenticated
-from utils import cache_views
-from utils.file import delete_thumb
-
-from ..models import Media
-from ..pagination import MediaPagination
-from ..serializers.admin_serializers import AdminMediaSerializer
+from media.models import Media
+from media.serializers import admin_serializers
+from rest_framework import filters, generics, permissions
+from utils import cache_views, file
 
 
 class AdminMediaViewSet(cache_views.CacheModelViewSet):
     queryset = Media.objects.all().order_by('-id')
-    permission_classes = (IsAuthenticated,)
-    serializer_class = AdminMediaSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = admin_serializers.AdminMediaSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     base_cache_key = 'media'
@@ -22,12 +18,11 @@ class AdminMediaViewSet(cache_views.CacheModelViewSet):
         """
         if "file" in self.request.data:
             media = Media.objects.get(id=self.kwargs['pk'])
-            delete_thumb(media.file.name)
+            file.delete_thumb(media.file.name)
         serializer.save()
 
 
 class AdminPostPageMediaView(generics.ListCreateAPIView):
-    queryset = Media.objects.all().order_by('-id')
-    serializer_class = AdminMediaSerializer
-    pagination_class = MediaPagination
-    # def get(self, request):
+    queryset = Media.get_all()
+    serializer_class = admin_serializers.AdminMediaSerializer
+    permission_classes = (permissions.IsAuthenticated,)

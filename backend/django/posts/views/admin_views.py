@@ -1,26 +1,23 @@
 from bs4 import BeautifulSoup
-from categories.models import get_all_categories
+from categories.models import Category
 from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from markdown import markdown
 from posts.models import Post
 from posts.paginatin import PostPagination
-from posts.serializers.admin_serializers import AdminPostSerializer
-from rest_framework import filters, status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from tags.models import get_all_tags
+from posts.serializers import admin_serializers
+from rest_framework import filters, permissions, response, status
+from tags.models import Tag
 from tags.serializers import TagListSerializer
 from users.models import User
-from utils import cache_views
-from utils.file import base64decode, delete_thumb
+from utils import cache_views, file
 
 
 class AdminPostViewSet(cache_views.CacheModelViewSet):
     queryset = Post.objects.all().order_by('-id')
-    permission_classes = (IsAuthenticated,)
-    serializer_class = AdminPostSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = admin_serializers.AdminPostSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['title', 'plain_content']
     filterset_fields = ['category', 'tag']
@@ -40,21 +37,21 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = self.get_detail_queryset(
             base_key=self.base_cache_key, request=request, pk=pk)
-        serializer = AdminPostSerializer(queryset, context={
+        serializer = admin_serializers.AdminPostSerializer(queryset, context={
             "request": request})
         data = self.get_tag_and_category_list()
         data["post"] = serializer.data
-        return Response(data)
+        return response.Response(data)
 
     def form_item(self, serializser):
         data = self.get_tag_and_category_list()
-        return Response(data)
+        return response.Response(data)
 
     def create(self, request, *args, **kwargs):
         user = User.objects.get(id=self.request.user.id)
         cp = request.data.copy()
         if 'cover' in self.request.data:
-            cp['cover'] = base64decode(self.request.data['cover'])
+            cp['cover'] = file.base64decode(self.request.data['cover'])
         if 'content' in self.request.data:
             plain = self.make_plain_content(self.request.data['content'])
 
@@ -66,7 +63,9 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         # cache
         self.delete_index_cache(base_key=self.base_cache_key)
         self.delete_list_query_cache(base_key=self.base_cache_key)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return response.Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None):
         queryset = self.queryset
@@ -74,8 +73,8 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         cp = request.data.copy()
         if 'cover' in self.request.data:
             post = Post.objects.get(id=self.kwargs['pk'])
-            delete_thumb(post.cover.name)
-            cp['cover'] = base64decode(self.request.data['cover'])
+            file.delete_thumb(post.cover.name)
+            cp['cover'] = file.base64decode(self.request.data['cover'])
         if 'content' in self.request.data:
             plain = self.make_plain_content(self.request.data['content'])
 
@@ -87,7 +86,7 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         self.delete_index_cache(base_key=self.base_cache_key)
         self.delete_list_query_cache(base_key=self.base_cache_key)
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
-        return Response(serializer.data)
+        return response.Response(serializer.data)
 
     def make_plain_content(self, content):
         html = markdown(content)
@@ -97,9 +96,9 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         return plain
 
     def get_tag_and_category_list(self):
-        tagSerializer = TagListSerializer(get_all_tags(), many=True)
+        tagSerializer = TagListSerializer(Tag.get_all(), many=True)
         categorySerializer = CategoryListSerializer(
-            get_all_categories(), many=True)
+            Category.get_all(), many=True)
         return {
             "tags": tagSerializer.data,
             "categories": categorySerializer.data
