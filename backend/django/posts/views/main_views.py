@@ -1,15 +1,13 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from ..models import Post
-from ..serializers.main_serializers import (MainPostListSerializer,
-                                            MainPostSerializer)
+from posts.models import Post
+from posts.serializers import main_serializers
+from rest_framework import response, views
 
 
-class PostList(APIView):
+class PostList(views.APIView):
+    throttle_scope = 'main'
     queryset = Post.objects.all()
-    serializer_class = MainPostListSerializer
+    serializer_class = main_serializers.MainPostListSerializer
 
     def get(self, request):
         posts = Post.objects.filter(is_show=True).order_by('-id')
@@ -17,19 +15,19 @@ class PostList(APIView):
         result = {
             "posts": serializer.data,
         }
-        return Response(result)
+        return response.Response(result)
 
 
-class PostDetail(APIView):
+class PostDetail(views.APIView):
     queryset = Post.objects.all()
-    serializer_class = MainPostSerializer
+    serializer_class = main_serializers.MainPostSerializer
 
     def get(self, request, pk=None):
         queryset = Post.objects.all()
         post = get_object_or_404(queryset, pk=pk, is_show=True)
-        serializer = MainPostSerializer(post)
+        serializer = main_serializers.MainPostSerializer(post)
 
         result = {
             "post": serializer.data,
         }
-        return Response(result)
+        return response.Response(result)
