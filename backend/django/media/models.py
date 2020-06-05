@@ -42,6 +42,7 @@ class Media(models.Model):
 
     @classmethod
     def get_all(cls):
+        result = cache.get(cls.base_cache_key)
         return Media.objects.all()
         # result = cache.get(cls.base_cache_key)
         # if result:
