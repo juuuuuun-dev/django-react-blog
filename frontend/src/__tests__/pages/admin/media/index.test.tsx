@@ -1,13 +1,14 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list } from '../../../../service/admin/media';
-import { defaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/media';
-import { sortDate } from '../../../../helper/sort';
-import { setUp } from '../../../../__mocks__/adminSetUp';
+import { mocked } from 'ts-jest/utils';
 
-afterEach(() => cleanup());
+import { act, fireEvent, waitFor } from '@testing-library/react';
+
+import { setUp } from '../../../../__mocks__/adminSetUp';
+import { listAxiosResponse, listData } from '../../../../__mocks__/serviceResponse/media';
+import { defaultErrorText } from '../../../../components/common/toast';
+import { sortDate } from '../../../../helper/sort';
+import { list } from '../../../../service/admin/media';
+
 jest.mock('../../../../service/admin/media');
 jest.mock('../../../../helper/sort')
 describe("Admin media index", () => {

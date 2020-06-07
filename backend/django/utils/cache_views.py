@@ -96,15 +96,9 @@ class CacheModelViewSet(viewsets.ModelViewSet):
             base_key=base_key)
         cache_key = cache_key_stringfiy(
             base_key=base_key, query_dict=query_dict)
-        cache_data = cache.get(cache_key)
-        if not cache_data:
-            result = self.filter_queryset(super().get_queryset().filter())
-            cache.set(
-                cache_key,
-                result,
-                timeout=time if time else self.default_cache_time)
-            return result
-        return cache_data
+        return cache.get_or_set(
+            cache_key, self.filter_queryset(
+                super().get_queryset().filter()))
 
     def sort_query_dict(self, query_dict):
         sorted_dict = {}

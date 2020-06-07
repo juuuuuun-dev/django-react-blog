@@ -43,13 +43,13 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
               </Paragraph>
               <div className="entry-date">
                 <span className="entry-date__item"><ClockCircleOutlined />{item.created_at}</span>
-                <span className="entry-date__item"><ApartmentOutlined />{item.category}</span>
+                {/* <span className="entry-date__item"><ApartmentOutlined />{item.category}</span> */}
               </div>
             </>}
           />
           <div className="post-list__thumb">
             {/* sp 80 pc 160 */}
-            <Link to={`/post/${item.id}`}>
+            <Link to={`/posts/${item.id}`}>
               <LazyLoadImage
                 alt="test"
                 width={80}

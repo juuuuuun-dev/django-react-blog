@@ -1,9 +1,10 @@
-import React from 'react';
-import { Form, Input, Button } from 'antd';
-import { login } from '../../../service/admin/auth';
-import { useHistory } from 'react-router-dom';
+import { Button, Form, Input } from 'antd';
 import { set } from 'local-storage';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+
 import toast from '../../../components/common/toast';
+import { login } from '../../../service/admin/auth';
 
 const LoginForm: React.FC = () => {
   const history = useHistory();
@@ -17,7 +18,11 @@ const LoginForm: React.FC = () => {
       history.push('/admin/dashboard');
     } catch (e) {
       if (e.response.data.detail) {
-        toast({ type: "ERROR", text: e.response.data.detail })
+        if (e.response.status === 429) {
+          toast({ type: "ERROR", text: 'Restricting requests' })
+        } else {
+          toast({ type: "ERROR", text: e.response.data.detail })
+        }
       } else {
         toast({ type: "ERROR" });
       }

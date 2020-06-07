@@ -28,7 +28,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const [file, setFile] = React.useState<File | undefined>();
-  const [removeFile, setRemoveFile] = React.useState<boolean>(false)
   const [editorSpan, setEditorSpan] = useState<number>(12);
   const [previewSpan, setPreviewSpan] = useState<number>(12);
 
@@ -80,7 +79,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
     if (isJpgOrPng && isLt2M) {
       getBase64(file, (imageUrl: string) => {
         setLoading(true);
-        setRemoveFile(false);
         setImageUrl(imageUrl);
       });
       // cropp用
@@ -97,7 +95,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
     setImageUrl('')
     setFile(undefined);
     setLoading(false);
-    setRemoveFile(true);
   }
 
   const uploadButton = (

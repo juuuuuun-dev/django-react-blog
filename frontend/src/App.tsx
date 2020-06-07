@@ -1,15 +1,15 @@
+import './less/app.less';
+
 import React from 'react';
-
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-import MainLayout from './components/main/layout/MainLayout';
-import AdminLayout from './components/admin/layout/AdminLayout';
-import LoginLayout from './components/login/layout/LoginLayout';
-import { adminPathList } from './config/admin';
-import { mainPathList } from './config/main';
 import { QueryParamProvider } from 'use-query-params';
 
-import './less/app.less';
+import AdminLayout from './components/admin/layout/AdminLayout';
+import ErrorLayout from './components/error/layout/ErrorLayout';
+import LoginLayout from './components/login/layout/LoginLayout';
+import MainLayout from './components/main/layout/MainLayout';
+import { adminPathList } from './config/admin';
+import { mainPathList } from './config/main';
 
 function App() {
   return (
@@ -25,6 +25,9 @@ function App() {
             </Route>
             <Route path={['/login', '/password-reset', '/password-reset-confirm/:uid/:token/']}>
               <LoginLayout />
+            </Route>
+            <Route>
+              <ErrorLayout />
             </Route>
           </Switch>
         </QueryParamProvider>

@@ -20,7 +20,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
         <h2 className="post-detail__title">{post.title}</h2>
         <div className="entry-date">
           <span className="entry-date__item"><ClockCircleOutlined />{post.created_at}</span>
-          <span className="entry-date__item"><ApartmentOutlined />{post.category}</span>
+          {/* <span className="entry-date__item"><ApartmentOutlined />{post.category}</span> */}
         </div>
         <PostDetaiLContent content={post.content} />
 
