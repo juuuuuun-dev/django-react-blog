@@ -1,6 +1,7 @@
 import React from 'react';
+
 import Index from '../pages/index';
-import PostDetail from '../pages/post/detail';
+import PostDetail from '../pages/posts/detail';
 
 interface INavList {
   path: string;

@@ -1,6 +1,16 @@
 import React from 'react';
-import { mainReducer, initState } from './mainReducer';
-import { ProviderProps } from '../types/mainContext';
+
+import { MainState, ProviderProps } from '../types/mainContext';
+import { mainReducer } from './mainReducer';
+
+export const initState: MainState = {
+  loading: false,
+  globalModalConfig: {
+    title: null,
+    type: null,
+    content: null,
+  },
+};
 
 export const MainContext = React.createContext({} as ProviderProps);
 export const MainContextProvider = ({ children }: { children: React.ReactNode }) => {

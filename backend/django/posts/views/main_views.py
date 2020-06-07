@@ -19,6 +19,7 @@ class PostList(views.APIView):
 
 
 class PostDetail(views.APIView):
+    throttle_scope = 'main'
     queryset = Post.objects.all()
     serializer_class = main_serializers.MainPostSerializer
 

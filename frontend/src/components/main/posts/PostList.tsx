@@ -49,7 +49,7 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
           />
           <div className="post-list__thumb">
             {/* sp 80 pc 160 */}
-            <Link to={`/post/${item.id}`}>
+            <Link to={`/posts/${item.id}`}>
               <LazyLoadImage
                 alt="test"
                 width={80}
