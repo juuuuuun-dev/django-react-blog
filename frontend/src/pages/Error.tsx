@@ -18,8 +18,7 @@ const Error: React.FC = () => {
   }, [status])
   const history = useHistory();
   return (
-    <div className="container"
-    >
+    <div>
       <div><img src={img} width="175" alt="error" /></div>
       <h3>{errorCode}</h3>
       {errorCode && statusCodes[errorCode].name}<p></p>

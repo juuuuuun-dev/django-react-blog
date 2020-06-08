@@ -9,7 +9,7 @@ const ErrorLayout: React.FC = () => {
   const { Content } = Layout;
   return (
     <>
-      <Content>
+      <Content className="error-container">
         <Error />
       </Content>
     </>

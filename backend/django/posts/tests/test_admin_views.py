@@ -27,6 +27,7 @@ class AdminPostViewSetTestCase(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
 
     def tearDown(self):
+        cache.clear()
         posts = Post.objects.all()
         for value in posts:
             delete_thumb(value.cover.name)

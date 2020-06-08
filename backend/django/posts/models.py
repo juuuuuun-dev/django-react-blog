@@ -2,10 +2,12 @@ import os
 import uuid
 
 from categories.models import Category
+from categories.serializers import CategoryListSerializer
 from django.db import models
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from tags.models import Tag
+from tags.serializers import TagListSerializer
 from users.models import User
 from utils.file import delete_thumb
 
@@ -16,6 +18,10 @@ def get_file_path(instance, filename):
 
 
 class Post(models.Model):
+
+    base_cache_key = 'posts'
+    show_cache_key = 'show-posts'
+
     class Meta:
         db_table = 'posts'
 
@@ -49,3 +55,13 @@ class Post(models.Model):
         except BaseException:
             pass
         super().delete(*args, **kwargs)
+
+    @staticmethod
+    def get_tag_and_category_list():
+        tagSerializer = TagListSerializer(Tag.get_all(), many=True)
+        categorySerializer = CategoryListSerializer(
+            Category.get_all(), many=True)
+        return {
+            "tags": tagSerializer.data,
+            "categories": categorySerializer.data
+        }
