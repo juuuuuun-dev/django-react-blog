@@ -7,7 +7,7 @@ const GlobalModal: React.FC = () => {
   const [{ globalModalConfig }, dispatch] = React.useContext(MainContext);
 
   React.useEffect(() => {
-    console.log({ globalModalConfig })
+
   }, [globalModalConfig]);
   const [modal, contextHolder] = Modal.useModal();
   const config = {

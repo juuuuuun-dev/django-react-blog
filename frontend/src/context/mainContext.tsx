@@ -5,6 +5,7 @@ import { mainReducer } from './mainReducer';
 
 export const initState: MainState = {
   loading: false,
+  pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
   globalModalConfig: {
     title: null,
     type: null,

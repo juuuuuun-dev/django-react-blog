@@ -21,7 +21,7 @@ export type PostList = Pagination & {
   results: PostDetail[],
   tags: TagDetail[],
   categories: CategoryDetail[],
-}
+} | undefined;
 
 export type PostFormItem = {
   tags: TagDetail[];
@@ -41,9 +41,6 @@ export type PostDetailProps = {
   post: PostDetail;
 }
 
-export type PostListProps = {
-  posts: PostDetail[] | undefined;
-}
 
 export type PostPreviewProps = {
   title: string;
