@@ -17,13 +17,15 @@ const MainLayout = () => {
         <Header />
         <Content className="site-layout">
           <div className="main-container site-layout-background">
-            <Row>
-              <Col flex="1 1 587px">
+            <Row gutter={[60, 60]}>
+              <Col lg={17} md={24} flex="auto">
+                {/* <Col flex="1 1 587px"> */}
                 <div className="contents">
                   <Container />
                 </div>
               </Col>
-              <Col className="right-contents" flex="0 1 300px">
+              <Col flex="320px" lg={7} md={24}>
+                {/* <Col className="right-contents" flex="0 1 300px"> */}
                 <RightContainer />
               </Col>
             </Row>
