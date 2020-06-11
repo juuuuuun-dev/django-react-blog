@@ -4,46 +4,15 @@ import { List, Pagination, Typography } from 'antd';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
-import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import { ApartmentOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 import { MainContext } from '../../../context/mainContext';
-import { useHistoryPushError } from '../../../helper/useHistoryPushError';
-import { list } from '../../../service/main/posts';
-import { PostList as PostListType } from '../../../types/posts';
+import { PostListProps } from '../../../types/posts';
 
-const PostList: React.FC = () => {
+const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
   const [{ pageSize }, dispatch] = React.useContext(MainContext);
   const { Paragraph } = Typography;
-  const [data, setData] = React.useState<PostListType>();
-  const [query, setQuery] = useQueryParams({ category: NumberParam, tag: NumberParam, search: StringParam, page: NumberParam });
-  const [pushError] = useHistoryPushError();
-
-  const fetchData = React.useCallback(async () => {
-    try {
-      const res = await list({ page: query.page, category: query.category, tag: query.tag, search: query.search });
-      setData(res.data)
-    } catch (e) {
-      if (e.response && e.response.status) {
-        pushError(e.response.status)
-      }
-    }
-
-  }, [pushError, query]);
-  React.useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  const handlePageChange = (page: number, pageSize?: number | undefined): void => {
-    setQuery({
-      category: query.category || undefined,
-      tag: query.tag || undefined,
-      page: page,
-      search: query.search || undefined,
-    }, 'push')
-  }
-
 
   return (
     <>

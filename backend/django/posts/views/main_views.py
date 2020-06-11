@@ -12,8 +12,9 @@ class PostList(cache_views.ReadOnlyCacheModelViewSet):
     queryset = Post.objects.filter(is_show=True).order_by('-id')
     serializer_class = main_serializers.MainPostListSerializer
     pagination_class = PostPagination
-    filterset_fields = ['category', 'tag']
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = ['category', 'tag']
+    search_fields = ['title', 'plain_content']
 
     def list(self, request):
         queryset = self.get_list_queryset(
