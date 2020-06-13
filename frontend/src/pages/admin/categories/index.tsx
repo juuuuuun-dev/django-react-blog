@@ -1,6 +1,6 @@
 import { Input, Table } from 'antd';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
@@ -18,6 +18,7 @@ const Categories: React.FC = () => {
   const searchRef = React.useRef<null | Input>(null);
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
+  const history = useHistory();
 
   const location = useLocation();
 
@@ -111,14 +112,14 @@ const Categories: React.FC = () => {
         handleQuerySearch={handleQuerySearch}
       />
       <Table
-        className="table"
+        className="admin-table"
         columns={columns}
         dataSource={data?.results}
-        onRow={(record: any, rowIndex: any) => {
+        onRow={(record: any) => {
           return {
-            onClick: event => {
-              console.log({ event })
-            }, // click row
+            onClick: () => {
+              history.push(`${location.pathname}/${record.id}/edit`);
+            },
           }
         }}
         pagination={{

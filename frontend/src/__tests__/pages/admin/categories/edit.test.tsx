@@ -48,7 +48,7 @@ describe("Admin categories edit", () => {
       expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
       expect(utils.getAllByText(listData.results[0].slug)).toBeTruthy()
     })
-    fireEvent.click(utils.getAllByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     await waitFor(() => {
       expect(utils.getAllByText("Category edit")).toBeTruthy();
     });
@@ -72,9 +72,8 @@ describe("Admin categories edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     await waitFor(() => {
       expect(utils.getByText("Category edit")).toBeTruthy();
     });
@@ -92,9 +91,8 @@ describe("Admin categories edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
     });
@@ -104,9 +102,9 @@ describe("Admin categories edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {
@@ -123,9 +121,9 @@ describe("Admin categories edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {
