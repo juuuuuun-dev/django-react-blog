@@ -6,6 +6,7 @@ export type GlobalModalConfig = {
 
 export type MainState = {
   loading: boolean;
+  pageSize: number;
   globalModalConfig: GlobalModalConfig,
 }
 

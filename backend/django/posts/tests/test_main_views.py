@@ -1,10 +1,11 @@
+from categories.factories import CategoryFactory
+from django.core.cache import cache
+from django.urls import reverse
+from posts.factories import PostFactory
 from rest_framework import status
 from rest_framework.test import APITestCase
-from users.factories import UserFactory
 from tags.factories import TagFactory
-from categories.factories import CategoryFactory
-from posts.factories import PostFactory
-from django.urls import reverse
+from users.factories import UserFactory
 
 
 class PostListTestCase(APITestCase):
@@ -13,6 +14,9 @@ class PostListTestCase(APITestCase):
         self.user.set_password("test1234")
         self.user.save()
 
+    def tearDown(self):
+        cache.clear()
+
     def test_get_show(self):
         tag = TagFactory.create(name="tagdayo")
         TagFactory.create(name="tag2")
@@ -20,17 +24,17 @@ class PostListTestCase(APITestCase):
         api = reverse("posts:post-list")
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['posts']), 1)
-        self.assertEqual(response.data['posts'][0]['title'], post.title)
-        self.assertTrue(response.data['posts'][0]['category'])
-        self.assertEqual(len(response.data['posts'][0]['tag']), 1)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['title'], post.title)
+        self.assertTrue(response.data['results'][0]['category'])
+        self.assertEqual(len(response.data['results'][0]['tag']), 1)
 
     def test_get_not_show(self):
         PostFactory.create(user=self.user, is_show=False)
         api = reverse("posts:post-list")
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['posts']), 0)
+        self.assertEqual(len(response.data['results']), 0)
 
 
 class PostDetailTestCase(APITestCase):

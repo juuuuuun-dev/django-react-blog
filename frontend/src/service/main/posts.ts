@@ -1,8 +1,13 @@
+import { queryStringify } from '../../helper/query';
+import { ListQuery } from '../../types/pagination';
 import axios from '../client';
+
 const endPoint = '/posts/';
 
-export const list = async () => {
-  return axios.get(endPoint);
+
+export const list = async (queries: ListQuery) => {
+  const query = queryStringify(queries);
+  return axios.get(`${endPoint}?${query}`);
 };
 
 export const retrieve = async (id: string | undefined) => {

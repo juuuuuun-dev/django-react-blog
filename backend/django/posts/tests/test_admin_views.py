@@ -10,7 +10,6 @@ from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 from tags.factories import TagFactory
 from users.factories import UserFactory
-from utils.cache_views import cache_key_stringfiy, get_detail_key
 from utils.file import delete_thumb
 
 
@@ -27,6 +26,7 @@ class AdminPostViewSetTestCase(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
 
     def tearDown(self):
+        cache.clear()
         posts = Post.objects.all()
         for value in posts:
             delete_thumb(value.cover.name)

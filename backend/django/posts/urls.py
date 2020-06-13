@@ -1,7 +1,9 @@
-from django.urls import path, include
-from .views.admin_views import AdminPostViewSet
-from .views.main_views import PostList, PostDetail
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
+
+from .views.admin_views import AdminPostViewSet
+from .views.main_views import PostDetail, PostList
+
 app_name = 'posts'
 
 form_item = AdminPostViewSet.as_view({
@@ -12,8 +14,8 @@ router = DefaultRouter()
 router.register(r'admin-post', AdminPostViewSet, basename="admin-post")
 
 urlpatterns = [
-    path('', PostList.as_view(), name="post-list"),
-    path('<int:pk>/', PostDetail.as_view(), name="post-detail"),
+    path('', PostList.as_view({'get': 'list'}), name="post-list"),
+    path('<int:pk>/', PostDetail.as_view({'get': 'retrieve'}), name="post-detail"),
     path('', include(router.urls)),
     path('admin-post/form-item', form_item, name="post-form-item"),
 

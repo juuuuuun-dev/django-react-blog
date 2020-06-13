@@ -1,5 +1,5 @@
 import { CategoryDetail, CategoryList, CategorySimpleDetail } from './categories';
-import { Pagination } from './pagination';
+import { ListQuery, Pagination } from './pagination';
 import { TagDetail, TagList } from './tags';
 
 export type PostDetail = {
@@ -21,6 +21,12 @@ export type PostList = Pagination & {
   results: PostDetail[],
   tags: TagDetail[],
   categories: CategoryDetail[],
+} | undefined;
+
+export type PostListProps = {
+  data: PostList;
+  query: ListQuery;
+  handlePageChange: (page: number, pageSize?: number | undefined) => void
 }
 
 export type PostFormItem = {
@@ -41,9 +47,6 @@ export type PostDetailProps = {
   post: PostDetail;
 }
 
-export type PostListProps = {
-  posts: PostDetail[] | undefined;
-}
 
 export type PostPreviewProps = {
   title: string;

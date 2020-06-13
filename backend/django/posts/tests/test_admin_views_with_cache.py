@@ -17,7 +17,7 @@ from utils.file import delete_thumb
 class AdminPostViewSetWithTestCase(APITestCase):
     def setUp(self):
         cache.clear()
-        self.base_cache_key = "posts"
+        self.base_cache_key = Post.base_cache_key
         self.base64image = 'data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAABIAAD/4QMcaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA2LjAtYzAwMiA3OS4xNjQzNTIsIDIwMjAvMDEvMzAtMTU6NTA6MzggICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjQ3QTU5NEZBOTI1OTExRUE4M0RDRjNERUZFMjM0RkFGIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjQ3QTU5NEY5OTI1OTExRUE4M0RDRjNERUZFMjM0RkFGIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMDIwIE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSIzQTBFMjdGNEVCNDlDOEREODVERURCMEUwNjFBM0ZCMCIgc3RSZWY6ZG9jdW1lbnRJRD0iM0EwRTI3RjRFQjQ5QzhERDg1REVEQjBFMDYxQTNGQjAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/7gAOQWRvYmUAZMAAAAAB/9sAhAAEAwMDAwMEAwMEBQMDAwUGBQQEBQYHBgYGBgYHCQcICAgIBwkJCwsMCwsJDAwMDAwMEBAQEBASEhISEhISEhISAQQEBAcHBw4JCQ4UDg0OFBQSEhISFBISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhL/wAARCAAKAAoDAREAAhEBAxEB/8QASwABAQAAAAAAAAAAAAAAAAAAAAkBAQAAAAAAAAAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAARAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ/gAAA//9k='
         self.user = UserFactory.create()
         self.user.set_password("test1234")
@@ -27,6 +27,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
 
     def tearDown(self):
+        cache.clear()
         posts = Post.objects.all()
         for value in posts:
             delete_thumb(value.cover.name)
@@ -227,3 +228,46 @@ class AdminPostViewSetWithTestCase(APITestCase):
         cache_response = self.client.get(api, format="json")
         self.assertEqual(cache_response.status_code, status.HTTP_200_OK)
         self.assertEqual(cache_response.data['post']['title'], post.title)
+
+    def test_update_with_cache(self):
+        tag = TagFactory.create(name="tag")
+        category = CategoryFactory.create(name="test")
+        post = PostFactory.create(
+            user=self.user,
+            category=category,
+            tag=[tag],
+            is_show=True)
+        show_cache_key = get_detail_key(
+            base_key=Post.show_cache_key, pk=post.id)
+        cache_key = get_detail_key(base_key=self.base_cache_key, pk=post.id)
+        cache_data = cache.get(cache_key)
+        show_cache_data = cache.get(show_cache_key)
+        self.assertIsNone(cache_data)
+        self.assertIsNone(show_cache_data)
+        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        response = self.client.get(api, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        cache_data = cache.get(cache_key)
+        self.assertEqual(cache_data.id, post.id)
+
+        main_api = reverse("posts:post-detail", kwargs={"pk": post.id})
+        main_response = self.client.get(main_api, format="json")
+        self.assertEqual(main_response.status_code, status.HTTP_200_OK)
+
+        # Update and delete cache
+        post_data = {
+            "title": "update",
+            "content": "  # update",
+            "is_show": True,
+            "category": category.id,
+        }
+        update_api = reverse(
+            "posts:admin-post-detail",
+            kwargs={
+                "pk": post.id})
+        update_response = self.client.put(update_api, post_data)
+        self.assertEqual(update_response.status_code, status.HTTP_200_OK)
+        after_cache_data = cache.get(cache_key)
+        after_show_cache_data = cache.get(show_cache_key)
+        self.assertIsNone(after_cache_data)
+        self.assertIsNone(after_show_cache_data)

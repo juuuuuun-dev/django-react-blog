@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Index from '../pages/index';
+import Index from '../pages/Main';
 import PostDetail from '../pages/posts/detail';
 
 interface INavList {

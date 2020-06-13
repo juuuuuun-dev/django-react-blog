@@ -114,8 +114,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.ScopedRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'main': '8/minute',
-        'login': '8/minute',
+        'main': '15/minute',
+        'login': '10/minute',
     },
     # 'DEFAULT_FILTER_BACKENDS': [
     #     'django_filters.rest_framework.DjangoFilterBackend',
