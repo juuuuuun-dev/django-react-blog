@@ -4,6 +4,7 @@ export const resultData = {
   "id": 1,
   "key": 1,
   "name": "testAbe",
+  "slug": "testAbe",
   "created_at": "2020-02-02",
   "updated_at": "2020-02-02",
 }
@@ -12,6 +13,7 @@ export const resultData2 = {
   "id": 2,
   "key": 2,
   "name": "testAsou",
+  "slug": "testAsou",
   "created_at": "2020-02-03",
   "updated_at": "2020-02-03",
 }
@@ -48,7 +50,18 @@ export const error404AxiosResponse: AxiosResponse = {
 
 export const error400AxiosResponse: AxiosResponse = {
   data: {
-    name: ["The name already exists"]
+    name: ["This name already exists"]
+  },
+  status: 400,
+  statusText: '400 Bad Request',
+  config: {},
+  headers: {},
+};
+
+
+export const error400SlugAxiosResponse: AxiosResponse = {
+  data: {
+    slug: ["This slug already exists"]
   },
   status: 400,
   statusText: '400 Bad Request',

@@ -36,7 +36,7 @@ const Index = () => {
   }
 
   const PageResults: React.FC = () => {
-    if (query.page && query.page > 1 || query.search) {
+    if ((query.page && query.page > 1) || query.search) {
       if (data?.count) {
         return (
           <ul className="page-resutls">

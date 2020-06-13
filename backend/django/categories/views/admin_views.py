@@ -9,5 +9,5 @@ class AdminCategoryViewSet(cache_views.CacheModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = CategorySerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name']
+    search_fields = ['name', 'slug']
     base_cache_key = 'categories'

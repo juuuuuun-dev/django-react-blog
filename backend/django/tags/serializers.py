@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Tag
 
 
@@ -11,7 +12,7 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = ["id", "key", "name", "updated_at", "created_at"]
+        fields = ["id", "key", "name", "slug", "updated_at", "created_at"]
         read_only_fields = ["key", "created_at", "updated_at"]
 
 

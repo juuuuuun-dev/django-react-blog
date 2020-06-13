@@ -27,6 +27,7 @@ class Post(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(verbose_name='title', unique=True, max_length=255)
+    slug = models.SlugField(verbose_name='slug', unique=True, max_length=255)
     content = models.TextField(verbose_name='content')
     plain_content = models.TextField(
         verbose_name='plain_content', null=True, blank=True)

@@ -1,9 +1,10 @@
 import React from 'react';
-import { create } from '../../../service/admin/categories';
-import { AdminContext } from '../../../context/adminContext';
+import { useHistory } from 'react-router-dom';
+
 import Form from '../../../components/admin/form/CategoryForm';
 import toast from '../../../components/common/toast';
-import { useHistory } from 'react-router-dom';
+import { AdminContext } from '../../../context/adminContext';
+import { create } from '../../../service/admin/categories';
 
 const Create: React.FC = () => {
   const dispatch = React.useContext(AdminContext)[1];
@@ -15,6 +16,7 @@ const Create: React.FC = () => {
     try {
       const data = {
         name: values.name,
+        slug: values.slug,
       };
       const res = await create(data);
       if (res.status === 201) {

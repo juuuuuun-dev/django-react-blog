@@ -1,7 +1,8 @@
 import factory
-from .models import Post
 from categories.factories import CategoryFactory
 from tags.factories import TagFactory
+
+from .models import Post
 
 
 class PostFactory(factory.DjangoModelFactory):
@@ -9,6 +10,7 @@ class PostFactory(factory.DjangoModelFactory):
         model = Post
 
     title = factory.Sequence(lambda n: "This is test title number" + str(n))
+    slug = factory.Sequence(lambda n: "This-is-test-title-number" + str(n))
     content = "test content"
     is_show = True
     category = factory.SubFactory(CategoryFactory, name="test cateogry")

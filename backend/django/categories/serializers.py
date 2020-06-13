@@ -12,12 +12,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ["id", "key", "name", "updated_at", "created_at"]
+        fields = ["id", "key", "name", "slug", "updated_at", "created_at"]
         read_only_fields = ["key", "created_at", "updated_at"]
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "name"]
+        fields = ["id", "name", "slug"]
         read_only_fields = ["name"]

@@ -41,6 +41,7 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.data['results'][0]['title'], post.title)
+        self.assertEqual(response.data['results'][0]['slug'], post.slug)
         self.assertTrue(response.data['results'][0]['category'])
         self.assertEqual(len(response.data['results'][0]['tag']), 1)
         self.assertEqual(len(response.data['tags']), 2)
@@ -64,6 +65,7 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.data['results'][0]['title'], post2.title)
+        self.assertEqual(response.data['results'][0]['slug'], post2.slug)
         self.assertEqual(response.data['results'][0]['category'], category2.id)
         self.assertNotEqual(response.data['results'][0]['title'], post.title)
 
@@ -84,6 +86,7 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.data['results'][0]['title'], post2.title)
+        self.assertEqual(response.data['results'][0]['slug'], post2.slug)
         self.assertEqual(response.data['results'][0]['category'], category2.id)
         self.assertNotEqual(response.data['results'][0]['title'], post.title)
 
@@ -115,6 +118,7 @@ class AdminPostViewSetTestCase(APITestCase):
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['post']['title'], post.title)
+        self.assertEqual(response.data['post']['slug'], post.slug)
         self.assertEqual(response.data['post']['content'], post.content)
         self.assertEqual(response.data['post']['is_show'], post.is_show)
         self.assertEqual(response.data['post']['category'], category.id)
@@ -132,6 +136,7 @@ class AdminPostViewSetTestCase(APITestCase):
         tag2 = TagFactory.create(name="test2")
         post_data = {
             "title": "test",
+            "slug": "test",
             "content": "content test",
             "is_show": True,
             "category": category.id,
@@ -142,6 +147,7 @@ class AdminPostViewSetTestCase(APITestCase):
         response = self.client.post(api, post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], post_data['title'])
+        self.assertEqual(response.data['slug'], post_data['slug'])
         self.assertEqual(response.data['content'], post_data['content'])
         self.assertEqual(response.data['is_show'], post_data['is_show'])
         self.assertEqual(response.data['category'], category.id)
@@ -158,6 +164,7 @@ class AdminPostViewSetTestCase(APITestCase):
         api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
         post_data = {
             "title": "testtest",
+            "slug": "slug-testtest",
             "content": "#title\n##body\n<img src=\"/img.jpg\" />\n<a href=\"./link/\">lidayo</a>",
             "is_show": False,
             "category": category.id,
@@ -170,6 +177,7 @@ class AdminPostViewSetTestCase(APITestCase):
         response = self.client.put(api, post_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], post_data['title'])
+        self.assertEqual(response.data['slug'], post_data['slug'])
         self.assertEqual(response.data['content'], post_data['content'])
         self.assertEqual(response.data['is_show'], post_data['is_show'])
         self.assertEqual(response.data['category'], category.id)

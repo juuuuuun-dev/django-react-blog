@@ -1,5 +1,6 @@
+import { Button, Form, Input } from 'antd';
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+
 import { CategoryFormProps } from '../../../types/categories';
 
 const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) => {
@@ -15,6 +16,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) =>
         {
           name: 'name',
           value: data.name
+        },
+        {
+          name: 'slug',
+          value: data.slug
         },
       ]);
     }
@@ -40,6 +45,17 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) =>
         rules={[{ required: true, message: 'Please input name' }]}
       >
         <Input aria-label="input-name" placeholder="name" />
+      </Form.Item>
+
+      <Form.Item
+        label="slug"
+        extra="Used for url. If you change it, the URL will change"
+        name="slug"
+        validateStatus={error && error.name ? "error" : "success"}
+        help={error && error.slug ? "This slug already exists" : null}
+        rules={[{ required: true, type: 'string', message: 'Please input slug' }]}
+      >
+        <Input aria-label="input-slug" placeholder="Used for url" />
       </Form.Item>
 
       <Form.Item colon={false}>

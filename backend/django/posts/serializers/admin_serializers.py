@@ -28,6 +28,7 @@ class AdminPostSerializer(serializers.ModelSerializer):
             "id",
             "key",
             "title",
+            "slug",
             "content",
             "cover",
             "thumb",

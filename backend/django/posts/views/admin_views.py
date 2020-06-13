@@ -19,7 +19,7 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = admin_serializers.AdminPostSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['title', 'plain_content']
+    search_fields = ['title', 'slug', 'plain_content']
     filterset_fields = ['category', 'tag']
     pagination_class = PostPagination
     base_cache_key = Post.base_cache_key

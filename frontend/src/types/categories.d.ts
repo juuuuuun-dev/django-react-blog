@@ -4,6 +4,7 @@ export type CategoryDetail = {
   id: number;
   key?: number;
   name: string;
+  slug: string;
   updated_at: string;
   created_at: string;
 }
@@ -15,6 +16,7 @@ export type CategoryList = Pagination & {
 export type CategorySimpleDetail = {
   id: number;
   name: string;
+  slug: string;
 }
 
 export type CategoryFormProps = {
@@ -22,8 +24,10 @@ export type CategoryFormProps = {
   onSubmit: (values: any) => Promise<void>;
   error?: {
     name?: Array<string>
+    slug?: Array<string>
   }
 }
 export type RequestData = {
   name: string;
+  slug: string;
 }

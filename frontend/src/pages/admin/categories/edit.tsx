@@ -1,11 +1,12 @@
 import React from 'react';
-import { retrieve, update, destroy } from '../../../service/admin/categories';
-import { AdminContext } from '../../../context/adminContext';
-import Form from '../../../components/admin/form/CategoryForm'
-import { CategoryDetail } from '../../../types/categories';
-import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
+
 import DeleteBtn from '../../../components/admin/DeleteBtn';
+import Form from '../../../components/admin/form/CategoryForm';
+import toast from '../../../components/common/toast';
+import { AdminContext } from '../../../context/adminContext';
+import { destroy, retrieve, update } from '../../../service/admin/categories';
+import { CategoryDetail } from '../../../types/categories';
 
 const Edit: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
@@ -36,6 +37,7 @@ const Edit: React.FC = () => {
     try {
       const data = {
         name: values.name,
+        slug: values.slug,
       };
       const res = await update(id, data);
       if (res.status === 200) {

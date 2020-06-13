@@ -1,14 +1,15 @@
+import { Input, Table } from 'antd';
 import React from 'react';
-import { AdminContext } from '../../../context/adminContext';
-import { list } from '../../../service/admin/categories';
-import { Table, Input } from 'antd';
-import { CategoryList, CategoryDetail } from '../../../types/categories';
+import { useHistory, useLocation } from 'react-router-dom';
+import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
+
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
-import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
-import { useLocation } from 'react-router-dom';
-import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
+import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import toast from '../../../components/common/toast';
+import { AdminContext } from '../../../context/adminContext';
 import { sortDate } from '../../../helper/sort';
+import { list } from '../../../service/admin/categories';
+import { CategoryDetail, CategoryList } from '../../../types/categories';
 
 const Categories: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
@@ -17,6 +18,7 @@ const Categories: React.FC = () => {
   const searchRef = React.useRef<null | Input>(null);
   const [searchText, setSearchText] = React.useState<string>('');
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
+  const history = useHistory();
 
   const location = useLocation();
 
@@ -77,11 +79,18 @@ const Categories: React.FC = () => {
       })
     },
     {
+      title: 'slug',
+      name: 'slug',
+      dataIndex: 'slug',
+      key: 'slug',
+      width: '25%',
+    },
+    {
       title: 'updated_at',
       name: 'updated_at',
       dataIndex: 'updated_at',
       key: 'updated_at',
-      width: '20%',
+      width: '15%',
       sorter: (a: CategoryDetail, b: CategoryDetail) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
@@ -90,7 +99,7 @@ const Categories: React.FC = () => {
       name: 'created_at',
       dataIndex: 'created_at',
       key: 'created_at',
-      width: '20%',
+      width: '15%',
       sorter: (a: CategoryDetail, b: CategoryDetail) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
@@ -103,9 +112,16 @@ const Categories: React.FC = () => {
         handleQuerySearch={handleQuerySearch}
       />
       <Table
-        className="table"
+        className="admin-table"
         columns={columns}
         dataSource={data?.results}
+        onRow={(record: any) => {
+          return {
+            onClick: () => {
+              history.push(`${location.pathname}/${record.id}/edit`);
+            },
+          }
+        }}
         pagination={{
           total: data?.count,
           pageSize: state.pageSize,
