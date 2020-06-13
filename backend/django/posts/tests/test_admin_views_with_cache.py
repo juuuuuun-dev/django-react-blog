@@ -86,6 +86,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
         # Update and delete cache
         post_data = {
             "title": "update",
+            "slug": "slug-update",
             "content": "  # update",
             "is_show": False,
             "category": category2.id,
@@ -155,6 +156,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
         # update
         post_data = {
             "title": "update",
+            "slug": "slug-upadte",
             "content": "  # update",
             "is_show": False,
             "category": category_2.id,
@@ -198,6 +200,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
         # Update and delete cache
         post_data = {
             "title": "update",
+            "slug": "slug",
             "content": "  # update",
             "is_show": False,
             "category": category.id,
@@ -257,6 +260,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
         # Update and delete cache
         post_data = {
             "title": "update",
+            "slug": "slug",
             "content": "  # update",
             "is_show": True,
             "category": category.id,
