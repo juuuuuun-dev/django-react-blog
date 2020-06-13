@@ -22,7 +22,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
         renderItem={item => (
           <List.Item key={item.id}>
             <List.Item.Meta
-              title={<Link to={`/post/${item.id}`}><Paragraph
+              title={<Link to={`/posts/${item.id}`}><Paragraph
                 ellipsis={{
                   rows: 2,
                   expandable: false,

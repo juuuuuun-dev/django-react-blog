@@ -1,11 +1,19 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list, retrieve, update, destroy } from '../../../../service/admin/categories';
-import { defaultSuccessText, defaultErrorText, defaultDeleteText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse } from '../../../../__mocks__/serviceResponse/categories';
-import { error404AxiosResponse, error500AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
+import { mocked } from 'ts-jest/utils';
+
+import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+
 import { setUp } from '../../../../__mocks__/adminSetUp';
+import {
+    detailAxiosResponse, listAxiosResponse, listData, updateAxiosResponse
+} from '../../../../__mocks__/serviceResponse/categories';
+import {
+    deleteAxiosResponse, error404AxiosResponse, error500AxiosResponse
+} from '../../../../__mocks__/serviceResponse/common';
+import {
+    defaultDeleteText, defaultErrorText, defaultSuccessText
+} from '../../../../components/common/toast';
+import { destroy, list, retrieve, update } from '../../../../service/admin/categories';
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/categories');
@@ -37,14 +45,16 @@ describe("Admin categories edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].slug)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name));
     await waitFor(() => {
       expect(utils.getAllByText("Category edit")).toBeTruthy();
     });
     act(() => {
       fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'updateAbe' } });
+      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'updateAbe' } });
     })
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {

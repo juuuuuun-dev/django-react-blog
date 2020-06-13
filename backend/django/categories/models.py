@@ -9,6 +9,7 @@ class Category(models.Model):
         db_table = 'categories'
 
     name = models.CharField(verbose_name='name', unique=True, max_length=255)
+    slug = models.SlugField(verbose_name='slug', unique=True, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

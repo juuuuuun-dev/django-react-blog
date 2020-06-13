@@ -19,7 +19,7 @@ export const navList: INavList[] = [
     exact: true,
   },
   {
-    path: '/post/:id/',
+    path: '/posts/:id/',
     title: 'Post',
     component: PostDetail,
     hiddenNav: true,

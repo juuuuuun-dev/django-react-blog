@@ -1,11 +1,16 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list, create } from '../../../../service/admin/categories';
-import { defaultSuccessText, defaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, createAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/categories';
-import { error500AxiosResponse } from '../../../../__mocks__/serviceResponse/common';
+import { mocked } from 'ts-jest/utils';
+
+import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+
 import { setUp } from '../../../../__mocks__/adminSetUp';
+import {
+    createAxiosResponse, error400AxiosResponse, error400SlugAxiosResponse, listAxiosResponse,
+    listData
+} from '../../../../__mocks__/serviceResponse/categories';
+import { error500AxiosResponse } from '../../../../__mocks__/serviceResponse/common';
+import { defaultErrorText, defaultSuccessText } from '../../../../components/common/toast';
+import { create, list } from '../../../../service/admin/categories';
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/categories');
@@ -28,7 +33,7 @@ describe("Admin categories create", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
     })
     fireEvent.click(utils.getByTestId("create-btn"));
     await waitFor(() => {
@@ -36,6 +41,7 @@ describe("Admin categories create", () => {
     });
     act(() => {
       fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'createAbe' } });
+      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'createAbe' } });
     })
 
     fireEvent.submit(utils.getByLabelText("form-submit"))
@@ -52,7 +58,6 @@ describe("Admin categories create", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
     fireEvent.click(utils.getByTestId("create-btn"));
     await waitFor(() => {
@@ -60,6 +65,7 @@ describe("Admin categories create", () => {
     });
 
     fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'error-val' } });
+    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'error-val' } });
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
@@ -74,7 +80,6 @@ describe("Admin categories create", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
     fireEvent.click(utils.getByTestId("create-btn"));
     await waitFor(() => {
@@ -82,10 +87,36 @@ describe("Admin categories create", () => {
     });
 
     fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'error-val' } });
+    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'error-val' } });
+
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText(defaultErrorText)).toBeTruthy();
-      expect(utils.getByText("This name already exists")).toBeTruthy();
+      expect(utils.getByText(error400AxiosResponse.data.name[0])).toBeTruthy();
+    });
+  })
+
+  // 400
+  it("400 slug already exists", async () => {
+    mocked(create).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.reject({ response: error400SlugAxiosResponse })
+    );
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId("create-btn")).toBeTruthy();
+    })
+    fireEvent.click(utils.getByTestId("create-btn"));
+    await waitFor(() => {
+      expect(utils.getAllByText("Category create")).toBeTruthy();
+    });
+
+    fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'error-val' } });
+    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'error-val' } });
+
+    fireEvent.submit(utils.getByLabelText("form-submit"))
+    await waitFor(() => {
+      expect(utils.getAllByText(defaultErrorText)).toBeTruthy();
+      expect(utils.getByText(error400SlugAxiosResponse.data.slug[0])).toBeTruthy();
     });
   })
 })
