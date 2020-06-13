@@ -51,7 +51,7 @@ export const resultData2 = {
 }
 
 export const listData = {
-  "count": 1,
+  "count": 2,
   "results": [resultData, resultData2],
   "tags": tagList,
   "categories": categoryList,
@@ -72,6 +72,20 @@ export const listAxiosResponse: AxiosResponse = {
   config: {},
   headers: {},
 };
+
+export const list0ResultAxiosResponse: AxiosResponse = {
+  data: {
+    count: 0,
+    "results": [],
+    "tags": tagList,
+    "categories": categoryList,
+  },
+  status: 200,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+};
+
 
 export const error404AxiosResponse: AxiosResponse = {
   data: {},
