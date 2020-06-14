@@ -54,7 +54,7 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, error }) => {
         label="slug"
         extra="Used for url. If you change it, the URL will change"
         name="slug"
-        validateStatus={error && error.name ? "error" : "success"}
+        validateStatus={error && error.slug ? "error" : "success"}
         help={error && error.slug ? error.slug[0] : null}
         rules={[{ required: true, type: 'string', message: 'Please input slug' }]}
       >

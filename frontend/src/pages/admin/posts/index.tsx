@@ -1,7 +1,7 @@
 import { Input, Table, Tag } from 'antd';
 import { keyBy } from 'lodash';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import { CheckOutlined } from '@ant-design/icons';
@@ -23,6 +23,7 @@ const Posts: React.FC = () => {
   const [data, setData] = React.useState<PostList | undefined>();
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
+  const history = useHistory();
 
   const categoryById: any = React.useMemo(() => {
     return keyBy(data?.categories, 'id')
@@ -191,9 +192,16 @@ const Posts: React.FC = () => {
       />
 
       <Table
-        className="table"
+        className="admin-table"
         columns={columns}
         dataSource={data?.results}
+        onRow={(record: any) => {
+          return {
+            onClick: () => {
+              history.push(`${location.pathname}/${record.id}/edit`);
+            },
+          }
+        }}
         pagination={{
           total: data?.count,
           pageSize: state.pageSize,

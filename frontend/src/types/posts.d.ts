@@ -6,6 +6,7 @@ export type PostDetail = {
   id?: number;
   key?: number;
   title: string;
+  slug: string;
   content: string;
   cover?: string;
   thumb?: string;
@@ -39,7 +40,8 @@ export type PostFormProps = {
   formItem?: PostFormItem;
   onSubmit: (values: any) => Promise<void>;
   error?: {
-    title?: Array<string>
+    title?: Array<string>,
+    slug?: Array<string>,
   }
 }
 

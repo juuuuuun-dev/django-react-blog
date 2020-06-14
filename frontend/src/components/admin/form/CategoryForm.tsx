@@ -41,7 +41,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) =>
         label="name"
         name="name"
         validateStatus={error && error.name ? "error" : "success"}
-        help={error && error.name ? "This name already exists" : null}
+        help={error && error.name ? error.name[0] : null}
         rules={[{ required: true, message: 'Please input name' }]}
       >
         <Input aria-label="input-name" placeholder="name" />
@@ -51,8 +51,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) =>
         label="slug"
         extra="Used for url. If you change it, the URL will change"
         name="slug"
-        validateStatus={error && error.name ? "error" : "success"}
-        help={error && error.slug ? "This slug already exists" : null}
+        validateStatus={error && error.slug ? "error" : "success"}
+        help={error && error.slug ? error.slug[0] : null}
         rules={[{ required: true, type: 'string', message: 'Please input slug' }]}
       >
         <Input aria-label="input-slug" placeholder="Used for url" />
