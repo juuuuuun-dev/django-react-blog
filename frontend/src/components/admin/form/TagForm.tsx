@@ -1,5 +1,6 @@
+import { Button, Form, Input } from 'antd';
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+
 import { TagFormProps } from '../../../types/tags';
 
 const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, error }) => {
@@ -8,6 +9,10 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, error }) => {
       name: 'name',
       value: '',
     },
+    {
+      name: 'slug',
+      value: '',
+    }
   ]);
   React.useEffect(() => {
     if (data) {
@@ -15,6 +20,10 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, error }) => {
         {
           name: 'name',
           value: data.name
+        },
+        {
+          name: 'slug',
+          value: data.slug
         },
       ]);
     }
@@ -35,10 +44,21 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, error }) => {
         label="name"
         name="name"
         validateStatus={error && error.name ? "error" : "success"}
-        help={error && error.name ? "This name already exists" : null}
+        help={error && error.name ? error.name[0] : null}
         rules={[{ required: true, message: 'Please input name' }]}
       >
         <Input aria-label="input-name" placeholder="name" />
+      </Form.Item>
+
+      <Form.Item
+        label="slug"
+        extra="Used for url. If you change it, the URL will change"
+        name="slug"
+        validateStatus={error && error.name ? "error" : "success"}
+        help={error && error.slug ? error.slug[0] : null}
+        rules={[{ required: true, type: 'string', message: 'Please input slug' }]}
+      >
+        <Input aria-label="input-slug" placeholder="Used for url" />
       </Form.Item>
 
       <Form.Item colon={false}>

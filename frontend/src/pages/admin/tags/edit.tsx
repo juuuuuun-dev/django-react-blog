@@ -1,11 +1,12 @@
 import React from 'react';
-import { retrieve, update, destroy } from '../../../service/admin/tags';
-import { AdminContext } from '../../../context/adminContext';
-import TagForm from '../../../components/admin/form/TagForm'
-import { TagDetail } from '../../../types/tags';
-import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
+
 import DeleteBtn from '../../../components/admin/DeleteBtn';
+import TagForm from '../../../components/admin/form/TagForm';
+import toast from '../../../components/common/toast';
+import { AdminContext } from '../../../context/adminContext';
+import { destroy, retrieve, update } from '../../../service/admin/tags';
+import { TagDetail } from '../../../types/tags';
 
 const TagEdit: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
@@ -37,6 +38,7 @@ const TagEdit: React.FC = () => {
     try {
       const data = {
         name: values.name,
+        slug: values.slug,
       };
       const res = await update(id, data);
       if (res.status === 200) {

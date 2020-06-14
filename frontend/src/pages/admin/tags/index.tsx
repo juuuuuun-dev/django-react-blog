@@ -1,6 +1,6 @@
 import { Input, Table } from 'antd';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
@@ -19,6 +19,8 @@ const Tags: React.FC = () => {
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
+  const history = useHistory();
+
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
@@ -79,11 +81,18 @@ const Tags: React.FC = () => {
       })
     },
     {
+      title: 'slug',
+      name: 'slug',
+      dataIndex: 'slug',
+      key: 'slug',
+      width: '25%',
+    },
+    {
       title: 'updated',
       name: 'updated_at',
       dataIndex: 'updated_at',
       key: 'updated_at',
-      width: '20%',
+      width: '15%',
       sorter: (a: TagDetail, b: TagDetail) => sortDate(a.updated_at, b.updated_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
@@ -92,7 +101,7 @@ const Tags: React.FC = () => {
       name: 'created_at',
       dataIndex: 'created_at',
       key: 'created_at',
-      width: '20%',
+      width: '15%',
       sorter: (a: TagDetail, b: TagDetail) => sortDate(a.created_at, b.created_at),
       render: (text: string) => (<span className="font-size-07">{text}</span>)
     },
@@ -105,9 +114,16 @@ const Tags: React.FC = () => {
         handleQuerySearch={handleQuerySearch}
       />
       <Table
-        className="table"
+        className="admin-table"
         columns={columns}
         dataSource={data?.results}
+        onRow={(record: any) => {
+          return {
+            onClick: () => {
+              history.push(`${location.pathname}/${record.id}/edit`);
+            },
+          }
+        }}
         pagination={{
           total: data?.count,
           pageSize: state.pageSize,
