@@ -1,9 +1,10 @@
 import React from 'react';
-import { create } from '../../../service/admin/tags';
-import { AdminContext } from '../../../context/adminContext';
-import TagForm from '../../../components/admin/form/TagForm'
-import toast from '../../../components/common/toast';
 import { useHistory } from 'react-router-dom';
+
+import TagForm from '../../../components/admin/form/TagForm';
+import toast from '../../../components/common/toast';
+import { AdminContext } from '../../../context/adminContext';
+import { create } from '../../../service/admin/tags';
 
 const TagCreate: React.FC = () => {
   const dispatch = React.useContext(AdminContext)[1];
@@ -15,6 +16,7 @@ const TagCreate: React.FC = () => {
     try {
       const data = {
         name: values.name,
+        slug: values.slug,
       };
       const res = await create(data);
       if (res.status === 201) {

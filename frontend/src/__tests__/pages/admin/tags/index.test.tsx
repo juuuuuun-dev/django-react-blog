@@ -1,11 +1,13 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { fireEvent, waitFor, act } from '@testing-library/react'
-import { list } from '../../../../service/admin/tags';
-import { defaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse } from '../../../../__mocks__/serviceResponse/tags';
-import { sortDate } from '../../../../helper/sort';
+import { mocked } from 'ts-jest/utils';
+
+import { act, fireEvent, waitFor } from '@testing-library/react';
+
 import { setUp } from '../../../../__mocks__/adminSetUp';
+import { listAxiosResponse, listData } from '../../../../__mocks__/serviceResponse/tags';
+import { defaultErrorText } from '../../../../components/common/toast';
+import { sortDate } from '../../../../helper/sort';
+import { list } from '../../../../service/admin/tags';
 
 jest.mock('../../../../service/admin/tags');
 jest.mock('../../../../helper/sort')
@@ -17,14 +19,15 @@ describe("Admin tags index", () => {
   })
 
   // success
-  it("successful request", async () => {
+  it("Successful request", async () => {
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getAllByText("CREATE")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].slug)).toBeTruthy()
     })
   })
 
@@ -36,7 +39,6 @@ describe("Admin tags index", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getAllByText("CREATE")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
     fireEvent.click(utils.getByLabelText('open-filter-serach'));
     await waitFor(() => {
@@ -51,7 +53,7 @@ describe("Admin tags index", () => {
     fireEvent.click(utils.getByLabelText('open-filter-serach'));
     fireEvent.click(utils.getByLabelText('reset-filter-search'));
     await waitFor(() => {
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
     })
   })
 
@@ -63,7 +65,7 @@ describe("Admin tags index", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getAllByText("CREATE")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
     })
     fireEvent.click(utils.getByText('created'));
     fireEvent.click(utils.getByText('created'));
@@ -80,7 +82,6 @@ describe("Admin tags index", () => {
     const { utils, history } = await setUp(initialPath);
 
     expect(await utils.findAllByText("CREATE")).toBeTruthy();
-    expect(await utils.findByText(listData.results[0].name)).toBeTruthy()
 
     const searchText = 'STAY-HOME';
     expect(utils.queryByTestId('result-query-search-text')).toBeNull();

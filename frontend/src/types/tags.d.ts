@@ -3,6 +3,7 @@ import { Pagination } from './pagination';
 export type TagDetail = {
   id: number;
   name: string;
+  slug: string;
   key?: number;
   updated_at?: string;
   created_at?: string;
@@ -17,7 +18,8 @@ export type TagFormProps = {
   data?: TagDetail;
   onSubmit: (values: any) => Promise<void>;
   error?: {
-    name?: Array<string>
+    name?: Array<string>,
+    slug?: Array<string>
   }
 }
 

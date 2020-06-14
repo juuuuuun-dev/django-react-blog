@@ -1,13 +1,20 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list, retrieve, update, destroy } from '../../../../service/admin/tags';
-import { defaultSuccessText, defaultErrorText, defaultDeleteText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/tags';
-import { error404AxiosResponse, error500AxiosResponse, deleteAxiosResponse } from '../../../../__mocks__/serviceResponse/common';
-import { setUp } from '../../../../__mocks__/adminSetUp';
+import { mocked } from 'ts-jest/utils';
 
-afterEach(() => cleanup());
+import { act, fireEvent, waitFor } from '@testing-library/react';
+
+import { setUp } from '../../../../__mocks__/adminSetUp';
+import {
+    deleteAxiosResponse, error404AxiosResponse, error500AxiosResponse
+} from '../../../../__mocks__/serviceResponse/common';
+import {
+    detailAxiosResponse, error400AxiosResponse, listAxiosResponse, listData, updateAxiosResponse
+} from '../../../../__mocks__/serviceResponse/tags';
+import {
+    defaultDeleteText, defaultErrorText, defaultSuccessText
+} from '../../../../components/common/toast';
+import { destroy, list, retrieve, update } from '../../../../service/admin/tags';
+
 jest.mock('../../../../service/admin/tags');
 
 describe("Admin tags edit", () => {
@@ -37,14 +44,16 @@ describe("Admin tags edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].slug)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     await waitFor(() => {
       expect(utils.getAllByText("Tag edit")).toBeTruthy();
     });
     act(() => {
       fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'updateAbe' } });
+      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'updateAbe' } });
     })
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
@@ -62,9 +71,8 @@ describe("Admin tags edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     await waitFor(() => {
       expect(utils.getByText("Tag edit")).toBeTruthy();
     });
@@ -82,9 +90,8 @@ describe("Admin tags edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
     });
@@ -94,9 +101,8 @@ describe("Admin tags edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {
@@ -113,9 +119,8 @@ describe("Admin tags edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].name));
+    fireEvent.click(utils.getAllByText(listData.results[0].name)[0]);
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {

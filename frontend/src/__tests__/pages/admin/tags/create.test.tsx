@@ -1,13 +1,16 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list, create } from '../../../../service/admin/tags';
-import { defaultSuccessText, defaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, createAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/tags';
-import { error500AxiosResponse } from '../../../../__mocks__/serviceResponse/common';
-import { setUp } from '../../../../__mocks__/adminSetUp';
+import { mocked } from 'ts-jest/utils';
 
-afterEach(() => cleanup());
+import { act, fireEvent, waitFor } from '@testing-library/react';
+
+import { setUp } from '../../../../__mocks__/adminSetUp';
+import { error500AxiosResponse } from '../../../../__mocks__/serviceResponse/common';
+import {
+    createAxiosResponse, error400AxiosResponse, listAxiosResponse, listData
+} from '../../../../__mocks__/serviceResponse/tags';
+import { defaultErrorText, defaultSuccessText } from '../../../../components/common/toast';
+import { create, list } from '../../../../service/admin/tags';
+
 jest.mock('../../../../service/admin/tags');
 
 describe("Admin tags create", () => {
@@ -28,7 +31,7 @@ describe("Admin tags create", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
+      expect(utils.getAllByText(listData.results[0].name)).toBeTruthy()
     })
     fireEvent.click(utils.getByTestId("create-btn"));
     await waitFor(() => {
@@ -36,6 +39,7 @@ describe("Admin tags create", () => {
     });
     act(() => {
       fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'createAbe' } });
+      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'createAbe' } });
     })
 
     fireEvent.submit(utils.getByLabelText("form-submit"))
@@ -52,7 +56,6 @@ describe("Admin tags create", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
     fireEvent.click(utils.getByTestId("create-btn"));
     await waitFor(() => {
@@ -60,6 +63,8 @@ describe("Admin tags create", () => {
     });
 
     fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'error-val' } });
+    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'error-val' } });
+
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
@@ -74,7 +79,6 @@ describe("Admin tags create", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].name)).toBeTruthy()
     })
     fireEvent.click(utils.getByTestId("create-btn"));
     await waitFor(() => {
@@ -82,10 +86,12 @@ describe("Admin tags create", () => {
     });
 
     fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'error-val' } });
+    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'error-val' } });
+
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText(defaultErrorText)).toBeTruthy();
-      expect(utils.getByText("This name already exists")).toBeTruthy();
+      expect(utils.getByText(error400AxiosResponse.data.name[0])).toBeTruthy();
     });
   })
 })
