@@ -39,6 +39,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
       form.setFieldsValue(
         {
           title: data.title,
+          slug: data.slug,
           content: data.content,
           is_show: data.is_show || false,
           category: data.category,
@@ -81,7 +82,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
         setLoading(true);
         setImageUrl(imageUrl);
       });
-      // cropp用
+      // cropp
       // setFile(new File([file], file.name))
     }
     return false;
@@ -124,7 +125,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
               label="Title"
               name="title"
               validateStatus={error && error.title ? "error" : "success"}
-              help={error && error.title ? "This title already exists" : null}
+              help={error && error.title ? error.title[0] : null}
               rules={[{ required: true, message: 'Please input title' }]}
             >
               <Input
@@ -132,6 +133,18 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 aria-label="input-title"
                 placeholder="Title" />
             </Form.Item>
+
+            <Form.Item
+              label="slug"
+              extra="Used for url. If you change it, the URL will change"
+              name="slug"
+              validateStatus={error && error.slug ? "error" : "success"}
+              help={error && error.slug ? error.slug[0] : null}
+              rules={[{ required: true, type: 'string', message: 'Please input slug' }]}
+            >
+              <Input aria-label="input-slug" placeholder="Used for url" />
+            </Form.Item>
+
             <Form.Item
               label="Cover"
             // validateStatus={error && error.coer ? "error" : "success"}

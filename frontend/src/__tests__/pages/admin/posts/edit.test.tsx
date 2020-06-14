@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { mocked } from 'ts-jest/utils';
 
-import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 
 import { setUp } from '../../../../__mocks__/adminSetUp';
 import {
@@ -16,7 +16,6 @@ import {
 import { getBase64 } from '../../../../helper/file';
 import { destroy, list, retrieve, update } from '../../../../service/admin/posts';
 
-afterEach(() => cleanup());
 jest.mock('../../../../service/admin/posts');
 jest.mock('../../../../helper/file');
 
@@ -91,6 +90,7 @@ describe("Admin posts edit", () => {
     });
     act(() => {
       fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'Update Abe' } });
+      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'Update-Abe' } });
     })
     expect(await utils.findByTestId("post-preview-cover")).toBeTruthy();
     fireEvent.click(utils.getByLabelText("delete-cover"));
