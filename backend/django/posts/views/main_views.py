@@ -1,3 +1,4 @@
+from categories.models import Category
 from django_filters.rest_framework import DjangoFilterBackend
 from posts.models import Post
 from posts.paginatin import PostPagination
@@ -14,25 +15,38 @@ class PostList(cache_views.ReadOnlyCacheModelViewSet):
     pagination_class = PostPagination
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = ['category', 'tag']
-    search_fields = ['title', 'plain_content']
+    search_fields = ['title', 'slug', 'plain_content']
 
     def list(self, request):
         queryset = self.get_list_queryset(
-            request=request, base_key=self.base_cache_key)
-        # Post.objects.filter(is_show=True).order_by('-id')
-        # queryset = queryset.filter(is_show=True)
+            query_params=request.query_params, base_key=self.base_cache_key)
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, context={
             "request": request})
         return self.get_paginated_response(
             serializer.data)
-    # def get(self, request):
-    #     posts = Post.objects.filter(is_show=True).order_by('-id')
-    #     serializer = self.serializer_class(posts, many=True)
-    #     result = {
-    #         "posts": serializer.data,
-    #     }
-    #     return response.Response(result)
+
+
+class PostCategorySlugList(cache_views.ReadOnlyCacheModelViewSet):
+    throttle_scope = 'main'
+    base_cache_key = Post.show_cache_key
+    queryset = Post.objects.filter(is_show=True).order_by('-id')
+    serializer_class = main_serializers.MainPostListSerializer
+    pagination_class = PostPagination
+    filterset_fields = ['category', 'tag']
+
+    def list(self, request, slug=None):
+        category = Category.get_by_slug(slug)
+        if category:
+            cp = request.query_params.copy()
+            cp['category'] = category.id
+            queryset = self.get_list_queryset(
+                query_params=cp, base_key=self.base_cache_key)
+            page = self.paginate_queryset(queryset)
+            serializer = self.get_serializer(page, many=True, context={
+                "request": request})
+            return self.get_paginated_response(
+                serializer.data)
 
 
 class PostDetail(cache_views.ReadOnlyCacheModelViewSet):

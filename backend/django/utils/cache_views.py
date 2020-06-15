@@ -31,17 +31,17 @@ class CacheListModelMixin(mixins.ListModelMixin):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_list_queryset(
-            request=request, base_key=self.base_cache_key)
+            query_params=request.query_params, base_key=self.base_cache_key)
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, context={
             "request": request})
         return self.get_paginated_response(
             serializer.data)
 
-    def get_list_queryset(self, request, base_key, time=None):
-        if 'search' in request.query_params:
+    def get_list_queryset(self, query_params, base_key, time=None):
+        if 'search' in query_params:
             return self.filter_queryset(super().get_queryset().filter())
-        query_dict = self.sort_query_dict(request.query_params)
+        query_dict = self.sort_query_dict(query_params)
         self.list_cache_key_save(
             query_dict=query_dict,
             base_key=base_key)

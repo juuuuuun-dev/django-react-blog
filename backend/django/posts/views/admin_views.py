@@ -26,7 +26,7 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
 
     def list(self, request):
         queryset = self.get_list_queryset(
-            request=request, base_key=self.base_cache_key)
+            query_params=request.query_params, base_key=self.base_cache_key)
 
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, context={

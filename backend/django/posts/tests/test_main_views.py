@@ -37,6 +37,43 @@ class PostListTestCase(APITestCase):
         self.assertEqual(len(response.data['results']), 0)
 
 
+class PostCategorySlugListTestCase(APITestCase):
+    def setUp(self):
+        self.user = UserFactory.create()
+        self.user.set_password("test1234")
+        self.user.save()
+
+    def tearDown(self):
+        cache.clear()
+
+    def test_get_show(self):
+        tag = TagFactory.create(name="tagdayo")
+        TagFactory.create(name="tag2")
+        category = CategoryFactory.create()
+        post = PostFactory.create(user=self.user, category=category, tag=[tag])
+        api = reverse(
+            "posts:post-category-slug-list",
+            kwargs={
+                "slug": category.slug})
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['title'], post.title)
+        self.assertTrue(response.data['results'][0]['category'])
+        self.assertEqual(len(response.data['results'][0]['tag']), 1)
+
+    def test_get_not_show(self):
+        category = CategoryFactory.create()
+        PostFactory.create(user=self.user, category=category, is_show=False)
+        api = reverse(
+            "posts:post-category-slug-list",
+            kwargs={
+                "slug": category.slug})
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['results']), 0)
+
+
 class PostDetailTestCase(APITestCase):
     def setUp(self):
         self.user = UserFactory.create()

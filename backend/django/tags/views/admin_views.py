@@ -9,5 +9,5 @@ class AdminTagViewSet(cache_views.CacheModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = TagSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name']
+    search_fields = ['name', 'slug']
     base_cache_key = "tags"
