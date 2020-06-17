@@ -41,7 +41,7 @@ describe("Admin categories create", () => {
     });
     act(() => {
       fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'createAbe' } });
-      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'createAbe' } });
+      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'create-abe' } });
     })
 
     fireEvent.submit(utils.getByLabelText("form-submit"))

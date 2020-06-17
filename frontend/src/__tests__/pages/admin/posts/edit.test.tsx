@@ -90,7 +90,7 @@ describe("Admin posts edit", () => {
     });
     act(() => {
       fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'Update Abe' } });
-      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'Update-Abe' } });
+      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'update-abe' } });
     })
     expect(await utils.findByTestId("post-preview-cover")).toBeTruthy();
     fireEvent.click(utils.getByLabelText("delete-cover"));
