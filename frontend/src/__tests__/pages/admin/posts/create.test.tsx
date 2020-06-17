@@ -97,7 +97,7 @@ describe("Admin posts create", () => {
     });
     // change
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
-    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'createAbe' } });
+    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'create-abe' } });
     fireEvent.change(utils.getByLabelText("input-cover"), { target: { files: [file] } });
     const contentTitle = "create";
     await waitFor(() => {
@@ -188,7 +188,7 @@ describe("Admin posts create", () => {
 
     // change
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
-    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'createAbe' } });
+    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'create-abe' } });
     utils.getByTestId('text-area').firstElementChild.value = 'test';
     fireEvent.mouseDown(utils.getByLabelText("select-category").firstElementChild);
     fireEvent.click(utils.getByLabelText(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
@@ -215,7 +215,7 @@ describe("Admin posts create", () => {
 
     // change
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
-    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'createAbe' } });
+    fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'create-abe' } });
     fireEvent.mouseDown(utils.getByLabelText("select-category").firstElementChild);
     fireEvent.click(utils.getByLabelText(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
     fireEvent.submit(utils.getByLabelText("form-submit"))

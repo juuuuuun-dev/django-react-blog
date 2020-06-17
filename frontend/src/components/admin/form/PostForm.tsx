@@ -140,7 +140,10 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
               name="slug"
               validateStatus={error && error.slug ? "error" : "success"}
               help={error && error.slug ? error.slug[0] : null}
-              rules={[{ required: true, type: 'string', message: 'Please input slug' }]}
+              rules={[
+                { required: true, message: 'Please input slug' },
+                { pattern: new RegExp("^[a-z0-9_-]*$"), message: 'The slug must contain only lowercase letters, numbers, and hyphens/underscores.' },
+              ]}
             >
               <Input aria-label="input-slug" placeholder="Used for url" />
             </Form.Item>
