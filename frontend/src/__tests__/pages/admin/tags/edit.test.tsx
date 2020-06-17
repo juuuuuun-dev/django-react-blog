@@ -53,7 +53,7 @@ describe("Admin tags edit", () => {
     });
     act(() => {
       fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'updateAbe' } });
-      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'updateAbe' } });
+      fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'update-abe' } });
     })
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {

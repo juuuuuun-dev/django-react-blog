@@ -4,7 +4,7 @@ export const resultData = {
   "id": 1,
   "key": 1,
   "name": "testAbe",
-  "slug": "testAbe",
+  "slug": "test-abe",
   "created_at": "2020-02-02",
   "updated_at": "2020-02-02",
 }
@@ -13,7 +13,7 @@ export const resultData2 = {
   "id": 2,
   "key": 2,
   "name": "testAsou",
-  "slug": "testAsou",
+  "slug": "test-asou",
   "created_at": "2020-02-03",
   "updated_at": "2020-02-03",
 }
@@ -27,6 +27,7 @@ export const updateResultData = {
   "id": 1,
   "key": 1,
   "name": "updateAbe",
+  "slug": "update-abe",
   "created_at": "2020-02-02",
   "updated_at": "2020-02-03",
 }
