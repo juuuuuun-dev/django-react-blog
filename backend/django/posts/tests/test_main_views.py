@@ -49,8 +49,15 @@ class PostCategorySlugListTestCase(APITestCase):
     def test_get_show(self):
         tag = TagFactory.create(name="tagdayo")
         TagFactory.create(name="tag2")
-        category = CategoryFactory.create()
-        post = PostFactory.create(user=self.user, category=category, tag=[tag])
+        category = CategoryFactory.create(slug="slu")
+        category_2 = CategoryFactory.create(slug="slug2")
+        post = PostFactory.create(
+            user=self.user,
+            title="post",
+            category=category,
+            tag=[tag])
+        post_2 = PostFactory.create(
+            user=self.user, title="post_2", category=category_2, tag=[tag])
         api = reverse(
             "posts:post-category-slug-list",
             kwargs={
@@ -58,6 +65,8 @@ class PostCategorySlugListTestCase(APITestCase):
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['id'], post.id)
         self.assertEqual(response.data['results'][0]['title'], post.title)
         self.assertTrue(response.data['results'][0]['category'])
         self.assertEqual(len(response.data['results'][0]['tag']), 1)
