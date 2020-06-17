@@ -55,3 +55,8 @@ export type PostPreviewProps = {
   content: string;
   cover?: string;
 }
+
+export type PostListPageCountResultsProps = {
+  query: ListQuery
+  data: PostList,
+}
