@@ -58,5 +58,5 @@ export type PostPreviewProps = {
 
 export type PostListPageCountResultsProps = {
   query: ListQuery
-  data: PostList,
+  count: number | undefined,
 }

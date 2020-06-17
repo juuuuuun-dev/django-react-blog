@@ -1,8 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
+import { NumberParam, useQueryParams } from 'use-query-params';
 
 import PostList from '../../components/main/posts/PostList';
+import PostListPageCountResults from '../../components/main/posts/PostListPageCountResults';
+import PostListTitle from '../../components/main/posts/PostListTitle';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { categoryPagelist } from '../../service/main/posts';
 import { PostList as PostListType } from '../../types/posts';
@@ -11,7 +13,6 @@ const Index: React.FC = () => {
   const [pushError] = useHistoryPushError();
   const [data, setData] = React.useState<PostListType>();
   const [query, setQuery] = useQueryParams({ page: NumberParam });
-
   const { slug } = useParams();
 
   const fetchData = React.useCallback(async () => {
@@ -24,7 +25,7 @@ const Index: React.FC = () => {
       }
     }
 
-  }, [pushError, query]);
+  }, [pushError, query, slug]);
 
   React.useEffect(() => {
     fetchData();
@@ -38,7 +39,8 @@ const Index: React.FC = () => {
 
   return (
     <>
-      <h3 className="list-title">Search:あ</h3>
+      <PostListTitle title={`Category: ${slug}`} />
+      <PostListPageCountResults count={data?.count} query={query} />
       <PostList data={data} query={query} handlePageChange={handlePageChange} />
     </>
   )

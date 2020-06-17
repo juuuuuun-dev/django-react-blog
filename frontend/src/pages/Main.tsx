@@ -2,6 +2,7 @@ import React from 'react';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import PostList from '../components/main/posts/PostList';
+import PostListTitle from '../components/main/posts/PostListTitle';
 import { useHistoryPushError } from '../helper/useHistoryPushError';
 import { list } from '../service/main/posts';
 import { PostList as PostListType } from '../types/posts';
@@ -56,7 +57,7 @@ const Index = () => {
 
   return (
     <>
-      {query.search && <h3 className="list-title">Search: {query.search}</h3>}
+      {query.search && <PostListTitle title={`Search: ${query.search}`} />}
       <PageResults />
       <PostList data={data} query={query} handlePageChange={handlePageChange} />
     </>
