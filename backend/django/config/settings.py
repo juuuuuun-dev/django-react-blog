@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'users',
     'media',
     'utils',
+    'initial',
     'blog_auth',
     'django.contrib.sites',
     'django.contrib.admin',
