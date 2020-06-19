@@ -18,7 +18,9 @@ const PostSearchInput: React.FC = () => {
   }
   return (
     <>
-      <Search placeholder="search" allowClear aria-label="input-query-search" defaultValue={search || undefined} onSearch={(value) => handleQuerySearch(value)} enterButton={<SearchOutlined aria-label="submit-query-search" />} />
+      <div className="right-contents-search">
+        <Search placeholder="search" allowClear aria-label="input-query-search" defaultValue={search || undefined} onSearch={(value) => handleQuerySearch(value)} enterButton={<SearchOutlined aria-label="submit-query-search" />} />
+      </div>
     </>
   )
 }

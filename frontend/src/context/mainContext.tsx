@@ -1,9 +1,12 @@
 import React from 'react';
 
+import { useHistoryPushError } from '../helper/useHistoryPushError';
+import { getInit } from '../service/main/init';
 import { MainState, ProviderProps } from '../types/mainContext';
 import { mainReducer } from './mainReducer';
 
-export const initState: MainState = {
+export const mainState: MainState = {
+  init: undefined,
   loading: false,
   pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
   globalModalConfig: {
@@ -15,15 +18,24 @@ export const initState: MainState = {
 
 export const MainContext = React.createContext({} as ProviderProps);
 export const MainContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = React.useReducer(mainReducer, initState);
+  const [state, dispatch] = React.useReducer(mainReducer, mainState);
   const providerValue = React.useMemo((): ProviderProps => [state, dispatch], [state, dispatch]);
+  const [pushError] = useHistoryPushError();
+
+  const fetchData = React.useCallback(async () => {
+    try {
+      const res = await getInit();
+      dispatch({ type: 'SET_INIT', payload: { init: res.data } });
+    } catch (e) {
+      if (e.response && e.response.status) {
+        pushError(e.response.status)
+      }
+    }
+  }, [pushError])
 
   React.useEffect(() => {
-    const fn = async () => {
-
-    };
-    fn();
-  }, []);
+    fetchData()
+  }, [fetchData]);
 
   return React.useMemo(() => {
     return (

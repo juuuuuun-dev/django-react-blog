@@ -4,6 +4,10 @@
 // xl	≥1200px,
 // xxl	≥1600px
 
+ul{ margin: 0; padding: 0;}
+li {list-style: none;}
+a { color: @content-link-color; }
+
 .header-container {
   max-width: @max-width;
   margin: 0 auto;
@@ -14,9 +18,26 @@
   margin: 0 auto;
   padding: @global-padding;
 }
+// .right-contents
 .right-contents{
   background: #fff;
   margin-left: @global-margin;
+  &-search {
+    margin-bottom: (@global-margin / 2) - 5;
+  }
+  &-section {
+    margin-bottom: @global-margin / 2;
+    &__title {
+      font-weight: bold;
+    }
+  }
+  &-list{
+    &__item {
+      border-bottom: 1px dashed #eee;
+      padding: 5px 0;
+    }
+
+  }
 }
 
 .page-resutls {
