@@ -43,7 +43,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                   className="post-list__description"
                   title={`${item.plain_content}`}
                 >
-                  <Link to={`/post/${item.id}`}>{item.plain_content}</Link>
+                  <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
                 </Paragraph>
                 <div className="entry-date">
                   <span className="entry-date__item"><ClockCircleOutlined />{item.created_at}</span>

@@ -14,11 +14,7 @@ export const setLoading = (loading: boolean) => ({
 export const setInit = (init: InitState) => ({
   type: SET_INIT,
   payload: {
-    init: {
-      author: init?.author,
-      categories: init?.categories,
-      tags: init?.tags
-    }
+    init: init
   }
 });
 

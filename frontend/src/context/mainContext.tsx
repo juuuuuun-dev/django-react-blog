@@ -25,7 +25,16 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
   const fetchData = React.useCallback(async () => {
     try {
       const res = await getInit();
-      dispatch({ type: 'SET_INIT', payload: { init: res.data } });
+      dispatch({
+        type: 'SET_INIT', payload: {
+          init: {
+            author: res.data.author,
+            categories: res.data.categories,
+            tags: res.data.tags,
+            recentPosts: res.data.recent_posts,
+          }
+        }
+      });
     } catch (e) {
       if (e.response && e.response.status) {
         pushError(e.response.status)
