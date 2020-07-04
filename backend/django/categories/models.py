@@ -4,6 +4,7 @@ from django.db import models
 
 class Category(models.Model):
     base_cache_key = "categories"
+    slug_cache_key = "category-slug"
 
     class Meta:
         db_table = 'categories'
@@ -20,7 +21,9 @@ class Category(models.Model):
     def get_all(cls):
         return cache.get_or_set(cls.base_cache_key, Category.objects.all())
 
-    # TODO cache
     @classmethod
     def get_by_slug(cls, slug):
-        return Category.objects.get(slug=slug)
+        return cache.get_or_set(
+            cls.slug_cache_key,
+            Category.objects.get(
+                slug=slug))
