@@ -6,7 +6,7 @@
 
 .post-list {
   &__title {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-right: 10px;
     font-weight: 600;
     font-family:  Roboto, 'Helvetica Neue',
@@ -15,25 +15,38 @@
     color: #111;
   }
   &__description.ant-typography{
-    margin-right: 10px;
+    margin-right: @global-margin / 4;
     font-size: .8rem;
     a {
       color: #666;
     }
   }
   &__thumb {
-    margin-top: -40px;
+    margin-top: -16px;
     img {
       border-radius: 4px;
     }
   }
   .ant-list-items {
+    .ant-list-item {
+      margin-bottom: @global-margin / 4;
+      padding-bottom: @global-margin / 3;
+    }
     .ant-list-item:first-child {
       padding-top: 0;
     }
   }
 }
 
+.right-contents-section .post-list {
+  &__thumb {
+    margin-top: -0;
+  }
+  &__title {
+    font-size: .8rem;
+    font-weight: normal;
+  }
+}
 
 @media screen and (max-width: @break-point) {
   .post-list {

@@ -63,7 +63,7 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         # cache
         self.delete_list_cache(self.base_cache_key)
         self.delete_list_cache(Post.show_cache_key)
-
+        self.delete_list_cache(Post.recent_cache_key)
         return response.Response(
             serializer.data,
             status=status.HTTP_201_CREATED)
@@ -86,6 +86,7 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         # delete cache
         self.delete_list_cache(self.base_cache_key)
         self.delete_list_cache(Post.show_cache_key)
+        self.delete_list_cache(Post.recent_cache_key)
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
         self.delete_detail_cache(base_key=Post.show_cache_key, pk=pk)
         return response.Response(serializer.data)

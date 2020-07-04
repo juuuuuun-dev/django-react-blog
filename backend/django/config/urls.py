@@ -29,6 +29,7 @@ urlpatterns = [
     path("{}categories/".format(settings.API_VERSION), include("categories.urls")),
     path("{}posts/".format(settings.API_VERSION), include("posts.urls")),
     path("{}media/".format(settings.API_VERSION), include("media.urls")),
+    path("{}init/".format(settings.API_VERSION), include("initial.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

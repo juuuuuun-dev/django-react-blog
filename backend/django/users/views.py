@@ -1,15 +1,17 @@
-from rest_framework import views, status
-from rest_framework.response import Response
 from django.contrib.sites.shortcuts import get_current_site
-from rest_framework.permissions import IsAuthenticated, AllowAny
 # from rest_framework.authentication import TokenAuthentication
 # from rest_framework.decorators import api_view, permission_classes
 # from .parmission import UserIsOwnerUserProfile
 from django.shortcuts import get_object_or_404
-from .models import UserProfile, User
-from .serializers import UserProfileSerializer, UserSerializer, \
-    PasswordResetSerializer, PasswordResetConfirmSerializer
+from rest_framework import status, views
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from utils.file import delete_thumb
+
+from .models import User, UserProfile
+from .serializers import (PasswordResetConfirmSerializer,
+                          PasswordResetSerializer, UserProfileSerializer,
+                          UserSerializer)
 
 
 class UserProfileView(views.APIView):

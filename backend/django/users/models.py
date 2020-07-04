@@ -56,6 +56,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ("username",)
 
+    @classmethod
+    def get_author(cls):
+        author = User.objects.get(is_superuser=True)
+        if author:
+            return author
+
 
 def get_file_path(instance, filename):
     name, ext = os.path.splitext(filename)

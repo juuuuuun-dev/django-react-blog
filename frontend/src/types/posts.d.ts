@@ -1,4 +1,4 @@
-import { CategoryDetail, CategoryList, CategorySimpleDetail } from './categories';
+import { CategoryDetail, CategoryList } from './categories';
 import { ListQuery, Pagination } from './pagination';
 import { TagDetail, TagList } from './tags';
 

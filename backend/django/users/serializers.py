@@ -1,6 +1,7 @@
-from rest_framework import serializers
-from .models import User, UserProfile
 from django.contrib.auth.tokens import default_token_generator
+from rest_framework import serializers
+
+from .models import User, UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -48,6 +49,16 @@ class UserSerializer(serializers.ModelSerializer):
         instance.profile.url = profile_data.get("url", instance.profile.url)
         instance.profile.save()
         return instance
+
+
+class PublicAuthorSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer()
+
+    class Meta:
+        model = User
+        fields = (
+            "profile",
+        )
 
 
 class PasswordResetSerializer(serializers.Serializer):

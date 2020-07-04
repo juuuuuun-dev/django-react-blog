@@ -3,6 +3,7 @@ import uuid
 
 from categories.models import Category
 from categories.serializers import CategoryListSerializer
+from django.core.cache import cache
 from django.db import models
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
@@ -21,6 +22,7 @@ class Post(models.Model):
 
     base_cache_key = 'posts'
     show_cache_key = 'show-posts'
+    recent_cache_key = 'recent-posts'
 
     class Meta:
         db_table = 'posts'
@@ -56,6 +58,11 @@ class Post(models.Model):
         except BaseException:
             pass
         super().delete(*args, **kwargs)
+
+    @classmethod
+    def get_recent_posts(cls):
+        return cache.get_or_set(cls.recent_cache_key, Post.objects.filter(
+            is_show=True).order_by('-id')[:3])
 
     @staticmethod
     def get_tag_and_category_list():

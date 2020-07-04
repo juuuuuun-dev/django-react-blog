@@ -18,13 +18,13 @@ const MainLayout = () => {
         <Content className="site-layout">
           <div className="main-container site-layout-background">
             <Row gutter={[60, 60]}>
-              <Col lg={17} md={24} flex="auto">
+              <Col lg={17} md={24} sm={24} xs={24}>
                 {/* <Col flex="1 1 587px"> */}
                 <div className="contents">
                   <Container />
                 </div>
               </Col>
-              <Col flex="320px" lg={7} md={24}>
+              <Col lg={7} md={24} sm={24} xs={24}>
                 {/* <Col className="right-contents" flex="0 1 300px"> */}
                 <RightContainer />
               </Col>

@@ -11,13 +11,14 @@ import { MainContext } from '../../../context/mainContext';
 import { PostListProps } from '../../../types/posts';
 
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
-  const [{ pageSize }, dispatch] = React.useContext(MainContext);
+  const [{ pageSize }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
 
   return (
     <>
       <List
         className="post-list"
+        data-testid="post-list"
         dataSource={data?.results}
         renderItem={item => (
           <List.Item key={item.id}>
@@ -43,7 +44,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                   className="post-list__description"
                   title={`${item.plain_content}`}
                 >
-                  <Link to={`/post/${item.id}`}>{item.plain_content}</Link>
+                  <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
                 </Paragraph>
                 <div className="entry-date">
                   <span className="entry-date__item"><ClockCircleOutlined />{item.created_at}</span>

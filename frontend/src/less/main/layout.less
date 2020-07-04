@@ -4,6 +4,10 @@
 // xl	≥1200px,
 // xxl	≥1600px
 
+ul{ margin: 0; padding: 0;}
+li {list-style: none;}
+a { color: @content-link-color; }
+
 .header-container {
   max-width: @max-width;
   margin: 0 auto;
@@ -14,9 +18,41 @@
   margin: 0 auto;
   padding: @global-padding;
 }
+// .right-contents
 .right-contents{
+  &__catch {
+    margin-bottom: @global-margin;
+  }
   background: #fff;
   margin-left: @global-margin;
+  &-section {
+    margin-bottom: @global-margin;
+    &__title {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: @global-margin / 3;
+    }
+  }
+  &-about-me {
+    &__avatar {
+      margin-bottom: @global-margin / 4;
+      & h3 {
+        font-weight: normal;
+        line-height: 3.5;
+      }
+    }
+    & p {
+      font-size: .8rem;
+    }
+  }
+  &-list{
+    margin-top: -5px;
+    &__item {
+      border-bottom: 1px dashed #eee;
+      padding: 5px 0;
+    }
+
+  }
 }
 
 .page-resutls {

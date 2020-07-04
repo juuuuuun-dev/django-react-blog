@@ -5,18 +5,12 @@ export type CategoryDetail = {
   key?: number;
   name: string;
   slug: string;
-  updated_at: string;
-  created_at: string;
+  updated_at?: string;
+  created_at?: string;
 }
 
 export type CategoryList = Pagination & {
   results: CategoryDetail[]
-}
-
-export type CategorySimpleDetail = {
-  id: number;
-  name: string;
-  slug: string;
 }
 
 export type CategoryFormProps = {
