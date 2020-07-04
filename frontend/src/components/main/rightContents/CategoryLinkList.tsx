@@ -8,7 +8,7 @@ const CategoryLinkList: React.FC<CategoryLinkListProps> = ({ categories }) => {
   return (
     <>
       {categories && <RightContentSection title="Categories">
-        <ul className="right-contents-list">
+        <ul className="right-contents-list" data-testid="right-contents-category-link-list">
           {categories.map((value, index) => {
             return (<Link key={index} to={`/categories/${value.slug}`}><li className="right-contents-list__item">{value.name}</li></Link>)
           })}

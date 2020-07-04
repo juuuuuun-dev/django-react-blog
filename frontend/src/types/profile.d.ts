@@ -2,6 +2,7 @@ export type ProfileDetail = {
   public_name: string;
   message: string;
   avator: string;
+  thumb?: string;
   url: string;
 }
 

@@ -20,11 +20,12 @@ class InitialView(views.APIView):
             recent_posts, many=True)
         tag_serializer = TagListSerializer(tags, many=True)
         category_serializer = CategoryListSerializer(categories, many=True)
-        author_serializer = PublicAuthorSerializer(author)
+        author_serializer = PublicAuthorSerializer(author, context={
+            "request": request})
         data = {
             "author": author_serializer.data["profile"],
             "categories": category_serializer.data,
             "tags": tag_serializer.data,
-            "recent_posts": recent_post_serializer.data
+            "recent_posts": recent_post_serializer.data,
         }
         return response.Response(data)

@@ -11,13 +11,14 @@ import { MainContext } from '../../../context/mainContext';
 import { PostListProps } from '../../../types/posts';
 
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
-  const [{ pageSize }, dispatch] = React.useContext(MainContext);
+  const [{ pageSize }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
 
   return (
     <>
       <List
         className="post-list"
+        data-testid="post-list"
         dataSource={data?.results}
         renderItem={item => (
           <List.Item key={item.id}>

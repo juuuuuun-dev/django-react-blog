@@ -1,5 +1,6 @@
 import { CategoryDetail } from './categories';
 import { PostDetail } from './posts';
+import { ProfileDetail } from './profile';
 import { TagDetail } from './tags';
 
 export type CategoryLinkListProps = {
@@ -18,4 +19,8 @@ export type RecentPostListProps = {
 export type RightContentsSectionProps = {
   children: ReactNode;
   title: string;
+}
+
+export type AboutMeProps = {
+  author: ProfileDetail | undefined;
 }

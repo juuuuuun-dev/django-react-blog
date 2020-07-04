@@ -9,10 +9,11 @@ const TagLinkList: React.FC<TagLinkListProps> = ({ tags }) => {
   return (
     <>
       {tags && <RightContentSection title="Tags">
-        {tags.map((value, index) => {
-          return (<Tag key={index}><Link to={`/tags/${value.slug}`}>{value.name}</Link></Tag>)
-        })}
-
+        <div data-testid="right-contents-tag-link-list">
+          {tags.map((value, index) => {
+            return (<Tag key={index}><Link to={`/tags/${value.slug}`}>{value.name}</Link></Tag>)
+          })}
+        </div>
       </RightContentSection>}
     </>
   )

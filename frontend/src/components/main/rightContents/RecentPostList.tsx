@@ -16,6 +16,7 @@ const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {
       {posts && <RightContentSection title="Recent posts">
         <List
           className="post-list"
+          data-testid="recent-post-list"
           dataSource={posts}
           renderItem={item => (
             <List.Item key={item.id}>

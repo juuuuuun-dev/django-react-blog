@@ -2,6 +2,7 @@ import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import { MainContext } from '../../../context/mainContext';
+import AboutMe from '../rightContents/AboutMe';
 import CategoryLinkList from '../rightContents/CategoryLinkList';
 import PostSearchInput from '../rightContents/PostSearchInput';
 import RecentPostList from '../rightContents/RecentPostList';
@@ -20,6 +21,7 @@ const RightContainer: React.FC = () => {
           src={`/assets/images/right.jpg`}
         />
       </div>
+      <AboutMe author={init?.author} />
       <PostSearchInput />
       <RecentPostList posts={init?.recentPosts} />
       <CategoryLinkList categories={init?.categories} />
