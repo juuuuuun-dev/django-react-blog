@@ -4,15 +4,17 @@ import { ProfileDetail } from './profile';
 import { TagDetail } from './tags';
 
 export type CategoryLinkListProps = {
-  categories: CategoryDetail[] | undefined
+  categories: CategoryDetail[] | undefined;
+  slug: string | undefined;
 }
 
 export type TagLinkListProps = {
-  tags: TagDetail[] | undefined
+  tags: TagDetail[] | undefined;
+  slug: string | undefined;
 }
 
 export type RecentPostListProps = {
-  posts: PostDetail[] | undefined
+  posts: PostDetail[] | undefined;
 }
 
 

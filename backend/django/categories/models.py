@@ -1,10 +1,10 @@
 from django.core.cache import cache
 from django.db import models
+from utils.cache_views import cache_key_stringfiy
 
 
 class Category(models.Model):
     base_cache_key = "categories"
-    slug_cache_key = "category-slug"
 
     class Meta:
         db_table = 'categories'
@@ -23,7 +23,11 @@ class Category(models.Model):
 
     @classmethod
     def get_by_slug(cls, slug):
+        cache_key = cache_key_stringfiy(
+            base_key=cls.base_cache_key,
+            query_dict={
+                "slug": slug})
         return cache.get_or_set(
-            cls.slug_cache_key,
+            cache_key,
             Category.objects.get(
                 slug=slug))

@@ -6,10 +6,12 @@ export const tagList = [
   {
     "id": 1,
     "name": "test tag",
+    "slug": "test-tag"
   },
   {
     "id": 2,
     "name": "test tag2",
+    "slug": "test-tag2",
   }
 ];
 export const categoryList = [

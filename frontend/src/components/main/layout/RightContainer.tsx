@@ -1,5 +1,6 @@
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useParams } from 'react-router-dom';
 
 import { MainContext } from '../../../context/mainContext';
 import AboutMe from '../rightContents/AboutMe';
@@ -11,7 +12,7 @@ import TagLinkList from '../rightContents/TagLinkList';
 const RightContainer: React.FC = () => {
   const [{ init }, dispatch] = React.useContext(MainContext);
   console.log({ init })
-
+  const { slug } = useParams();
   return (
     <>
       <div className="right-contents-section">
@@ -24,8 +25,8 @@ const RightContainer: React.FC = () => {
       <AboutMe author={init?.author} />
       <PostSearchInput />
       <RecentPostList posts={init?.recentPosts} />
-      <CategoryLinkList categories={init?.categories} />
-      <TagLinkList tags={init?.tags} />
+      <CategoryLinkList categories={init?.categories} slug={slug} />
+      <TagLinkList tags={init?.tags} slug={slug} />
     </>
   )
 }

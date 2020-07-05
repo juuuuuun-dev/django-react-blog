@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { CategoryLinkListProps } from '../../../types/rightContents';
 import RightContentSection from './RightContentSection';
 
-const CategoryLinkList: React.FC<CategoryLinkListProps> = ({ categories }) => {
+const CategoryLinkList: React.FC<CategoryLinkListProps> = ({ categories, slug }) => {
   return (
     <>
       {categories && <RightContentSection title="Categories">
