@@ -12,8 +12,11 @@ const TagLinkList: React.FC<TagLinkListProps> = ({ tags, slug }) => {
       {tags && <RightContentSection title="Tags">
         <div data-testid="right-contents-tag-link-list">
           {tags.map((value, index) => {
-
-            return (<Tag key={index}><Link data-testid={`right-contents-tag-link-${value.slug}`} to={`/tags/${value.slug}`}>{value.name}</Link></Tag>)
+            let color = '';
+            if (value.slug == slug) {
+              color = "#444"
+            }
+            return (<Tag color={color} key={index}><Link data-testid={`right-contents-tag-link-${value.slug}`} to={`/tags/${value.slug}`}>{value.name}</Link></Tag>)
           })}
         </div>
       </RightContentSection>}
