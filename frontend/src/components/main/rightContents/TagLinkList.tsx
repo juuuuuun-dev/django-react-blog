@@ -5,8 +5,9 @@ import { Link, useParams } from 'react-router-dom';
 import { TagLinkListProps } from '../../../types/rightContents';
 import RightContentSection from './RightContentSection';
 
-const TagLinkList: React.FC<TagLinkListProps> = ({ tags, slug }) => {
-  console.log({ slug })
+const TagLinkList: React.FC<TagLinkListProps> = ({ tags }) => {
+  const { slug } = useParams();
+
   return (
     <>
       {tags && <RightContentSection title="Tags">

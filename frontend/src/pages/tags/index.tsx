@@ -39,7 +39,7 @@ const Index: React.FC = () => {
 
   return (
     <>
-      <PostListTitle title={`Tag: ${slug}`} />
+      <PostListTitle title={`Tag: ${data?.tag_name}`} />
       <PostListPageCountResults count={data?.count} query={query} />
       <PostList data={data} query={query} handlePageChange={handlePageChange} />
     </>

@@ -18,10 +18,12 @@ export const categoryList = [
   {
     id: 1,
     name: "category test",
+    slug: "category-test",
   },
   {
     id: 2,
     name: "category test2",
+    slug: "category-test2",
   },
 ]
 

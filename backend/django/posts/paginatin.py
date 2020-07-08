@@ -19,6 +19,6 @@ class PostPagination(PageNumberPagination):
             'count': self.page.paginator.count,
             'tags': tagSerializer.data,
             'categories': categorySerializer.data,
-            'results': data
         }
+        response.update(data)
         return Response(response)

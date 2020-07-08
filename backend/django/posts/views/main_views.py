@@ -24,8 +24,10 @@ class PostList(cache_views.ReadOnlyCacheModelViewSet):
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, context={
             "request": request})
-        return self.get_paginated_response(
-            serializer.data)
+        data = {
+            "results": serializer.data
+        }
+        return self.get_paginated_response(data)
 
 
 class PostCategorySlugList(cache_views.ReadOnlyCacheModelViewSet):
@@ -49,8 +51,11 @@ class PostCategorySlugList(cache_views.ReadOnlyCacheModelViewSet):
             page = self.paginate_queryset(queryset)
             serializer = self.get_serializer(page, many=True, context={
                 "request": request})
-            return self.get_paginated_response(
-                serializer.data)
+            data = {
+                "category_name": category.name,
+                "results": serializer.data,
+            }
+            return self.get_paginated_response(data)
 
 
 class PostTagSlugList(cache_views.ReadOnlyCacheModelViewSet):
@@ -74,8 +79,11 @@ class PostTagSlugList(cache_views.ReadOnlyCacheModelViewSet):
             page = self.paginate_queryset(queryset)
             serializer = self.get_serializer(page, many=True, context={
                 "request": request})
-            return self.get_paginated_response(
-                serializer.data)
+            data = {
+                "tag_name": tag.name,
+                "results": serializer.data,
+            }
+            return self.get_paginated_response(data)
 
 
 class PostDetail(cache_views.ReadOnlyCacheModelViewSet):
