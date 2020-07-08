@@ -31,8 +31,10 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, context={
             "request": request})
-        return self.get_paginated_response(
-            serializer.data)
+        data = {
+            "results": serializer.data
+        }
+        return self.get_paginated_response(data)
 
     def retrieve(self, request, pk=None):
         queryset = self.get_detail_queryset(

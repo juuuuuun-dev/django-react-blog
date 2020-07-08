@@ -22,6 +22,8 @@ export type PostList = Pagination & {
   results: PostDetail[],
   tags: TagDetail[],
   categories: CategoryDetail[],
+  tag_name?: string;
+  category_name?: string;
 } | undefined;
 
 export type PostListProps = {

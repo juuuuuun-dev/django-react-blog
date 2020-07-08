@@ -1,5 +1,6 @@
 from django.core.cache import cache
 from django.db import models
+from utils.cache_views import cache_key_stringfiy
 
 
 class Category(models.Model):
@@ -20,7 +21,13 @@ class Category(models.Model):
     def get_all(cls):
         return cache.get_or_set(cls.base_cache_key, Category.objects.all())
 
-    # TODO cache
     @classmethod
     def get_by_slug(cls, slug):
-        return Category.objects.get(slug=slug)
+        cache_key = cache_key_stringfiy(
+            base_key=cls.base_cache_key,
+            query_dict={
+                "slug": slug})
+        return cache.get_or_set(
+            cache_key,
+            Category.objects.get(
+                slug=slug))

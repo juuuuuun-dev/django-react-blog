@@ -47,6 +47,7 @@ class CacheListModelMixin(mixins.ListModelMixin):
             base_key=base_key)
         cache_key = cache_key_stringfiy(
             base_key=base_key, query_dict=query_dict)
+        print(cache_key)
         return cache.get_or_set(
             cache_key, self.filter_queryset(
                 super().get_queryset().filter()))

@@ -6,7 +6,7 @@ import PostList from '../../components/main/posts/PostList';
 import PostListPageCountResults from '../../components/main/posts/PostListPageCountResults';
 import PostListTitle from '../../components/main/posts/PostListTitle';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
-import { categoryPagelist } from '../../service/main/posts';
+import { tagPagelist } from '../../service/main/posts';
 import { PostList as PostListType } from '../../types/posts';
 
 const Index: React.FC = () => {
@@ -17,7 +17,7 @@ const Index: React.FC = () => {
 
   const fetchData = React.useCallback(async () => {
     try {
-      const res = await categoryPagelist(slug, { page: query.page });
+      const res = await tagPagelist(slug, { page: query.page });
       setData(res.data)
     } catch (e) {
       if (e.response && e.response.status) {
@@ -39,7 +39,7 @@ const Index: React.FC = () => {
 
   return (
     <>
-      <PostListTitle title={`Category: ${data?.category_name}`} />
+      <PostListTitle title={`Tag: ${data?.tag_name}`} />
       <PostListPageCountResults count={data?.count} query={query} />
       <PostList data={data} query={query} handlePageChange={handlePageChange} />
     </>

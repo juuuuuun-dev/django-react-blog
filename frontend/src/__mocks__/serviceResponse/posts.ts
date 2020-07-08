@@ -59,6 +59,22 @@ export const listData = {
   "categories": categoryList,
 }
 
+export const listTagFilterData = {
+  "count": 2,
+  "results": [resultData, resultData2],
+  "tags": tagList,
+  "categories": categoryList,
+  "tag_name": "test",
+}
+
+export const listCategoryFilterData = {
+  "count": 2,
+  "results": [resultData, resultData2],
+  "tags": tagList,
+  "categories": categoryList,
+  "category_name": "test",
+}
+
 export const updateResultData = {
   "id": 1,
   "key": 1,
@@ -70,6 +86,22 @@ export const updateResultData = {
 
 export const listAxiosResponse: AxiosResponse = {
   data: listData,
+  status: 200,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+};
+
+export const listTagFilterAxiosResponse: AxiosResponse = {
+  data: listTagFilterData,
+  status: 200,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+};
+
+export const listCategoryFilterAxiosResponse: AxiosResponse = {
+  data: listTagFilterData,
   status: 200,
   statusText: 'OK',
   config: {},

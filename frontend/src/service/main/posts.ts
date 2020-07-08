@@ -22,3 +22,8 @@ export const categoryPagelist = async (slug: string | undefined, queries: ListQu
   const query = queryStringify(queries);
   return axios.get(`${endPoint}categories/${slug}/?${query}`);
 };
+
+export const tagPagelist = async (slug: string | undefined, queries: ListQuery) => {
+  const query = queryStringify(queries);
+  return axios.get(`${endPoint}tags/${slug}/?${query}`);
+};

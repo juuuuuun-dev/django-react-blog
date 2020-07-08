@@ -4,6 +4,7 @@ from posts.models import Post
 from posts.paginatin import PostPagination
 from posts.serializers import main_serializers
 from rest_framework import filters, response
+from tags.models import Tag
 from utils import cache_views
 
 
@@ -23,8 +24,10 @@ class PostList(cache_views.ReadOnlyCacheModelViewSet):
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True, context={
             "request": request})
-        return self.get_paginated_response(
-            serializer.data)
+        data = {
+            "results": serializer.data
+        }
+        return self.get_paginated_response(data)
 
 
 class PostCategorySlugList(cache_views.ReadOnlyCacheModelViewSet):
@@ -48,8 +51,39 @@ class PostCategorySlugList(cache_views.ReadOnlyCacheModelViewSet):
             page = self.paginate_queryset(queryset)
             serializer = self.get_serializer(page, many=True, context={
                 "request": request})
-            return self.get_paginated_response(
-                serializer.data)
+            data = {
+                "category_name": category.name,
+                "results": serializer.data,
+            }
+            return self.get_paginated_response(data)
+
+
+class PostTagSlugList(cache_views.ReadOnlyCacheModelViewSet):
+    throttle_scope = 'main'
+    base_cache_key = Post.show_cache_key
+    # queryset = Post.objects.filter(is_show=True).order_by('-id')
+    serializer_class = main_serializers.MainPostListSerializer
+    pagination_class = PostPagination
+    filterset_fields = ['category', 'tag']
+
+    def list(self, request, slug=None):
+        tag = Tag.get_by_slug(slug)
+        if tag:
+            self.queryset = Post.objects.filter(
+                is_show=True, tag=tag).order_by('-id')
+
+            cp = request.query_params.copy()
+            cp['tag'] = tag.id
+            queryset = self.get_list_queryset(
+                query_params=cp, base_key=self.base_cache_key)
+            page = self.paginate_queryset(queryset)
+            serializer = self.get_serializer(page, many=True, context={
+                "request": request})
+            data = {
+                "tag_name": tag.name,
+                "results": serializer.data,
+            }
+            return self.get_paginated_response(data)
 
 
 class PostDetail(cache_views.ReadOnlyCacheModelViewSet):

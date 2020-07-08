@@ -11,7 +11,7 @@ class PostPagination(PageNumberPagination):
         tagSerializer = TagListSerializer(Tag.get_all(), many=True)
         categorySerializer = CategoryListSerializer(
             Category.get_all(), many=True)
-        return Response({
+        response = {
             'links': {
                 'next': self.get_next_link(),
                 'previous': self.get_previous_link()
@@ -19,5 +19,6 @@ class PostPagination(PageNumberPagination):
             'count': self.page.paginator.count,
             'tags': tagSerializer.data,
             'categories': categorySerializer.data,
-            'results': data
-        })
+        }
+        response.update(data)
+        return Response(response)

@@ -83,6 +83,57 @@ class PostCategorySlugListTestCase(APITestCase):
         self.assertEqual(len(response.data['results']), 0)
 
 
+class PostTagSlugListTestCase(APITestCase):
+    def setUp(self):
+        self.user = UserFactory.create()
+        self.user.set_password("test1234")
+        self.user.save()
+
+    def tearDown(self):
+        cache.clear()
+
+    def test_get_show(self):
+        tag = TagFactory.create(slug="tagdayo")
+        tag_2 = TagFactory.create(slug="tag2")
+        category = CategoryFactory.create(slug="slu")
+        category_2 = CategoryFactory.create(slug="slug2")
+        post = PostFactory.create(
+            user=self.user,
+            title="post",
+            category=category,
+            tag=[tag])
+        post_2 = PostFactory.create(
+            user=self.user, title="post_2", category=category_2, tag=[tag_2])
+        api = reverse(
+            "posts:post-tag-slug-list",
+            kwargs={
+                "slug": tag.slug})
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['id'], post.id)
+        self.assertEqual(response.data['results'][0]['title'], post.title)
+        self.assertTrue(response.data['results'][0]['category'])
+        self.assertEqual(len(response.data['results'][0]['tag']), 1)
+
+    def test_get_not_show(self):
+        category = CategoryFactory.create()
+        tag = TagFactory.create()
+        PostFactory.create(
+            user=self.user,
+            category=category,
+            tag=[tag],
+            is_show=False)
+        api = reverse(
+            "posts:post-tag-slug-list",
+            kwargs={
+                "slug": tag.slug})
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['results']), 0)
+
+
 class PostDetailTestCase(APITestCase):
     def setUp(self):
         self.user = UserFactory.create()

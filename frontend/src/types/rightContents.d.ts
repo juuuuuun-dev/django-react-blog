@@ -8,11 +8,11 @@ export type CategoryLinkListProps = {
 }
 
 export type TagLinkListProps = {
-  tags: TagDetail[] | undefined
+  tags: TagDetail[] | undefined;
 }
 
 export type RecentPostListProps = {
-  posts: PostDetail[] | undefined
+  posts: PostDetail[] | undefined;
 }
 
 
