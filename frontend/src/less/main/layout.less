@@ -7,7 +7,18 @@
 ul{ margin: 0; padding: 0;}
 li {list-style: none;}
 a { color: @content-link-color; }
-a.active{ color: @active-link-color;}
+a.active{ color: @active-link-color; font-weight: 500;}
+.humberger{
+  float: right;
+  margin-right: -10px;
+  &-button {
+    padding: 0 10px;
+    &__icon {
+      font-size: 20px;
+    }
+    
+  }
+}
 .header-container {
   max-width: @max-width;
   margin: 0 auto;
@@ -72,6 +83,8 @@ a.active{ color: @active-link-color;}
 h3.list-title{
   margin-bottom: 0;
 }
+
+
 
 // tablet
 // @media screen and (max-width: 1000px) {
