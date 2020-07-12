@@ -20,7 +20,6 @@ jest.mock('../../helper/useHistoryPushError');
 describe("Main index", () => {
   const initialPath = "/";
   beforeEach(() => {
-    // @todo useWindowSizeのmock
     mocked(useWindowSize).mockClear();
     mocked(list).mockClear();
     mocked(useHistoryPushError).mockClear();
@@ -32,7 +31,7 @@ describe("Main index", () => {
   );
 
   // Header pc size category nav
-  it("Request header pc size category nav", async () => {
+  it("Request header pc size nav", async () => {
     mocked(getInit).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
     );
@@ -47,13 +46,50 @@ describe("Main index", () => {
     initAxiosResponse.data.categories.forEach((value) => {
       categoryLinks.push(`nav-category-${value.slug}`);
     })
-    const categoryLink = `nav-category-${initAxiosResponse.data.categories[0].slug}`;
+
     fireEvent.mouseOver(utils.getByTitle('Category'));
     await waitFor(() => {
       categoryLinks.forEach((value) => {
         expect(utils.getByTestId(value)).toBeTruthy();
       })
     })
+  })
+
+  // Header mobile size nav
+  it("Request header mobile size nav", async () => {
+    mocked(getInit).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
+    );
+    mocked(useWindowSize).mockImplementation(
+      () => [480, 800]
+    );
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId('app-title').innerHTML).toBe(process.env.REACT_APP_TITLE);
+    })
+    const categoryLinks: string[] = [];
+    initAxiosResponse.data.categories.forEach((value) => {
+      categoryLinks.push(`nav-category-${value.slug}`);
+    })
+
+    // open
+    fireEvent.click(utils.getByTestId('humberger-open-button'));
+    await waitFor(() => {
+      expect(utils.getByTitle('Category')).toBeTruthy();
+      expect(utils.getByTestId('humberger-close-button')).toBeTruthy();
+    });
+    // category
+    fireEvent.click(utils.getByTitle('Category'));
+    await waitFor(() => {
+      categoryLinks.forEach((value) => {
+        expect(utils.getByTestId(value)).toBeTruthy();
+      })
+    })
+    // close
+    fireEvent.click(utils.getByTestId(categoryLinks[0]));
+    await waitFor(() => {
+      expect(utils.getByTestId('humberger-open-button')).toBeTruthy();
+    });
   })
 
   // Right contents success
