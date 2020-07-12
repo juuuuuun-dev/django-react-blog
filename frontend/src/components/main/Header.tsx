@@ -1,16 +1,20 @@
+import { Col, Drawer, Layout, Row } from 'antd';
 import React from 'react';
-import { Layout, Drawer, Row, Col } from 'antd';
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+
 import { useWindowSize } from '@react-hook/window-size';
+
+import { MainContext } from '../../context/mainContext';
+import Humberger from './ Humberger';
 import Nav from './Nav';
 
 const Header: React.FC = () => {
+  const [{ init, appTitle }] = React.useContext(MainContext);
   const headerHeight = '60px';
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
-
-  const navOnClick = (): void => { };
+  console.log({ width })
   return (
     <>
       <Header
@@ -18,19 +22,17 @@ const Header: React.FC = () => {
           height: headerHeight,
           background: '#ffffff',
           boxShadow: "0 4px 12px 0 rgba(0, 0, 0, 0.05)",
-          // position: 'fixed',
-          // top: 0,
-          // left: 0,
-          // width: '100%'
+
         }}
       >
         <div className="header-container">
           <Row>
-            <Col flex="100px">Logo</Col>
+            <Col flex="100px"><Link to="/"><h1 className="app-title" data-testid="app-title">{appTitle}</h1></Link></Col>
             <Col flex="auto">
               {width > 600 && (
                 <Nav
                   mode="horizontal"
+                  categories={init?.categories}
                   styles={{
                     lineHeight: headerHeight,
                     float: 'right',
@@ -40,36 +42,22 @@ const Header: React.FC = () => {
               {width <= 600 && <Humberger showDrawer={showDrawer} setShowDrawer={setShowDrawer} />}
             </Col>
           </Row>
-          <div className="logo"></div>
         </div>
       </Header>
 
       <Drawer
-        title="Basic Drawer"
         placement="right"
         closable={false}
+        className="nav-drawer"
         onClose={() => setShowDrawer(false)}
         visible={showDrawer}
         style={{
           top: headerHeight,
         }}
       >
-        <Nav mode="vertical" handleClick={navOnClick} styles={{}} />
+        <Nav mode="inline" categories={init?.categories} setShowDrawer={setShowDrawer} styles={{}} />
       </Drawer>
     </>
-  );
-};
-
-export interface HumbergerProps {
-  showDrawer: boolean;
-  setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-}
-const Humberger = ({ showDrawer, setShowDrawer }: HumbergerProps) => {
-  return (
-    <div style={{ float: 'right' }}>
-      {!showDrawer && <MenuOutlined onClick={() => setShowDrawer(true)} />}
-      {showDrawer && <CloseOutlined onClick={() => setShowDrawer(false)} />}
-    </div>
   );
 };
 

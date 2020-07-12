@@ -25,6 +25,7 @@ export type ReceiveInitState = {
 
 export type MainState = {
   init: InitState | undefined;
+  appTitle: string;
   loading: boolean;
   pageSize: number;
   globalModalConfig: GlobalModalConfig,

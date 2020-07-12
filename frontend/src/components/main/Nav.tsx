@@ -1,45 +1,37 @@
-import React from 'react';
 import { Menu } from 'antd';
-import { Link } from 'react-router-dom';
-import { ApartmentOutlined } from '@ant-design/icons';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+
+import { CategoryDetail } from '../../types/categories';
 
 export interface NavProps {
   mode?: 'vertical' | 'vertical-left' | 'vertical-right' | 'horizontal' | 'inline' | undefined;
   styles: object;
-  handleClick?: () => void;
+  categories: CategoryDetail[] | undefined;
+  setShowDrawer?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Nav = ({ mode, styles, handleClick }: NavProps) => {
+const Nav = ({ mode, styles, categories, setShowDrawer }: NavProps) => {
   const { SubMenu } = Menu;
 
+  const handleClick = () => {
+    if (setShowDrawer) {
+      setShowDrawer(false);
+    }
+  }
   return (
     <>
-      <Menu mode={mode} defaultSelectedKeys={['1']} style={styles}>
-        <Menu.Item>
-          <Link to="/">Top</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link to="/articles">Articles</Link>
-        </Menu.Item>
+      <Menu mode={mode} selectedKeys={['1']} style={styles}>
         <SubMenu
-          title={
-            <span className="submenu-title-wrapper">
-              <ApartmentOutlined />
-              Category
-            </span>
-          }
+          title="Category"
+          data-testid="nav-sub-menu-category"
         >
-          <Menu.ItemGroup title="Item 1">
-            <Menu.Item key="setting:1">Option 1</Menu.Item>
-            <Menu.Item key="setting:2">Option 2</Menu.Item>
-          </Menu.ItemGroup>
-          <Menu.ItemGroup title="Item 2">
-            <Menu.Item key="setting:3">Option 3</Menu.Item>
-            <Menu.Item key="setting:4">Option 4</Menu.Item>
-          </Menu.ItemGroup>
+          {categories?.map((value, index) => {
+            return <Menu.Item key={`nav-category-${index}`}><NavLink data-testid={`nav-category-${value.slug}`} onClick={handleClick} to={`/categories/${value.slug}`}>{value.name}</NavLink></Menu.Item>
+          })}
         </SubMenu>
         <Menu.Item>
-          <Link to="/admin/login">Login</Link>
+          <NavLink to="/about">About me</NavLink>
         </Menu.Item>
       </Menu>
     </>

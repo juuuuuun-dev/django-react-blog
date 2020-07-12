@@ -9,7 +9,7 @@ import RecentPostList from '../rightContents/RecentPostList';
 import TagLinkList from '../rightContents/TagLinkList';
 
 const RightContainer: React.FC = () => {
-  const [{ init }, dispatch] = React.useContext(MainContext);
+  const [{ init }] = React.useContext(MainContext);
   console.log({ init })
   return (
     <>

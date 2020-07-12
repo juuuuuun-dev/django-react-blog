@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { mocked } from 'ts-jest/utils';
 
-import { fireEvent, waitFor } from '@testing-library/react';
+import { useWindowSize } from '@react-hook/window-size';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 
 import { setUp } from '../../__mocks__/mainSetUp';
 import { error500AxiosResponse } from '../../__mocks__/serviceResponse/common';
@@ -11,6 +12,7 @@ import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { getInit } from '../../service/main/init';
 import { list } from '../../service/main/posts';
 
+jest.mock('@react-hook/window-size');
 jest.mock('../../service/main/init');
 jest.mock('../../service/main/posts');
 jest.mock('../../helper/useHistoryPushError');
@@ -18,6 +20,7 @@ jest.mock('../../helper/useHistoryPushError');
 describe("Main index", () => {
   const initialPath = "/";
   beforeEach(() => {
+    mocked(useWindowSize).mockClear();
     mocked(list).mockClear();
     mocked(useHistoryPushError).mockClear();
   })
@@ -27,13 +30,76 @@ describe("Main index", () => {
     () => [mockPush]
   );
 
-  // init success
-  it("Request init successful", async () => {
+  // Header pc size category nav
+  it("Request header pc size nav", async () => {
+    mocked(getInit).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
+    );
+    mocked(useWindowSize).mockImplementation(
+      () => [1200, 1000]
+    );
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId('app-title').innerHTML).toBe(process.env.REACT_APP_TITLE);
+    })
+    const categoryLinks: string[] = [];
+    initAxiosResponse.data.categories.forEach((value) => {
+      categoryLinks.push(`nav-category-${value.slug}`);
+    })
+
+    fireEvent.mouseOver(utils.getByTitle('Category'));
+    await waitFor(() => {
+      categoryLinks.forEach((value) => {
+        expect(utils.getByTestId(value)).toBeTruthy();
+      })
+    })
+  })
+
+  // Header mobile size nav
+  it("Request header mobile size nav", async () => {
+    mocked(getInit).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
+    );
+    mocked(useWindowSize).mockImplementation(
+      () => [480, 800]
+    );
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId('app-title').innerHTML).toBe(process.env.REACT_APP_TITLE);
+    })
+    const categoryLinks: string[] = [];
+    initAxiosResponse.data.categories.forEach((value) => {
+      categoryLinks.push(`nav-category-${value.slug}`);
+    })
+
+    // open
+    fireEvent.click(utils.getByTestId('humberger-open-button'));
+    await waitFor(() => {
+      expect(utils.getByTitle('Category')).toBeTruthy();
+      expect(utils.getByTestId('humberger-close-button')).toBeTruthy();
+    });
+    // category
+    fireEvent.click(utils.getByTitle('Category'));
+    await waitFor(() => {
+      categoryLinks.forEach((value) => {
+        expect(utils.getByTestId(value)).toBeTruthy();
+      })
+    })
+    // close
+    fireEvent.click(utils.getByTestId(categoryLinks[0]));
+    await waitFor(() => {
+      expect(utils.getByTestId('humberger-open-button')).toBeTruthy();
+    });
+  })
+
+  // Right contents success
+  it("Request right contents successful", async () => {
     mocked(getInit).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
+      // right-contents
       expect(utils.getByTestId('right-contents-about-me').innerHTML).toMatch(new RegExp(initAxiosResponse.data.author.public_name));
       expect(utils.getByTestId('right-contents-about-me').innerHTML).toMatch(new RegExp(initAxiosResponse.data.author.message));
       expect(utils.getByTestId('recent-post-list').innerHTML).toMatch(new RegExp(initAxiosResponse.data.recent_posts[0].title));

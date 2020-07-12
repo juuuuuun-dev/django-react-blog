@@ -7,7 +7,22 @@
 ul{ margin: 0; padding: 0;}
 li {list-style: none;}
 a { color: @content-link-color; }
-a.active{ color: @active-link-color;}
+a.active{ color: @active-link-color; font-weight: 500;}
+.humberger{
+  float: right;
+  margin-right: -10px;
+  &-button {
+    padding: 0 10px;
+    &__icon {
+      font-size: 20px;
+    }
+    
+  }
+}
+.app-title{
+  font-size: .9rem;
+  font-weight: 500;
+}
 .header-container {
   max-width: @max-width;
   margin: 0 auto;
@@ -28,9 +43,9 @@ a.active{ color: @active-link-color;}
   &-section {
     margin-bottom: @global-margin;
     &__title {
-      font-weight: bold;
-      font-size: 1rem;
-      margin-bottom: @global-margin / 3;
+      font-weight: 600;
+      font-size: .9rem;
+      margin-bottom: @global-margin / 4;
     }
   }
   &-about-me {
@@ -60,10 +75,10 @@ a.active{ color: @active-link-color;}
   padding: 0;
   width: 100%;
   clear: both;
+  margin-bottom: @global-margin;
   li {
     text-indent: 0;
     margin-right: 10px;
-    margin-bottom: @global-margin / 2;
     padding: 0;
     display: inline-block;
     font-size: .8rem;
@@ -71,7 +86,10 @@ a.active{ color: @active-link-color;}
 }
 h3.list-title{
   margin-bottom: 0;
+  font-size: 1.3rem;
 }
+
+
 
 // tablet
 // @media screen and (max-width: 1000px) {

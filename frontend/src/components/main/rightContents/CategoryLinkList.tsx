@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { CategoryLinkListProps } from '../../../types/rightContents';
+import { CategoryLinkListProps } from '../../../types/components/main/rightContents';
 import RightContentSection from './RightContentSection';
 
 const CategoryLinkList: React.FC<CategoryLinkListProps> = ({ categories }) => {
