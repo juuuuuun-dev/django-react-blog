@@ -23,14 +23,11 @@ const Nav = ({ mode, styles, categories, setShowDrawer }: NavProps) => {
     <>
       <Menu mode={mode} selectedKeys={['1']} style={styles}>
         <SubMenu
-          title={
-            <span className="submenu-title-wrapper">
-              Category
-            </span>
-          }
+          title="Category"
+          data-testid="nav-sub-menu-category"
         >
           {categories?.map((value, index) => {
-            return <Menu.Item key={`nav-category-${index}`}><NavLink onClick={handleClick} to={`/categories/${value.slug}`}>{value.name}</NavLink></Menu.Item>
+            return <Menu.Item key={`nav-category-${index}`}><NavLink data-testid={`nav-category-${value.slug}`} onClick={handleClick} to={`/categories/${value.slug}`}>{value.name}</NavLink></Menu.Item>
           })}
         </SubMenu>
         <Menu.Item>

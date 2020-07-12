@@ -9,7 +9,7 @@ const ScrollToTop: React.FC<RouteComponentProps> = ({ history }) => {
     return () => {
       unlisten();
     }
-  }, [])
+  }, [history])
   return (null)
 }
 

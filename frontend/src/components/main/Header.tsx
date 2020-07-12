@@ -2,10 +2,10 @@ import { Col, Drawer, Layout, Row } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
 import { useWindowSize } from '@react-hook/window-size';
 
 import { MainContext } from '../../context/mainContext';
+import Humberger from './ Humberger';
 import Nav from './Nav';
 
 const Header: React.FC = () => {
@@ -14,8 +14,7 @@ const Header: React.FC = () => {
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
-
-  const navOnClick = (): void => { };
+  console.log({ width })
   return (
     <>
       <Header
@@ -28,7 +27,7 @@ const Header: React.FC = () => {
       >
         <div className="header-container">
           <Row>
-            <Col flex="100px"><Link to="/"><div>{appTitle}</div></Link></Col>
+            <Col flex="100px"><Link to="/"><h1 className="app-title" data-testid="app-title">{appTitle}</h1></Link></Col>
             <Col flex="auto">
               {width > 600 && (
                 <Nav
@@ -59,19 +58,6 @@ const Header: React.FC = () => {
         <Nav mode="inline" categories={init?.categories} setShowDrawer={setShowDrawer} styles={{}} />
       </Drawer>
     </>
-  );
-};
-
-export interface HumbergerProps {
-  showDrawer: boolean;
-  setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-}
-const Humberger = ({ showDrawer, setShowDrawer }: HumbergerProps) => {
-  return (
-    <div className="humberger">
-      {!showDrawer && <div className="humberger-button" onClick={() => setShowDrawer(true)}><MenuOutlined className="humberger-button__icon" /></div>}
-      {showDrawer && <div className="humberger-button" onClick={() => setShowDrawer(false)}><CloseOutlined className="humberger-button__icon" /></div>}
-    </div>
   );
 };
 

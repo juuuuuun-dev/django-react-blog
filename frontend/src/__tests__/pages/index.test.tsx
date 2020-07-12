@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { mocked } from 'ts-jest/utils';
 
-import { fireEvent, waitFor } from '@testing-library/react';
+import { useWindowSize } from '@react-hook/window-size';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 
 import { setUp } from '../../__mocks__/mainSetUp';
 import { error500AxiosResponse } from '../../__mocks__/serviceResponse/common';
@@ -11,6 +12,7 @@ import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { getInit } from '../../service/main/init';
 import { list } from '../../service/main/posts';
 
+jest.mock('@react-hook/window-size');
 jest.mock('../../service/main/init');
 jest.mock('../../service/main/posts');
 jest.mock('../../helper/useHistoryPushError');
@@ -18,6 +20,8 @@ jest.mock('../../helper/useHistoryPushError');
 describe("Main index", () => {
   const initialPath = "/";
   beforeEach(() => {
+    // @todo useWindowSizeのmock
+    mocked(useWindowSize).mockClear();
     mocked(list).mockClear();
     mocked(useHistoryPushError).mockClear();
   })
@@ -27,13 +31,39 @@ describe("Main index", () => {
     () => [mockPush]
   );
 
-  // init success
-  it("Request init successful", async () => {
+  // Header pc size category nav
+  it("Request header pc size category nav", async () => {
+    mocked(getInit).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
+    );
+    mocked(useWindowSize).mockImplementation(
+      () => [1200, 1000]
+    );
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId('app-title').innerHTML).toBe(process.env.REACT_APP_TITLE);
+    })
+    const categoryLinks: string[] = [];
+    initAxiosResponse.data.categories.forEach((value) => {
+      categoryLinks.push(`nav-category-${value.slug}`);
+    })
+    const categoryLink = `nav-category-${initAxiosResponse.data.categories[0].slug}`;
+    fireEvent.mouseOver(utils.getByTitle('Category'));
+    await waitFor(() => {
+      categoryLinks.forEach((value) => {
+        expect(utils.getByTestId(value)).toBeTruthy();
+      })
+    })
+  })
+
+  // Right contents success
+  it("Request right contents successful", async () => {
     mocked(getInit).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
+      // right-contents
       expect(utils.getByTestId('right-contents-about-me').innerHTML).toMatch(new RegExp(initAxiosResponse.data.author.public_name));
       expect(utils.getByTestId('right-contents-about-me').innerHTML).toMatch(new RegExp(initAxiosResponse.data.author.message));
       expect(utils.getByTestId('recent-post-list').innerHTML).toMatch(new RegExp(initAxiosResponse.data.recent_posts[0].title));

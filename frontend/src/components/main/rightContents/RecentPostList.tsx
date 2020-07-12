@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { ClockCircleOutlined } from '@ant-design/icons';
 
-import { RecentPostListProps } from '../../../types/rightContents';
+import { RecentPostListProps } from '../../../types/components/main/rightContents';
 import RightContentSection from './RightContentSection';
 
 const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {

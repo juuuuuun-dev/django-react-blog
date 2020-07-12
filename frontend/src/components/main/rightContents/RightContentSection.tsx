@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { RightContentsSectionProps } from '../../../types/rightContents';
+import { RightContentsSectionProps } from '../../../types/components/main/rightContents';
 
 const RightContentSection: React.FC<RightContentsSectionProps> = ({ title, children }) => {
   return (

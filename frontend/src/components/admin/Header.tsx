@@ -1,9 +1,11 @@
+import { Col, Drawer, Layout, Row } from 'antd';
 import React from 'react';
-import { Layout, Drawer, Row, Col } from 'antd';
+
+import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
 import { useWindowSize } from '@react-hook/window-size';
+
 import { AdminContext } from '../../context/adminContext';
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
-import { HeaderProps, HumbergerProps } from '../../types/header';
+import { HeaderProps, HumbergerProps } from '../../types/components/admin/header';
 import Nav from './Nav';
 
 const Header: React.FC<HeaderProps> = ({ headerHeight }) => {
