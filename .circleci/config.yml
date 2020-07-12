@@ -70,7 +70,7 @@ jobs:
           working_directory: frontend
       - run:
           name: cp env
-          command: cp .env.ci .env
+          command: cp frontend/.env.ci frontend/.env
           working_directory: frontend
       - save_cache:
           name: Save yarn cache
