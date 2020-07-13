@@ -10,6 +10,6 @@ import './__mocks__/fileMock';
 // env
 process.env.REACT_APP_PAGE_SIZE = '1';
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 afterEach(() => cleanup());
