@@ -10,6 +10,7 @@ const Footer: React.FC = () => {
     <>
       <footer className='footer'>
         <div className='footer-container'>
+
           <span data-testid="footer-copyright">&copy; {copyrightStartYear}{currnetYear} {domain}</span>
         </div>
       </footer>
