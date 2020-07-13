@@ -10,7 +10,6 @@ import TagLinkList from '../rightContents/TagLinkList';
 
 const RightContainer: React.FC = () => {
   const [{ init }] = React.useContext(MainContext);
-  console.log({ init })
   return (
     <>
       <div className="right-contents-section">

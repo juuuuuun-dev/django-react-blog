@@ -14,7 +14,6 @@ const Header: React.FC = () => {
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
-  console.log({ width })
   return (
     <>
       <Header

@@ -119,7 +119,20 @@ describe("Main index", () => {
     })
   })
 
-
+  // Footer
+  it("Footer", async () => {
+    mocked(getInit).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
+    );
+    mocked(useWindowSize).mockImplementation(
+      () => [1200, 1000]
+    );
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId('footer-copyright').innerHTML).toMatch(process.env.REACT_APP_DOMAIN || "");
+      expect(utils.getByTestId('footer-copyright').innerHTML).toMatch(process.env.REACT_APP_COPYRIGHT_START_YEAR || "");
+    })
+  })
 
   // Filter search
   it("Filter search", async () => {

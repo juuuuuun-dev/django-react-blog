@@ -4,6 +4,7 @@ import { Col, Layout, Row } from 'antd';
 import React from 'react';
 
 import { MainContextProvider } from '../../../context/mainContext';
+import Footer from '../Footer';
 import GlobalModal from '../GlobalModal';
 import Header from '../Header';
 import Container from './Container';
@@ -30,6 +31,7 @@ const MainLayout = () => {
           </div>
           <GlobalModal />
         </Content>
+        <Footer />
       </MainContextProvider>
     </>
   );
