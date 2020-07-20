@@ -5,7 +5,7 @@ docker-compose build --no-cache
 docker volume create --name=sync-blog-backend
 docker volume create --name=sync-blog-frontend
 ```
-起動
+Docker start
 ```
 docker-sync-stack start
 or
@@ -15,6 +15,7 @@ http://localhost:8000/
 # create superuser
 ```
 docker-compose exec django /bin/bash
+python manage.py migrate
 python manage.py createsuperuser
 ...
 ```

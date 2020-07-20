@@ -9,6 +9,8 @@ export const mainState: MainState = {
   init: undefined,
   loading: false,
   appTitle: process.env.REACT_APP_TITLE || "SITE NAME",
+  domain: process.env.REACT_APP_DOMAIN || "example.com",
+  copyrightStartYear: parseInt(process.env.REACT_APP_COPYRIGHT_START_YEAR || "2020"),
   pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
   globalModalConfig: {
     title: null,

@@ -27,6 +27,8 @@ export type MainState = {
   init: InitState | undefined;
   appTitle: string;
   loading: boolean;
+  domain: string;
+  copyrightStartYear: number;
   pageSize: number;
   globalModalConfig: GlobalModalConfig,
 }
