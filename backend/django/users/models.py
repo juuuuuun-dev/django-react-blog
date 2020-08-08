@@ -128,6 +128,20 @@ class UserProfile(models.Model):
             return data
 
 
+class AboutMe(models.Model):
+    class Meta:
+        db_table = 'about_me'
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="about_me",
+        primary_key=True
+    )
+    page_title = models.CharField(verbose_name="name", max_length=50)
+    description = models.TextField(null=True, blank=True)
+
+
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         profile, created = UserProfile.objects.get_or_create(
@@ -136,4 +150,13 @@ def create_user_profile(sender, instance, created, **kwargs):
         )
 
 
+def create_about_me(sender, instance, created, **kwargs):
+    if created:
+        about_me, created = AboutMe.objects.get_or_create(
+            user=instance,
+            page_title="About me"
+        )
+
+
 post_save.connect(create_user_profile, sender=User)
+post_save.connect(create_about_me, sender=User)
