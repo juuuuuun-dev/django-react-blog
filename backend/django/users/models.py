@@ -129,6 +129,8 @@ class UserProfile(models.Model):
 
 
 class AboutMe(models.Model):
+    default_page_title = "About me"
+
     class Meta:
         db_table = 'about_me'
 
@@ -154,7 +156,7 @@ def create_about_me(sender, instance, created, **kwargs):
     if created:
         about_me, created = AboutMe.objects.get_or_create(
             user=instance,
-            page_title="About me"
+            page_title=AboutMe.default_page_title
         )
 
 

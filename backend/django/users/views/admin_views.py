@@ -1,17 +1,13 @@
 from django.contrib.sites.shortcuts import get_current_site
-# from rest_framework.authentication import TokenAuthentication
-# from rest_framework.decorators import api_view, permission_classes
-# from .parmission import UserIsOwnerUserProfile
 from django.shortcuts import get_object_or_404
 from rest_framework import status, views
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from users.models import AboutMe, User, UserProfile
+from users.serializers import (AboutMeSerializer,
+                               PasswordResetConfirmSerializer,
+                               PasswordResetSerializer, UserProfileSerializer)
 from utils.file import delete_thumb
-
-from .models import User, UserProfile
-from .serializers import (PasswordResetConfirmSerializer,
-                          PasswordResetSerializer, UserProfileSerializer,
-                          UserSerializer)
 
 
 class UserProfileView(views.APIView):
@@ -38,16 +34,6 @@ class UserProfileView(views.APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # def patch(self, request):
-    #     serializer = UserSerializer(data=request.data)
-    #     if serializer.is_valid(raise_exception=True):
-    #         user = User.objects.get(id=self.request.user.id)
-    #         serializer.update(instance=user,
-    #                           validated_data=request.data)
-    #         serializer = UserSerializer(user)
-    #         return Response(serializer.data)
-    # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordResetView(views.APIView):
@@ -97,13 +83,15 @@ class PasswordResetConfirmationView(views.APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view(["GET"])
-# @permission_classes([AllowAny])
-# def verify_auth_view(request):
-#     if request.method == "GET":
-#         existing_user = User.objects.get(id=request.user.id)
-#         print(existing_user)
-#         if existing_user:
-#             return Response(status=status.HTTP_200_OK)
-#         else:
-#             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class AdminAboutMeView(views.APIView):
+    permission_classes = (IsAuthenticated, AllowAny)
+
+    def get(self, request):
+        queryset = AboutMe.objects.all()
+        about_me = get_object_or_404(
+            queryset, user_id=self.request.user.id)
+        serializer = AboutMeSerializer(about_me, context={
+            "request": request
+        })
+        return Response(serializer.data)

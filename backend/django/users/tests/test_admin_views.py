@@ -5,9 +5,8 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 from users.factories import UserFactory
+from users.models import AboutMe, UserProfile
 from utils.file import delete_thumb
-
-from ..models import UserProfile
 
 
 class AdminUserProfileTestCase(APITestCase):
@@ -128,3 +127,25 @@ class PasswordResetConfirmationViewTestCase(APITestCase):
             response = self.client.post(token_api, login_data, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertTrue(response.data["access"])
+
+
+class AdminAboutMeViewTestCase(APITestCase):
+    def setUp(self):
+        self.api_basename = "users:admin-about-me"
+        self.factory = APIRequestFactory()
+        self.auth_api = "/{}blog_auth/".format(settings.API_VERSION)
+        # user
+        self.user = UserFactory.create()
+        self.user.set_password("testtest1234")
+        self.user.save()
+        refresh = RefreshToken.for_user(self.user)
+        self.client.credentials(
+            HTTP_AUTHORIZATION="Bearer {}".format(refresh.access_token))
+
+    def test_get(self):
+        api = reverse(self.api_basename)
+        response = self.client.get(api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data['page_title'],
+            AboutMe.default_page_title)

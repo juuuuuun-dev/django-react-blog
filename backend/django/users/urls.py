@@ -1,12 +1,17 @@
 from django.urls import path
-
-from .views import (PasswordResetConfirmationView, PasswordResetView,
-                    UserProfileView)
+from users.views.admin_views import (AdminAboutMeView,
+                                     PasswordResetConfirmationView,
+                                     PasswordResetView, UserProfileView)
 
 app_name = 'users'
 
 urlpatterns = [
-    path('user-profile/', UserProfileView.as_view(), name='user-profile'),
+    path('user-profile/',
+         UserProfileView.as_view(),
+         name='user-profile'),
+    path('admin-about-me/',
+         AdminAboutMeView.as_view(),
+         name="admin-about-me"),
     path(
         'password-reset/',
         PasswordResetView.as_view(),
