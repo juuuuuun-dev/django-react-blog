@@ -22,6 +22,7 @@ class UserProfileView(views.APIView):
         return Response(serializer.data)
 
     def put(self, request):
+        print("putdayo")
         queryset = UserProfile.objects.all()
         user_profile = get_object_or_404(
             queryset, user_id=self.request.user.id)
@@ -95,3 +96,15 @@ class AdminAboutMeView(views.APIView):
             "request": request
         })
         return Response(serializer.data)
+
+    def put(self, request):
+        queryset = AboutMe.objects.all()
+        about_me = get_object_or_404(
+            queryset, user_id=self.request.user.id)
+        serializer = AboutMeSerializer(about_me, data=request.data, context={
+            "request": request
+        })
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

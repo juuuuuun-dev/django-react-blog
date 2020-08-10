@@ -63,6 +63,9 @@ class PublicAuthorSerializer(serializers.ModelSerializer):
 
 class AboutMeSerializer(serializers.ModelSerializer):
 
+    page_title = serializers.CharField(
+        max_length=AboutMe.page_title_max_length)
+
     class Meta:
         model = AboutMe
         fields = ("page_title", "description")

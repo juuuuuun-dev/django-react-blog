@@ -142,10 +142,23 @@ class AdminAboutMeViewTestCase(APITestCase):
         self.client.credentials(
             HTTP_AUTHORIZATION="Bearer {}".format(refresh.access_token))
 
-    def test_get(self):
+    def test_get_successful(self):
         api = reverse(self.api_basename)
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data['page_title'],
             AboutMe.default_page_title)
+
+    def test_put_successful(self):
+        post_data = {
+            "page_title": "Test title",
+            "description": "test",
+        }
+        api = reverse(self.api_basename)
+        response = self.client.put(api, post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['page_title'], post_data['page_title'])
+        self.assertEqual(
+            response.data['description'],
+            post_data['description'])

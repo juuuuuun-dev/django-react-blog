@@ -130,6 +130,7 @@ class UserProfile(models.Model):
 
 class AboutMe(models.Model):
     default_page_title = "About me"
+    page_title_max_length = 50
 
     class Meta:
         db_table = 'about_me'
@@ -140,7 +141,9 @@ class AboutMe(models.Model):
         related_name="about_me",
         primary_key=True
     )
-    page_title = models.CharField(verbose_name="name", max_length=50)
+    page_title = models.CharField(
+        verbose_name="Page title",
+        max_length=page_title_max_length)
     description = models.TextField(null=True, blank=True)
 
 
