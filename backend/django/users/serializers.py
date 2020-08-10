@@ -76,12 +76,6 @@ class PasswordResetSerializer(serializers.Serializer):
         required=True
     )
 
-    def update(self, instance, validated_data):
-        pass
-
-    def create(self, validated_data):
-        pass
-
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
     token_generator = default_token_generator
@@ -126,9 +120,3 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         if not self.valid_attempt:
             raise serializers.ValidationError("Operation not allowed.")
         return attrs
-
-    # def update(self, instance, validated_data):
-    #     pass
-
-    # def create(self, validated_data):
-    #     pass

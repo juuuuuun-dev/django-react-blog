@@ -1,19 +1,20 @@
 import React from 'react';
-import Dashboard from '../pages/admin/Dashboard';
-import Profile from '../pages/admin/Profile';
-import Tags from '../pages/admin/tags/index';
-import TagEdit from '../pages/admin/tags/edit';
-import TagCreate from '../pages/admin/tags/create';
-import Categories from '../pages/admin/categories/index';
-import CategoryEdit from '../pages/admin/categories/edit';
+
+import AboutMe from '../pages/admin/AboutMe';
 import CategoryCreate from '../pages/admin/categories/create';
-import Posts from '../pages/admin/posts/index';
-import PostEdit from '../pages/admin/posts/edit';
-import PostCreate from '../pages/admin/posts/create';
-import Media from '../pages/admin/media/index';
+import CategoryEdit from '../pages/admin/categories/edit';
+import Categories from '../pages/admin/categories/index';
+import Dashboard from '../pages/admin/Dashboard';
 import MediaCreate from '../pages/admin/media/create';
 import MediaEdit from '../pages/admin/media/edit';
-
+import Media from '../pages/admin/media/index';
+import PostCreate from '../pages/admin/posts/create';
+import PostEdit from '../pages/admin/posts/edit';
+import Posts from '../pages/admin/posts/index';
+import Profile from '../pages/admin/Profile';
+import TagCreate from '../pages/admin/tags/create';
+import TagEdit from '../pages/admin/tags/edit';
+import Tags from '../pages/admin/tags/index';
 
 interface INavList {
   id?: string;
@@ -121,6 +122,12 @@ export const navList: INavList[] = [
     path: '/admin/profile',
     title: 'Public profile',
     component: Profile,
+  },
+  {
+    id: 'aboutMe',
+    path: '/admin/about-me',
+    title: 'About me',
+    component: AboutMe,
   },
 ];
 
