@@ -1,10 +1,11 @@
-import { set } from 'local-storage';
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import SimpleMDE from 'react-simplemde-editor';
 
 import AboutMeForm from '../../components/admin/form/AboutMeForm';
 import toast from '../../components/common/toast';
 import { AdminContext } from '../../context/adminContext';
-import { retrieve, update } from '../../service/admin/profile';
+import { retrieve, update } from '../../service/admin/aboutMe';
 import { AboutMeDetail } from '../../types/aboutMe';
 
 const Profile: React.FC = () => {
