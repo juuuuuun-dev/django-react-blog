@@ -128,6 +128,25 @@ class UserProfile(models.Model):
             return data
 
 
+class AboutMe(models.Model):
+    default_page_title = "About me"
+    page_title_max_length = 50
+
+    class Meta:
+        db_table = 'about_me'
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="about_me",
+        primary_key=True
+    )
+    page_title = models.CharField(
+        verbose_name="Page title",
+        max_length=page_title_max_length)
+    description = models.TextField(null=True, blank=True)
+
+
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         profile, created = UserProfile.objects.get_or_create(
@@ -136,4 +155,13 @@ def create_user_profile(sender, instance, created, **kwargs):
         )
 
 
+def create_about_me(sender, instance, created, **kwargs):
+    if created:
+        about_me, created = AboutMe.objects.get_or_create(
+            user=instance,
+            page_title=AboutMe.default_page_title
+        )
+
+
 post_save.connect(create_user_profile, sender=User)
+post_save.connect(create_about_me, sender=User)

@@ -12,6 +12,11 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+
+######
+use hyphens for the strings, and underscores for the package path:
+######
+
 """
 from django.conf import settings
 from django.conf.urls import url
@@ -22,6 +27,8 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("{}users/".format(settings.API_VERSION), include("users.urls")),
+
+    # @TODO use hyphens
     path("{}blog_auth/".format(settings.API_VERSION),
          include("blog_auth.urls")),
 

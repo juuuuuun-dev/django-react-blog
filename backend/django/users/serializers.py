@@ -1,7 +1,7 @@
 from django.contrib.auth.tokens import default_token_generator
 from rest_framework import serializers
 
-from .models import User, UserProfile
+from .models import AboutMe, User, UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -61,16 +61,20 @@ class PublicAuthorSerializer(serializers.ModelSerializer):
         )
 
 
+class AboutMeSerializer(serializers.ModelSerializer):
+
+    page_title = serializers.CharField(
+        max_length=AboutMe.page_title_max_length)
+
+    class Meta:
+        model = AboutMe
+        fields = ("page_title", "description")
+
+
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField(
         required=True
     )
-
-    def update(self, instance, validated_data):
-        pass
-
-    def create(self, validated_data):
-        pass
 
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
@@ -116,9 +120,3 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         if not self.valid_attempt:
             raise serializers.ValidationError("Operation not allowed.")
         return attrs
-
-    # def update(self, instance, validated_data):
-    #     pass
-
-    # def create(self, validated_data):
-    #     pass
