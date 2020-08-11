@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from 'antd';
+import { Button, Form, Input } from 'antd';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import SimpleMDE from 'react-simplemde-editor';
@@ -10,17 +10,12 @@ import MediaModal from '../../admin/MediaModal';
 const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
   const { data, onSubmit } = props;
   const [form] = Form.useForm();
-  const [imageUrl, setImageUrl] = React.useState<string>('');
-  const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
   const [content, setContent] = React.useState<string>("");
   const [codemirror, setCodeMirror] = React.useState<any>();
   const [mediaModalVisible, setMediaModalVisible] = React.useState<boolean>(false)
 
-  const [showModal, setShowModal] = React.useState<boolean>(false)
-
   React.useEffect(() => {
     if (data) {
-      setImageUrl(data.avator);
       setContent(data.description)
       form.setFieldsValue({
         page_title: data.page_title,
@@ -33,7 +28,6 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
     if (content) {
       values["description"] = content;
     }
-    console.log({ values })
     onSubmit(values);
   };
 
@@ -86,12 +80,13 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
               }],
             }}
           />
-          <MediaModal
-            handleAddMedia={handleAddMedia}
-            visible={mediaModalVisible}
-            setVisible={setMediaModalVisible}
-          />
+
         </Form.Item>
+        <MediaModal
+          handleAddMedia={handleAddMedia}
+          visible={mediaModalVisible}
+          setVisible={setMediaModalVisible}
+        />
 
         <Form.Item>
           <Button aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
@@ -99,12 +94,6 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
         </Button>
         </Form.Item>
       </Form>
-      <Modal visible={previewVisible} footer={null} onCancel={() => setPreviewVisible(false)}>
-        <img data-testid="preview-modal" alt="preview" style={{ width: '100%' }} src={imageUrl} />
-      </Modal>
-      <Modal visible={showModal} onCancel={() => setShowModal(false)} footer={null}>
-        <img data-testid="cropp-image" src={imageUrl} alt="preview" style={{ maxWidth: '100%' }} />
-      </Modal>
     </>
   );
 };

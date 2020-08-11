@@ -22,6 +22,7 @@ jest.mock('../../../../service/admin/posts');
 jest.mock('../../../../service/admin/media');
 jest.mock('../../../../helper/file');
 
+// Use to SimpleMDE
 // @ts-ignore
 global.document.createRange = () => ({
   setStart: () => { },

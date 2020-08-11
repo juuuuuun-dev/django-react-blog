@@ -1,9 +1,9 @@
-import { retrieve, update } from '../../../service/admin/profile';
+import { retrieve, update } from '../../../service/admin/aboutMe';
 import axios from '../../../service/client';
 
 jest.mock('../../../service/client');
 
-describe("Service profile", () => {
+describe("Service about me", () => {
   const mockedAxios = axios as jest.Mocked<typeof axios>;
   const expectedResult = 'result';
 
@@ -15,14 +15,11 @@ describe("Service profile", () => {
 
   it("update", async () => {
     mockedAxios.put.mockReturnValueOnce(Promise.resolve(expectedResult));
-    const params = new FormData();
-    params.append('public_name', 'test');
-    params.append('message', 'message');
-    const file = new File(['test'], "test.jpg", {
-      type: "image/jpeg",
-    });
-    params.append('avator', file);
-    const result = await update(params);
+    const data = {
+      "page_title": "test",
+      "description": "test",
+    }
+    const result = await update(data);
     expect(result).toBe(expectedResult);
   })
 });
