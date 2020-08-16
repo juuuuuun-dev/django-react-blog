@@ -153,12 +153,12 @@ class AdminAboutMeViewTestCase(APITestCase):
     def test_put_successful(self):
         post_data = {
             "page_title": "Test title",
-            "description": "test",
+            "content": "test",
         }
         api = reverse(self.api_basename)
         response = self.client.put(api, post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['page_title'], post_data['page_title'])
         self.assertEqual(
-            response.data['description'],
-            post_data['description'])
+            response.data['content'],
+            post_data['content'])

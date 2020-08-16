@@ -144,7 +144,7 @@ class AboutMe(models.Model):
     page_title = models.CharField(
         verbose_name="Page title",
         max_length=page_title_max_length)
-    description = models.TextField(null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
 
 
 def create_user_profile(sender, instance, created, **kwargs):
