@@ -1,5 +1,5 @@
 import 'highlight.js/styles/dark.css';
-import '../../../less/highlightCode.less';
+import '../../less/highlightCode.less';
 
 import marked from 'marked';
 import React from 'react';
@@ -24,10 +24,15 @@ marked.setOptions({
   },
 });
 
-const PostDetailContent = ({ content }: { content: string }) => {
+const MarkdownContent = ({ content }: { content: string | null | undefined }) => {
+  if (content) {
+    return (
+      <div className="markdown-content" data-testid="markdown-content" dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
+    )
+  }
   return (
-    <div className="post-detail__content" data-testid="post-md-content" dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
+    <></>
   )
 }
 
-export default PostDetailContent;
+export default MarkdownContent;

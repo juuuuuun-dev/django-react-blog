@@ -14,9 +14,9 @@ export const retrieve = async (id: string | undefined) => {
   return axios.get(`${endPoint}/${id}`)
 }
 
-export const postFormItem = async () => {
-  return axios.get(`${endPoint}/form-item`);
-}
+// export const postFormItem = async () => {
+//   return axios.get(`${endPoint}/form-item`);
+// }
 
 export const categoryPagelist = async (slug: string | undefined, queries: ListQuery) => {
   const query = queryStringify(queries);

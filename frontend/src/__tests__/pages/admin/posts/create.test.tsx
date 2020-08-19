@@ -124,7 +124,7 @@ describe("Admin posts create", () => {
     await waitFor(() => {
       const mediaStr = `${mediaListAxiosResponse.data.results[0].file}`;
       const match = new RegExp(escapeRegExp(mediaStr));
-      expect(utils.getByTestId("post-md-content").innerHTML).toMatch(match)
+      expect(utils.getByTestId("markdown-content").innerHTML).toMatch(match)
     });
 
     fireEvent.submit(utils.getByLabelText("form-submit"))

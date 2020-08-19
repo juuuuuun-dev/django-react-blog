@@ -79,7 +79,7 @@ jobs:
             - ~/caches/yarn
       - run:
           name: yarn test
-          command: yarn test
+          command: yarn test --runInBand
           working_directory: frontend
 workflows:
   version: 2

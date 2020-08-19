@@ -1,6 +1,6 @@
 export type AboutMeDetail = {
   page_title: string;
-  description: string | null;
+  content: string | null;
 }
 
 export type AboutMeFormProps = {

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import About from '../pages/about/index';
 import Categories from '../pages/categories/index';
 import Index from '../pages/Main';
 import PostDetail from '../pages/posts/detail';
@@ -35,6 +36,11 @@ export const navList: INavList[] = [
     path: '/tags/:slug/',
     title: 'Tags',
     component: Tags,
+  },
+  {
+    path: '/about/',
+    title: 'About me',
+    component: About,
   },
 
 ];

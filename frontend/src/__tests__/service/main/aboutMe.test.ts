@@ -1,5 +1,5 @@
-import { retrieve, update } from '../../../service/admin/aboutMe';
 import axios from '../../../service/client';
+import { retrieve } from '../../../service/main/aboutMe';
 
 jest.mock('../../../service/client');
 
@@ -10,16 +10,6 @@ describe("Service about me", () => {
   it("retrieve", async () => {
     mockedAxios.get.mockReturnValueOnce(Promise.resolve(expectedResult));
     const result = await retrieve();
-    expect(result).toBe(expectedResult);
-  })
-
-  it("update", async () => {
-    mockedAxios.put.mockReturnValueOnce(Promise.resolve(expectedResult));
-    const data = {
-      "page_title": "test",
-      "content": "test",
-    }
-    const result = await update(data);
     expect(result).toBe(expectedResult);
   })
 });

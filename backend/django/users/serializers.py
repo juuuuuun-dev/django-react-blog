@@ -68,7 +68,7 @@ class AboutMeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AboutMe
-        fields = ("page_title", "description")
+        fields = ("page_title", "content")
 
 
 class PasswordResetSerializer(serializers.Serializer):

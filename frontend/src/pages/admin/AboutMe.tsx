@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import SimpleMDE from 'react-simplemde-editor';
 
 import AboutMeForm from '../../components/admin/form/AboutMeForm';
 import toast from '../../components/common/toast';
@@ -30,7 +28,7 @@ const Profile: React.FC = () => {
   const handleSubmit = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await update(values);
+      await update(values);
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'SUCCESS' });
     } catch {

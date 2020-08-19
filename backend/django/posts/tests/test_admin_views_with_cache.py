@@ -185,6 +185,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
             "&",
             urlencode({"page": page}),
         ])
+        print(api)
         cache_key = cache_key_stringfiy(
             base_key=self.base_cache_key, query_dict={
                 'category': category.id, 'page': page, })

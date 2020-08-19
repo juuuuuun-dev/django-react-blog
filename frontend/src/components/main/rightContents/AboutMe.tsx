@@ -18,7 +18,7 @@ const AboutMe: React.FC<AboutMeProps> = ({ author }) => {
               {author.thumb && init && <Link to="/about"><Avatar size={60} src={`${author.thumb}`}></Avatar></Link>}
             </Col>
             <Col flex="auto">
-              <h3><Link to="/about">{author.public_name}</Link></h3>
+              <h3><Link data-testid="right-contents-about-me-name" to="/about">{author.public_name}</Link></h3>
             </Col>
           </Row>
           <p>{author.message}</p>

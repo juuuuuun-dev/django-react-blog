@@ -2,12 +2,12 @@ import { AxiosResponse } from 'axios';
 
 export const resultData = {
   page_title: 'test',
-  description: "test message",
+  content: "test message",
 }
 
 export const updateResultData = {
   page_title: "update",
-  description: "update description"
+  content: "update content"
 }
 
 

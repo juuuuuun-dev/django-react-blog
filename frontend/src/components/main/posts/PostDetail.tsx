@@ -6,7 +6,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ApartmentOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 import { PostDetailProps } from '../../../types/posts';
-import PostDetaiLContent from './PostDetailContent';
+import MarkdownContent from '../../common/MarkdownContent';
 
 const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
   return (
@@ -22,7 +22,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
           <span className="entry-date__item"><ClockCircleOutlined />{post.created_at}</span>
           {/* <span className="entry-date__item"><ApartmentOutlined />{post.category}</span> */}
         </div>
-        <PostDetaiLContent content={post.content} />
+        <MarkdownContent content={post.content} />
 
       </div>
     </>

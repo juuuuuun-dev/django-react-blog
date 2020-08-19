@@ -1,4 +1,5 @@
 from categories.factories import CategoryFactory
+from django.core.cache import cache
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -16,6 +17,9 @@ class AdminCategoryViewSetTestCase(APITestCase):
         refresh = RefreshToken.for_user(self.user)
         self.client.credentials(
             HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
+
+    def tearDown(self):
+        cache.clear()
 
     def test_get(self):
         category = CategoryFactory(name="test")
