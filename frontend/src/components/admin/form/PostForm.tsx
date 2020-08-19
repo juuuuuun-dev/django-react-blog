@@ -12,10 +12,10 @@ import {
 
 import PostPreview from '../../../components/admin/PostPreview';
 import toast from '../../../components/common/toast';
-import PostDetailContent from '../../../components/main/posts/PostDetailContent';
 import { getBase64 } from '../../../helper/file';
 import { PostFormProps } from '../../../types/posts';
 import MediaModal from '../../admin/MediaModal';
+import MarkdownContent from '../../common/MarkdownContent';
 
 const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) => {
   const { Option } = Select;
@@ -182,7 +182,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 options={{
                   previewRender(text) {
                     return ReactDOMServer.renderToString(
-                      <PostDetailContent content={text} />
+                      <MarkdownContent content={text} />
                     )
                   },
                   toolbar: ["bold", "italic", "heading", "|", "quote", "code", "table", "|", "preview", "side-by-side", "fullscreen", {

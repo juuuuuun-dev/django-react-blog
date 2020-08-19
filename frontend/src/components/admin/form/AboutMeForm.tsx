@@ -3,9 +3,9 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import SimpleMDE from 'react-simplemde-editor';
 
-import PostDetailContent from '../../../components/main/posts/PostDetailContent';
 import { AboutMeFormProps } from '../../../types/aboutMe';
 import MediaModal from '../../admin/MediaModal';
+import PostDetailContent from '../../common/MarkdownContent';
 
 const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
   const { data, onSubmit } = props;
@@ -16,17 +16,17 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
 
   React.useEffect(() => {
     if (data) {
-      setContent(data.description)
+      setContent(data.content)
       form.setFieldsValue({
         page_title: data.page_title,
-        description: data.description,
+        content: data.content,
       });
     }
   }, [data, form]);
 
   const onFinish = async (values: any) => {
     if (content) {
-      values["description"] = content;
+      values["content"] = content;
     }
     onSubmit(values);
   };
@@ -54,8 +54,8 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
           <Input aria-label="input-page-title" placeholder="page title" />
         </Form.Item>
 
-        <Form.Item label="Description" name="description">
-          {/* <Input.TextArea aria-label="textarea-description" rows={6} placeholder="desciption" /> */}
+        <Form.Item label="content" name="content">
+          {/* <Input.TextArea aria-label="textarea-content" rows={6} placeholder="desciption" /> */}
           <SimpleMDE
             data-testid="text-area"
             onChange={setContent}

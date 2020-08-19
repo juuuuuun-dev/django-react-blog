@@ -84,11 +84,26 @@ a.active{ color: @active-link-color; font-weight: 500;}
     font-size: .8rem;
   }
 }
+
 h3.list-title{
   margin-bottom: 0;
-  font-size: 1.3rem;
+  font-size: @title-font-size;
 }
 
+h3.page-title {
+  font-size: @title-font-size;
+  margin-bottom: @global-margin;
+}
+
+// markdown
+.markdown-content {
+  font-size: .9rem;
+  line-height: 1.8rem;
+  color: #333;
+  p {
+    margin-bottom: 1.8rem;
+  }
+}
 // footer
 .footer {
   
