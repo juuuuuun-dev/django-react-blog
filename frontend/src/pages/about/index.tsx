@@ -1,5 +1,6 @@
 import React from 'react';
 
+import MarkdownContent from '../../components/common/MarkdownContent';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { retrieve } from '../../service/main/aboutMe';
 import { AboutMeDetail } from '../../types/aboutMe';
@@ -26,7 +27,7 @@ const Index: React.FC = () => {
   return (
     <>
       <h3 className="page-title" data-testid="page-title">{data?.page_title}</h3>
-      <div className="content">{data?.content}</div>
+      <MarkdownContent content={data?.content}></MarkdownContent>
     </>
   )
 }

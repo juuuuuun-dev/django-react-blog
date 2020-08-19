@@ -24,9 +24,14 @@ marked.setOptions({
   },
 });
 
-const MarkdownContent = ({ content }: { content: string }) => {
+const MarkdownContent = ({ content }: { content: string | null | undefined }) => {
+  if (content) {
+    return (
+      <div className="markdown-content" data-testid="markdown-content" dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
+    )
+  }
   return (
-    <div className="markdown-content" data-testid="post-md-content" dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
+    <></>
   )
 }
 
