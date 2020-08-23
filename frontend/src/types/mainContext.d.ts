@@ -26,6 +26,8 @@ export type ReceiveInitState = {
 export type MainState = {
   init: InitState | undefined;
   appTitle: string;
+  pageTitle: string;
+  description: string;
   loading: boolean;
   domain: string;
   copyrightStartYear: number;

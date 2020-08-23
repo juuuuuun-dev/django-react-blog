@@ -3,6 +3,7 @@ import '../../../less/main/main.less';
 import { Col, Layout, Row } from 'antd';
 import React from 'react';
 
+import MetaHead from '../../../components/main/MetaHead';
 import { MainContextProvider } from '../../../context/mainContext';
 import Footer from '../Footer';
 import GlobalModal from '../GlobalModal';
@@ -15,6 +16,7 @@ const MainLayout = () => {
   return (
     <>
       <MainContextProvider>
+        <MetaHead />
         <Header />
         <Content className="site-layout">
           <div className="main-container site-layout-background">
