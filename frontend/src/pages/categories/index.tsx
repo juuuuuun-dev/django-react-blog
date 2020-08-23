@@ -5,12 +5,15 @@ import { NumberParam, useQueryParams } from 'use-query-params';
 import PostList from '../../components/main/posts/PostList';
 import PostListPageCountResults from '../../components/main/posts/PostListPageCountResults';
 import PostListTitle from '../../components/main/posts/PostListTitle';
+import { MainContext } from '../../context/mainContext';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { categoryPagelist } from '../../service/main/posts';
 import { PostList as PostListType } from '../../types/posts';
 
 const Index: React.FC = () => {
   const [pushError] = useHistoryPushError();
+  const context = React.useContext(MainContext);
+  const dispatch = context[1];
   const [data, setData] = React.useState<PostListType>();
   const [query, setQuery] = useQueryParams({ page: NumberParam });
   const { slug } = useParams();
@@ -18,6 +21,8 @@ const Index: React.FC = () => {
   const fetchData = React.useCallback(async () => {
     try {
       const res = await categoryPagelist(slug, { page: query.page });
+      const pageNumberTitle = query.page ? `page ${query.page}` : ''
+      dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: `Category ${res.data.category_name}` + pageNumberTitle } })
       setData(res.data)
     } catch (e) {
       if (e.response && e.response.status) {

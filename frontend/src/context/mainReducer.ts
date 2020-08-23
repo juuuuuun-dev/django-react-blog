@@ -13,10 +13,10 @@ export const setLoading = (loading: boolean) => ({
   },
 });
 
-export const setPageTitle = (title: string) => ({
+export const setPageTitle = (pageTitle: string) => ({
   type: SET_PAGE_TITLE,
   payload: {
-    title,
+    pageTitle,
   },
 });
 
@@ -57,7 +57,7 @@ export const mainReducer = (state: MainState, action: Actions) => {
     case SET_LOADING:
       return { ...state, loading: action.payload.loading };
     case SET_PAGE_TITLE:
-      return { ...state, title: action.payload.title };
+      return { ...state, pageTitle: action.payload.pageTitle };
     case SET_DESCRIPTION:
       return { ...state, description: action.payload.description };
     case SET_INIT:
