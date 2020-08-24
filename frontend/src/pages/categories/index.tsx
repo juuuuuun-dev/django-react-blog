@@ -22,7 +22,8 @@ const Index: React.FC = () => {
     try {
       const res = await categoryPagelist(slug, { page: query.page });
       const pageNumberTitle = query.page ? `page ${query.page}` : ''
-      dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: `Category ${res.data.category_name}` + pageNumberTitle } })
+      dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: `${res.data.category_name} - category` + pageNumberTitle } })
+      dispatch({ type: 'SET_DESCRIPTION', payload: { description: `${res.data.category_name} - category` } })
       setData(res.data)
     } catch (e) {
       if (e.response && e.response.status) {
@@ -44,7 +45,7 @@ const Index: React.FC = () => {
 
   return (
     <>
-      <PostListTitle title={`Category: ${data?.category_name}`} />
+      <PostListTitle title={`${data?.category_name}`} subTitle="category" />
       <PostListPageCountResults count={data?.count} query={query} />
       <PostList data={data} query={query} handlePageChange={handlePageChange} />
     </>

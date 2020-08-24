@@ -19,9 +19,10 @@ const Detail: React.FC = () => {
     try {
       const res = await retrieve(id);
       if (res.status === 200) {
+        console.log(res.data.post)
         setPost(res.data.post)
         dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: res.data.post.title } })
-
+        dispatch({ type: 'SET_DESCRIPTION', payload: { description: res.data.post.plain_content } })
       }
     } catch (e) {
       if (e.response && e.response.status) {

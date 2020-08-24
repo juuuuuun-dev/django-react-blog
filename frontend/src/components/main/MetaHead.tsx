@@ -11,7 +11,7 @@ const MetaHead: React.FC = () => {
       <Helmet data-testid="helmet" defaultTitle={appTitle} titleTemplate={`%s | ${appTitle}`}>
         <meta charSet='utf-8' />
         {pageTitle && <title>{pageTitle}</title>}
-        <meta name="description" content={description} />
+        {description && <meta name="description" content={description} />}
       </Helmet>
     </>
   )

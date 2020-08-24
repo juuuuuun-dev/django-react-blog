@@ -1,7 +1,12 @@
 import React from 'react';
 
-const PostListTitle: React.FC<{ title: string }> = ({ title }) => {
-  return <h3 className="list-title" data-testid="list-title">{title}</h3>
+import { PostListTilteProps } from '../../../types/posts';
+
+const PostListTitle: React.FC<PostListTilteProps> = ({ title, subTitle }) => {
+  return (
+    <h3 className="list-title" data-testid="list-title">{title}
+      {subTitle && <span className="list-title__sub">{subTitle}</span>}
+    </h3>)
 }
 
 export default PostListTitle;
