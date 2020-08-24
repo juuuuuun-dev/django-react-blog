@@ -28,7 +28,7 @@ const Index = () => {
       }
     }
 
-  }, [pushError, query]);
+  }, [pushError, dispatch, query]);
   React.useEffect(() => {
     fetchData();
   }, [fetchData]);

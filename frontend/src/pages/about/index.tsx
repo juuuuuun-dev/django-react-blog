@@ -23,7 +23,7 @@ const Index: React.FC = () => {
         pushError(e.response.status)
       }
     }
-  }, [pushError]);
+  }, [pushError, dispatch]);
 
   React.useEffect(() => {
     fetchData();

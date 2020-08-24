@@ -31,7 +31,7 @@ const Index: React.FC = () => {
       }
     }
 
-  }, [pushError, query, slug]);
+  }, [pushError, dispatch, query, slug]);
 
   React.useEffect(() => {
     fetchData();
