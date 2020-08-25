@@ -11,6 +11,7 @@ import LoginLayout from './components/login/layout/LoginLayout';
 import MainLayout from './components/main/layout/MainLayout';
 import { adminPathList } from './config/admin';
 import { mainPathList } from './config/main';
+import { AdminContextProvider } from './context/adminContext';
 import { MainContextProvider } from './context/mainContext';
 
 function App() {
@@ -21,7 +22,9 @@ function App() {
           <ScrollToTop />
           <Switch>
             <Route exact path={adminPathList}>
-              <AdminLayout />
+              <AdminContextProvider>
+                <AdminLayout />
+              </AdminContextProvider>
             </Route>
             <Route exact path={mainPathList}>
               <MainContextProvider>
