@@ -9,6 +9,7 @@ import { QueryParamProvider } from 'use-query-params';
 import { act, render } from '@testing-library/react';
 
 import MainLayout from '../components/main/layout/MainLayout';
+import { MainContextProvider } from '../context/mainContext';
 
 jest.mock('../service/admin/auth');
 
@@ -29,7 +30,9 @@ export const setUp = async (initialPath: string) => {
     utils = render(
       <Router history={history}>
         <QueryParamProvider ReactRouterRoute={Route}>
-          <MainLayout />
+          <MainContextProvider>
+            <MainLayout />
+          </MainContextProvider>
         </QueryParamProvider>
       </Router>
     )

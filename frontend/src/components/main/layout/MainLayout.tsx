@@ -1,7 +1,7 @@
 import '../../../less/main/main.less';
 
 import { Col, Layout, Row } from 'antd';
-import React from 'react';
+import React, { ReactNode, useContext } from 'react';
 
 import MetaHead from '../../../components/common/MetaHead';
 import { MainContext, MainContextProvider } from '../../../context/mainContext';
@@ -11,13 +11,18 @@ import Header from '../Header';
 import Container from './Container';
 import RightContainer from './RightContainer';
 
-const MainLayout = () => {
+const MainLayout: React.FC = () => {
   const { Content } = Layout;
-  const [{ pageTitle, description }] = React.useContext(MainContext);
+  const [{ pageTitle, description }] = useContext(MainContext);
+  // const context = React.useContext(MainContext);
 
+  // if (context) {
+  //   const state = context[0];
+  //   console.log(state)
+  // }
   return (
     <>
-      <MainContextProvider>
+      <ProviderWrapper>
         <MetaHead pageTitle={pageTitle} description={description} />
         <Header />
         <Content className="site-layout">
@@ -36,9 +41,17 @@ const MainLayout = () => {
           <GlobalModal />
         </Content>
         <Footer />
-      </MainContextProvider>
+      </ProviderWrapper>
     </>
   );
 };
+
+const ProviderWrapper = ({ children }: { children: ReactNode }) => {
+  return (
+    <MainContextProvider>
+      {children}
+    </MainContextProvider>
+  )
+}
 
 export default MainLayout;
