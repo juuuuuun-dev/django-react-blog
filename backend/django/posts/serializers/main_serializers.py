@@ -45,6 +45,7 @@ class MainPostSerializer(serializers.ModelSerializer):
             "content",
             "cover",
             "category",
+            "plain_content",
             "tag",
             "updated_at",
             "created_at",

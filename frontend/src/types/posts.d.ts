@@ -62,3 +62,8 @@ export type PostListPageCountResultsProps = {
   query: ListQuery
   count: number | undefined,
 }
+
+export type PostListTilteProps = {
+  title: string;
+  subTitle: string | undefined;
+}

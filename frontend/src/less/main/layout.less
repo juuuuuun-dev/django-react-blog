@@ -88,6 +88,15 @@ a.active{ color: @active-link-color; font-weight: 500;}
 h3.list-title{
   margin-bottom: 0;
   font-size: @title-font-size;
+  span {
+    font-size: .8rem;
+    font-weight: normal;
+    margin-left: 5px;
+  }
+}
+h3.list-title.list-title__sub{
+  font-size: .8rem;
+    font-weight: normal;
 }
 
 h3.page-title {
@@ -102,6 +111,10 @@ h3.page-title {
   color: #333;
   p {
     margin-bottom: 1.8rem;
+  }
+  img {
+    width: auto;
+    max-width: 100%;
   }
 }
 // footer

@@ -159,7 +159,7 @@ describe("Main index", () => {
     fireEvent.click(utils.getByLabelText('submit-query-search'));
 
     await waitFor(() => {
-      expect(utils.getByText("Search: STAY HOME")).toBeTruthy();
+      expect(utils.getByText("STAY HOME")).toBeTruthy();
       expect(utils.getByText("(0 results)")).toBeTruthy();
     })
   })

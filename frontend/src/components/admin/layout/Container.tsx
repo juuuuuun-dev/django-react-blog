@@ -1,6 +1,7 @@
+import { Spin } from 'antd';
 import React, { useMemo } from 'react';
 import { Route } from 'react-router-dom';
-import { Spin } from 'antd';
+
 import { navList } from '../../../config/admin';
 import { AdminContext } from '../../../context/adminContext';
 
@@ -13,7 +14,7 @@ const RouteContentList = navList.map((item, index) => (
   </Route>
 ));
 
-const Container: React.FC = () => {
+const Container = () => {
   const [{ loading }] = React.useContext(AdminContext);
   return useMemo(() => {
     return (

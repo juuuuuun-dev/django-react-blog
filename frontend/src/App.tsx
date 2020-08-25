@@ -11,6 +11,8 @@ import LoginLayout from './components/login/layout/LoginLayout';
 import MainLayout from './components/main/layout/MainLayout';
 import { adminPathList } from './config/admin';
 import { mainPathList } from './config/main';
+import { AdminContextProvider } from './context/adminContext';
+import { MainContextProvider } from './context/mainContext';
 
 function App() {
   return (
@@ -19,11 +21,15 @@ function App() {
         <QueryParamProvider ReactRouterRoute={Route}>
           <ScrollToTop />
           <Switch>
-            <Route exact path={mainPathList}>
-              <MainLayout />
-            </Route>
             <Route exact path={adminPathList}>
-              <AdminLayout />
+              <AdminContextProvider>
+                <AdminLayout />
+              </AdminContextProvider>
+            </Route>
+            <Route exact path={mainPathList}>
+              <MainContextProvider>
+                <MainLayout />
+              </MainContextProvider>
             </Route>
             <Route path={['/login', '/password-reset', '/password-reset-confirm/:uid/:token/']}>
               <LoginLayout />
