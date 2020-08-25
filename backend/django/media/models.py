@@ -24,6 +24,8 @@ class Media(models.Model):
         verbose_name="file",
         upload_to=get_file_path,
     )
+    width = models.IntegerField(verbose_name="width", default=0)
+    height = models.IntegerField(verbose_name="height", default=0)
     thumb = ImageSpecField(
         source='file',
         processors=[ResizeToFill(40, 40)],

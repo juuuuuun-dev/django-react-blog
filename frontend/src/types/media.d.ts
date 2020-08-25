@@ -1,10 +1,12 @@
-import { Pagination } from "./pagination";
+import { Pagination } from './pagination';
 
 export type MediaDetail = {
   id?: number;
   name: string;
   file: string;
   thumb?: string,
+  width: number;
+  height: number;
   updated_at?: string;
   created_at?: string;
 }

@@ -159,8 +159,14 @@
 <row name="name" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
-<row name="path" null="1" autoincrement="0">
+<row name="file" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="width" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="height" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="created_at" null="1" autoincrement="0">
 <datatype>DATE</datatype>
