@@ -37,7 +37,8 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
   }
 
   const handleAdd = (value: MediaDetail): void => {
-    const text = `![${value.name}](${value.file})`;
+    // const text = `![${value.name}](${value.file})`;
+    const text = `<img src="${value.file}" alt="${value.name}" width="${value.width}" height="${value.height}">`
     handleAddMedia(text);
 
     setVisible(false);

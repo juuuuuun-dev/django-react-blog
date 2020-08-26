@@ -1,11 +1,15 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { list, create } from '../../../../service/admin/media';
-import { defaultSuccessText, defaultErrorText } from '../../../../components/common/toast'
-import { listData, listAxiosResponse, createAxiosResponse, error400AxiosResponse } from '../../../../__mocks__/serviceResponse/media';
+import { mocked } from 'ts-jest/utils';
+
+import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+
 import { setUp } from '../../../../__mocks__/adminSetUp';
+import {
+    createAxiosResponse, error400AxiosResponse, listAxiosResponse, listData
+} from '../../../../__mocks__/serviceResponse/media';
+import { defaultErrorText, defaultSuccessText } from '../../../../components/common/toast';
 import { getBase64 } from '../../../../helper/file';
+import { create, list } from '../../../../service/admin/media';
 
 afterEach(() => cleanup());
 jest.mock('../../../../service/admin/media');

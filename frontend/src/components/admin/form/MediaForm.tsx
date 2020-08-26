@@ -55,8 +55,10 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
         setLoading(true);
         setRemoveFile(false);
         setImageUrl(imageUrl);
-        setWidth(image.width);
-        setHeight(image.height);
+        if (image) {
+          setWidth(image.width);
+          setHeight(image.height);
+        }
       });
     }
     return false;
