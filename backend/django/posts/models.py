@@ -7,6 +7,7 @@ from django.core.cache import cache
 from django.db import models
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from media.models import Media
 from tags.models import Tag
 from tags.serializers import TagListSerializer
 from users.models import User
@@ -33,18 +34,17 @@ class Post(models.Model):
     content = models.TextField(verbose_name='content')
     plain_content = models.TextField(
         verbose_name='plain_content', null=True, blank=True)
-    cover = models.FileField(
-        verbose_name="cover",
-        upload_to=get_file_path,
+    # cover = models.FileField(
+    #     verbose_name="cover",
+    #     upload_to=get_file_path,
+    #     null=True,
+    #     blank=True
+    # )
+    cover_media = models.ForeignKey(
+        Media,
+        on_delete=models.PROTECT,
         null=True,
-        blank=True
-    )
-    thumb = ImageSpecField(
-        source='cover',
-        processors=[ResizeToFill(80, 80)],
-        format='JPEG',
-        options={'quality': 90}
-    )
+        blank=True)
     is_show = models.BooleanField()
     category = models.ForeignKey(
         Category, verbose_name='category', on_delete=models.PROTECT)

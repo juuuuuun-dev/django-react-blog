@@ -15,6 +15,10 @@ def get_file_path(instance, filename):
 
 class Media(models.Model):
     base_cache_key = 'media'
+    cover_size = {
+        'width': 160,
+        'height': 160,
+    }
 
     class Meta:
         db_table = 'media'
@@ -26,6 +30,12 @@ class Media(models.Model):
     )
     width = models.IntegerField(verbose_name="width", default=0)
     height = models.IntegerField(verbose_name="height", default=0)
+    cover = ImageSpecField(
+        source='file',
+        processors=[ResizeToFill(cover_size['width'], cover_size['height'])],
+        format='JPEG',
+        options={'quality': 90}
+    )
     thumb = ImageSpecField(
         source='file',
         processors=[ResizeToFill(40, 40)],

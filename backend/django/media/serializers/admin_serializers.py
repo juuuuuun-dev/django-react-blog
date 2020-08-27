@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from ..models import Media
 
 
@@ -10,6 +11,7 @@ class AdminMediaSerializer(serializers.ModelSerializer):
     updated_at = serializers.DateTimeField(
         format="%Y-%m-%d %H:%M:%S", read_only=True)
     thumb = serializers.ImageField(read_only=True)
+    cover = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Media
