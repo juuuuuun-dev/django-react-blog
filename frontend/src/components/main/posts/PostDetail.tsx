@@ -23,7 +23,6 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
           {/* <span className="entry-date__item"><ApartmentOutlined />{post.category}</span> */}
         </div>
         <MarkdownContent content={post.content} />
-
       </div>
     </>
   );
