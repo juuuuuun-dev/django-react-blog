@@ -10,6 +10,7 @@ import { list } from '../../service/admin/media';
 import { MediaDetail, MediaList, MediaModalProps } from '../../types/media';
 
 const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddMedia }) => {
+  console.log({ handleAddMedia })
   const { Search } = Input;
   const [{ pageSize }] = React.useContext(AdminContext);
   const [data, setData] = React.useState<MediaList | undefined>();
@@ -36,12 +37,8 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
     setPage(page);
   }
 
-  /** @TODO ここもっと抽象してCoverでも使えるように */
   const handleAdd = (value: MediaDetail): void => {
-    // const text = `![${value.name}](${value.file})`;
-    const text = `<img src="${value.file}" alt="${value.name}" width="${value.width}" height="${value.height}" loading="lazy">`
-    handleAddMedia(text);
-
+    handleAddMedia(value);
     setVisible(false);
   }
 

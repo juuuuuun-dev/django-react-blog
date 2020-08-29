@@ -4,6 +4,7 @@ export type MediaDetail = {
   id?: number;
   name: string;
   file: string;
+  cover?: string;
   thumb?: string,
   width: number;
   height: number;
