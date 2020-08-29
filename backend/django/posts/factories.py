@@ -1,5 +1,6 @@
 import factory
 from categories.factories import CategoryFactory
+from media.factories import MediaFactory
 from tags.factories import TagFactory
 
 from .models import Post
@@ -14,6 +15,7 @@ class PostFactory(factory.DjangoModelFactory):
     content = "test content"
     is_show = True
     category = factory.SubFactory(CategoryFactory, name="test cateogry")
+    cover_media = factory.SubFactory(MediaFactory, name='test abe')
 
     @factory.post_generation
     def tag(self, create, extracted, **kwargs):

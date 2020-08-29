@@ -36,6 +36,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
     setPage(page);
   }
 
+  /** @TODO ここもっと抽象してCoverでも使えるように */
   const handleAdd = (value: MediaDetail): void => {
     // const text = `![${value.name}](${value.file})`;
     const text = `<img src="${value.file}" alt="${value.name}" width="${value.width}" height="${value.height}" loading="lazy">`

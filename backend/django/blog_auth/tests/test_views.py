@@ -1,16 +1,20 @@
-from django.test import TestCase
-from rest_framework import status
-from rest_framework.test import APITestCase
-from django.urls import reverse
-from rest_framework.response import Response
-from django.conf import settings
 from pprint import pprint
-from .test_models import UserFactory
+
+from django.conf import settings
+from django.core.cache import cache
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from .test_models import UserFactory
 
 
 class RestUserAuthTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.base_api = "/{}blog_auth/".format(settings.API_VERSION)
         self.user_api = "/{}users/".format(settings.API_VERSION)
         # user

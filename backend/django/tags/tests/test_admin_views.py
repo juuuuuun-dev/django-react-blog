@@ -12,6 +12,7 @@ from utils.cache_views import get_detail_key
 
 class AdminTagTestViewSetTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.base_cache_key = "tags"
         # user
         self.user = UserFactory.create()
@@ -20,6 +21,9 @@ class AdminTagTestViewSetTestCase(APITestCase):
         refresh = RefreshToken.for_user(self.user)
         self.client.credentials(
             HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
+
+    def tearDown(self):
+        cache.clear()
 
     def test_get(self):
         tag = TagFactory.create(name="test")

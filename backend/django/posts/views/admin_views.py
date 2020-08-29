@@ -52,8 +52,8 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
     def create(self, request, *args, **kwargs):
         user = User.objects.get(id=self.request.user.id)
         cp = request.data.copy()
-        if 'cover' in self.request.data:
-            cp['cover'] = file.base64decode(self.request.data['cover'])
+        # if 'cover' in self.request.data:
+        #     cp['cover'] = file.base64decode(self.request.data['cover'])
         if 'content' in self.request.data:
             plain = self.make_plain_content(self.request.data['content'])
 
@@ -74,10 +74,10 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         queryset = self.queryset
         instance = get_object_or_404(queryset, pk=pk)
         cp = request.data.copy()
-        if 'cover' in self.request.data:
-            post = Post.objects.get(id=self.kwargs['pk'])
-            file.delete_thumb(post.cover.name)
-            cp['cover'] = file.base64decode(self.request.data['cover'])
+        # if 'cover' in self.request.data:
+        #     post = Post.objects.get(id=self.kwargs['pk'])
+        #     file.delete_thumb(post.cover.name)
+        #     cp['cover'] = file.base64decode(self.request.data['cover'])
         if 'content' in self.request.data:
             plain = self.make_plain_content(self.request.data['content'])
 

@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 from categories.factories import CategoryFactory
 from django.core.cache import cache
 from django.urls import reverse
+from media.factories import MediaFactory
 from posts.factories import PostFactory
 from posts.models import Post
 from rest_framework import status
@@ -11,7 +12,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from tags.factories import TagFactory
 from users.factories import UserFactory
 from utils.cache_views import cache_key_stringfiy, get_detail_key
-from utils.file import delete_thumb
 
 
 class AdminPostViewSetWithTestCase(APITestCase):
@@ -28,10 +28,6 @@ class AdminPostViewSetWithTestCase(APITestCase):
 
     def tearDown(self):
         cache.clear()
-        posts = Post.objects.all()
-        for value in posts:
-            delete_thumb(value.cover.name)
-            value.cover.delete()
 
     def test_list_with_cache(self):
         tag = TagFactory.create(name="tagdayo")
@@ -236,9 +232,11 @@ class AdminPostViewSetWithTestCase(APITestCase):
     def test_update_with_cache(self):
         tag = TagFactory.create(name="tag")
         category = CategoryFactory.create(name="test")
+        media = MediaFactory.create(name="test")
         post = PostFactory.create(
             user=self.user,
             category=category,
+            cover_media=media,
             tag=[tag],
             is_show=True)
         show_cache_key = get_detail_key(
@@ -265,6 +263,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
             "content": "  # update",
             "is_show": True,
             "category": category.id,
+            "cover_media": media.id,
         }
         update_api = reverse(
             "posts:admin-post-detail",

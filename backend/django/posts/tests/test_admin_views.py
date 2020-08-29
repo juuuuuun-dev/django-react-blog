@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 from categories.factories import CategoryFactory
 from django.core.cache import cache
 from django.urls import reverse
+from media.factories import MediaFactory
 from posts.factories import PostFactory
 from posts.models import Post
 from rest_framework import status
@@ -28,9 +29,6 @@ class AdminPostViewSetTestCase(APITestCase):
     def tearDown(self):
         cache.clear()
         posts = Post.objects.all()
-        for value in posts:
-            delete_thumb(value.cover.name)
-            value.cover.delete()
 
     def test_list(self):
         tag = TagFactory.create(name="tagdayo")
@@ -45,6 +43,7 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertTrue(response.data['results'][0]['category'])
         self.assertEqual(len(response.data['results'][0]['tag']), 1)
         self.assertEqual(len(response.data['tags']), 2)
+        print(response.data['results'][0]['cover_media'])
 
     def test_get_filter_category(self):
         tag = TagFactory.create(name="tagdayo")
@@ -132,6 +131,7 @@ class AdminPostViewSetTestCase(APITestCase):
 
     def test_post(self):
         category = CategoryFactory.create(name="test")
+        media = MediaFactory.create(name="test")
         tag = TagFactory.create(name="test")
         tag2 = TagFactory.create(name="test2")
         post_data = {
@@ -141,7 +141,7 @@ class AdminPostViewSetTestCase(APITestCase):
             "is_show": True,
             "category": category.id,
             "tag": [tag.id, tag2.id],
-            "cover": self.base64image,
+            "cover_media": media.id,
         }
         api = reverse("posts:admin-post-list")
         response = self.client.post(api, post_data)
@@ -151,16 +151,16 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.data['content'], post_data['content'])
         self.assertEqual(response.data['is_show'], post_data['is_show'])
         self.assertEqual(response.data['category'], category.id)
+        self.assertEqual(response.data['cover_media'], media.id)
         self.assertEqual(response.data['tag'][0], tag.id)
         self.assertEqual(response.data['tag'][1], tag2.id)
-        self.assertTrue(response.data['thumb'])
-        self.assertTrue(response.data['cover'])
 
     def test_put(self):
         tag = TagFactory.create(name="tag")
         tag2 = TagFactory.create(name="tag2")
         post = PostFactory.create(user=self.user, tag=[tag])
         category = CategoryFactory.create(name="test")
+        media = MediaFactory.create(name="test")
         api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
         post_data = {
             "title": "testtest",
@@ -171,7 +171,7 @@ class AdminPostViewSetTestCase(APITestCase):
             "tag": [
                 tag.id,
                 tag2.id],
-            "cover": self.base64image,
+            "cover_media": media.id,
         }
 
         response = self.client.put(api, post_data)
@@ -181,8 +181,7 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertEqual(response.data['content'], post_data['content'])
         self.assertEqual(response.data['is_show'], post_data['is_show'])
         self.assertEqual(response.data['category'], category.id)
-        self.assertTrue(response.data['thumb'])
-        self.assertTrue(response.data['cover'])
+        self.assertEqual(response.data['cover_media'], media.id)
 
     def test_delete(self):
         tag = TagFactory.create(name="tag")
