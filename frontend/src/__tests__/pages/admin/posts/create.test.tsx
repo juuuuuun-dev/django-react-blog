@@ -99,7 +99,6 @@ describe("Admin posts create", () => {
     // change
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
     fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'create-abe' } });
-    fireEvent.change(utils.getByLabelText("input-cover"), { target: { files: [file] } });
     const contentTitle = "create";
     await waitFor(() => {
       utils.getByTestId('text-area').firstElementChild.value = `#${contentTitle}\n`;
@@ -114,6 +113,15 @@ describe("Admin posts create", () => {
     fireEvent.click(utils.getByLabelText(`option-tag-${formItemAxiosResponse.data.tags[1].id}`));
     // is_show
     fireEvent.click(utils.getByTestId("switch-is_show"));
+
+    // cover modal
+    fireEvent.click(utils.getByLabelText('select-cover'));
+    expect(await utils.findByTestId("media-modal")).toBeTruthy();
+    fireEvent.mouseOver(await utils.findByTestId(`media-list-${mediaListAxiosResponse.data.results[0].id}`));
+    fireEvent.click(await utils.findByTestId('add-media-code-btn'));
+    await waitFor(() => {
+      expect(utils.getByLabelText('cover-media-image').innerHTML).toMatch(/aa/)
+    });
 
     // media modal
     fireEvent.click(utils.getByTitle('Add media'));

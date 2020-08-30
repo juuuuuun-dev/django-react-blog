@@ -10,7 +10,6 @@ import { list } from '../../service/admin/media';
 import { MediaDetail, MediaList, MediaModalProps } from '../../types/media';
 
 const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddMedia }) => {
-  console.log({ handleAddMedia })
   const { Search } = Input;
   const [{ pageSize }] = React.useContext(AdminContext);
   const [data, setData] = React.useState<MediaList | undefined>();

@@ -39,7 +39,7 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = self.get_detail_queryset(
             base_key=self.base_cache_key, request=request, pk=pk)
-        serializer = admin_serializers.AdminPostSerializer(queryset, context={
+        serializer = admin_serializers.AdminGetSerializer(queryset, context={
             "request": request})
         data = Post.get_tag_and_category_list()
         data["post"] = serializer.data
