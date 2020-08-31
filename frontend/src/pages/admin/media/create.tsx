@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { parseCommandLine } from 'typescript';
 
 import Form from '../../../components/admin/form/MediaForm';
 import toast from '../../../components/common/toast';

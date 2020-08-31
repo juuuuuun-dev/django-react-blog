@@ -10,6 +10,7 @@ from users.factories import UserFactory
 
 class InitialViewsTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.user = UserFactory.create()
         self.user.set_password("test1234")
         self.user.save()

@@ -9,6 +9,7 @@ from users.factories import UserFactory
 
 class AdminCategoryViewSetTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.api_basename = "categories:admin-category"
         # user
         self.user = UserFactory.create()

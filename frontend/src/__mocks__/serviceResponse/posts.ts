@@ -26,7 +26,10 @@ export const resultData = {
   "key": 1,
   "title": "test Abe",
   "slug": "test-abe",
-  "cover": "http://localhost:3000/image.jpg",
+  "cover_media": {
+    "id": 1,
+    "cover": "http://localhost:3000/image.jpg",
+  },
   "content": "content Abe",
   "is_show": true,
   "category": categoryList[0].id,

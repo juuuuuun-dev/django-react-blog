@@ -10,6 +10,7 @@ from users.factories import UserFactory
 
 class PostListTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.user = UserFactory.create()
         self.user.set_password("test1234")
         self.user.save()
@@ -136,9 +137,13 @@ class PostTagSlugListTestCase(APITestCase):
 
 class PostDetailTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.user = UserFactory.create()
         self.user.set_password("test1234")
         self.user.save()
+
+    def tearDown(self):
+        cache.clear()
 
     def test_get_show(self):
         tag = TagFactory.create(name="tag")

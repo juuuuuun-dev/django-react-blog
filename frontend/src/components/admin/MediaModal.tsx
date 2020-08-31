@@ -37,10 +37,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
   }
 
   const handleAdd = (value: MediaDetail): void => {
-    // const text = `![${value.name}](${value.file})`;
-    const text = `<img src="${value.file}" alt="${value.name}" width="${value.width}" height="${value.height}" loading="lazy">`
-    handleAddMedia(text);
-
+    handleAddMedia(value);
     setVisible(false);
   }
 
@@ -75,7 +72,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
             return <div className="media-thumbs__item" key={index}>
               <Popover title={value.name} content={
                 <>
-                  <Button data-testid="add-media-code-btn" style={{ marginRight: 10 }} shape="circle" onClick={() => handleAdd(value)} icon={<PlusOutlined />} size="middle" />
+                  <Button data-testid="add-media-btn" style={{ marginRight: 10 }} shape="circle" onClick={() => handleAdd(value)} icon={<PlusOutlined />} size="middle" />
                   <Button style={{ marginRight: 10 }} shape="circle" onClick={() => handlePreview(value.file)} icon={<EyeOutlined />} size="middle" />
                 </>
               }>

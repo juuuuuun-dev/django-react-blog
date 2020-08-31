@@ -92,7 +92,7 @@ describe("Admin about me edit", () => {
     fireEvent.click(utils.getByTitle('Add media'));
     expect(await utils.findByTestId("media-modal")).toBeTruthy();
     fireEvent.mouseOver(await utils.findByTestId(`media-list-${mediaListAxiosResponse.data.results[0].id}`));
-    fireEvent.click(await utils.findByTestId('add-media-code-btn'));
+    fireEvent.click(await utils.findByTestId('add-media-btn'));
     // submit
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {

@@ -8,7 +8,10 @@ export type PostDetail = {
   title: string;
   slug: string;
   content: string;
-  cover?: string;
+  cover_media: {
+    id: number | undefined,
+    cover: string | undefined,
+  };
   thumb?: string;
   is_show?: boolean;
   plain_content?: string;

@@ -1,7 +1,7 @@
 import '../../../less/main/main.less';
 
 import { Col, Layout, Row } from 'antd';
-import React, { ReactNode, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import MetaHead from '../../../components/common/MetaHead';
 import { MainContext } from '../../../context/mainContext';
