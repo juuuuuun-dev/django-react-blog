@@ -170,6 +170,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
 
     def test_list_delete_page_max_cache(self):
         category = CategoryFactory.create(name="test")
+        media = MediaFactory.create(name="test")
         post_1 = PostFactory.create(user=self.user, category=category)
         post_2 = PostFactory.create(user=self.user, category=category)
         post_3 = PostFactory.create(user=self.user, category=category)
@@ -201,6 +202,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
             "content": "  # update",
             "is_show": False,
             "category": category.id,
+            "cover_media": media.id,
         }
         update_api = reverse(
             "posts:admin-post-detail",

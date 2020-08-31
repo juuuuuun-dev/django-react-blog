@@ -15,12 +15,12 @@ class AdminPostSerializer(serializers.ModelSerializer):
         queryset=Category.objects.all())
     key = serializers.IntegerField(source='id', read_only=True)
     cover_media = serializers.PrimaryKeyRelatedField(
-        queryset=Media.objects.all())
+        queryset=Media.objects.all(), required=False)
 
-    created_at = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S", read_only=True)
-    updated_at = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S", read_only=True)
+    # created_at = serializers.DateTimeField(
+    #     format="%Y-%m-%d %H:%M:%S", read_only=True)
+    # updated_at = serializers.DateTimeField(
+    #     format="%Y-%m-%d %H:%M:%S", read_only=True)
 
     class Meta:
         model = Post
@@ -51,10 +51,10 @@ class AdminGetSerializer(serializers.ModelSerializer):
     key = serializers.IntegerField(source='id', read_only=True)
     cover_media = CoverSerializer()
 
-    created_at = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S", read_only=True)
-    updated_at = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S", read_only=True)
+    # created_at = serializers.DateTimeField(
+    #     format="%Y-%m-%d %H:%M:%S", read_only=True)
+    # updated_at = serializers.DateTimeField(
+    #     format="%Y-%m-%d %H:%M:%S", read_only=True)
 
     class Meta:
         model = Post
