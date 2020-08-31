@@ -82,6 +82,31 @@ describe("Admin posts index", () => {
     })
   })
 
+  // filter tag
+  it("Filter tag", async () => {
+    mocked(list).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
+    );
+    const { utils, history } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getAllByText("CREATE")).toBeTruthy();
+      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
+    })
+    fireEvent.click(utils.getByTestId('open-filter-select-tag'));
+    await waitFor(() => {
+      expect(utils.getByTestId("filter-select-tag")).toBeTruthy();
+    })
+    // tag
+    fireEvent.mouseDown(utils.getByTestId("filter-select-tag").firstElementChild);
+    fireEvent.click(utils.getByTestId(`filter-option-${listData.tags[0].id}`));
+
+    await waitFor(() => {
+      expect(utils.getAllByText(listData.tags[0].name)).toBeTruthy();
+      const reg = new RegExp(`tag=${listData.tags[0].id}`)
+      expect(history.location.search).toMatch(reg)
+    })
+  })
+
   // sort
   it("Sort", async () => {
     mocked(list).mockImplementation(

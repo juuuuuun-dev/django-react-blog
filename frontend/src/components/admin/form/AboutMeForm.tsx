@@ -4,6 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 import SimpleMDE from 'react-simplemde-editor';
 
 import { AboutMeFormProps } from '../../../types/aboutMe';
+import { MediaDetail } from '../../../types/media';
 import MediaModal from '../../admin/MediaModal';
 import PostDetailContent from '../../common/MarkdownContent';
 
@@ -31,7 +32,8 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
     onSubmit(values);
   };
 
-  const handleAddMedia = (text: string) => {
+  const handleAddMedia = (value: MediaDetail) => {
+    const text = `<img src="${value.file}" alt="${value.name}" width="${value.width}" height="${value.height}" loading="lazy">`
     if (codemirror) {
       const { line, ch } = codemirror.getCursor();
       codemirror.replaceRange(text, { line: line, ch: ch })
