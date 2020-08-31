@@ -15,10 +15,14 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
   const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
   const [file, setFile] = React.useState<File | undefined>();
   const [removeFile, setRemoveFile] = React.useState<boolean>(false)
+  const [width, setWidth] = React.useState<number>(0);
+  const [height, setHeight] = React.useState<number>(0);
 
   React.useEffect(() => {
     if (data) {
       setImageUrl(data.file);
+      setHeight(data.height);
+      setWidth(data.width);
       form.setFieldsValue(
         {
           name: data.name,
@@ -33,6 +37,8 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
       return false;
     }
     values.file = file;
+    values.width = width;
+    values.height = height;
     onSubmit(values)
   };
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
@@ -45,11 +51,14 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
       toast({ type: 'ERROR', text: 'Image must smaller than 2MB!' })
     }
     if (isJpgOrPng && isLt2M) {
-      // move getBase64
-      getBase64(file, (imageUrl: string) => {
+      getBase64(file, (imageUrl: string, image: HTMLImageElement) => {
         setLoading(true);
         setRemoveFile(false);
         setImageUrl(imageUrl);
+        if (image) {
+          setWidth(image.width);
+          setHeight(image.height);
+        }
       });
     }
     return false;
@@ -71,6 +80,8 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
 
   const handleRemove = async (file: any) => {
     setImageUrl('')
+    setHeight(0);
+    setWidth(0);
     setFile(undefined);
     setLoading(false);
     setRemoveFile(true);

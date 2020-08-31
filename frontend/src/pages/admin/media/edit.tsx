@@ -1,11 +1,12 @@
 import React from 'react';
-import { retrieve, update, destroy } from '../../../service/admin/media';
-import { AdminContext } from '../../../context/adminContext';
-import Form from '../../../components/admin/form/MediaForm'
-import { MediaDetail } from '../../../types/media';
-import toast from '../../../components/common/toast';
 import { useHistory, useParams } from 'react-router-dom';
+
 import DeleteBtn from '../../../components/admin/DeleteBtn';
+import Form from '../../../components/admin/form/MediaForm';
+import toast from '../../../components/common/toast';
+import { AdminContext } from '../../../context/adminContext';
+import { destroy, retrieve, update } from '../../../service/admin/media';
+import { MediaDetail } from '../../../types/media';
 
 const MediaEdit: React.FC = () => {
   const redirectPath = "/admin/media";
@@ -38,6 +39,8 @@ const MediaEdit: React.FC = () => {
     try {
       const params = new FormData();
       params.append('name', values.name);
+      params.append('width', values.width);
+      params.append('height', values.height);
       if (values.file) {
         params.append('file', values.file);
       }

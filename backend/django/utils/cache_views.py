@@ -128,6 +128,14 @@ class CacheCreateAndUpdateAndDestroyModelMixin(
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
         return Response(serializer.data)
 
+    def destroy(self, request, pk=None, *args, **kwargs):
+        instance = self.get_object()
+        print(self.base_cache_key)
+        self.perform_destroy(instance)
+        self.delete_list_cache(self.base_cache_key)
+        self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def delete_list_cache(self, base_key):
         self.delete_index_cache(base_key)
         self.delete_list_query_cache(base_key)

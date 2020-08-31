@@ -1,9 +1,11 @@
 import React from 'react';
-import { create } from '../../../service/admin/media';
-import { AdminContext } from '../../../context/adminContext';
+import { useHistory } from 'react-router-dom';
+import { parseCommandLine } from 'typescript';
+
 import Form from '../../../components/admin/form/MediaForm';
 import toast from '../../../components/common/toast';
-import { useHistory } from 'react-router-dom';
+import { AdminContext } from '../../../context/adminContext';
+import { create } from '../../../service/admin/media';
 
 const Create: React.FC = () => {
   const redirectPath = '/admin/media';
@@ -24,6 +26,8 @@ const Create: React.FC = () => {
       const params = new FormData();
       params.append('name', values.name);
       params.append('file', values.file);
+      params.append('width', values.width);
+      params.append('height', values.height);
       const res = await create(params);
       if (res.status === 201) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });

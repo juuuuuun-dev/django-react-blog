@@ -276,3 +276,30 @@ class AdminPostViewSetWithTestCase(APITestCase):
         after_show_cache_data = cache.get(show_cache_key)
         self.assertIsNone(after_cache_data)
         self.assertIsNone(after_show_cache_data)
+
+    def test_delete_with_cache(self):
+        tag = TagFactory.create(name="tag")
+        category = CategoryFactory.create(name="test")
+        post = PostFactory.create(
+            user=self.user,
+            category=category,
+            tag=[tag],
+            is_show=True)
+        show_cache_key = get_detail_key(
+            base_key=Post.show_cache_key, pk=post.id)
+        cache_key = get_detail_key(base_key=self.base_cache_key, pk=post.id)
+        cache_data = cache.get(cache_key)
+        show_cache_data = cache.get(show_cache_key)
+        self.assertIsNone(cache_data)
+        self.assertIsNone(show_cache_data)
+        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        response = self.client.get(api, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        cache_data = cache.get(cache_key)
+        self.assertEqual(cache_data.id, post.id)
+
+        delete_api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        response = self.client.delete(delete_api, format="json")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        cache_data = cache.get(cache_key)
+        self.assertIsNone(cache_data)
