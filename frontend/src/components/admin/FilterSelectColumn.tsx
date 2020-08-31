@@ -11,7 +11,7 @@ const FilterSelectColumn = ({ dataIndex, selected, listItem, handleChange }: fil
   filterDropdown: ({ confirm, clearFilters }: dropdownProps) => (
     <div style={{ padding: 8 }}>
       <Select
-        aria-label={`filter-select-${dataIndex}`}
+        data-testid={`filter-select-${dataIndex}`}
         allowClear
         placeholder={dataIndex}
         style={{ width: "180px" }}
@@ -27,13 +27,13 @@ const FilterSelectColumn = ({ dataIndex, selected, listItem, handleChange }: fil
         optionFilterProp="children"
       >
         {listItem?.map((value, index) => (
-          <Option aria-label={`filter-option-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+          <Option data-testid={`filter-option-${value.id}`} key={index} value={value.id}>{value.name}</Option>
         ))}
       </Select>
     </div>
   ),
   visible: false,
-  filterIcon: (filtered: boolean) => <FilterFilled aria-label={`open-filter-select-${dataIndex}`} style={{ color: selected ? '#1890ff' : '#bbb' }} />,
+  filterIcon: (filtered: boolean) => <FilterFilled data-testid={`open-filter-select-${dataIndex}`} style={{ color: selected ? '#1890ff' : '#bbb' }} />,
   onFilter: (value: string | number | boolean, record: any) => {
     return record[dataIndex]
       .toString()

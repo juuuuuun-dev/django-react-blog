@@ -79,6 +79,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   }
 
   const handleResetCover = () => {
+    console.log("reset")
     setCover({
       id: undefined,
       cover: undefined,
@@ -157,6 +158,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 }}
                 type="link"
                 shape="circle"
+                aria-label="delete-cover"
                 onClick={handleResetCover}
                 icon={<CloseCircleOutlined />}></Button>}
               {cover && <Image
@@ -210,7 +212,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                     },
                     className: "fa fa-image",
                     title: "Add media",
-
                   }],
                 }}
               />
@@ -222,7 +223,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
             >
               <Select
                 showSearch
-                aria-label="select-category"
+                data-testid="select-category"
                 style={{ width: 200 }}
                 placeholder="Select a category"
                 // optionLabelProp="label"
@@ -234,7 +235,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 }}
               >
                 {formItem?.categories?.map((value, index) => {
-                  return <Option label={value.name} aria-label={`option-category-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+                  return <Option label={value.name} data-testid={`option-category-${value.id}`} key={index} value={value.id}>{value.name}</Option>
                 })}
               </Select>
             </Form.Item>
@@ -246,10 +247,10 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
                 mode="multiple"
                 style={{ width: '100%' }}
                 placeholder="Please select"
-                aria-label="select-tag"
+                data-testid="select-tag"
               >
                 {formItem?.tags.map((value, index) => {
-                  return <Option label={value.name} aria-label={`option-tag-${value.id}`} key={index} value={value.id}>{value.name}</Option>
+                  return <Option label={value.name} data-testid={`option-tag-${value.id}`} key={index} value={value.id}>{value.name}</Option>
                 })}
               </Select>
             </Form.Item>

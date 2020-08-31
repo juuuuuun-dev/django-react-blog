@@ -67,13 +67,13 @@ describe("Admin posts index", () => {
       expect(utils.getAllByText("CREATE")).toBeTruthy();
       expect(utils.getByText(listData.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByLabelText('open-filter-select-category'));
+    fireEvent.click(utils.getByTestId('open-filter-select-category'));
     await waitFor(() => {
-      expect(utils.getByLabelText("filter-select-category")).toBeTruthy();
+      expect(utils.getByTestId("filter-select-category")).toBeTruthy();
     })
     // category
-    fireEvent.mouseDown(utils.getByLabelText("filter-select-category").firstElementChild);
-    fireEvent.click(utils.getByLabelText(`filter-option-${listData.categories[0].id}`));
+    fireEvent.mouseDown(utils.getByTestId("filter-select-category").firstElementChild);
+    fireEvent.click(utils.getByTestId(`filter-option-${listData.categories[0].id}`));
 
     await waitFor(() => {
       expect(utils.getAllByText(listData.categories[0].name)).toBeTruthy();

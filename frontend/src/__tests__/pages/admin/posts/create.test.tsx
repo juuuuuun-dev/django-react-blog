@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { act } from 'react-dom/test-utils';
 import { mocked } from 'ts-jest/utils';
 
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
@@ -103,14 +104,17 @@ describe("Admin posts create", () => {
     await waitFor(() => {
       utils.getByTestId('text-area').firstElementChild.value = `#${contentTitle}\n`;
     })
-
     // category
-    fireEvent.mouseDown(utils.getByLabelText("select-category").firstElementChild);
-    fireEvent.click(utils.getByLabelText(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
-    // tag
-    fireEvent.mouseDown(utils.getByLabelText("select-tag").firstElementChild);
-    fireEvent.click(utils.getByLabelText(`option-tag-${formItemAxiosResponse.data.tags[0].id}`));
-    fireEvent.click(utils.getByLabelText(`option-tag-${formItemAxiosResponse.data.tags[1].id}`));
+    fireEvent.mouseDown(utils.getByTestId("select-category").firstElementChild);
+    await waitFor(() => {
+      fireEvent.click(utils.getByTestId(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
+    })
+
+    // // tag
+    fireEvent.mouseDown(utils.getByTestId("select-tag").firstElementChild);
+    fireEvent.click(utils.getByTestId(`option-tag-${formItemAxiosResponse.data.tags[0].id}`));
+    fireEvent.click(utils.getByTestId(`option-tag-${formItemAxiosResponse.data.tags[1].id}`));
+
     // is_show
     fireEvent.click(utils.getByTestId("switch-is_show"));
 
@@ -118,16 +122,17 @@ describe("Admin posts create", () => {
     fireEvent.click(utils.getByLabelText('select-cover'));
     expect(await utils.findByTestId("media-modal")).toBeTruthy();
     fireEvent.mouseOver(await utils.findByTestId(`media-list-${mediaListAxiosResponse.data.results[0].id}`));
-    fireEvent.click(await utils.findByTestId('add-media-code-btn'));
+    fireEvent.click(await utils.findByTestId('add-media-btn'));
     await waitFor(() => {
-      expect(utils.getByLabelText('cover-media-image').innerHTML).toMatch(/aa/)
+      const match = new RegExp(mediaListAxiosResponse.data.results[0].cover)
+      expect(utils.getByLabelText('cover-media-image').innerHTML).toMatch(match)
     });
 
     // media modal
     fireEvent.click(utils.getByTitle('Add media'));
     expect(await utils.findByTestId("media-modal")).toBeTruthy();
     fireEvent.mouseOver(await utils.findByTestId(`media-list-${mediaListAxiosResponse.data.results[0].id}`));
-    fireEvent.click(await utils.findByTestId('add-media-code-btn'));
+    fireEvent.click(await utils.findByTestId('add-media-btn'));
 
     await waitFor(() => {
       const mediaStr = `${mediaListAxiosResponse.data.results[0].file}`;
@@ -138,25 +143,6 @@ describe("Admin posts create", () => {
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText(defaultSuccessText)).toBeTruthy();
-    });
-  })
-
-  it("Uploading not image", async () => {
-    const { utils } = await setUp(initialPath);
-    await waitFor(() => {
-      expect(utils.getByTestId("create-btn")).toBeTruthy();
-    })
-    fireEvent.click(utils.getByTestId("create-btn"));
-    await waitFor(() => {
-      expect(utils.getAllByText("Post create")).toBeTruthy();
-    });
-
-    const text = new File(['abe'], "test.txt", {
-      type: "text/plain",
-    });
-    fireEvent.change(utils.getByLabelText("input-cover"), { target: { files: [text] } });
-    await waitFor(() => {
-      expect(utils.getByText("You can only upload JPG/PNG file!")).toBeTruthy();
     });
   })
 
@@ -199,8 +185,12 @@ describe("Admin posts create", () => {
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
     fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'create-abe' } });
     utils.getByTestId('text-area').firstElementChild.value = 'test';
-    fireEvent.mouseDown(utils.getByLabelText("select-category").firstElementChild);
-    fireEvent.click(utils.getByLabelText(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
+
+    // category
+    fireEvent.mouseDown(utils.getByTestId("select-category").firstElementChild);
+    await waitFor(() => {
+      fireEvent.click(utils.getByTestId(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
+    })
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
@@ -225,8 +215,11 @@ describe("Admin posts create", () => {
     // change
     fireEvent.change(utils.getByLabelText("input-title"), { target: { value: 'createAbe' } });
     fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'create-abe' } });
-    fireEvent.mouseDown(utils.getByLabelText("select-category").firstElementChild);
-    fireEvent.click(utils.getByLabelText(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
+    // category
+    fireEvent.mouseDown(utils.getByTestId("select-category").firstElementChild);
+    await waitFor(() => {
+      fireEvent.click(utils.getByTestId(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
+    })
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText(defaultErrorText)).toBeTruthy();

@@ -6,6 +6,7 @@ export const resultData = {
   "name": "test Abe",
   "file": "http://localhost:3000/image.jpg",
   "thumb": "http://localhost:3000/thumb.jpg",
+  "cover": "http://localhost:3000/cover.jpg",
   "created_at": "2020-02-02",
   "updated_at": "2020-02-02",
 }
