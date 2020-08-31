@@ -5,6 +5,8 @@ export type AdminState = {
   username: string;
   thumb: string;
   pageSize: number;
+  dateFormat: string;
+  dateTimeFormat: string;
 }
 
 export type providerProps = [

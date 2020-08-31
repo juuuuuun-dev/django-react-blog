@@ -14,6 +14,8 @@ const initState: AdminState = {
   username: '',
   thumb: '',
   pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
+  dateFormat: process.env.REACT_APP_DATE_FORMAT || "YYYY-MM-DD",
+  dateTimeFormat: process.env.REACT_APP__DATETIME_FORMAT || "YYYY-MM-DD hh:mm:ss",
 };
 
 export const AdminContext = React.createContext({} as providerProps);

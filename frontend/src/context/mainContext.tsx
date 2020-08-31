@@ -14,6 +14,8 @@ export const mainState: MainState = {
   domain: process.env.REACT_APP_DOMAIN || "example.com",
   copyrightStartYear: parseInt(process.env.REACT_APP_COPYRIGHT_START_YEAR || "2020"),
   pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
+  dateFormat: process.env.REACT_APP_DATE_FORMAT || "YYYY-MM-DD",
+  dateTimeFormat: process.env.REACT_APP__DATETIME_FORMAT || "YYYY-MM-DD hh:mm:ss",
   globalModalConfig: {
     title: null,
     type: null,

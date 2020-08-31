@@ -33,6 +33,8 @@ export type MainState = {
   copyrightStartYear: number;
   pageSize: number;
   globalModalConfig: GlobalModalConfig,
+  dateFormat: string,
+  dateTimeFormat: string,
 }
 
 
