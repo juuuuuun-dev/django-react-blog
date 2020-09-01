@@ -1,6 +1,7 @@
 import '../../../less/main/posts/postList.less';
 
 import { List, Pagination, Typography } from 'antd';
+import moment from 'moment';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
@@ -11,7 +12,7 @@ import { MainContext } from '../../../context/mainContext';
 import { PostListProps } from '../../../types/posts';
 
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
-  const [{ pageSize }] = React.useContext(MainContext);
+  const [{ pageSize, dateFormat }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
 
   return (
@@ -47,7 +48,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                   <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
                 </Paragraph>
                 <div className="entry-date">
-                  <span className="entry-date__item"><ClockCircleOutlined />{item.created_at}</span>
+                  <span className="entry-date__item"><ClockCircleOutlined />{moment(item.created_at).format(dateFormat)}</span>
                   {/* <span className="entry-date__item"><ApartmentOutlined />{item.category}</span> */}
                 </div>
               </>}

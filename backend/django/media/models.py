@@ -30,6 +30,7 @@ class Media(models.Model):
     )
     width = models.IntegerField(verbose_name="width", default=0)
     height = models.IntegerField(verbose_name="height", default=0)
+    # @TODO OGP 推奨サイズ 1200 * 630 / 最小サイズ 600 * 315
     cover = ImageSpecField(
         source='file',
         processors=[ResizeToFill(cover_size['width'], cover_size['height'])],

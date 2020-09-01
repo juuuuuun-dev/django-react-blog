@@ -167,8 +167,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 # date format
-DATE_FORMAT = env('DATE_FORMAT')
-DATETIME_FORMAT = env('DATETIME_FORMAT')
+# DATE_FORMAT = env('DATE_FORMAT')
+# DATETIME_FORMAT = env('DATETIME_FORMAT')
 
 DATABASES = {
     'default': {

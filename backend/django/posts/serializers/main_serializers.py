@@ -1,5 +1,6 @@
 from categories.models import Category
 from categories.serializers import CategoryListSerializer
+from media.serializers.main_serializers import CoverSerializer
 from rest_framework import serializers
 from tags.serializers import TagListSerializer
 
@@ -10,10 +11,7 @@ class MainPostListSerializer(serializers.ModelSerializer):
     tag = TagListSerializer(read_only=True, many=True)
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all())
-    created_at = serializers.DateTimeField(
-        format="%Y-%m-%d", read_only=True)
-    updated_at = serializers.DateTimeField(
-        format="%Y-%m-%d", read_only=True)
+    cover_media = CoverSerializer()
 
     class Meta:
         model = Post
@@ -32,10 +30,7 @@ class MainPostListSerializer(serializers.ModelSerializer):
 class MainPostSerializer(serializers.ModelSerializer):
     tag = TagListSerializer(read_only=True, many=True)
     category = CategoryListSerializer(read_only=True)
-    created_at = serializers.DateTimeField(
-        format="%Y-%m-%d", read_only=True)
-    updated_at = serializers.DateTimeField(
-        format="%Y-%m-%d", read_only=True)
+    cover_media = CoverSerializer()
 
     class Meta:
         model = Post

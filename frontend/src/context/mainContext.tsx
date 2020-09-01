@@ -10,6 +10,7 @@ export const mainState: MainState = {
   loading: false,
   appTitle: process.env.REACT_APP_TITLE || "SITE NAME",
   pageTitle: "",
+  meta: [],
   description: process.env.REACT_APP_DESCRIPTION || "DESCRIPTION",
   domain: process.env.REACT_APP_DOMAIN || "example.com",
   copyrightStartYear: parseInt(process.env.REACT_APP_COPYRIGHT_START_YEAR || "2020"),

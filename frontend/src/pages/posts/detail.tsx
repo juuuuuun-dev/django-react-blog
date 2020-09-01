@@ -1,10 +1,11 @@
 import '../../less/admin/postForm.less';
 
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import PostDetail from '../../components/main/posts/PostDetail';
 import { MainContext } from '../../context/mainContext';
+import { createMeta } from '../../helper/meta';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { retrieve } from '../../service/main/posts';
 import { PostDetail as TypePostDetail } from '../../types/posts';
@@ -15,6 +16,9 @@ const Detail: React.FC = () => {
   const context = React.useContext(MainContext);
   const dispatch = context[1];
   const [pushError] = useHistoryPushError();
+  const history = useHistory();
+  console.log(history);
+  console.log(window.location.href)
   const fetchData = React.useCallback(async () => {
     try {
       const res = await retrieve(id);
@@ -22,6 +26,11 @@ const Detail: React.FC = () => {
         setPost(res.data.post)
         dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: res.data.post.title } })
         dispatch({ type: 'SET_DESCRIPTION', payload: { description: res.data.post.plain_content } })
+        const meta = createMeta({
+          title: res.data.post.title,
+          url: "",
+        })
+
       }
     } catch (e) {
       if (e.response && e.response.status) {

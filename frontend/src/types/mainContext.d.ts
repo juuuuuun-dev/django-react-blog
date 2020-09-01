@@ -16,6 +16,12 @@ export type InitState = {
   recentPosts: PostDetail[],
 };
 
+export type MetaType = {
+  name: string;
+  content: string;
+}[];
+
+
 export type ReceiveInitState = {
   author: ProfileDetail,
   categories: CategoryDetail[],
@@ -28,6 +34,7 @@ export type MainState = {
   appTitle: string;
   pageTitle: string;
   description: string;
+  meta: MetaType,
   loading: boolean;
   domain: string;
   copyrightStartYear: number;
