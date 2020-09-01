@@ -1,4 +1,5 @@
 import { CategoryDetail } from './categories';
+import { MetaType } from './meta';
 import { PostDetail } from './posts';
 import { ProfileDetail } from './profile';
 import { TagDetail } from './tags';
@@ -16,11 +17,6 @@ export type InitState = {
   recentPosts: PostDetail[],
 };
 
-export type MetaType = {
-  name: string;
-  content: string;
-}[];
-
 
 export type ReceiveInitState = {
   author: ProfileDetail,
@@ -37,6 +33,7 @@ export type MainState = {
   meta: MetaType,
   loading: boolean;
   domain: string;
+  url: string;
   copyrightStartYear: number;
   pageSize: number;
   globalModalConfig: GlobalModalConfig,

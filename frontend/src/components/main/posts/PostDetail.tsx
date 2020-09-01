@@ -23,9 +23,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
         />
         <h2 className="post-detail__title">{post.title}</h2>
         <div className="entry-date">
-          <span className="entry-date__item"><ClockCircleOutlined />{moment(post.created_at).format(dateFormat)}
-            {moment(post.created_at).format(dateFormat) !== moment(post.updated_at).format(dateFormat) && <span> (updated: {moment(post.updated_at).format(dateFormat)})</span>}
-          </span>
+          <time itemProp="datePublished" dateTime={post.created_at} className="entry-date__item"><ClockCircleOutlined />{moment(post.created_at).format(dateFormat)}</time>
+          {moment(post.created_at).format(dateFormat) !== moment(post.updated_at).format(dateFormat) && <time itemProp="dateModified" dateTime={post.updated_at}> (updated: {moment(post.updated_at).format(dateFormat)})</time>}
         </div>
         <MarkdownContent content={post.content} />
       </div>

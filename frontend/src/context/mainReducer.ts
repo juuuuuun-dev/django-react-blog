@@ -1,4 +1,5 @@
-import { GlobalModalConfig, InitState, MainState, MetaType } from '../types/mainContext';
+import { GlobalModalConfig, InitState, MainState } from '../types/mainContext';
+import { MetaType } from '../types/meta';
 
 const SET_LOADING = 'SET_LOADING' as const;
 const SET_INIT = 'SET_INIT' as const;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-import { metaHeadProps } from '../../types/components/common/metaHead';
+import { MetaHeadProps } from '../../types/meta';
 
-const MetaHead: React.FC<metaHeadProps> = ({ pageTitle, description, meta }) => {
+const MetaHead: React.FC<MetaHeadProps> = ({ pageTitle, description, meta }) => {
   const appTitle = process.env.REACT_APP_TITLE;
   return React.useMemo(() => {
     return (

@@ -13,10 +13,10 @@ import RightContainer from './RightContainer';
 
 const MainLayout: React.FC = () => {
   const { Content } = Layout;
-  const [{ pageTitle, description }] = useContext(MainContext);
+  const [{ pageTitle, description, meta }] = useContext(MainContext);
   return (
     <>
-      <MetaHead pageTitle={pageTitle} description={description} />
+      <MetaHead pageTitle={pageTitle} description={description} meta={meta} />
       <Header />
       <Content className="site-layout">
         <div className="main-container site-layout-background">

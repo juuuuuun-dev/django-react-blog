@@ -13,8 +13,7 @@ import { PostDetail as TypePostDetail } from '../../types/posts';
 const Detail: React.FC = () => {
   const [post, setPost] = React.useState<TypePostDetail>()
   const { id } = useParams();
-  const context = React.useContext(MainContext);
-  const dispatch = context[1];
+  const [state, dispatch] = React.useContext(MainContext);
   const [pushError] = useHistoryPushError();
   const history = useHistory();
   console.log(history);
@@ -28,9 +27,10 @@ const Detail: React.FC = () => {
         dispatch({ type: 'SET_DESCRIPTION', payload: { description: res.data.post.plain_content } })
         const meta = createMeta({
           title: res.data.post.title,
-          url: "",
+          url: state.url + history.location.pathname,
+          description: res.data.post.plain_content,
         })
-
+        dispatch({ type: 'SET_META', payload: { meta: meta } })
       }
     } catch (e) {
       if (e.response && e.response.status) {

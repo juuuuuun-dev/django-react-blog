@@ -13,6 +13,7 @@ export const mainState: MainState = {
   meta: [],
   description: process.env.REACT_APP_DESCRIPTION || "DESCRIPTION",
   domain: process.env.REACT_APP_DOMAIN || "example.com",
+  url: process.env.REACT_APP_URL || "https://www.example.com",
   copyrightStartYear: parseInt(process.env.REACT_APP_COPYRIGHT_START_YEAR || "2020"),
   pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
   dateFormat: process.env.REACT_APP_DATE_FORMAT || "YYYY-MM-DD",
