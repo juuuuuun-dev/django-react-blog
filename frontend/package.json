@@ -33,8 +33,10 @@
     "react-lazy-load-image-component": "^1.4.3",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
+    "react-schemaorg": "^1.2.0",
     "react-scripts": "3.4.0",
     "react-simplemde-editor": "^4.1.1",
+    "schema-dts": "^0.7.1",
     "typescript": "^3.8.3"
   },
   "scripts": {
