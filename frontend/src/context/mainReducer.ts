@@ -6,6 +6,7 @@ const SET_INIT = 'SET_INIT' as const;
 const SET_PAGE_TITLE = 'SET_PAGE_TITLE' as const;
 const SET_DESCRIPTION = 'SET_DESCRIPTION' as const;
 const SET_META = 'SET_META' as const;
+const SET_LD_JSON = 'SET_LD_JSON' as const;
 const SET_GLOBAL_MODAL_CONFIG = 'SET_GLOBAL_MODAL_CONFIG' as const;
 
 export const setLoading = (loading: boolean) => ({
@@ -36,6 +37,13 @@ export const setMeta = (meta: MetaType) => ({
   },
 });
 
+export const setLdJson = (ldJson: []) => ({
+  type: SET_LD_JSON,
+  payload: {
+    ldJson,
+  },
+});
+
 export const setInit = (init: InitState) => ({
   type: SET_INIT,
   payload: {
@@ -60,6 +68,7 @@ export type Actions =
   | ReturnType<typeof setDescription>
   | ReturnType<typeof setInit>
   | ReturnType<typeof setMeta>
+  | ReturnType<typeof setLdJson>
   | ReturnType<typeof setGlobalModalConfig>;
 
 export const mainReducer = (state: MainState, action: Actions) => {
@@ -74,6 +83,8 @@ export const mainReducer = (state: MainState, action: Actions) => {
       return { ...state, init: action.payload.init };
     case SET_META:
       return { ...state, meta: action.payload.meta };
+    case SET_LD_JSON:
+      return { ...state, ldJson: action.payload.ldJson };
     case SET_GLOBAL_MODAL_CONFIG:
       return { ...state, conifg: action.payload.globalModalConfig };
   }

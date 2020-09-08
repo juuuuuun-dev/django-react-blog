@@ -11,6 +11,7 @@ export const mainState: MainState = {
   appTitle: process.env.REACT_APP_TITLE || "SITE NAME",
   pageTitle: "",
   meta: [],
+  ldJson: [],
   description: process.env.REACT_APP_DESCRIPTION || "DESCRIPTION",
   domain: process.env.REACT_APP_DOMAIN || "example.com",
   url: process.env.REACT_APP_URL || "https://www.example.com",
@@ -41,6 +42,10 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
             categories: res.data.categories,
             tags: res.data.tags,
             recentPosts: res.data.recent_posts,
+            title: res.data.title,
+            description: res.data.description,
+            logo: res.data.logo,
+            mainImage: res.data.mainImage,
           }
         }
       });

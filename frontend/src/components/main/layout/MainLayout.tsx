@@ -13,7 +13,7 @@ import RightContainer from './RightContainer';
 
 const MainLayout: React.FC = () => {
   const { Content } = Layout;
-  const [{ pageTitle, description, meta }] = useContext(MainContext);
+  const [{ pageTitle, description, meta, ldJson }] = useContext(MainContext);
   return (
     <>
       <MetaHead pageTitle={pageTitle} description={description} meta={meta} />

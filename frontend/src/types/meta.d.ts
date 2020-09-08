@@ -5,6 +5,7 @@ export type MetaHeadProps = {
   pageTitle?: string | undefined;
   description?: string | undefined;
   meta?: MetaType;
+  ldJson?: [] | undefined;
 }
 
 export type MetaType = {

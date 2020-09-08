@@ -15,19 +15,21 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
 
   return (
     <>
-      <div className="post-detail">
-        <LazyLoadImage
-          alt="test"
-          className="post-detail__cover"
-          src={`/assets/images/160.jpg`}
-        />
+      <article className="post-detail">
+        <figure>
+          <LazyLoadImage
+            alt="test"
+            className="post-detail__cover"
+            src={`/assets/images/160.jpg`}
+          />
+        </figure>
         <h2 className="post-detail__title">{post.title}</h2>
         <div className="entry-date">
           <time itemProp="datePublished" dateTime={post.created_at} className="entry-date__item"><ClockCircleOutlined />{moment(post.created_at).format(dateFormat)}</time>
           {moment(post.created_at).format(dateFormat) !== moment(post.updated_at).format(dateFormat) && <time itemProp="dateModified" dateTime={post.updated_at}> (updated: {moment(post.updated_at).format(dateFormat)})</time>}
         </div>
         <MarkdownContent content={post.content} />
-      </div>
+      </article>
     </>
   );
 };

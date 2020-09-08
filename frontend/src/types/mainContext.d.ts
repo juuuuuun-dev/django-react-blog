@@ -15,6 +15,10 @@ export type InitState = {
   categories: CategoryDetail[],
   tags: TagDetail[],
   recentPosts: PostDetail[],
+  mainImage: string | undefined,
+  logo: string | undefined,
+  title: string,
+  description: string,
 };
 
 
@@ -31,6 +35,7 @@ export type MainState = {
   pageTitle: string;
   description: string;
   meta: MetaType,
+  ldJson: [],
   loading: boolean;
   domain: string;
   url: string;
