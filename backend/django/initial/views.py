@@ -27,5 +27,12 @@ class InitialView(views.APIView):
             "categories": category_serializer.data,
             "tags": tag_serializer.data,
             "recent_posts": recent_post_serializer.data,
+            # @TODO admin
+            "site_settings": {
+                "title": "Junkata blog",
+                "description": "Blog description",
+                "main_image": "/image.jpg",
+                "logo": "/logo.jpg",
+            }
         }
         return response.Response(data)

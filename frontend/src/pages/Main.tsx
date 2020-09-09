@@ -1,9 +1,11 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import PostList from '../components/main/posts/PostList';
 import PostListTitle from '../components/main/posts/PostListTitle';
 import { MainContext } from '../context/mainContext';
+import { createMeta } from '../helper/meta';
 import { useHistoryPushError } from '../helper/useHistoryPushError';
 import { list } from '../service/main/posts';
 import { PostList as PostListType } from '../types/posts';
@@ -12,23 +14,31 @@ const Index = () => {
   const [pushError] = useHistoryPushError();
   const [data, setData] = React.useState<PostListType>();
   const [query, setQuery] = useQueryParams({ category: NumberParam, tag: NumberParam, search: StringParam, page: NumberParam });
-  const context = React.useContext(MainContext);
-  const dispatch = context[1];
+  const [state, dispatch] = React.useContext(MainContext);
+  const history = useHistory();
 
   const fetchData = React.useCallback(async () => {
     try {
       const res = await list({ page: query.page, category: query.category, tag: query.tag, search: query.search });
       setData(res.data)
       const pageTitle = query.search ? `${query.search} - search` : '';
+      const meta = createMeta({
+        title: state.init?.siteSettings.title,
+        url: state.url + history.location.pathname,
+        description: state.init?.siteSettings.description,
+        image: state.init?.siteSettings.mainImage,
+      })
       dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: pageTitle } })
       dispatch({ type: 'SET_DESCRIPTION', payload: { description: pageTitle } })
+      dispatch({ type: 'SET_META', payload: { meta: meta } })
+
     } catch (e) {
       if (e.response && e.response.status) {
         pushError(e.response.status)
       }
     }
 
-  }, [pushError, dispatch, query]);
+  }, [pushError, dispatch, query, state.init, state.url, history.location.pathname]);
   React.useEffect(() => {
     fetchData();
   }, [fetchData]);

@@ -16,7 +16,7 @@ export type MetaType = {
 
 
 export type CreateMetaArg = {
-  title: string;
+  title: string | undefined;
   url: string;
   description?: string;
   image?: string;

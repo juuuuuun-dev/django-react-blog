@@ -16,20 +16,18 @@ const Detail: React.FC = () => {
   const [state, dispatch] = React.useContext(MainContext);
   const [pushError] = useHistoryPushError();
   const history = useHistory();
-  console.log(history);
-  console.log(window.location.href)
   const fetchData = React.useCallback(async () => {
     try {
       const res = await retrieve(id);
       if (res.status === 200) {
-        setPost(res.data.post)
-        dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: res.data.post.title } })
-        dispatch({ type: 'SET_DESCRIPTION', payload: { description: res.data.post.plain_content } })
         const meta = createMeta({
           title: res.data.post.title,
           url: state.url + history.location.pathname,
           description: res.data.post.plain_content,
         })
+        setPost(res.data.post)
+        dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: res.data.post.title } })
+        dispatch({ type: 'SET_DESCRIPTION', payload: { description: res.data.post.plain_content } })
         dispatch({ type: 'SET_META', payload: { meta: meta } })
       }
     } catch (e) {

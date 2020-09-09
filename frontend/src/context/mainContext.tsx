@@ -35,6 +35,7 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
   const fetchData = React.useCallback(async () => {
     try {
       const res = await getInit();
+      console.log({ res })
       dispatch({
         type: 'SET_INIT', payload: {
           init: {
@@ -42,13 +43,16 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
             categories: res.data.categories,
             tags: res.data.tags,
             recentPosts: res.data.recent_posts,
-            title: res.data.title,
-            description: res.data.description,
-            logo: res.data.logo,
-            mainImage: res.data.mainImage,
+            siteSettings: {
+              title: res.data.site_settings.title,
+              description: res.data.site_settings.description,
+              mainImage: res.data.site_settings.main_image,
+              logo: res.data.site_settings.logo,
+            },
           }
         }
       });
+      console.log("dispatch");
     } catch (e) {
       if (e.response && e.response.status) {
         pushError(e.response.status)

@@ -2,6 +2,7 @@ import { CategoryDetail } from './categories';
 import { MetaType } from './meta';
 import { PostDetail } from './posts';
 import { ProfileDetail } from './profile';
+import { SiteSettings } from './siteSettings';
 import { TagDetail } from './tags';
 
 export type GlobalModalConfig = {
@@ -15,10 +16,7 @@ export type InitState = {
   categories: CategoryDetail[],
   tags: TagDetail[],
   recentPosts: PostDetail[],
-  mainImage: string | undefined,
-  logo: string | undefined,
-  title: string,
-  description: string,
+  siteSettings: SiteSettings,
 };
 
 
