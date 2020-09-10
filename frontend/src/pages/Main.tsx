@@ -5,6 +5,7 @@ import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 import PostList from '../components/main/posts/PostList';
 import PostListTitle from '../components/main/posts/PostListTitle';
 import { MainContext } from '../context/mainContext';
+import { createLdJsonTypeWebSite } from '../helper/ldJson';
 import { createMeta } from '../helper/meta';
 import { useHistoryPushError } from '../helper/useHistoryPushError';
 import { list } from '../service/main/posts';
@@ -28,10 +29,12 @@ const Index = () => {
         description: state.init?.siteSettings.description,
         image: state.init?.siteSettings.mainImage,
       })
+      const ldJson = createLdJsonTypeWebSite(state.init?.siteSettings);
+      console.log({ ldJson })
       dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: pageTitle } })
       dispatch({ type: 'SET_DESCRIPTION', payload: { description: pageTitle } })
       dispatch({ type: 'SET_META', payload: { meta: meta } })
-
+      dispatch({ type: 'SET_LD_JSON', payload: { ldJson: [ldJson] } })
     } catch (e) {
       if (e.response && e.response.status) {
         pushError(e.response.status)

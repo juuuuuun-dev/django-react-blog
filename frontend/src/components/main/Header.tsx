@@ -9,7 +9,7 @@ import Humberger from './ Humberger';
 import Nav from './Nav';
 
 const Header: React.FC = () => {
-  const [{ init, appTitle }] = React.useContext(MainContext);
+  const [{ init }] = React.useContext(MainContext);
   const headerHeight = '60px';
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
@@ -26,7 +26,7 @@ const Header: React.FC = () => {
       >
         <div className="header-container">
           <Row>
-            <Col flex="100px"><Link to="/"><h1 className="app-title" data-testid="app-title">{appTitle}</h1></Link></Col>
+            <Col flex="100px"><Link to="/"><h1 className="app-title" data-testid="app-title">{init?.siteSettings.title}</h1></Link></Col>
             <Col flex="auto">
               {width > 600 && (
                 <Nav

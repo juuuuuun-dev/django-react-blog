@@ -12,11 +12,8 @@ export const mainState: MainState = {
   pageTitle: "",
   meta: [],
   ldJson: [],
-  description: process.env.REACT_APP_DESCRIPTION || "DESCRIPTION",
-  domain: process.env.REACT_APP_DOMAIN || "example.com",
   url: process.env.REACT_APP_URL || "https://www.example.com",
   copyrightStartYear: parseInt(process.env.REACT_APP_COPYRIGHT_START_YEAR || "2020"),
-  pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
   dateFormat: process.env.REACT_APP_DATE_FORMAT || "YYYY-MM-DD",
   dateTimeFormat: process.env.REACT_APP__DATETIME_FORMAT || "YYYY-MM-DD hh:mm:ss",
   globalModalConfig: {
@@ -35,7 +32,6 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
   const fetchData = React.useCallback(async () => {
     try {
       const res = await getInit();
-      console.log({ res })
       dispatch({
         type: 'SET_INIT', payload: {
           init: {
@@ -49,6 +45,7 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
               mainImage: res.data.site_settings.main_image,
               logo: res.data.site_settings.logo,
             },
+            paginationSize: res.data.pagination_size,
           }
         }
       });

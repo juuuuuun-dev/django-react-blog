@@ -2,8 +2,8 @@
 
 
 export type MetaHeadProps = {
+  appTitle?: string | undefined;
   pageTitle?: string | undefined;
-  description?: string | undefined;
   meta?: MetaType;
   ldJson?: [] | undefined;
 }

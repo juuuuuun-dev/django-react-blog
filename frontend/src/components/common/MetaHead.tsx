@@ -2,14 +2,14 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { helmetJsonLdProp } from 'react-schemaorg';
 import { BlogPosting, Person } from 'schema-dts';
+import { isPropertyAccessChain } from 'typescript';
 
 import { MetaHeadProps } from '../../types/meta';
 
-const MetaHead: React.FC<MetaHeadProps> = ({ pageTitle, description, meta, ldJson }) => {
-  const appTitle = process.env.REACT_APP_TITLE;
+const MetaHead: React.FC<MetaHeadProps> = ({ appTitle, pageTitle, meta, ldJson }) => {
   // https://developers.google.com/search/docs/data-types/breadcrumb?hl=ja
   // https://search.google.com/test/rich-results?utm_campaign=sdtt&utm_medium=message
-
+  appTitle = appTitle || process.env.REACT_APP_TITLE;
   return React.useMemo(() => {
     return (
       <>
@@ -105,11 +105,10 @@ const MetaHead: React.FC<MetaHeadProps> = ({ pageTitle, description, meta, ldJso
               ]
           })}</script>
           {pageTitle && <title>{pageTitle}</title>}
-          {description && <meta name="description" content={description} />}
         </Helmet>
       </>
     )
-  }, [appTitle, pageTitle, description, meta])
+  }, [appTitle, pageTitle, meta])
 }
 
 export default MetaHead;
