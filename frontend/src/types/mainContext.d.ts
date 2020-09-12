@@ -13,7 +13,7 @@ export type GlobalModalConfig = {
 
 export type InitState = {
   author: ProfileDetail,
-  categories: CategoryDetail[],
+  categories: { [key: string]: CategoryDetail },
   tags: TagDetail[],
   recentPosts: PostDetail[],
   siteSettings: SiteSettings,

@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import PostDetail from '../../components/main/posts/PostDetail';
 import { MainContext } from '../../context/mainContext';
+import { createLdJsonTypeBlogPosting, CreateLdJsonTypeBlogPostingArg } from '../../helper/ldJson';
 import { createMeta } from '../../helper/meta';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { retrieve } from '../../service/main/posts';
@@ -25,6 +26,7 @@ const Detail: React.FC = () => {
           url: state.init?.url + history.location.pathname,
           description: res.data.post.plain_content,
         })
+        const ldJson = createLdJsonTypeBlogPosting({ init: state.init, post: res.data.post });
         setPost(res.data.post)
         dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: res.data.post.title } })
         dispatch({ type: 'SET_DESCRIPTION', payload: { description: res.data.post.plain_content } })
@@ -35,7 +37,7 @@ const Detail: React.FC = () => {
         pushError(e.response.status)
       }
     }
-  }, [id, pushError, dispatch])
+  }, [id, pushError, dispatch, state.init])
   React.useEffect(() => {
     fetchData();
   }, [fetchData]);

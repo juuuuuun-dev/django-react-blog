@@ -1,3 +1,4 @@
+import { keyBy } from 'lodash';
 import React from 'react';
 
 import { useHistoryPushError } from '../helper/useHistoryPushError';
@@ -35,7 +36,7 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
         type: 'SET_INIT', payload: {
           init: {
             author: res.data.author,
-            categories: res.data.categories,
+            categories: keyBy(res.data?.categories, 'id'),
             tags: res.data.tags,
             recentPosts: res.data.recent_posts,
             siteSettings: {
@@ -49,7 +50,6 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
           }
         }
       });
-      console.log("dispatch");
     } catch (e) {
       if (e.response && e.response.status) {
         pushError(e.response.status)

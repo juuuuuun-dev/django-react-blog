@@ -7,7 +7,7 @@ import { CategoryDetail } from '../../types/categories';
 export interface NavProps {
   mode?: 'vertical' | 'vertical-left' | 'vertical-right' | 'horizontal' | 'inline' | undefined;
   styles: object;
-  categories: CategoryDetail[] | undefined;
+  categories: { [key: string]: CategoryDetail } | undefined;
   setShowDrawer?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -26,9 +26,12 @@ const Nav = ({ mode, styles, categories, setShowDrawer }: NavProps) => {
           title="Category"
           data-testid="nav-sub-menu-category"
         >
-          {categories?.map((value, index) => {
-            return <Menu.Item key={`nav-category-${index}`}><NavLink data-testid={`nav-category-${value.slug}`} onClick={handleClick} to={`/categories/${value.slug}`}>{value.name}</NavLink></Menu.Item>
+          {categories && Object.keys(categories).map(key => {
+            return <Menu.Item key={`nav-category-${key}`}><NavLink data-testid={`nav-category-${categories[key].slug}`} onClick={handleClick} to={`/categories/${categories[key].slug}`}>{categories[key].name}</NavLink></Menu.Item>
           })}
+          {/* {categories?.map((value, index) => {
+            return <Menu.Item key={`nav-category-${index}`}><NavLink data-testid={`nav-category-${value.slug}`} onClick={handleClick} to={`/categories/${value.slug}`}>{value.name}</NavLink></Menu.Item>
+          })} */}
         </SubMenu>
         <Menu.Item>
           <NavLink to="/about">About me</NavLink>

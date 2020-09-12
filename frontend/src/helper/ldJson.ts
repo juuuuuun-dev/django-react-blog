@@ -24,20 +24,9 @@ export const createLdJsonTypeWebSite = ({ init }: CreateLdJsonTypeWebSiteArg) =>
   }
 }
 
-const createPublisher = (init: InitState) => {
-  return {
-    "@type": "Organization",
-    "name": init.siteSettings.title,
-    "logo": {
-      "@type": "ImageObject",
-      "url": init.siteSettings.logo,
-    }
-  }
-}
-
 export const createLdJsonTypeBlogPosting = ({ init, post }: CreateLdJsonTypeBlogPostingArg) => {
   if (init) {
-    return {
+    const BlogPosting = {
       "@context": "http://schema.org",
       "@type": "BlogPosting",
       "datePublished": post.created_at,
@@ -52,15 +41,60 @@ export const createLdJsonTypeBlogPosting = ({ init, post }: CreateLdJsonTypeBlog
       },
       "publisher": createPublisher(init),
     }
+    const breadcrumbList = createLdJsonTypeBreadcrumbList([
+      {
+        position: 1,
+        name: post.category.name,
+        item: `${init.url}/${post.category.slug}`
+      },
+    ])
+    return [BlogPosting, breadcrumbList]
   }
 }
 
+type BreadcrumbList = {
+  position: number,
+  name: string,
+  item: string,
+}[]
 
-export const createDlJsonTypeBreadcrumbList = () => {
+export const createLdJsonTypeBreadcrumbList = (list: BreadcrumbList) => {
+  console.log({ list })
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": list
+  }
+}
 
+export const createPostBreadcrumbList = ({ init, post }: CreateLdJsonTypeBlogPostingArg) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Books",
+        "item": "https://example.com/books"
+      }
+    ]
+  }
 }
 
 export const createLdJsonData = () => {
   const appTitle = process.env.REACT_APP_TITLE;
   console.log(appTitle)
+}
+
+
+const createPublisher = (init: InitState) => {
+  return {
+    "@type": "Organization",
+    "name": init.siteSettings.title,
+    "logo": {
+      "@type": "ImageObject",
+      "url": init.siteSettings.logo,
+    }
+  }
 }

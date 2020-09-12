@@ -4,7 +4,7 @@ import { ProfileDetail } from './profile';
 import { TagDetail } from './tags';
 
 export type CategoryLinkListProps = {
-  categories: CategoryDetail[] | undefined
+  categories: { [key: string]: CategoryDetail } | undefined
 }
 
 export type TagLinkListProps = {
