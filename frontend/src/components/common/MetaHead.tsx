@@ -1,8 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { helmetJsonLdProp } from 'react-schemaorg';
-import { BlogPosting, Person } from 'schema-dts';
-import { isPropertyAccessChain } from 'typescript';
 
 import { MetaHeadProps } from '../../types/meta';
 

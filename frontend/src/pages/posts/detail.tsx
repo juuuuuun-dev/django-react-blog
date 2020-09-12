@@ -22,7 +22,7 @@ const Detail: React.FC = () => {
       if (res.status === 200) {
         const meta = createMeta({
           title: res.data.post.title,
-          url: state.url + history.location.pathname,
+          url: state.init?.url + history.location.pathname,
           description: res.data.post.plain_content,
         })
         setPost(res.data.post)

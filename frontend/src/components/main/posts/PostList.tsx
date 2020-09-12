@@ -14,7 +14,6 @@ import { PostListProps } from '../../../types/posts';
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
   const [{ init, dateFormat }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
-  console.log(init?.paginationSize);
   return (
     <>
       <List
@@ -69,7 +68,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
       </List>
       <Pagination
         total={data?.count}
-        pageSize={init?.paginationSize || 1}
+        pageSize={init?.pageSize || 1}
         defaultCurrent={query.page || 1}
         current={query.page || 1}
         onChange={handlePageChange}

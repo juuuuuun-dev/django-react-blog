@@ -17,7 +17,8 @@ export type InitState = {
   tags: TagDetail[],
   recentPosts: PostDetail[],
   siteSettings: SiteSettings,
-  paginationSize: number;
+  pageSize: number;
+  url: string,
 };
 
 
@@ -35,7 +36,6 @@ export type MainState = {
   meta: MetaType,
   ldJson: [],
   loading: boolean;
-  url: string;
   copyrightStartYear: number;
   globalModalConfig: GlobalModalConfig,
   dateFormat: string,

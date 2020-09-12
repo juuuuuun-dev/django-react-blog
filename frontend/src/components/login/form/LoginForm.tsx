@@ -15,6 +15,7 @@ const LoginForm: React.FC = () => {
       set<string>('refresh', data.refresh);
       set<string>('username', data.username);
       set<string>('thumb', data.thumb);
+      set<string>('pageSize', data.page_size);
       history.push('/admin/dashboard');
     } catch (e) {
       if (e.response.data.detail) {
