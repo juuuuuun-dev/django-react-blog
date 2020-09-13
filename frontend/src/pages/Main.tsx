@@ -16,16 +16,17 @@ const Index = () => {
   const [data, setData] = React.useState<PostListType>();
   const [query, setQuery] = useQueryParams({ category: NumberParam, tag: NumberParam, search: StringParam, page: NumberParam });
   const [state, dispatch] = React.useContext(MainContext);
-  const history = useHistory();
 
   const fetchData = React.useCallback(async () => {
     try {
       const res = await list({ page: query.page, category: query.category, tag: query.tag, search: query.search });
       setData(res.data)
+      console.log("featchData")
+
       const pageTitle = query.search ? `${query.search} - search` : '';
       const meta = createMeta({
         title: state.init?.siteSettings.title,
-        url: state.init?.url + history.location.pathname,
+        url: state.init?.url,
         description: state.init?.siteSettings.description,
         image: state.init?.siteSettings.mainImage,
       })
@@ -35,14 +36,17 @@ const Index = () => {
       dispatch({ type: 'SET_LD_JSON', payload: { ldJson: [ldJson] } })
     } catch (e) {
       if (e.response && e.response.status) {
+        console.log("pushError")
         pushError(e.response.status)
       }
     }
 
-  }, [pushError, dispatch, query, state.init, state.init?.url, history.location.pathname]);
+  }, [pushError, dispatch, query, state.init]);
   React.useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (state.init) {
+      fetchData();
+    }
+  }, [fetchData, state.init]);
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
     setQuery({

@@ -27,15 +27,23 @@ export const categoryList = [
   },
 ]
 
+export const siteSettings = {
+  title: process.env.REACT_APP_TITLE,
+  description: "Test description",
+  mainImage: "main.jpg",
+  logo: "logo.jpg",
+}
+
 
 export const initData = {
-  "author": {
+  author: {
     "public_name": "Abe",
     "message": "Test message",
   },
-  "recent_posts": [postData, postData2],
-  "tags": tagList,
-  "categories": categoryList,
+  recent_posts: [postData, postData2],
+  tags: tagList,
+  categories: categoryList,
+  site_settings: siteSettings,
 }
 
 
