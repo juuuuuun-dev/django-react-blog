@@ -3,7 +3,12 @@ import { CreateMetaArg, MetaType } from '../types/meta';
 export const createMeta = (data: CreateMetaArg) => {
   data.type = data.type || 'article';
   data.image = data.image || '/assets/images/ogp-image.jpg';
-  return [...createOgpMeta(data), ...createTwitterMeta(data)]
+  return [...createDefaultMeta(data), ...createOgpMeta(data), ...createTwitterMeta(data)]
+}
+const createDefaultMeta = (data: CreateMetaArg) => {
+  return [
+    { name: 'description', content: data.description }
+  ]
 }
 
 const createOgpMeta = (data: CreateMetaArg) => {

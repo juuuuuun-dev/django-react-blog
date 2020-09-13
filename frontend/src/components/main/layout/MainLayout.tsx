@@ -16,7 +16,7 @@ const MainLayout: React.FC = () => {
   const [{ init, pageTitle, meta, ldJson }] = useContext(MainContext);
   return (
     <>
-      <MetaHead appTitle={init?.siteSettings.title} pageTitle={pageTitle} meta={meta} />
+      <MetaHead appTitle={init?.siteSettings.title} pageTitle={pageTitle} meta={meta} ldJson={ldJson} />
       <Header />
       <Content className="site-layout">
         <div className="main-container site-layout-background">

@@ -30,9 +30,7 @@ const Index = () => {
         image: state.init?.siteSettings.mainImage,
       })
       const ldJson = createLdJsonTypeWebSite({ init: state.init });
-      console.log({ ldJson })
       dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: pageTitle } })
-      dispatch({ type: 'SET_DESCRIPTION', payload: { description: pageTitle } })
       dispatch({ type: 'SET_META', payload: { meta: meta } })
       dispatch({ type: 'SET_LD_JSON', payload: { ldJson: [ldJson] } })
     } catch (e) {

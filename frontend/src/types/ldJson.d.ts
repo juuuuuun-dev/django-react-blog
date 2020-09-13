@@ -9,3 +9,10 @@ export type CreateLdJsonTypeBlogPostingArg = {
   init: InitState | undefined,
   post: PostDetail,
 }
+
+export type BreadcrumbList = {
+  position: number,
+  name: string,
+  item: string,
+}[]
+
