@@ -37,10 +37,12 @@ const Detail: React.FC = () => {
         pushError(e.response.status)
       }
     }
-  }, [id, pushError, dispatch, state.init])
+  }, [id, pushError, dispatch, state.init, history.location.pathname])
   React.useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (state.init) {
+      fetchData();
+    }
+  }, [fetchData, state.init]);
 
   return (
     <>

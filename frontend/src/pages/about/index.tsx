@@ -35,11 +35,13 @@ const Index: React.FC = () => {
         pushError(e.response.status)
       }
     }
-  }, [pushError, dispatch]);
+  }, [pushError, dispatch, state.init, history.location.pathname]);
 
   React.useEffect(() => {
-    fetchData();
-  }, [fetchData])
+    if (state.init) {
+      fetchData();
+    }
+  }, [fetchData, state.init])
 
   return (
     <>

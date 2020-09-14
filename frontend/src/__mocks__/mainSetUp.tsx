@@ -6,22 +6,12 @@ import { Route, Router } from 'react-router-dom';
 import { mocked } from 'ts-jest/utils';
 import { QueryParamProvider } from 'use-query-params';
 
-import { act, render } from '@testing-library/react';
+import { act, cleanup, render } from '@testing-library/react';
 
 import MainLayout from '../components/main/layout/MainLayout';
 import { MainContextProvider } from '../context/mainContext';
 
-jest.mock('../service/admin/auth');
-
 export const setUp = async (initialPath: string) => {
-
-
-  beforeEach(() => {
-    // mocked(refreshAuthToken).mockClear();
-  })
-  // mocked(refreshAuthToken).mockImplementation(
-  //   (): Promise<AxiosResponse<any>> => Promise.resolve(refreshTokenAxiosResponse)
-  // )
 
   const history = createMemoryHistory();
   history.push(initialPath);

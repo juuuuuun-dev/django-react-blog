@@ -1,6 +1,5 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { helmetJsonLdProp } from 'react-schemaorg';
 
 import { MetaHeadProps } from '../../types/meta';
 

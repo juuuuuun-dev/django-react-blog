@@ -86,7 +86,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ visible, setVisible, handleAddM
       </Spin>
       <Pagination
         defaultCurrent={page}
-        pageSize={pageSize}
+        pageSize={pageSize || 1}
         total={data?.count}
         onChange={handlePageChange}
       />

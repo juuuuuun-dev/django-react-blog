@@ -1,4 +1,4 @@
-import { CreateMetaArg, MetaType } from '../types/meta';
+import { CreateMetaArg } from '../types/meta';
 
 export const createMeta = (data: CreateMetaArg) => {
   data.type = data.type || 'article';

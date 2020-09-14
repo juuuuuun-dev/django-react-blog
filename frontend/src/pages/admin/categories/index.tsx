@@ -112,23 +112,25 @@ const Categories: React.FC = () => {
         search={query.search}
         handleQuerySearch={handleQuerySearch}
       />
-      <Table
-        className="admin-table"
-        columns={columns}
-        dataSource={data?.results}
-        onRow={(record: any) => {
-          return {
-            onClick: () => {
-              history.push(`${location.pathname}/${record.id}/edit`);
-            },
-          }
-        }}
-        pagination={{
-          total: data?.count,
-          pageSize: state.pageSize,
-          defaultCurrent: query.page || 1,
-          onChange: handlePageChange,
-        }} />
+      <span data-testid="table">
+        <Table
+          className="admin-table"
+          columns={columns}
+          dataSource={data?.results}
+          onRow={(record: any) => {
+            return {
+              onClick: () => {
+                history.push(`${location.pathname}/${record.id}/edit`);
+              },
+            }
+          }}
+          pagination={{
+            total: data?.count,
+            pageSize: state.pageSize || 1,
+            defaultCurrent: query.page || 1,
+            onChange: handlePageChange,
+          }} />
+      </span>
     </>
   );
 };

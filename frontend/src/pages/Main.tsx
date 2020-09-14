@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import PostList from '../components/main/posts/PostList';
@@ -21,8 +20,6 @@ const Index = () => {
     try {
       const res = await list({ page: query.page, category: query.category, tag: query.tag, search: query.search });
       setData(res.data)
-      console.log("featchData")
-
       const pageTitle = query.search ? `${query.search} - search` : '';
       const meta = createMeta({
         title: state.init?.siteSettings.title,
@@ -36,7 +33,6 @@ const Index = () => {
       dispatch({ type: 'SET_LD_JSON', payload: { ldJson: [ldJson] } })
     } catch (e) {
       if (e.response && e.response.status) {
-        console.log("pushError")
         pushError(e.response.status)
       }
     }

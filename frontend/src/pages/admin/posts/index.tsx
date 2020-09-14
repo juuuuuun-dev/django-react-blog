@@ -207,7 +207,7 @@ const Posts: React.FC = () => {
         }}
         pagination={{
           total: data?.count,
-          pageSize: state.pageSize,
+          pageSize: state.pageSize || 1,
           defaultCurrent: query.page || 1,
           current: query.page || 1,
           onChange: handlePageChange,

@@ -41,11 +41,13 @@ const Index: React.FC = () => {
       }
     }
 
-  }, [pushError, dispatch, query, slug, state.init]);
+  }, [pushError, dispatch, query, slug, state.init, history.location.pathname]);
 
   React.useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (state.init) {
+      fetchData();
+    }
+  }, [fetchData, state.init]);
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
     setQuery({
