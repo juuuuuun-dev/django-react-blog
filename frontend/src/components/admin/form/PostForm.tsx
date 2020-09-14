@@ -79,7 +79,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
   }
 
   const handleResetCover = () => {
-    console.log("reset")
     setCover({
       id: undefined,
       cover: undefined,

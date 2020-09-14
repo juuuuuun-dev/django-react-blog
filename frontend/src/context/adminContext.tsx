@@ -13,7 +13,9 @@ const initState: AdminState = {
   hasToken: false,
   username: '',
   thumb: '',
-  pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
+  pageSize: 20,
+  dateFormat: process.env.REACT_APP_DATE_FORMAT || "YYYY-MM-DD",
+  dateTimeFormat: process.env.REACT_APP__DATETIME_FORMAT || "YYYY-MM-DD hh:mm:ss",
 };
 
 export const AdminContext = React.createContext({} as providerProps);
@@ -41,6 +43,7 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
       dispatch({ type: 'SET_HAS_TOKEN', payload: { hasToken: true } });
       dispatch({ type: 'SET_USERNAME', payload: { username: get("username") } });
       dispatch({ type: 'SET_THUMB', payload: { thumb: get("thumb") } });
+      dispatch({ type: 'SET_PAGE_SIZE', payload: { pageSize: get("pageSize") } });
     } catch (e) {
       logout();
     }

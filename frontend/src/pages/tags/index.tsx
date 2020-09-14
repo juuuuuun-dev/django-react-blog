@@ -1,11 +1,13 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { NumberParam, useQueryParams } from 'use-query-params';
 
 import PostList from '../../components/main/posts/PostList';
 import PostListPageCountResults from '../../components/main/posts/PostListPageCountResults';
 import PostListTitle from '../../components/main/posts/PostListTitle';
 import { MainContext } from '../../context/mainContext';
+import { createLdJsonTypeWebSite } from '../../helper/ldJson';
+import { createMeta } from '../../helper/meta';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { tagPagelist } from '../../service/main/posts';
 import { PostList as PostListType } from '../../types/posts';
@@ -14,16 +16,24 @@ const Index: React.FC = () => {
   const [pushError] = useHistoryPushError();
   const [data, setData] = React.useState<PostListType>();
   const [query, setQuery] = useQueryParams({ page: NumberParam });
+  const [state, dispatch] = React.useContext(MainContext);
   const { slug } = useParams();
-  const context = React.useContext(MainContext);
-  const dispatch = context[1];
+  const history = useHistory();
 
   const fetchData = React.useCallback(async () => {
     try {
       const res = await tagPagelist(slug, { page: query.page });
       const pageNumberTitle = query.page ? `page ${query.page}` : ''
+      const meta = createMeta({
+        title: state.init?.siteSettings.title,
+        url: state.init?.url + history.location.pathname,
+        description: state.init?.siteSettings.description,
+        image: state.init?.siteSettings.mainImage,
+      })
+      const ldJson = createLdJsonTypeWebSite({ init: state.init });
+      dispatch({ type: 'SET_META', payload: { meta: meta } })
+      dispatch({ type: 'SET_LD_JSON', payload: { ldJson: [ldJson] } })
       dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: `${res.data.tag_name} - tag` + pageNumberTitle } })
-      dispatch({ type: 'SET_DESCRIPTION', payload: { description: `${res.data.tag_name} - tag` } })
       setData(res.data)
     } catch (e) {
       if (e.response && e.response.status) {
@@ -31,11 +41,13 @@ const Index: React.FC = () => {
       }
     }
 
-  }, [pushError, dispatch, query, slug]);
+  }, [pushError, dispatch, query, slug, state.init, history.location.pathname]);
 
   React.useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (state.init) {
+      fetchData();
+    }
+  }, [fetchData, state.init]);
 
   const handlePageChange = (page: number, pageSize?: number | undefined): void => {
     setQuery({

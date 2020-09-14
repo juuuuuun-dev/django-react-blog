@@ -1,4 +1,5 @@
 import { Input, Table } from 'antd';
+import moment from 'moment';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
@@ -94,7 +95,7 @@ const Tags: React.FC = () => {
       key: 'updated_at',
       width: '15%',
       sorter: (a: TagDetail, b: TagDetail) => sortDate(a.updated_at, b.updated_at),
-      render: (text: string) => (<span className="font-size-07">{text}</span>)
+      render: (text: string) => (<span className="font-size-07">{moment(text).format(state.dateTimeFormat)}</span>)
     },
     {
       title: 'created',
@@ -103,7 +104,7 @@ const Tags: React.FC = () => {
       key: 'created_at',
       width: '15%',
       sorter: (a: TagDetail, b: TagDetail) => sortDate(a.created_at, b.created_at),
-      render: (text: string) => (<span className="font-size-07">{text}</span>)
+      render: (text: string) => (<span className="font-size-07">{moment(text).format(state.dateTimeFormat)}</span>)
     },
   ];
   return (
@@ -126,7 +127,7 @@ const Tags: React.FC = () => {
         }}
         pagination={{
           total: data?.count,
-          pageSize: state.pageSize,
+          pageSize: state.pageSize || 1,
           defaultCurrent: query.page || 1,
           onChange: handlePageChange,
         }} />

@@ -19,15 +19,20 @@ jest.mock('../../helper/useHistoryPushError');
 
 describe("Main index", () => {
   const initialPath = "/";
+  const mockPush = jest.fn()
+  mocked(useHistoryPushError).mockImplementation(
+    () => [mockPush]
+  );
   beforeEach(() => {
     mocked(useWindowSize).mockClear();
     mocked(list).mockClear();
     mocked(useHistoryPushError).mockClear();
+    mocked(mockPush).mockClear();
   })
 
-  const mockPush = jest.fn()
-  mocked(useHistoryPushError).mockImplementation(
-    () => [mockPush]
+
+  mocked(useWindowSize).mockImplementation(
+    () => [1200, 1000]
   );
 
   // Header pc size category nav
@@ -40,7 +45,7 @@ describe("Main index", () => {
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
-      expect(utils.getByTestId('app-title').innerHTML).toBe(process.env.REACT_APP_TITLE);
+      expect(utils.getByTestId('app-title').innerHTML).toBe(initAxiosResponse.data.site_settings.title);
     })
     const categoryLinks: string[] = [];
     initAxiosResponse.data.categories.forEach((value) => {

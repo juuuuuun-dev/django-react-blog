@@ -17,6 +17,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         if self.user.profile.thumb:
             data['thumb'] = f"{settings.BACKEND_URL}\
                 {self.user.profile.thumb.url}"
+        data['page_size'] = settings.PAGE_SIZE
         return data
 
     @classmethod

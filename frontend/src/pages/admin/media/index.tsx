@@ -1,15 +1,17 @@
+import { Input, Table } from 'antd';
+import moment from 'moment';
 import React from 'react';
-import { AdminContext } from '../../../context/adminContext';
-import { list } from '../../../service/admin/media';
-import { Table, Input } from 'antd';
-import searchWithinPageColumn from "../../../components/admin/SearchWithinPageColumn"
-import { useLocation } from 'react-router-dom';
-import { MediaList, MediaDetail } from '../../../types/media'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
+import { useLocation } from 'react-router-dom';
+import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
+
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
+import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import toast from '../../../components/common/toast';
+import { AdminContext } from '../../../context/adminContext';
 import { sortDate } from '../../../helper/sort';
+import { list } from '../../../service/admin/media';
+import { MediaDetail, MediaList } from '../../../types/media';
 
 const Media: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
@@ -97,7 +99,7 @@ const Media: React.FC = () => {
       key: 'updated_at',
       width: '10%',
       sorter: (a: MediaDetail, b: MediaDetail) => sortDate(a.updated_at, b.updated_at),
-      render: (text: string) => (<span className="font-size-07">{text}</span>)
+      render: (text: string) => (<span className="font-size-07">{moment(text).format(state.dateTimeFormat)}</span>)
     },
     {
       title: 'created',
@@ -106,7 +108,7 @@ const Media: React.FC = () => {
       key: 'created_at',
       width: '10%',
       sorter: (a: MediaDetail, b: MediaDetail) => sortDate(a.created_at, b.created_at),
-      render: (text: string) => (<span className="font-size-07">{text}</span>)
+      render: (text: string) => (<span className="font-size-07">{moment(text).format(state.dateTimeFormat)}</span>)
     },
   ];
   return (
@@ -123,7 +125,7 @@ const Media: React.FC = () => {
         dataSource={data?.results}
         pagination={{
           total: data?.count,
-          pageSize: state.pageSize,
+          pageSize: state.pageSize || 1,
           defaultCurrent: query.page || 1,
           onChange: handlePageChange,
         }}

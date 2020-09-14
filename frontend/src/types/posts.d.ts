@@ -15,7 +15,7 @@ export type PostDetail = {
   thumb?: string;
   is_show?: boolean;
   plain_content?: string;
-  category: number;
+  category: CategoryDetail;
   tag: TagDetail[],
   updated_at?: string;
   created_at?: string;

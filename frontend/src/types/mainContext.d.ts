@@ -1,6 +1,8 @@
 import { CategoryDetail } from './categories';
+import { MetaType } from './meta';
 import { PostDetail } from './posts';
 import { ProfileDetail } from './profile';
+import { SiteSettings } from './siteSettings';
 import { TagDetail } from './tags';
 
 export type GlobalModalConfig = {
@@ -11,10 +13,14 @@ export type GlobalModalConfig = {
 
 export type InitState = {
   author: ProfileDetail,
-  categories: CategoryDetail[],
+  categories: { [key: string]: CategoryDetail },
   tags: TagDetail[],
   recentPosts: PostDetail[],
+  siteSettings: SiteSettings,
+  pageSize: number;
+  url: string,
 };
+
 
 export type ReceiveInitState = {
   author: ProfileDetail,
@@ -27,12 +33,13 @@ export type MainState = {
   init: InitState | undefined;
   appTitle: string;
   pageTitle: string;
-  description: string;
+  meta: MetaType,
+  ldJson: [],
   loading: boolean;
-  domain: string;
   copyrightStartYear: number;
-  pageSize: number;
   globalModalConfig: GlobalModalConfig,
+  dateFormat: string,
+  dateTimeFormat: string,
 }
 
 

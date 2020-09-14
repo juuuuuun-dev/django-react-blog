@@ -1,4 +1,5 @@
 import { Input, Table } from 'antd';
+import moment from 'moment';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
@@ -92,7 +93,7 @@ const Categories: React.FC = () => {
       key: 'updated_at',
       width: '15%',
       sorter: (a: CategoryDetail, b: CategoryDetail) => sortDate(a.updated_at, b.updated_at),
-      render: (text: string) => (<span className="font-size-07">{text}</span>)
+      render: (text: string) => (<span className="font-size-07">{moment(text).format(state.dateTimeFormat)}</span>)
     },
     {
       title: 'created_at',
@@ -101,7 +102,7 @@ const Categories: React.FC = () => {
       key: 'created_at',
       width: '15%',
       sorter: (a: CategoryDetail, b: CategoryDetail) => sortDate(a.created_at, b.created_at),
-      render: (text: string) => (<span className="font-size-07">{text}</span>)
+      render: (text: string) => (<span className="font-size-07">{moment(text).format(state.dateTimeFormat)}</span>)
     },
   ];
   return (
@@ -111,23 +112,25 @@ const Categories: React.FC = () => {
         search={query.search}
         handleQuerySearch={handleQuerySearch}
       />
-      <Table
-        className="admin-table"
-        columns={columns}
-        dataSource={data?.results}
-        onRow={(record: any) => {
-          return {
-            onClick: () => {
-              history.push(`${location.pathname}/${record.id}/edit`);
-            },
-          }
-        }}
-        pagination={{
-          total: data?.count,
-          pageSize: state.pageSize,
-          defaultCurrent: query.page || 1,
-          onChange: handlePageChange,
-        }} />
+      <span data-testid="table">
+        <Table
+          className="admin-table"
+          columns={columns}
+          dataSource={data?.results}
+          onRow={(record: any) => {
+            return {
+              onClick: () => {
+                history.push(`${location.pathname}/${record.id}/edit`);
+              },
+            }
+          }}
+          pagination={{
+            total: data?.count,
+            pageSize: state.pageSize || 1,
+            defaultCurrent: query.page || 1,
+            onChange: handlePageChange,
+          }} />
+      </span>
     </>
   );
 };

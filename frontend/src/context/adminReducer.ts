@@ -7,6 +7,8 @@ const SET_HAS_TOKEN = 'SET_HAS_TOKEN' as const;
 const SET_USERNAME = 'SET_USERNAME' as const;
 const SET_THUMB = 'SET_THUMB' as const;
 const SET_LOADING = 'SET_LOADING' as const;
+const SET_PAGE_SIZE = 'SET_PAGE_SIZE' as const;
+
 
 export const siderShow = () => ({
   type: SIDER_SHOW,
@@ -27,6 +29,13 @@ export const setLoading = (loading: boolean) => ({
   type: SET_LOADING,
   payload: {
     loading,
+  },
+});
+
+export const setPageSize = (pageSize: number) => ({
+  type: SET_PAGE_SIZE,
+  payload: {
+    pageSize,
   },
 });
 
@@ -51,6 +60,7 @@ export type Actions =
   | ReturnType<typeof setHasToken>
   | ReturnType<typeof setUsername>
   | ReturnType<typeof setThumb>
+  | ReturnType<typeof setPageSize>
   | ReturnType<typeof setLoading>;
 
 export const adminReducer = (state: AdminState, action: Actions) => {
@@ -69,5 +79,7 @@ export const adminReducer = (state: AdminState, action: Actions) => {
       return { ...state, thumb: action.payload.thumb };
     case SET_LOADING:
       return { ...state, loading: action.payload.loading };
+    case SET_PAGE_SIZE:
+      return { ...state, pageSize: action.payload.pageSize };
   }
 };

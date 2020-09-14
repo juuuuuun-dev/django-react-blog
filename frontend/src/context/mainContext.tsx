@@ -1,3 +1,4 @@
+import { keyBy } from 'lodash';
 import React from 'react';
 
 import { useHistoryPushError } from '../helper/useHistoryPushError';
@@ -10,10 +11,11 @@ export const mainState: MainState = {
   loading: false,
   appTitle: process.env.REACT_APP_TITLE || "SITE NAME",
   pageTitle: "",
-  description: process.env.REACT_APP_DESCRIPTION || "DESCRIPTION",
-  domain: process.env.REACT_APP_DOMAIN || "example.com",
+  meta: [],
+  ldJson: [],
   copyrightStartYear: parseInt(process.env.REACT_APP_COPYRIGHT_START_YEAR || "2020"),
-  pageSize: parseInt(process.env.REACT_APP_PAGE_SIZE || "20"),
+  dateFormat: process.env.REACT_APP_DATE_FORMAT || "YYYY-MM-DD",
+  dateTimeFormat: process.env.REACT_APP__DATETIME_FORMAT || "YYYY-MM-DD hh:mm:ss",
   globalModalConfig: {
     title: null,
     type: null,
@@ -34,9 +36,17 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
         type: 'SET_INIT', payload: {
           init: {
             author: res.data.author,
-            categories: res.data.categories,
+            categories: keyBy(res.data?.categories, 'id'),
             tags: res.data.tags,
             recentPosts: res.data.recent_posts,
+            siteSettings: {
+              title: res.data.site_settings.title,
+              description: res.data.site_settings.description,
+              mainImage: res.data.site_settings.main_image,
+              logo: res.data.site_settings.logo,
+            },
+            pageSize: res.data.page_size,
+            url: res.data.url,
           }
         }
       });

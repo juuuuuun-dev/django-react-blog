@@ -247,4 +247,25 @@
 </key>
 <comment>about me page</comment>
 </table>
+<table x="552" y="751" name="site_settings">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="main_image" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>1200*630</comment>
+</row>
+<row name="logo" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
 </sql>

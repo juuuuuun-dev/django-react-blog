@@ -52,6 +52,7 @@ describe("Admin categories edit", () => {
     await waitFor(() => {
       expect(utils.getAllByText("Category edit")).toBeTruthy();
     });
+
     act(() => {
       fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'updateAbe' } });
       fireEvent.change(utils.getByLabelText("input-slug"), { target: { value: 'update-abe' } });
