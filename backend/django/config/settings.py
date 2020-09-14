@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'utils',
     'initial',
     'blog_auth',
+    'site_settings',
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',

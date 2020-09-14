@@ -12,6 +12,7 @@ from django.db.models.signals import post_save
 from django.template.loader import render_to_string
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from site_settings.models import SiteSetting
 from utils.file import delete_thumb
 
 
@@ -160,6 +161,15 @@ def create_about_me(sender, instance, created, **kwargs):
         about_me, created = AboutMe.objects.get_or_create(
             user=instance,
             page_title=AboutMe.default_page_title
+        )
+
+
+def create_site_settings(sender, instance, created, **kwargs):
+    if created:
+        site_setting, created = SiteSetting.objects.get_or_create(
+            id=1,
+            name="Site name",
+            description="Site descritpion"
         )
 
 
