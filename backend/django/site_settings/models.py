@@ -49,7 +49,7 @@ class SiteSetting(models.Model):
         blank=True
     )
     header_logo_pc = ImageSpecField(
-        source='avator',
+        source='header_logo',
         processors=[
             ResizeToFill(
                 header_logo_size['width'] / 2,

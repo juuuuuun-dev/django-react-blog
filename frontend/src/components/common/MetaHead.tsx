@@ -6,6 +6,7 @@ import { MetaHeadProps } from '../../types/meta';
 const MetaHead: React.FC<MetaHeadProps> = ({ appTitle, pageTitle, meta, ldJson }) => {
   // https://developers.google.com/search/docs/data-types/breadcrumb?hl=ja
   // https://search.google.com/test/rich-results?utm_campaign=sdtt&utm_medium=message
+
   appTitle = appTitle || process.env.REACT_APP_TITLE;
   return React.useMemo(() => {
     return (
