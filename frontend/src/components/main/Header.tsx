@@ -34,7 +34,7 @@ const Header: React.FC = () => {
                 <Link to="/">
                   <h1 className="app-title" data-testid="app-title">
                     {init?.siteSettings.logo
-                      ? <img height="50" src={init?.siteSettings.logo} alt={init?.siteSettings.title} />
+                      ? <img height="56" src={init?.siteSettings.logo} alt={init?.siteSettings.title} />
                       : init?.siteSettings.title
                     }
                   </h1>

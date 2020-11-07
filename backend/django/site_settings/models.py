@@ -15,7 +15,7 @@ class SiteSetting(models.Model):
     base_cache_key = 'site_settings'
     logo_size = {
         'width': 290,
-        'height': 100,
+        'height': 112,
     }
 
     class Meta:
@@ -33,7 +33,7 @@ class SiteSetting(models.Model):
         null=True,
         blank=True
     )
-    # Logo　Transparent png 290 * 100 ? / 112 * 112 use header and ld json
+    # Logo　Transparent png 290 * 112 / 112 * 112 use header and ld json
     logo = models.FileField(
         verbose_name="file",
         upload_to=get_file_path,
