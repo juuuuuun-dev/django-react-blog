@@ -13,8 +13,8 @@ def get_file_path(instance, filename):
 
 class SiteSetting(models.Model):
     base_cache_key = 'site_settings'
-    header_logo_size = {
-        'width': 280,
+    logo_size = {
+        'width': 290,
         'height': 100,
     }
 
@@ -26,34 +26,43 @@ class SiteSetting(models.Model):
         verbose_name='description',
         unique=True,
         max_length=255)
-    # 1200 * 630 - 600 * 315
+    # 1200 * 630 ~ 600 * 315 use ld json site image
     main_image = models.FileField(
         verbose_name="file",
         upload_to=get_file_path,
         null=True,
         blank=True
     )
-    # ld json logo 60 * 600 ? / 112 * 112
-    # 512* 512 mini 192 * 192 透過
+    # Logo　Transparent png 290 * 100 ? / 112 * 112 use header and ld json
     logo = models.FileField(
         verbose_name="file",
         upload_to=get_file_path,
         null=True,
         blank=True
     )
-    #　透過
-    header_logo = models.FileField(
-        verbose_name="file",
-        upload_to=get_file_path,
-        null=True,
-        blank=True
-    )
-    header_logo_pc = ImageSpecField(
-        source='header_logo',
+
+    logo_mini = ImageSpecField(
+        source='logo_mini',
         processors=[
             ResizeToFill(
-                header_logo_size['width'] / 2,
-                header_logo_size['height'] / 2)],
+                logo_size['width'] / 2,
+                logo_size['height'] / 2)],
         format='PNG',
         options={
             'quality': 90})
+
+    # header_logo = models.FileField(
+    #     verbose_name="file",
+    #     upload_to=get_file_path,
+    #     null=True,
+    #     blank=True
+    # )
+    # header_logo_pc = ImageSpecField(
+    #     source='header_logo',
+    #     processors=[
+    #         ResizeToFill(
+    #             header_logo_size['width'] / 2,
+    #             header_logo_size['height'] / 2)],
+    #     format='PNG',
+    #     options={
+    #         'quality': 90})

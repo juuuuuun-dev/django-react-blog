@@ -34,7 +34,7 @@ class InitialView(views.APIView):
                 "title": "Junkata blog",
                 "description": "Blog description",
                 "main_image": "/image.jpg",
-                "logo": "/logo.jpg",
+                "logo": "/assets/images/header_logo.png",
             },
             "page_size": settings.PAGE_SIZE,
         }

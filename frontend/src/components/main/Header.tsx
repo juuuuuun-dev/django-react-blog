@@ -30,9 +30,16 @@ const Header: React.FC = () => {
         >
           <div className="header-container">
             <Row>
-              {/* <Col><Link to="/"><h1 className="app-title" data-testid="app-title">{init?.siteSettings.title}aa</h1></Link></Col> */}
-              {/* 280 * 100 */}
-              <Col><Link to="/"><h1 className="app-title" data-testid="app-title"><img height="50" src="/assets/images/header_logo.jpg" alt="title" /></h1></Link></Col>
+              <Col>
+                <Link to="/">
+                  <h1 className="app-title" data-testid="app-title">
+                    {init?.siteSettings.logo
+                      ? <img height="50" src={init?.siteSettings.logo} alt={init?.siteSettings.title} />
+                      : init?.siteSettings.title
+                    }
+                  </h1>
+                </Link>
+              </Col>
 
               <Col flex="auto">
                 {width > 600 && (

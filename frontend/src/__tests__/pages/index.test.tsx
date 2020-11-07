@@ -45,7 +45,7 @@ describe("Main index", () => {
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
-      expect(utils.getByTestId('app-title').innerHTML).toBe(initAxiosResponse.data.site_settings.title);
+      expect(utils.getByTestId('app-title').innerHTML).toMatch(initAxiosResponse.data.site_settings.logo);
     })
     const categoryLinks: string[] = [];
     initAxiosResponse.data.categories.forEach((value) => {
@@ -70,7 +70,7 @@ describe("Main index", () => {
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
-      expect(utils.getByTestId('app-title').innerHTML).toBe(process.env.REACT_APP_TITLE);
+      expect(utils.getByTestId('app-title').innerHTML).toMatch(initAxiosResponse.data.site_settings.logo);
     })
     const categoryLinks: string[] = [];
     initAxiosResponse.data.categories.forEach((value) => {
