@@ -2,6 +2,7 @@ import os
 import uuid
 
 from django.db import models
+from django.shortcuts import get_object_or_404
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
@@ -13,6 +14,8 @@ def get_file_path(instance, filename):
 
 class SiteSetting(models.Model):
     base_cache_key = 'site_settings'
+    default_site_name = 'Site name'
+    default_description = 'Site descritpion'
     logo_size = {
         'width': 290,
         'height': 112,
@@ -42,14 +45,14 @@ class SiteSetting(models.Model):
     )
 
     logo_mini = ImageSpecField(
-        source='logo_mini',
+        source='logo',
         processors=[
             ResizeToFill(
                 logo_size['width'] / 2,
                 logo_size['height'] / 2)],
         format='PNG',
         options={
-            'quality': 90})
+            'quality': 90},)
 
     # header_logo = models.FileField(
     #     verbose_name="file",
@@ -66,3 +69,11 @@ class SiteSetting(models.Model):
     #     format='PNG',
     #     options={
     #         'quality': 90})
+
+    @classmethod
+    def getSiteSetting(self):
+        try:
+            site_setting = SiteSetting.objects.get(id=1)
+        except SiteSetting.DoesNotExist:
+            site_setting = None
+        return site_setting

@@ -165,13 +165,14 @@ def create_about_me(sender, instance, created, **kwargs):
 
 
 def create_site_settings(sender, instance, created, **kwargs):
-    if created:
-        site_setting, created = SiteSetting.objects.get_or_create(
-            id=1,
-            name="Site name",
-            description="Site descritpion"
+    site_setting = SiteSetting.getSiteSetting()
+    if created and not site_setting:
+        site_setting = SiteSetting.objects.create(
+            name=SiteSetting.default_site_name,
+            description=SiteSetting.default_description
         )
 
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(create_about_me, sender=User)
+post_save.connect(create_site_settings, sender=User)
