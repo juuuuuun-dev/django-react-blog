@@ -23,8 +23,10 @@ class AdminSiteSettingTestCase(APITestCase):
 
     def tearDown(self):
         site_setting = SiteSetting.getSiteSetting()
-        site_setting.main_image.delete()
-        site_setting.logo.delete()
+        if hasattr(site_setting, 'main_image'):
+            site_setting.main_image.delete()
+        if hasattr(site_setting, 'logo'):
+            site_setting.logo.delete()
 
     def test_get(self):
         api = reverse(self.api_basename)

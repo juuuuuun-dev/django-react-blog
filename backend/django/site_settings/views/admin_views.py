@@ -26,7 +26,7 @@ class AdminSiteSettingView(views.APIView):
         )
         if serializer.is_valid():
             if "logo" in self.request.data:
-                if site_setting.logo:
+                if hasattr(site_setting, 'logo'):
                     delete_thumb(site_setting.logo.name)
             serializer.save()
             return response.Response(serializer.data)
