@@ -1,13 +1,14 @@
+import { Layout, Menu } from 'antd';
 import React from 'react';
-import { Menu, Layout } from 'antd';
-import { Link } from 'react-router-dom';
-import { navList } from '../../config/admin';
+import { Link, useHistory } from 'react-router-dom';
+
+import { groupNavList, navList } from '../../config/admin';
 import { AdminContext } from '../../context/adminContext';
-import { useHistory } from 'react-router-dom';
 import SideNavAvator from './SideNavAvator';
 
-const SideNav = ({ background }: { background: string; }) => {
+const SideNav = () => {
   const { Sider } = Layout;
+  const { SubMenu } = Menu;
   const [{ isSiderShow }, dispatch] = React.useContext(AdminContext);
   const history = useHistory();
   const pathname = history.location.pathname;
@@ -30,6 +31,7 @@ const SideNav = ({ background }: { background: string; }) => {
     return keyIndex.toString();
   }, [pathname]);
 
+
   return React.useMemo(() => {
     return <>
       <Sider
@@ -37,7 +39,6 @@ const SideNav = ({ background }: { background: string; }) => {
         collapsedWidth="0"
         trigger={null}
         width="200"
-        style={{ background: background }}
         onBreakpoint={broken => {
           if (broken) {
             dispatch({ type: 'SIDER_HIDE' });
@@ -48,21 +49,37 @@ const SideNav = ({ background }: { background: string; }) => {
         collapsed={!isSiderShow}
       >
         <SideNavAvator />
-        <Menu theme="dark" style={{ background: background }} mode="inline" selectedKeys={[curretSelectedKey]}>
+        <Menu theme="dark" mode="inline" selectedKeys={[curretSelectedKey]}>
           {navList.map((item, index) => {
-            if (!item.hiddenNav) {
+            if (!item.hiddenNav && !item.group) {
               return (
-                <Menu.Item key={index}>
+                <Menu.Item key={index} icon={item.icon ? <item.icon /> : null}>
                   <Link data-testid={`side-nav-${item.id}`} to={item.path}>{item.title}</Link>
                 </Menu.Item>
               );
             }
             return null
           })}
+          {/* group nav */}
+          {groupNavList.map((gItem, gIndex) => {
+            return (
+              <SubMenu key={gItem.id} title={gItem.title} icon={gItem.icon ? <gItem.icon /> : null}>
+                {navList.map((item, index) => {
+                  if (gItem.id == item.group) {
+                    return (
+                      <Menu.Item key={index}>
+                        <Link data-testid={`side-nav-${item.id}`} to={item.path}>{item.title}</Link>
+                      </Menu.Item>
+                    );
+                  }
+                })}
+              </SubMenu>
+            )
+          })}
         </Menu>
       </Sider>
     </>
-  }, [isSiderShow, curretSelectedKey, background, dispatch])
+  }, [isSiderShow, curretSelectedKey, dispatch])
 };
 
 export default SideNav;
