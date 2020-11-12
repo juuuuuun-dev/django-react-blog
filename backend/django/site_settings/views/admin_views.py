@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework import (filters, generics, permissions, response, status,
                             views)
 from site_settings.models import SiteSetting
-from site_settings.serializers import SiteSettingSerializer
+from site_settings.serializers.admin_serializers import \
+    AdminSiteSettingSerializer
 from utils.file import delete_thumb
 
 
@@ -11,13 +12,21 @@ class AdminSiteSettingView(views.APIView):
 
     def get(self, request):
         queryset = SiteSetting.getSiteSetting()
-        serializer = SiteSettingSerializer(queryset, context={
+        serializer = AdminSiteSettingSerializer(queryset, context={
             "request": request})
-        return response.Response(serializer.data)
+        return response.Response(
+            {
+                "data": serializer.data,
+                "config": {
+                    "main_image_size": SiteSetting.main_image_size,
+                    "logo_size": SiteSetting.logo_size,
+                }
+            }
+        )
 
     def put(self, request):
         site_setting = SiteSetting.getSiteSetting()
-        serializer = SiteSettingSerializer(
+        serializer = AdminSiteSettingSerializer(
             site_setting,
             data=request.data,
             context={

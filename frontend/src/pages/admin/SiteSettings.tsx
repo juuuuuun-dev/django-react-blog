@@ -1,20 +1,23 @@
+import { config } from 'process';
 import React from 'react';
 
 import SiteSettingForm from '../../components/admin/form/SiteSettingForm';
 import toast from '../../components/common/toast';
 import { AdminContext } from '../../context/adminContext';
 import { retrieve, update } from '../../service/admin/siteSettings';
-import { SiteSettingDetail } from '../../types/siteSettings';
+import { SiteSettingConfig, SiteSettingDetail } from '../../types/siteSettings';
 
 const SiteSettings: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
   const [data, setData] = React.useState<SiteSettingDetail | undefined>();
+  const [config, setConfig] = React.useState<SiteSettingConfig | undefined>();
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
       const res = await retrieve();
-      setData(res.data);
+      setData(res.data.data);
+      setConfig(res.data.config);
     } catch (e) {
       toast({ type: "ERROR" });
     }
@@ -47,7 +50,7 @@ const SiteSettings: React.FC = () => {
   };
   return (
     <>
-      <SiteSettingForm data={data} onSubmit={handleSubmit} />
+      <SiteSettingForm data={data} config={config} onSubmit={handleSubmit} />
     </>
   );
 };

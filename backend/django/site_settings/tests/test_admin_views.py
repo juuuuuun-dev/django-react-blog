@@ -33,11 +33,17 @@ class AdminSiteSettingTestCase(APITestCase):
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            response.data['name'],
+            response.data['data']['name'],
             SiteSetting.default_site_name)
         self.assertEqual(
-            response.data['description'],
+            response.data['data']['description'],
             SiteSetting.default_description)
+        self.assertEqual(
+            response.data['config']['logo_size'],
+            SiteSetting.logo_size)
+        self.assertEqual(
+            response.data['config']['main_image_size'],
+            SiteSetting.main_image_size)
 
     def test_put(self):
         post_data = {

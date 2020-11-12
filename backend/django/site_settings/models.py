@@ -16,9 +16,15 @@ class SiteSetting(models.Model):
     base_cache_key = 'site_settings'
     default_site_name = 'Site name'
     default_description = 'Site descritpion'
+    # Logo　Transparent png 290 * 112 / 112 * 112 use header and ld json
     logo_size = {
         'width': 290,
         'height': 112,
+    }
+    # 1200 * 630 ~ 600 * 315 use ld json site image
+    main_image_size = {
+        'width': 1200,
+        'height': 630
     }
 
     class Meta:
@@ -29,14 +35,12 @@ class SiteSetting(models.Model):
         verbose_name='description',
         unique=True,
         max_length=255)
-    # 1200 * 630 ~ 600 * 315 use ld json site image
     main_image = models.FileField(
         verbose_name="file",
         upload_to=get_file_path,
         null=True,
         blank=True
     )
-    # Logo　Transparent png 290 * 112 / 112 * 112 use header and ld json
     logo = models.FileField(
         verbose_name="file",
         upload_to=get_file_path,

@@ -9,7 +9,7 @@ import { getBase64 } from '../../../helper/file';
 import { SiteSettingsFormProps } from '../../../types/siteSettings';
 
 const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
-  const { data, onSubmit } = props;
+  const { data, config, onSubmit } = props;
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [logoUrl, setLogoUrl] = React.useState<string>('');
@@ -88,7 +88,7 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
       <Form
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 18 }}
-        name="public_profile"
+        name="siteSettings"
         className="login-form"
         form={form}
         onFinish={onFinish}
@@ -96,15 +96,19 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
         {/* <Form.Item label="username" name="username" rules={[{ required: true, message: 'Please input your username' }]}>
         <Input data-testid="input-username" placeholder="username" />
       </Form.Item> */}
-        <Form.Item label="Public name" name="public_name" rules={[{ required: true, message: 'Please input your username' }]}>
-          <Input aria-label="input-public_name" placeholder="public name" />
+        <Form.Item label="Site name" name="name" rules={[{ required: true, message: 'Please input your username' }]}>
+          <Input aria-label="input-name" placeholder="Site name" />
         </Form.Item>
+
+        <Form.Item label="Description" name="description" rules={[{ required: false, message: 'requreid description' }]}>
+          <Input.TextArea aria-label="textarea-description" rows={6} placeholder="description" />
+        </Form.Item>
+
         <Form.Item
-          label="Avator"
+          label="Logo"
           validateStatus={file ? "success" : "error"}
           help={removeFile ? "Please selected file" : null}
         >
-          {/* <ImgCrop rotate > */}
           <Upload
             name="logo"
             listType="picture-card"
@@ -116,17 +120,10 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
             onChange={handleChange}
             onRemove={handleRemove}
           >
-            {logoUrl ? <><img src={logoUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
+            {logoUrl ? <><img src={logoUrl} alt="logo" style={{ width: '100%' }} /></> : uploadButton}
           </Upload>
           {/* </ImgCrop> */}
           {logoUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview()} /><DeleteOutlined aria-label="delete-image" onClick={handleRemove} /></> : <></>}
-
-        </Form.Item>
-        <Form.Item label="Url" name="url" rules={[{ required: false, message: '' }]}>
-          <Input aria-label="input-url" placeholder="url" />
-        </Form.Item>
-        <Form.Item label="Message" name="message" rules={[{ required: false, message: 'requreid email' }]}>
-          <Input.TextArea aria-label="textarea-message" rows={6} placeholder="message" />
         </Form.Item>
 
         <Form.Item>

@@ -1,9 +1,8 @@
 from rest_framework import serializers
+from site_settings.models import SiteSetting
 
-from .models import SiteSetting
 
-
-class SiteSettingSerializer(serializers.ModelSerializer):
+class AdminSiteSettingSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSetting
         fields = '__all__'

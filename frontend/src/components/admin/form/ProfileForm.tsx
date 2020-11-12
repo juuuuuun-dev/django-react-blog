@@ -1,10 +1,13 @@
-import React from 'react';
+import { Button, Form, Input, Modal, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload';
-import { Form, Input, Upload, Modal, Button } from 'antd';
-import { LoadingOutlined, PlusOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons';
-import { ProfileFormProps } from '../../../types/profile';
+import React from 'react';
+
+import { DeleteOutlined, EyeOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+
 import toast from '../../../components/common/toast';
 import { getBase64 } from '../../../helper/file';
+import { ProfileFormProps } from '../../../types/profile';
+
 // import ImgCrop from 'antd-img-crop';
 
 
