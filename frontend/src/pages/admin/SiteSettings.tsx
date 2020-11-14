@@ -1,4 +1,3 @@
-import { config } from 'process';
 import React from 'react';
 
 import SiteSettingForm from '../../components/admin/form/SiteSettingForm';

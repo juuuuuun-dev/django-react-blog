@@ -36,13 +36,13 @@ class SiteSetting(models.Model):
         unique=True,
         max_length=255)
     main_image = models.FileField(
-        verbose_name="file",
+        verbose_name="main_image",
         upload_to=get_file_path,
         null=True,
         blank=True
     )
     logo = models.FileField(
-        verbose_name="file",
+        verbose_name="logo",
         upload_to=get_file_path,
         null=True,
         blank=True
@@ -57,22 +57,6 @@ class SiteSetting(models.Model):
         format='PNG',
         options={
             'quality': 90},)
-
-    # header_logo = models.FileField(
-    #     verbose_name="file",
-    #     upload_to=get_file_path,
-    #     null=True,
-    #     blank=True
-    # )
-    # header_logo_pc = ImageSpecField(
-    #     source='header_logo',
-    #     processors=[
-    #         ResizeToFill(
-    #             header_logo_size['width'] / 2,
-    #             header_logo_size['height'] / 2)],
-    #     format='PNG',
-    #     options={
-    #         'quality': 90})
 
     @classmethod
     def getSiteSetting(self):

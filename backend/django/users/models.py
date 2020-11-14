@@ -168,6 +168,7 @@ def create_site_settings(sender, instance, created, **kwargs):
     site_setting = SiteSetting.getSiteSetting()
     if created and not site_setting:
         site_setting = SiteSetting.objects.create(
+            id=1,
             name=SiteSetting.default_site_name,
             description=SiteSetting.default_description
         )
