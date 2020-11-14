@@ -33,6 +33,8 @@ const SiteSettings: React.FC = () => {
       const params = new FormData();
       params.append('name', values.name);
       params.append('description', values.description);
+      params.append('delete_logo', values.delete_logo);
+      params.append('delete_main_image', values.delete_main_image);
       if (values.logo) {
         params.append('logo', values.logo);
       }

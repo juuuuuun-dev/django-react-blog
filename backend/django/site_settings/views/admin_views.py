@@ -26,6 +26,11 @@ class AdminSiteSettingView(views.APIView):
 
     def put(self, request):
         site_setting = SiteSetting.getSiteSetting()
+        if "delete_logo" in self.request.data:
+            delete_thumb(site_setting.logo.name)
+            site_setting.logo.delete()
+        if "delete_main_image" in self.request.data:
+            site_setting.main_image.delete()
         serializer = AdminSiteSettingSerializer(
             site_setting,
             data=request.data,
@@ -37,6 +42,7 @@ class AdminSiteSettingView(views.APIView):
             if "logo" in self.request.data:
                 if hasattr(site_setting, 'logo'):
                     delete_thumb(site_setting.logo.name)
+
             serializer.save()
             return response.Response(serializer.data)
         return response.Response(

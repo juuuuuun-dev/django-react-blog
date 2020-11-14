@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Typography, Upload } from 'antd';
+import { Button, Checkbox, Col, Form, Input, Modal, Row, Typography, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import React from 'react';
 
@@ -19,7 +19,9 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
   const [mainImageFile, setMainImageFile] = React.useState<File | undefined>();
   const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = React.useState<string>('');
-  const [showModal, setShowModal] = React.useState<boolean>(false)
+  const [showModal, setShowModal] = React.useState<boolean>(false);
+  const [deleteLogo, setDeleteLogo] = React.useState<boolean>(false);
+  const [deleteMainImage, setDeleteMainImage] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (data) {
@@ -73,6 +75,8 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
   }
 
   const onFinish = async (values: any) => {
+    values.delete_logo = deleteLogo;
+    values.delete_main_image = deleteMainImage;
     values.logo = logoFile;
     values.main_image = mainImageFile;
     onSubmit(values);
@@ -142,27 +146,32 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
         >
 
           <Text type="danger">Used for header and JSON-LD</Text><br /><span>w{config?.logo_size.width}px * h{config?.logo_size.height}px (transparent PNG)</span>
-          <Upload
-            name="logo"
-            listType="picture-card"
-            className="file-uploader"
-            aria-label="input-logo"
-            showUploadList={false}
-            beforeUpload={beforeUploadLogo}
-            onChange={handleChangeLogo}
-            onRemove={() => handleRemove({ type: 'logo' })}
-          >
-            {logoUrl ? <><img src={logoUrl} alt="logo" style={{ width: '100%' }} /></> : uploadButton}
-          </Upload>
+          <Row>
+            <Col flex="100px">
+              <Upload
+                name="logo"
+                listType="picture-card"
+                className="file-uploader"
+                aria-label="input-logo"
+                showUploadList={false}
+                beforeUpload={beforeUploadLogo}
+                onChange={handleChangeLogo}
+                onRemove={() => handleRemove({ type: 'logo' })}
+              >
+                {logoUrl ? <><img src={logoUrl} alt="logo" /></> : uploadButton}
+              </Upload>
+            </Col>
+
+          </Row>
           {/* </ImgCrop> */}
-          {logoUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview({ url: logoUrl })} /><DeleteOutlined aria-label="delete-image" onClick={() => handleRemove({ type: 'logo' })} /></> : <></>}
+          {logoUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview({ url: logoUrl })} /><DeleteOutlined style={{ marginRight: "10px" }} aria-label="delete-image" onClick={() => handleRemove({ type: 'logo' })} /></> : <></>}
+          {data?.logo && <Checkbox onClick={() => setDeleteLogo(!deleteLogo)}>Delete from server</Checkbox>}
         </Form.Item>
 
         <Form.Item
           label="Site main image"
           validateStatus={logoFile ? "success" : "error"}
         >
-
           <Text type="danger">Used for JSON-LD</Text><br /><span>w{config?.main_image_size.width}px * h{config?.main_image_size.height}px</span>
           <Upload
             name="main_image"
@@ -174,10 +183,11 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
             onChange={handleChangeMainImage}
             onRemove={() => handleRemove({ type: 'main_image' })}
           >
-            {mainImageUrl ? <><img src={mainImageUrl} alt="main_image" style={{ width: '100%' }} /></> : uploadButton}
+            {mainImageUrl ? <><img src={mainImageUrl} alt="main_image" /></> : uploadButton}
           </Upload>
           {/* </ImgCrop> */}
-          {mainImageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview({ url: mainImageUrl })} /><DeleteOutlined aria-label="delete-image" onClick={() => handleRemove({ type: 'main_image' })} /></> : <></>}
+          {mainImageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview({ url: mainImageUrl })} /><DeleteOutlined style={{ marginRight: "10px" }} aria-label="delete-image" onClick={() => handleRemove({ type: 'main_image' })} /></> : <></>}
+          {data?.main_image && <Checkbox onClick={() => setDeleteMainImage(!deleteMainImage)}>Delete from server</Checkbox>}
         </Form.Item>
 
         <Form.Item>
