@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 
 import SiteSettingForm from '../../components/admin/form/SiteSettingForm';
 import toast from '../../components/common/toast';
@@ -10,6 +11,8 @@ const SiteSettings: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
   const [data, setData] = React.useState<SiteSettingDetail | undefined>();
   const [config, setConfig] = React.useState<SiteSettingConfig | undefined>();
+  const history = useHistory()
+
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
@@ -44,6 +47,8 @@ const SiteSettings: React.FC = () => {
       const res = await update(params);
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'SUCCESS' });
+      history.go(0);
+      window.scrollTo(0, 0);
     } catch {
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'ERROR' });

@@ -2,7 +2,7 @@ import { Button, Checkbox, Col, Form, Input, Modal, Row, Typography, Upload } fr
 import { RcFile } from 'antd/lib/upload';
 import React from 'react';
 
-import { DeleteOutlined, EyeOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
 
 import toast from '../../../components/common/toast';
 import { getBase64 } from '../../../helper/file';
@@ -12,14 +12,12 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
   const { data, config, onSubmit } = props;
   const { Text } = Typography;
   const [form] = Form.useForm();
-  const [loading, setLoading] = React.useState<boolean>(false);
   const [logoUrl, setLogoUrl] = React.useState<string>('');
   const [mainImageUrl, setMainImageUrl] = React.useState<string>('');
   const [logoFile, setLogoFile] = React.useState<File | undefined>();
   const [mainImageFile, setMainImageFile] = React.useState<File | undefined>();
   const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = React.useState<string>('');
-  const [showModal, setShowModal] = React.useState<boolean>(false);
   const [deleteLogo, setDeleteLogo] = React.useState<boolean>(false);
   const [deleteMainImage, setDeleteMainImage] = React.useState<boolean>(false);
 
@@ -49,7 +47,6 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
     }
     if (isPng && isLt2M) {
       getBase64(file, (imageUrl: string) => {
-        setLoading(true);
         setLogoUrl(imageUrl);
       });
     }
@@ -67,7 +64,6 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
     }
     if (isJpgOrPng && isLt2M) {
       getBase64(file, (imageUrl: string) => {
-        setLoading(true);
         setMainImageUrl(imageUrl);
       });
     }
@@ -85,7 +81,6 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
   const handleChangeLogo = (info: any) => {
     setLogoFile(info.file)
     if (info.file.status === 'uploading') {
-      setLoading(true);
       return;
     }
   };
@@ -93,7 +88,6 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
   const handleChangeMainImage = (info: any) => {
     setMainImageFile(info.file)
     if (info.file.status === 'uploading') {
-      setLoading(true);
       return;
     }
   };
@@ -107,11 +101,9 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
     if (type === 'logo') {
       setLogoUrl('')
       setLogoFile(undefined);
-      setLoading(false);
     } else if (type === 'main_image') {
       setMainImageUrl('')
       setMainImageFile(undefined);
-      setLoading(false);
     }
   }
 
@@ -128,7 +120,6 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 18 }}
         name="siteSettings"
-        className="login-form"
         form={form}
         onFinish={onFinish}
       >
@@ -177,7 +168,7 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
             name="main_image"
             listType="picture-card"
             className="file-uploader"
-            aria-label="input-logo"
+            aria-label="input-main-logo"
             showUploadList={false}
             beforeUpload={beforeUploadMainImage}
             onChange={handleChangeMainImage}

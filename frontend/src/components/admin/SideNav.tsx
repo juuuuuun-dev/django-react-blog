@@ -65,12 +65,14 @@ const SideNav = () => {
             return (
               <SubMenu key={gItem.id} title={gItem.title} icon={gItem.icon ? <gItem.icon /> : null}>
                 {navList.map((item, index) => {
-                  if (gItem.id == item.group) {
+                  if (gItem.id === item.group) {
                     return (
                       <Menu.Item key={index}>
                         <Link data-testid={`side-nav-${item.id}`} to={item.path}>{item.title}</Link>
                       </Menu.Item>
                     );
+                  } else {
+                    return (null)
                   }
                 })}
               </SubMenu>
