@@ -26,6 +26,7 @@ class AdminSiteSettingTestCase(APITestCase):
         if hasattr(site_setting, 'main_image'):
             site_setting.main_image.delete()
         if hasattr(site_setting, 'logo'):
+            delete_thumb(site_setting.logo.name)
             site_setting.logo.delete()
 
     def test_get(self):
@@ -49,6 +50,8 @@ class AdminSiteSettingTestCase(APITestCase):
         post_data = {
             "name": "test",
             "description": "test description",
+            "delete_logo": False,
+            "delete_main_image": False,
             "main_image": SimpleUploadedFile(
                 name='test_image.jpg',
                 content=open(
@@ -56,11 +59,11 @@ class AdminSiteSettingTestCase(APITestCase):
                     'rb').read(),
                 content_type='image/jpeg'),
             "logo": SimpleUploadedFile(
-                name='test_image.jpg',
+                name='test_image.png',
                 content=open(
-                    "media/tests/test.jpg",
+                    "site_settings/tests/test_logo.png",
                     'rb').read(),
-                content_type='image/jpeg')
+                content_type='image/png')
         }
         api = reverse(self.api_basename)
         response = self.client.put(api, post_data, format="multipart")

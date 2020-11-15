@@ -44,7 +44,7 @@ describe("Admin siteSettngs edit", () => {
     }
   )
 
-  it("Request successful", async () => {
+  it("Update successful", async () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("container-title")).toBeTruthy();
@@ -60,42 +60,15 @@ describe("Admin siteSettngs edit", () => {
     });
   });
 
-  it("Image preview delete", async () => {
+  it("Retrieve error", async () => {
+    mocked(retrieve).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.reject({ response: error404AxiosResponse })
+    );
     const { utils } = await setUp(initialPath);
-
     await waitFor(() => {
       expect(utils.getByTestId("container-title")).toBeTruthy();
-      expect(utils.getByTestId("container-title").innerHTML).toMatch(/Public profile/);
-      expect(utils.getByLabelText("image-preview")).toBeTruthy();
-    })
-    fireEvent.click(utils.getByLabelText("image-preview"));
-    expect(utils.getByTestId("preview-modal")).toBeTruthy();
-    fireEvent.click(utils.getByLabelText("close"));
-    fireEvent.click(utils.getByLabelText("delete-image"));
-    await waitFor(() => {
-      expect(utils.queryByLabelText("image-preview")).toBeNull();
-    })
-    fireEvent.submit(utils.getByLabelText("form-submit"))
-    await waitFor(() => {
-      expect(utils.getByText("Please selected file")).toBeTruthy();
-    })
-  });
-  it("Uploading not image", async () => {
-    const { utils } = await setUp(initialPath);
-
-    await waitFor(() => {
-      expect(utils.getByTestId("container-title")).toBeTruthy();
-      expect(utils.getByTestId("container-title").innerHTML).toMatch(/Public profile/)
-    })
-
-    const text = new File(['test'], "tets.txt", {
-      type: "text/plain",
-    });
-    fireEvent.change(utils.getByLabelText("input-public_name"), { target: { value: 'updateAbe' } });
-    fireEvent.change(utils.getByLabelText("input-avator"), { target: { files: [text] } });
-    fireEvent.submit(utils.getByLabelText("form-submit"))
-    await waitFor(() => {
-      expect(utils.getByText("You can only upload JPG/PNG file!")).toBeTruthy();
+      expect(utils.getByTestId("container-title").innerHTML).toMatch(/Site settings/)
+      expect(utils.getAllByText(defaultErrorText)).toBeTruthy();
     });
   })
 
@@ -110,25 +83,15 @@ describe("Admin siteSettngs edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("container-title")).toBeTruthy();
-      expect(utils.getByTestId("container-title").innerHTML).toMatch(/Public profile/)
+      expect(utils.getByTestId("container-title").innerHTML).toMatch(/Site settings/)
     })
-    fireEvent.change(utils.getByLabelText("input-public_name"), { target: { value: 'updateAbe' } });
-    fireEvent.change(utils.getByLabelText("input-avator"), { target: { files: [file] } });
+    fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'updateAbe' } });
+    fireEvent.change(utils.getByLabelText("textarea-description"), { target: { value: 'update description' } });
+    fireEvent.change(utils.getByLabelText("input-logo"), { target: { files: [file] } });
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
-      expect(utils.getByText(defaultErrorText)).toBeTruthy();
-    });
-  })
-
-  it("Retrieve error", async () => {
-    mocked(retrieve).mockImplementation(
-      (): Promise<AxiosResponse<any>> => Promise.reject({ response: error404AxiosResponse })
-    );
-    const { utils } = await setUp(initialPath);
-    await waitFor(() => {
-      expect(utils.getByTestId("container-title")).toBeTruthy();
-      expect(utils.getByTestId("container-title").innerHTML).toMatch(/Public profile/)
       expect(utils.getAllByText(defaultErrorText)).toBeTruthy();
     });
   })
+
 });
