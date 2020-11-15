@@ -22,12 +22,25 @@ const Header: React.FC = () => {
             height: headerHeight,
             background: '#ffffff',
             boxShadow: "0 4px 12px 0 rgba(0, 0, 0, 0.05)",
-
+            position: 'fixed',
+            zIndex: 10,
+            width: "100%",
+            top: 0,
           }}
         >
           <div className="header-container">
             <Row>
-              <Col flex="100px"><Link to="/"><h1 className="app-title" data-testid="app-title">{init?.siteSettings.title}</h1></Link></Col>
+              <Col>
+                <Link to="/">
+                  <h1 className="app-title" data-testid="app-title">
+                    {init?.siteSettings.logo
+                      ? <img height="56" src={init?.siteSettings.logo} alt={init?.siteSettings.title} />
+                      : init?.siteSettings.title
+                    }
+                  </h1>
+                </Link>
+              </Col>
+
               <Col flex="auto">
                 {width > 600 && (
                   <Nav

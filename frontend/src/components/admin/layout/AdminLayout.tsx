@@ -20,7 +20,7 @@ const AdminLayout = () => {
       <MetaHead pageTitle="Admin" meta={meta} />
       <div>
         <Layout className="contents site-layout-background" style={{ padding: '0px 0' }}>
-          <SideNav background={'#444'} />
+          <SideNav />
           <Content style={{ padding: '0 0px', minHeight: 280 }}>
             <Header headerHeight="60px" />
             <Content>

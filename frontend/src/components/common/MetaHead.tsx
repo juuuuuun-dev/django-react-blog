@@ -6,6 +6,7 @@ import { MetaHeadProps } from '../../types/meta';
 const MetaHead: React.FC<MetaHeadProps> = ({ appTitle, pageTitle, meta, ldJson }) => {
   // https://developers.google.com/search/docs/data-types/breadcrumb?hl=ja
   // https://search.google.com/test/rich-results?utm_campaign=sdtt&utm_medium=message
+
   appTitle = appTitle || process.env.REACT_APP_TITLE;
   return React.useMemo(() => {
     return (
@@ -16,6 +17,7 @@ const MetaHead: React.FC<MetaHeadProps> = ({ appTitle, pageTitle, meta, ldJson }
           defaultTitle={appTitle} titleTemplate={`%s | ${appTitle}`}
         >
           <meta charSet='utf-8' />
+          <link id="favicon" rel="icon" href={`${process.env.PUBLIC_URL}/new-favicon.ico`} type="image/x-icon" />
           <script type="application/ld+json">{JSON.stringify({
             "@context": "https://schema.org",
             "@graph": ldJson,

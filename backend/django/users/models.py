@@ -12,6 +12,7 @@ from django.db.models.signals import post_save
 from django.template.loader import render_to_string
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from site_settings.models import SiteSetting
 from utils.file import delete_thumb
 
 
@@ -163,5 +164,16 @@ def create_about_me(sender, instance, created, **kwargs):
         )
 
 
+def create_site_settings(sender, instance, created, **kwargs):
+    site_setting = SiteSetting.getSiteSetting()
+    if created and not site_setting:
+        site_setting = SiteSetting.objects.create(
+            id=1,
+            name=SiteSetting.default_site_name,
+            description=SiteSetting.default_description
+        )
+
+
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(create_about_me, sender=User)
+post_save.connect(create_site_settings, sender=User)

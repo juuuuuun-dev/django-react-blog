@@ -1,11 +1,14 @@
 from categories.factories import CategoryFactory
 from django.core.cache import cache
 from django.urls import reverse
+from media.models import Media
 from posts.factories import PostFactory
+from posts.models import Post
 from rest_framework import status
 from rest_framework.test import APITestCase
 from tags.factories import TagFactory
 from users.factories import UserFactory
+from utils.file import delete_thumb
 
 
 class PostListTestCase(APITestCase):
@@ -17,6 +20,10 @@ class PostListTestCase(APITestCase):
 
     def tearDown(self):
         cache.clear()
+        media = Media.objects.all()
+        for value in media:
+            delete_thumb(value.file.name)
+            value.file.delete(False)
 
     def test_get_show(self):
         tag = TagFactory.create(name="tagdayo")
@@ -46,6 +53,10 @@ class PostCategorySlugListTestCase(APITestCase):
 
     def tearDown(self):
         cache.clear()
+        media = Media.objects.all()
+        for value in media:
+            delete_thumb(value.file.name)
+            value.file.delete(False)
 
     def test_get_show(self):
         tag = TagFactory.create(name="tagdayo")
@@ -92,6 +103,10 @@ class PostTagSlugListTestCase(APITestCase):
 
     def tearDown(self):
         cache.clear()
+        media = Media.objects.all()
+        for value in media:
+            delete_thumb(value.file.name)
+            value.file.delete(False)
 
     def test_get_show(self):
         tag = TagFactory.create(slug="tagdayo")
@@ -144,6 +159,10 @@ class PostDetailTestCase(APITestCase):
 
     def tearDown(self):
         cache.clear()
+        media = Media.objects.all()
+        for value in media:
+            delete_thumb(value.file.name)
+            value.file.delete(False)
 
     def test_get_show(self):
         tag = TagFactory.create(name="tag")

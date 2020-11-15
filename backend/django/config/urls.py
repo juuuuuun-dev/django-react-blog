@@ -37,6 +37,8 @@ urlpatterns = [
     path("{}posts/".format(settings.API_VERSION), include("posts.urls")),
     path("{}media/".format(settings.API_VERSION), include("media.urls")),
     path("{}init/".format(settings.API_VERSION), include("initial.urls")),
+    path("{}site-settings/".format(settings.API_VERSION),
+         include("site_settings.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

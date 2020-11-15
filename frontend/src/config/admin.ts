@@ -1,5 +1,9 @@
 import React from 'react';
 
+import {
+    ApartmentOutlined, EditOutlined, FileImageOutlined, SettingOutlined, TagOutlined
+} from '@ant-design/icons';
+
 import AboutMe from '../pages/admin/AboutMe';
 import CategoryCreate from '../pages/admin/categories/create';
 import CategoryEdit from '../pages/admin/categories/edit';
@@ -12,6 +16,7 @@ import PostCreate from '../pages/admin/posts/create';
 import PostEdit from '../pages/admin/posts/edit';
 import Posts from '../pages/admin/posts/index';
 import Profile from '../pages/admin/Profile';
+import SiteSettings from '../pages/admin/SiteSettings';
 import TagCreate from '../pages/admin/tags/create';
 import TagEdit from '../pages/admin/tags/edit';
 import Tags from '../pages/admin/tags/index';
@@ -24,7 +29,23 @@ interface INavList {
   exact?: boolean;
   hiddenNav?: boolean;
   parentId?: string;
+  group?: string;
+  icon?: any;
 }
+
+interface IGroupNavList {
+  id: string;
+  title: string;
+  icon: any
+}
+
+export const groupNavList: IGroupNavList[] = [
+  {
+    id: "setting",
+    title: "Setting",
+    icon: SettingOutlined,
+  },
+]
 
 export const navList: INavList[] = [
   {
@@ -39,6 +60,7 @@ export const navList: INavList[] = [
     title: 'Posts',
     component: Posts,
     exact: true,
+    icon: EditOutlined,
   },
   {
     path: '/admin/posts/:id/edit',
@@ -55,11 +77,34 @@ export const navList: INavList[] = [
     parentId: 'posts',
   },
   {
+    id: 'media',
+    path: '/admin/media',
+    title: 'Media',
+    component: Media,
+    exact: true,
+    icon: FileImageOutlined,
+  },
+  {
+    path: '/admin/media/create',
+    title: 'Media create',
+    component: MediaCreate,
+    hiddenNav: true,
+    parentId: 'media',
+  },
+  {
+    path: '/admin/media/:id/edit',
+    title: 'Media edit',
+    component: MediaEdit,
+    hiddenNav: true,
+    parentId: 'media',
+  },
+  {
     id: 'tags',
     path: '/admin/tags',
     title: 'Tags',
     component: Tags,
     exact: true,
+    icon: TagOutlined,
   },
   {
     path: '/admin/tags/:id/edit',
@@ -81,6 +126,7 @@ export const navList: INavList[] = [
     title: 'Categories',
     component: Categories,
     exact: true,
+    icon: ApartmentOutlined,
   },
   {
     path: '/admin/categories/:id/edit',
@@ -97,37 +143,25 @@ export const navList: INavList[] = [
     parentId: 'categories',
   },
   {
-    id: 'media',
-    path: '/admin/media',
-    title: 'Media',
-    component: Media,
-    exact: true,
-  },
-  {
-    path: '/admin/media/create',
-    title: 'Media create',
-    component: MediaCreate,
-    hiddenNav: true,
-    parentId: 'media',
-  },
-  {
-    path: '/admin/media/:id/edit',
-    title: 'Media edit',
-    component: MediaEdit,
-    hiddenNav: true,
-    parentId: 'media',
-  },
-  {
     id: 'profile',
+    group: 'setting',
     path: '/admin/profile',
     title: 'Public profile',
     component: Profile,
   },
   {
     id: 'aboutMe',
+    group: 'setting',
     path: '/admin/about-me',
     title: 'About me',
     component: AboutMe,
+  },
+  {
+    id: 'siteSettings',
+    group: 'setting',
+    path: '/admin/site-settings',
+    title: 'Site settings',
+    component: SiteSettings,
   },
 ];
 

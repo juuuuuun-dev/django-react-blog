@@ -22,7 +22,6 @@ class UserProfileView(views.APIView):
         return Response(serializer.data)
 
     def put(self, request):
-        print("putdayo")
         queryset = UserProfile.objects.all()
         user_profile = get_object_or_404(
             queryset, user_id=self.request.user.id)
