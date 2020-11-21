@@ -165,7 +165,7 @@ def create_about_me(sender, instance, created, **kwargs):
 
 
 def create_site_settings(sender, instance, created, **kwargs):
-    site_setting = SiteSetting.getSiteSetting()
+    site_setting = SiteSetting.get_site_setting()
     if created and not site_setting:
         site_setting = SiteSetting.objects.create(
             id=1,

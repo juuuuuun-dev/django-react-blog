@@ -22,7 +22,7 @@ class AdminSiteSettingTestCase(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
 
     def tearDown(self):
-        site_setting = SiteSetting.getSiteSetting()
+        site_setting = SiteSetting.get_site_setting()
         if hasattr(site_setting, 'main_image'):
             site_setting.main_image.delete()
         if hasattr(site_setting, 'logo'):

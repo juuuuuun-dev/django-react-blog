@@ -11,7 +11,7 @@ class AdminSiteSettingView(views.APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        queryset = SiteSetting.getSiteSetting()
+        queryset = SiteSetting.get_site_setting()
         serializer = AdminSiteSettingSerializer(queryset, context={
             "request": request})
         return response.Response(
@@ -25,7 +25,7 @@ class AdminSiteSettingView(views.APIView):
         )
 
     def put(self, request):
-        site_setting = SiteSetting.getSiteSetting()
+        site_setting = SiteSetting.get_site_setting()
         if self.request.data['delete_logo'] == 'true':
             delete_thumb(site_setting.logo.name)
             site_setting.logo.delete()
