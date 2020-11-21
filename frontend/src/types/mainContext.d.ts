@@ -2,7 +2,7 @@ import { CategoryDetail } from './categories';
 import { MetaType } from './meta';
 import { PostDetail } from './posts';
 import { ProfileDetail } from './profile';
-import { SiteSettings } from './siteSettings';
+import { SiteSettingDetail } from './siteSettings';
 import { TagDetail } from './tags';
 
 export type GlobalModalConfig = {
@@ -16,11 +16,19 @@ export type InitState = {
   categories: { [key: string]: CategoryDetail },
   tags: TagDetail[],
   recentPosts: PostDetail[],
-  siteSettings: SiteSettings,
+  siteSettings: SiteSettingDetail,
   pageSize: number;
   url: string,
 };
 
+export type BreakPoint = {
+  xs: number,
+  sm: number,
+  md: number,
+  lg: number,
+  xl: number,
+  xxl: number,
+}
 
 export type ReceiveInitState = {
   author: ProfileDetail,
@@ -40,6 +48,7 @@ export type MainState = {
   globalModalConfig: GlobalModalConfig,
   dateFormat: string,
   dateTimeFormat: string,
+  breakPoint: BreakPoint,
 }
 
 

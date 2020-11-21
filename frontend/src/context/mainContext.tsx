@@ -21,6 +21,14 @@ export const mainState: MainState = {
     type: null,
     content: null,
   },
+  breakPoint: {
+    xs: 480,
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200,
+    xxl: 1600,
+  }
 };
 
 export const MainContext = React.createContext({} as ProviderProps);
@@ -40,10 +48,11 @@ export const MainContextProvider = ({ children }: { children: React.ReactNode })
             tags: res.data.tags,
             recentPosts: res.data.recent_posts,
             siteSettings: {
-              title: res.data.site_settings.title,
+              name: res.data.site_settings.name,
               description: res.data.site_settings.description,
-              mainImage: res.data.site_settings.main_image,
+              main_image: res.data.site_settings.main_image,
               logo: res.data.site_settings.logo,
+              logo_mini: res.data.site_settings.logo_mini,
             },
             pageSize: res.data.page_size,
             url: res.data.url,

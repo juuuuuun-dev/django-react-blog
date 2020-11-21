@@ -9,12 +9,14 @@ import Humberger from './ Humberger';
 import Nav from './Nav';
 
 const Header: React.FC = () => {
-  const [{ init }] = React.useContext(MainContext);
+  const [state] = React.useContext(MainContext);
+  const { init } = state;
   const headerHeight = '60px';
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
   return React.useMemo(() => {
+
     return (
       <>
         <Header
@@ -34,8 +36,12 @@ const Header: React.FC = () => {
                 <Link to="/">
                   <h1 className="app-title" data-testid="app-title">
                     {init?.siteSettings.logo
-                      ? <img height="56" src={init?.siteSettings.logo} alt={init?.siteSettings.title} />
-                      : init?.siteSettings.title
+                      ? <picture>
+                        <source media={`(max-width: ${state.breakPoint.sm - 1}px)`} srcSet={`${init?.siteSettings.logo} 1x`}></source>
+                        <source media={`(min-width: ${state.breakPoint.sm}px)`} srcSet={`${init?.siteSettings.logo_mini} 1x`}></source>
+                        <img height="56" src={init?.siteSettings.logo} alt={init?.siteSettings.name} />
+                      </picture>
+                      : init?.siteSettings.name
                     }
                   </h1>
                 </Link>
