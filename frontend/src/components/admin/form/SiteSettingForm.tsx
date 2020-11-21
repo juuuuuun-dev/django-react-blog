@@ -149,14 +149,14 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
                 onChange={handleChangeLogo}
                 onRemove={() => handleRemove({ type: 'logo' })}
               >
-                {logoUrl ? <><img src={logoUrl} alt="logo" /></> : uploadButton}
+                {logoUrl ? <><img src={logoUrl} aria-label="logo-url" alt="logo" /></> : uploadButton}
               </Upload>
             </Col>
 
           </Row>
           {/* </ImgCrop> */}
-          {logoUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview({ url: logoUrl })} /><DeleteOutlined style={{ marginRight: "10px" }} aria-label="delete-image" onClick={() => handleRemove({ type: 'logo' })} /></> : <></>}
-          {data?.logo && <Checkbox onClick={() => setDeleteLogo(!deleteLogo)}>Delete from server</Checkbox>}
+          {logoUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview({ url: logoUrl })} /><DeleteOutlined style={{ marginRight: "10px" }} aria-label="delete-logo-url" onClick={() => handleRemove({ type: 'logo' })} /></> : <></>}
+          {data?.logo && <Checkbox aria-label="set-delete-logo" onClick={() => setDeleteLogo(!deleteLogo)}>Delete from server</Checkbox>}
         </Form.Item>
 
         <Form.Item
@@ -174,11 +174,11 @@ const SiteSettingForm: React.FC<SiteSettingsFormProps> = (props) => {
             onChange={handleChangeMainImage}
             onRemove={() => handleRemove({ type: 'main_image' })}
           >
-            {mainImageUrl ? <><img src={mainImageUrl} alt="main_image" /></> : uploadButton}
+            {mainImageUrl ? <><img src={mainImageUrl} aria-label="main-image-url" alt="main_image" /></> : uploadButton}
           </Upload>
           {/* </ImgCrop> */}
-          {mainImageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview({ url: mainImageUrl })} /><DeleteOutlined style={{ marginRight: "10px" }} aria-label="delete-image" onClick={() => handleRemove({ type: 'main_image' })} /></> : <></>}
-          {data?.main_image && <Checkbox onClick={() => setDeleteMainImage(!deleteMainImage)}>Delete from server</Checkbox>}
+          {mainImageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview({ url: mainImageUrl })} /><DeleteOutlined style={{ marginRight: "10px" }} aria-label="delete-main-image-url" onClick={() => handleRemove({ type: 'main_image' })} /></> : <></>}
+          {data?.main_image && <Checkbox aria-label="set-delete-main-image" onClick={() => setDeleteMainImage(!deleteMainImage)}>Delete from server</Checkbox>}
         </Form.Item>
 
         <Form.Item>

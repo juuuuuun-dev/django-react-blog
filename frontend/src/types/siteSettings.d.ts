@@ -4,6 +4,7 @@ export type SiteSettingDetail = {
   description: string,
   main_image: string | undefined,
   logo: string | undefined,
+  logo_mini: string | undefined,
 }
 
 export type SiteSettingConfig = {

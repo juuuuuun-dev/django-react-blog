@@ -1,18 +1,16 @@
 import { AxiosResponse } from 'axios';
 import { mocked } from 'ts-jest/utils';
 
-import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 
 import { setUp } from '../../../__mocks__/adminSetUp';
 import {
-    deleteAxiosResponse, error404AxiosResponse, error500AxiosResponse
+    error404AxiosResponse, error500AxiosResponse
 } from '../../../__mocks__/serviceResponse/common';
 import {
     detailAxiosResponse, error400AxiosResponse, updateAxiosResponse
 } from '../../../__mocks__/serviceResponse/siteSettings';
-import {
-    defaultDeleteText, defaultErrorText, defaultSuccessText
-} from '../../../components/common/toast';
+import { defaultErrorText, defaultSuccessText } from '../../../components/common/toast';
 import { getBase64 } from '../../../helper/file';
 import { retrieve, update } from '../../../service/admin/siteSettings';
 
@@ -53,6 +51,34 @@ describe("Admin siteSettngs edit", () => {
     fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'updateAbe' } });
     fireEvent.change(utils.getByLabelText("textarea-description"), { target: { value: 'update description' } });
     fireEvent.change(utils.getByLabelText("input-logo"), { target: { files: [file] } });
+    fireEvent.submit(utils.getByLabelText("form-submit"))
+    await waitFor(() => {
+      expect(utils.getAllByText(defaultSuccessText)).toBeTruthy();
+      expect(scrollTo).toHaveBeenCalled();
+    });
+  });
+
+  it("Remove image", async () => {
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.getByTestId("container-title")).toBeTruthy();
+      expect(utils.getByTestId("container-title").innerHTML).toMatch(/Site settings/)
+    })
+    fireEvent.change(utils.getByLabelText("input-name"), { target: { value: 'updateAbe' } });
+    fireEvent.change(utils.getByLabelText("textarea-description"), { target: { value: 'update description' } });
+    fireEvent.change(utils.getByLabelText("input-logo"), { target: { files: [file] } });
+    await waitFor(() => {
+      expect(utils.queryAllByLabelText('logo-url').length).toBe(1)
+      expect(utils.queryAllByLabelText('main-image-url').length).toBe(1)
+    })
+    fireEvent.click(utils.getByLabelText("delete-logo-url"));
+    fireEvent.click(utils.getByLabelText("set-delete-logo"));
+    fireEvent.click(utils.getByLabelText("delete-main-image-url"));
+    fireEvent.click(utils.getByLabelText("set-delete-main-image"));
+    await waitFor(() => {
+      expect(utils.queryAllByLabelText('logo-url').length).toBe(0)
+      expect(utils.queryAllByLabelText('main-image-url').length).toBe(0)
+    })
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText(defaultSuccessText)).toBeTruthy();
