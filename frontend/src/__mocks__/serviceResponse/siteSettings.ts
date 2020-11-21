@@ -1,20 +1,26 @@
 import { AxiosResponse } from 'axios';
 
 export const resultData = {
-  public_name: 'test',
-  avator: "http://localhost:3000/test.jpg",
-  message: "test message",
-  url: "http://localhost:3001/",
+  name: 'test',
+  description: "test message",
+  logo: "http://localhost:3000/test.jpg",
+  main_image: "http://localhost:3000/test_main.jpg",
+}
+
+export const confitData = {
+  logo_size: {
+    width: 100,
+    height: 100,
+  },
+  main_image_size: {
+    width: 100,
+    height: 100,
+  }
 }
 
 export const updateResultData = {
-  username: "update",
-  profile: {
-    avator: "http://localhost:3000/test.jpg",
-    message: "update message",
-    url: "http://localhost:3001/",
-    email: "test@test.com",
-  },
+  name: "update",
+  description: "test message",
 }
 
 
@@ -38,7 +44,10 @@ export const error400AxiosResponse: AxiosResponse = {
 
 
 export const detailAxiosResponse: AxiosResponse = {
-  data: resultData,
+  data: {
+    data: resultData,
+    config: confitData,
+  },
   status: 200,
   statusText: 'OK',
   config: {},

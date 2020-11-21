@@ -59,7 +59,7 @@ class SiteSetting(models.Model):
             'quality': 90},)
 
     @classmethod
-    def getSiteSetting(self):
+    def get_site_setting(self):
         try:
             site_setting = SiteSetting.objects.get(id=1)
         except SiteSetting.DoesNotExist:

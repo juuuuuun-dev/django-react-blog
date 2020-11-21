@@ -20,10 +20,10 @@ const Index: React.FC = () => {
     try {
       const res = await retrieve();
       const meta = createMeta({
-        title: state.init?.siteSettings.title,
+        title: state.init?.siteSettings.name,
         url: state.init?.url + history.location.pathname,
         description: state.init?.siteSettings.description,
-        image: state.init?.siteSettings.mainImage,
+        image: state.init?.siteSettings.main_image,
       })
       const ldJson = createLdJsonTypeWebSite({ init: state.init });
       dispatch({ type: 'SET_META', payload: { meta: meta } })

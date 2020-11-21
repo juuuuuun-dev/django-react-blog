@@ -20,12 +20,13 @@ const Index = () => {
     try {
       const res = await list({ page: query.page, category: query.category, tag: query.tag, search: query.search });
       setData(res.data)
+      console.log(res.data)
       const pageTitle = query.search ? `${query.search} - search` : '';
       const meta = createMeta({
-        title: state.init?.siteSettings.title,
+        title: state.init?.siteSettings.name,
         url: state.init?.url,
         description: state.init?.siteSettings.description,
-        image: state.init?.siteSettings.mainImage,
+        image: state.init?.siteSettings.main_image,
       })
       const ldJson = createLdJsonTypeWebSite({ init: state.init });
       dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: pageTitle } })
@@ -39,6 +40,7 @@ const Index = () => {
 
   }, [pushError, dispatch, query, state.init]);
   React.useEffect(() => {
+    console.log("useEffect")
     if (state.init) {
       fetchData();
     }

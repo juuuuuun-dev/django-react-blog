@@ -4,6 +4,7 @@ from django.urls import reverse
 from posts.factories import PostFactory
 from rest_framework import status
 from rest_framework.test import APITestCase
+from site_settings.models import SiteSetting
 from tags.factories import TagFactory
 from users.factories import UserFactory
 
@@ -19,16 +20,24 @@ class InitialViewsTestCase(APITestCase):
         cache.clear()
 
     def test_get(self):
+        site_settings = SiteSetting.get_site_setting()
         tag = TagFactory.create(name="tagdayo")
         TagFactory.create(name="tag2")
         category = CategoryFactory(name="cat")
         post = PostFactory.create(user=self.user, tag=[tag])
         api = reverse("init:init-api")
+
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data["author"]["public_name"],
             self.user.profile.public_name)
+        self.assertEqual(
+            response.data["site_settings"]["name"],
+            site_settings.name)
+        self.assertEqual(
+            response.data["site_settings"]["description"],
+            site_settings.description)
         self.assertEqual(
             response.data["recent_posts"][0]["title"],
             post.title)

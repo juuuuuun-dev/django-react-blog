@@ -9,7 +9,7 @@ export const createLdJsonTypeWebSite = ({ init }: CreateLdJsonTypeWebSiteArg) =>
       "@context": "http://schema.org",
       "@type": "WebSite",
       "url": init.url,
-      "image": [init.siteSettings.mainImage],
+      "image": [init.siteSettings.main_image],
       "publisher": createPublisher(init),
     }
   }
@@ -54,7 +54,7 @@ export const createLdJsonTypeBreadcrumbList = (list: BreadcrumbList) => {
 const createPublisher = (init: InitState) => {
   return {
     "@type": "Organization",
-    "name": init.siteSettings.title,
+    "name": init.siteSettings.name,
     "logo": {
       "@type": "ImageObject",
       "url": init.siteSettings.logo,
