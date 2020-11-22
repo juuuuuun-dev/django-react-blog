@@ -9,8 +9,7 @@ from ..models import Post
 
 class MainPostListSerializer(serializers.ModelSerializer):
     tag = TagListSerializer(read_only=True, many=True)
-    category = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all())
+    category = CategoryListSerializer(read_only=True)
     cover_media = CoverSerializer()
 
     class Meta:

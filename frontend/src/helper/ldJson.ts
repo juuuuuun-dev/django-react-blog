@@ -1,5 +1,5 @@
 import {
-    BreadcrumbList, CreateLdJsonTypeBlogPostingArg, CreateLdJsonTypeWebSiteArg
+  BreadcrumbList, CreateLdJsonTypeBlogPostingArg, CreateLdJsonTypeWebSiteArg
 } from '../types/ldJson';
 import { InitState } from '../types/mainContext';
 

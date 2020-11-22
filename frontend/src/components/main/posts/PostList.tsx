@@ -14,67 +14,69 @@ import { PostListProps } from '../../../types/posts';
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
   const [{ init, dateFormat }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
-  return (
-    <>
-      <List
-        className="post-list"
-        data-testid="post-list"
-        dataSource={data?.results}
-        renderItem={item => (
-          <List.Item key={item.id}>
-            <List.Item.Meta
-              title={<Link to={`/posts/${item.id}`}><Paragraph
-                ellipsis={{
-                  rows: 2,
-                  expandable: false,
-                }}
-                className="post-list__title"
-                title={`${item.title}`}
-              >
-                {item.title}
-              </Paragraph>
-              </Link>
-              }
-              description={<>
-                <Paragraph
+  return React.useMemo(() => {
+    return (
+      <>
+        <List
+          className="post-list"
+          data-testid="post-list"
+          dataSource={data?.results}
+          renderItem={item => (
+            <List.Item key={item.id}>
+              <List.Item.Meta
+                title={<Link to={`/posts/${item.id}`}><Paragraph
                   ellipsis={{
                     rows: 2,
                     expandable: false,
                   }}
-                  className="post-list__description"
-                  title={`${item.plain_content}`}
+                  className="post-list__title"
+                  title={`${item.title}`}
                 >
-                  <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
+                  {item.title}
                 </Paragraph>
-                <div className="entry-date">
-                  <span className="entry-date__item"><ClockCircleOutlined />{moment(item.created_at).format(dateFormat)}</span>
-                  {/* <span className="entry-date__item"><ApartmentOutlined />{item.category}</span> */}
-                </div>
-              </>}
-            />
-            <div className="post-list__thumb">
-              {/* sp 80 pc 160 */}
-              <Link to={`/posts/${item.id}`}>
-                <LazyLoadImage
-                  alt="test"
-                  width={80}
-                  src={`/assets/images/160.jpg`}
-                />
-              </Link>
-            </div>
-          </List.Item>
-        )}
-      >
-      </List>
-      <Pagination
-        total={data?.count}
-        pageSize={init?.pageSize || 1}
-        defaultCurrent={query.page || 1}
-        current={query.page || 1}
-        onChange={handlePageChange}
-      />
-    </>
-  )
+                </Link>
+                }
+                description={<>
+                  <Paragraph
+                    ellipsis={{
+                      rows: 2,
+                      expandable: false,
+                    }}
+                    className="post-list__description"
+                    title={`${item.plain_content}`}
+                  >
+                    <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
+                  </Paragraph>
+                  <div className="entry-date">
+                    <span className="entry-date__item"><ClockCircleOutlined />{moment(item.created_at).format(dateFormat)}</span>
+                    <span className="entry-date__item"><ApartmentOutlined />{item.category.name}</span>
+                  </div>
+                </>}
+              />
+              <div className="post-list__thumb">
+                {/* sp 80 pc 160 */}
+                <Link to={`/posts/${item.id}`}>
+                  <LazyLoadImage
+                    alt="test"
+                    width={80}
+                    src={`/assets/images/160.jpg`}
+                  />
+                </Link>
+              </div>
+            </List.Item>
+          )}
+        >
+        </List>
+        <Pagination
+          total={data?.count}
+          pageSize={init?.pageSize || 1}
+          defaultCurrent={query.page || 1}
+          current={query.page || 1}
+          onChange={handlePageChange}
+        />
+      </>
+    )
+  }, [data, init, dateFormat, query, handlePageChange])
 };
 
 

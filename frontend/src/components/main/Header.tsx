@@ -10,7 +10,6 @@ import Nav from './Nav';
 
 const Header: React.FC = () => {
   const [state] = React.useContext(MainContext);
-  const { init } = state;
   const headerHeight = '60px';
   const { Header } = Layout;
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
@@ -35,13 +34,13 @@ const Header: React.FC = () => {
               <Col>
                 <Link to="/">
                   <h1 className="app-title" data-testid="app-title">
-                    {init?.siteSettings.logo
+                    {state.init?.siteSettings.logo
                       ? <picture>
-                        <source media={`(max-width: ${state.breakPoint.sm - 1}px)`} srcSet={`${init?.siteSettings.logo} 1x`}></source>
-                        <source media={`(min-width: ${state.breakPoint.sm}px)`} srcSet={`${init?.siteSettings.logo_mini} 1x`}></source>
-                        <img height="56" src={init?.siteSettings.logo} alt={init?.siteSettings.name} />
+                        <source media={`(max-width: ${state.breakPoint.sm - 1}px)`} srcSet={`${state.init?.siteSettings.logo} 1x`}></source>
+                        <source media={`(min-width: ${state.breakPoint.sm}px)`} srcSet={`${state.init?.siteSettings.logo_mini} 1x`}></source>
+                        <img height="56" src={state.init?.siteSettings.logo} alt={state.init?.siteSettings.name} />
                       </picture>
-                      : init?.siteSettings.name
+                      : state.init?.siteSettings.name
                     }
                   </h1>
                 </Link>
@@ -51,7 +50,7 @@ const Header: React.FC = () => {
                 {width > 600 && (
                   <Nav
                     mode="horizontal"
-                    categories={init?.categories}
+                    categories={state.init?.categories}
                     styles={{
                       lineHeight: headerHeight,
                       float: 'right',
@@ -74,11 +73,11 @@ const Header: React.FC = () => {
             top: headerHeight,
           }}
         >
-          <Nav mode="inline" categories={init?.categories} setShowDrawer={setShowDrawer} styles={{}} />
+          <Nav mode="inline" categories={state.init?.categories} setShowDrawer={setShowDrawer} styles={{}} />
         </Drawer>
       </>
     );
-  }, [init, showDrawer, width])
+  }, [state, showDrawer, width])
 };
 
 export default Header;
