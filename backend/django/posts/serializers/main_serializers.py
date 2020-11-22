@@ -1,4 +1,3 @@
-from categories.models import Category
 from categories.serializers import CategoryListSerializer
 from media.serializers.main_serializers import CoverSerializer
 from rest_framework import serializers

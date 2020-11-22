@@ -44,7 +44,7 @@ const SiteSettings: React.FC = () => {
       if (values.main_image) {
         params.append('main_image', values.main_image);
       }
-      const res = await update(params);
+      await update(params);
       dispatch({ type: 'SET_LOADING', payload: { loading: false } });
       toast({ type: 'SUCCESS' });
       history.go(0);

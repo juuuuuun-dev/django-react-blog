@@ -32,9 +32,9 @@ export const resultData = {
   },
   "content": "content Abe",
   "is_show": true,
-  "category": categoryList[0].id,
+  "category": categoryList[0],
   "tag": [
-    tagList[0].id,
+    tagList[0],
   ],
   "created_at": "2020-02-02",
   "updated_at": "2020-02-02",
@@ -47,9 +47,9 @@ export const resultData2 = {
   "slug": "test-asou",
   "content": "content Asou",
   "is_show": true,
-  "category": categoryList[1].id,
+  "category": categoryList[1],
   "tag": [
-    tagList[1].id,
+    tagList[1],
   ],
   "created_at": "2020-02-03",
   "updated_at": "2020-02-03",

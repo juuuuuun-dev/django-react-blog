@@ -20,7 +20,6 @@ const Index = () => {
     try {
       const res = await list({ page: query.page, category: query.category, tag: query.tag, search: query.search });
       setData(res.data)
-      console.log(res.data)
       const pageTitle = query.search ? `${query.search} - search` : '';
       const meta = createMeta({
         title: state.init?.siteSettings.name,
@@ -40,7 +39,6 @@ const Index = () => {
 
   }, [pushError, dispatch, query, state.init]);
   React.useEffect(() => {
-    console.log("useEffect")
     if (state.init) {
       fetchData();
     }

@@ -37,6 +37,15 @@ class Media(models.Model):
         format='JPEG',
         options={'quality': 90}
     )
+    cover_mini = ImageSpecField(
+        source='file',
+        processors=[
+            ResizeToFill(
+                cover_size['width'] / 2,
+                cover_size['height'] / 2)],
+        format='JPEG',
+        options={
+            'quality': 90})
     thumb = ImageSpecField(
         source='file',
         processors=[ResizeToFill(40, 40)],
