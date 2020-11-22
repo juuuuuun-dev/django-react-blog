@@ -1,10 +1,9 @@
 import { List, Typography } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
 
-import { ApartmentOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined } from '@ant-design/icons';
 
 import { MainContext } from '../../../context/mainContext';
 import { RecentPostListProps } from '../../../types/components/main/rightContents';
@@ -18,7 +17,7 @@ const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {
     <>
       {posts && <RightContentSection title="Recent posts">
         <List
-          className="post-list"
+          className="recent-post-list"
           data-testid="recent-post-list"
           dataSource={posts}
           renderItem={item => (
@@ -40,12 +39,11 @@ const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {
                 description={<>
                   <ul className="entry-date">
                     <li className="entry-date__item"><ClockCircleOutlined />{moment(item.created_at).format(dateFormat)}</li>
-                    <li className="entry-date__item"><ApartmentOutlined />{item.category.name}</li>
+                    {/* <li className="entry-date__item"><ApartmentOutlined />{item.category.name}</li> */}
                   </ul>
                 </>}
               />
-              <div className="post-list__thumb">
-                {/* sp 80 pc 160 */}
+              {/* <div className="post-list__thumb">
                 <Link to={`/posts/${item.id}`}>
                   <LazyLoadImage
                     alt="test"
@@ -53,14 +51,12 @@ const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {
                     src={`/assets/images/160.jpg`}
                   />
                 </Link>
-              </div>
+              </div> */}
             </List.Item>
           )}
         >
         </List>
-        {/* {posts.map((value, index) => {
-          return (<Link key={index} to={`/posts/${value.slug}`}>{value.title}</Link>)
-        })} */}
+
 
       </RightContentSection>}
     </>

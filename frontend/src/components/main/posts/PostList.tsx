@@ -22,7 +22,10 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
           data-testid="post-list"
           dataSource={data?.results}
           renderItem={(item, index) => (
-            <List.Item key={item.id} data-testid={`post-list-item-${index}`}>
+            <List.Item
+              key={item.id} data-testid={`post-list-item-${index}`}
+
+            >
               <List.Item.Meta
                 title={<Link to={`/posts/${item.id}`}><Paragraph
                   ellipsis={{
@@ -63,11 +66,6 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                       <img width={80} alt={item.title} src={item.cover_media.cover} />
                     </picture>
                   </LazyLoadComponent>
-                  {/* <LazyLoadImage
-                    alt="test"
-                    width={80}
-                    src={item.cover_media.cover}
-                  /> */}
                 </Link>
               </div>
             </List.Item>
