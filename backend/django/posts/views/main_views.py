@@ -11,7 +11,8 @@ from utils import cache_views
 class PostList(cache_views.ReadOnlyCacheModelViewSet):
     throttle_scope = 'main'
     base_cache_key = Post.show_cache_key
-    queryset = Post.objects.filter(is_show=True).order_by('-id')
+    queryset = Post.objects.select_related('cover_media').select_related(
+        'category').prefetch_related('tag').filter(is_show=True).order_by('-id')
     serializer_class = main_serializers.MainPostListSerializer
     pagination_class = PostPagination
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
@@ -41,7 +42,8 @@ class PostCategorySlugList(cache_views.ReadOnlyCacheModelViewSet):
     def list(self, request, slug=None):
         category = Category.get_by_slug(slug)
         if category:
-            self.queryset = Post.objects.filter(
+            self.queryset = Post.objects.select_related('cover_media').select_related(
+                'category').prefetch_related('tag').filter(
                 is_show=True, category=category).order_by('-id')
 
             cp = request.query_params.copy()
