@@ -3,7 +3,7 @@ import '../../../less/main/posts/postList.less';
 import { List, Pagination, Typography } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { LazyLoadComponent, LazyLoadImage } from 'react-lazy-load-image-component';
+import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
 
 import { ApartmentOutlined, ClockCircleOutlined } from '@ant-design/icons';
@@ -56,18 +56,19 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                   </div>
                 </>}
               />
-              <div className="post-list__thumb">
-                {/* sp 80 pc 160 */}
-                <Link to={`/posts/${item.id}`}>
-                  <LazyLoadComponent>
-                    <picture>
-                      <source media={`(max-width: ${breakPoint.sm - 1}px)`} srcSet={`${item.cover_media.cover} 2x`}></source>
-                      <source media={`(min-width: ${breakPoint.sm}px)`} srcSet={`${item.cover_media.cover_mini} 1x`}></source>
-                      <img width={80} alt={item.title} src={item.cover_media.cover} />
-                    </picture>
-                  </LazyLoadComponent>
-                </Link>
-              </div>
+              {item.cover_media.cover &&
+                <div className="post-list__thumb">
+                  <Link to={`/posts/${item.id}`}>
+                    <LazyLoadComponent>
+                      <picture>
+                        <source media={`(max-width: ${breakPoint.sm - 1}px)`} srcSet={`${item.cover_media.cover} 2x`}></source>
+                        <source media={`(min-width: ${breakPoint.sm}px)`} srcSet={`${item.cover_media.cover_mini} 1x`}></source>
+                        <img width={80} alt={item.title} src={item.cover_media.cover} />
+                      </picture>
+                    </LazyLoadComponent>
+                  </Link>
+                </div>
+              }
             </List.Item>
           )}
         >

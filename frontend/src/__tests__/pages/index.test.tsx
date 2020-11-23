@@ -126,7 +126,6 @@ describe("Main index", () => {
       listAxiosResponse.data.results.forEach((value, index) => {
         expect(utils.getByTestId(`post-list-item-${index}`).innerHTML).toMatch(new RegExp(listAxiosResponse.data.results[index].title))
         expect(utils.getByTestId(`post-list-item-${index}`).innerHTML).toMatch(new RegExp(listAxiosResponse.data.results[index].category.name))
-
       })
 
     })
