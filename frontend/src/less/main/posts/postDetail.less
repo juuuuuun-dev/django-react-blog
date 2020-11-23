@@ -12,8 +12,12 @@
   }
   &__title {
     font-size: 1.6rem;
+    font-weight: bold;
   }
   .entry-date {
-    margin-bottom: @global-margin;
+    margin-bottom: @global-margin / 2;
+    &__item:not(:last-child) {
+      margin-bottom: 6px;
+    }
   }
 }
