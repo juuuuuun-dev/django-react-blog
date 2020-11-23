@@ -11,7 +11,7 @@ import {
     listAxiosResponse as mediaListAxiosResponse
 } from '../../../../__mocks__/serviceResponse/media';
 import {
-    detailAxiosResponse, error400AxiosResponse, listAxiosResponse, listData, updateAxiosResponse
+    adminDetailAxiosResponse, adminListAxiosResponse, updateAxiosResponse
 } from '../../../../__mocks__/serviceResponse/posts';
 import {
     defaultDeleteText, defaultErrorText, defaultSuccessText
@@ -66,13 +66,13 @@ describe("Admin posts edit", () => {
   })
 
   mocked(list).mockImplementation(
-    (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
+    (): Promise<AxiosResponse<any>> => Promise.resolve(adminListAxiosResponse)
   );
   mocked(update).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(updateAxiosResponse)
   );
   mocked(retrieve).mockImplementation(
-    (): Promise<AxiosResponse<any>> => Promise.resolve(detailAxiosResponse)
+    (): Promise<AxiosResponse<any>> => Promise.resolve(adminDetailAxiosResponse)
   );
   mocked(destroy).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(deleteAxiosResponse)
@@ -90,9 +90,9 @@ describe("Admin posts edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
+      expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].title));
+    fireEvent.click(utils.getByText(adminListAxiosResponse.data.results[0].title));
     await waitFor(() => {
       expect(utils.getAllByText("Post edit")).toBeTruthy();
       expect(utils.getByTestId('post-preview')).toBeTruthy();
@@ -116,7 +116,7 @@ describe("Admin posts edit", () => {
     });
 
     fireEvent.mouseDown(utils.getByTestId("select-category").firstElementChild);
-    fireEvent.click(utils.getByTestId(`option-category-${listData.categories[0].id}`));
+    fireEvent.click(utils.getByTestId(`option-category-${adminListAxiosResponse.data.categories[0].id}`));
 
 
     fireEvent.submit(utils.getByLabelText("form-submit"))
@@ -135,9 +135,9 @@ describe("Admin posts edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
+      expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].title));
+    fireEvent.click(utils.getByText(adminListAxiosResponse.data.results[0].title));
     await waitFor(() => {
       expect(utils.getByText("Post edit")).toBeTruthy();
     });
@@ -155,9 +155,9 @@ describe("Admin posts edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
+      expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].title));
+    fireEvent.click(utils.getByText(adminListAxiosResponse.data.results[0].title));
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
     });
@@ -167,9 +167,9 @@ describe("Admin posts edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
+      expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].title));
+    fireEvent.click(utils.getByText(adminListAxiosResponse.data.results[0].title));
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {
@@ -186,9 +186,9 @@ describe("Admin posts edit", () => {
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
       expect(utils.getByTestId("create-btn")).toBeTruthy();
-      expect(utils.getByText(listData.results[0].title)).toBeTruthy()
+      expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
     })
-    fireEvent.click(utils.getByText(listData.results[0].title));
+    fireEvent.click(utils.getByText(adminListAxiosResponse.data.results[0].title));
     fireEvent.click(utils.getByLabelText("delete-btn"));
     fireEvent.click(utils.getByLabelText("delete-submit"));
     await waitFor(() => {

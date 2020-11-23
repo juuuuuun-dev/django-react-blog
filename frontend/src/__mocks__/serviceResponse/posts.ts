@@ -29,6 +29,46 @@ export const resultData = {
   "cover_media": {
     "id": 1,
     "cover": "http://localhost:3000/image.jpg",
+    "cover_mini": "http://localhost:3000/image_mini.jpg",
+  },
+  "content": "content Abe",
+  "is_show": true,
+  "category": categoryList[0],
+  "tag": [
+    tagList[0],
+  ],
+  "created_at": "2020-02-02",
+  "updated_at": "2020-02-02",
+}
+
+export const resultData2 = {
+  "id": 2,
+  "key": 2,
+  "title": "test Asou",
+  "slug": "test-asou",
+  "content": "content Asou",
+  "is_show": true,
+  "category": categoryList[1],
+  "tag": [
+    tagList[1],
+  ],
+  "cover_media": {
+    "id": 1,
+    "cover": "http://localhost:3000/image.jpg",
+    "cover_mini": "http://localhost:3000/image_mini.jpg",
+  },
+  "created_at": "2020-02-03",
+  "updated_at": "2020-02-03",
+}
+
+export const AdminResultData = {
+  "id": 1,
+  "key": 1,
+  "title": "test Abe",
+  "slug": "test-abe",
+  "cover_media": {
+    "id": 1,
+    "cover": "http://localhost:3000/image.jpg",
   },
   "content": "content Abe",
   "is_show": true,
@@ -40,7 +80,7 @@ export const resultData = {
   "updated_at": "2020-02-02",
 }
 
-export const resultData2 = {
+export const AdminResultData2 = {
   "id": 2,
   "key": 2,
   "title": "test Asou",
@@ -55,9 +95,17 @@ export const resultData2 = {
   "updated_at": "2020-02-03",
 }
 
+
 export const listData = {
   "count": 2,
   "results": [resultData, resultData2],
+  "tags": tagList,
+  "categories": categoryList,
+}
+
+export const adminListData = {
+  "count": 2,
+  "results": [AdminResultData, AdminResultData2],
   "tags": tagList,
   "categories": categoryList,
 }
@@ -89,6 +137,14 @@ export const updateResultData = {
 
 export const listAxiosResponse: AxiosResponse = {
   data: listData,
+  status: 200,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+};
+
+export const adminListAxiosResponse: AxiosResponse = {
+  data: adminListData,
   status: 200,
   statusText: 'OK',
   config: {},
@@ -155,6 +211,19 @@ export const detailAxiosResponse: AxiosResponse = {
   config: {},
   headers: {},
 }
+
+export const adminDetailAxiosResponse: AxiosResponse = {
+  data: {
+    post: AdminResultData,
+    tags: tagList,
+    categories: categoryList,
+  },
+  status: 200,
+  statusText: 'OK',
+  config: {},
+  headers: {},
+}
+
 export const createAxiosResponse: AxiosResponse = {
   data: resultData,
   status: 201,

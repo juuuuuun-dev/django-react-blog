@@ -10,7 +10,8 @@ import {
     listAxiosResponse as mediaListAxiosResponse
 } from '../../../../__mocks__/serviceResponse/media';
 import {
-    createAxiosResponse, error400AxiosResponse, formItemAxiosResponse, listAxiosResponse, listData
+    adminListAxiosResponse, createAxiosResponse, error400AxiosResponse, formItemAxiosResponse,
+    listData
 } from '../../../../__mocks__/serviceResponse/posts';
 import { defaultErrorText, defaultSuccessText } from '../../../../components/common/toast';
 import { getBase64 } from '../../../../helper/file';
@@ -66,7 +67,7 @@ describe("Admin posts create", () => {
   })
 
   mocked(list).mockImplementation(
-    (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
+    (): Promise<AxiosResponse<any>> => Promise.resolve(adminListAxiosResponse)
   );
   mocked(create).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(createAxiosResponse)

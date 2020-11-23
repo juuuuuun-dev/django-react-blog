@@ -29,11 +29,13 @@ describe("Main index", () => {
     mocked(useHistoryPushError).mockClear();
     mocked(mockPush).mockClear();
   })
-
-
+  mocked(getInit).mockImplementation(
+    (): Promise<AxiosResponse<any>> => Promise.resolve(initAxiosResponse)
+  );
   mocked(useWindowSize).mockImplementation(
     () => [1200, 1000]
   );
+
 
   // Header pc size category nav
   it("Request header pc size nav", async () => {
@@ -115,12 +117,17 @@ describe("Main index", () => {
 
   // post success
   it("Request post successful", async () => {
+
     mocked(list).mockImplementation(
       (): Promise<AxiosResponse<any>> => Promise.resolve(listAxiosResponse)
     );
     const { utils } = await setUp(initialPath);
     await waitFor(() => {
-      expect(utils.getByTestId('post-list').innerHTML).toMatch(new RegExp(listAxiosResponse.data.results[0].title))
+      listAxiosResponse.data.results.forEach((value, index) => {
+        expect(utils.getByTestId(`post-list-item-${index}`).innerHTML).toMatch(new RegExp(listAxiosResponse.data.results[index].title))
+        expect(utils.getByTestId(`post-list-item-${index}`).innerHTML).toMatch(new RegExp(listAxiosResponse.data.results[index].category.name))
+      })
+
     })
   })
 

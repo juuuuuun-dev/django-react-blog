@@ -1,4 +1,3 @@
-from categories.models import Category
 from categories.serializers import CategoryListSerializer
 from media.serializers.main_serializers import CoverSerializer
 from rest_framework import serializers
@@ -9,8 +8,7 @@ from ..models import Post
 
 class MainPostListSerializer(serializers.ModelSerializer):
     tag = TagListSerializer(read_only=True, many=True)
-    category = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all())
+    category = CategoryListSerializer(read_only=True)
     cover_media = CoverSerializer()
 
     class Meta:

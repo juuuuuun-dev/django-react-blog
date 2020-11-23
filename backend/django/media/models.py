@@ -19,6 +19,11 @@ class Media(models.Model):
         'width': 160,
         'height': 160,
     }
+    thumb_size = {
+        'width': 40,
+        'height': 40,
+    }
+    image_quality = 85
 
     class Meta:
         db_table = 'media'
@@ -35,13 +40,22 @@ class Media(models.Model):
         source='file',
         processors=[ResizeToFill(cover_size['width'], cover_size['height'])],
         format='JPEG',
-        options={'quality': 90}
+        options={'quality': image_quality}
     )
+    cover_mini = ImageSpecField(
+        source='file',
+        processors=[
+            ResizeToFill(
+                int(cover_size['width'] / 2),
+                int(cover_size['height'] / 2))],
+        format='JPEG',
+        options={
+            'quality': image_quality})
     thumb = ImageSpecField(
         source='file',
-        processors=[ResizeToFill(40, 40)],
+        processors=[ResizeToFill(thumb_size['width'], thumb_size['height'])],
         format='JPEG',
-        options={'quality': 90}
+        options={'quality': image_quality}
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

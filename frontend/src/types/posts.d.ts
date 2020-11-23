@@ -11,6 +11,7 @@ export type PostDetail = {
   cover_media: {
     id: number | undefined,
     cover: string | undefined,
+    cover_mini: string | undefined,
   };
   thumb?: string;
   is_show?: boolean;

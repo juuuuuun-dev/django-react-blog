@@ -28,9 +28,9 @@ export const categoryList = [
 ]
 
 export const siteSettings = {
-  title: process.env.REACT_APP_TITLE,
+  name: process.env.REACT_APP_TITLE,
   description: "Test description",
-  mainImage: "main.jpg",
+  main_image: "main.jpg",
   logo: "logo.jpg",
 }
 

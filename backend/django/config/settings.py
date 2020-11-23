@@ -116,7 +116,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.ScopedRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'main': '15/minute',
+        'main': '30/minute',
         'login': '10/minute',
     },
     # 'DEFAULT_FILTER_BACKENDS': [

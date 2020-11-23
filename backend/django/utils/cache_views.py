@@ -47,7 +47,6 @@ class CacheListModelMixin(mixins.ListModelMixin):
             base_key=base_key)
         cache_key = cache_key_stringfiy(
             base_key=base_key, query_dict=query_dict)
-        print(cache_key)
         return cache.get_or_set(
             cache_key, self.filter_queryset(
                 super().get_queryset().filter()))
@@ -130,7 +129,6 @@ class CacheCreateAndUpdateAndDestroyModelMixin(
 
     def destroy(self, request, pk=None, *args, **kwargs):
         instance = self.get_object()
-        print(self.base_cache_key)
         self.perform_destroy(instance)
         self.delete_list_cache(self.base_cache_key)
         self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
@@ -153,7 +151,22 @@ class CacheCreateAndUpdateAndDestroyModelMixin(
             cache.delete(key_name)
             count += 1
 
-    def delete_cache_max_number(self, base_key, query_key, max, page_max):
+    def delete_cache_max_number(self, base_key):
+        for key in self.enable_query_param_list:
+            max_key = get_max_num_key(base_key, key)
+            if max_key:
+                max = cache.get(max_key)
+                if max:
+                    count = 1
+                    while max >= count:
+                        key_name = cache_key_stringfiy(base_key, query_dict={
+                            key: count,
+                        })
+                        cache.delete(key_name)
+                        count += 1
+
+    def delete_cache_max_number_and_page(
+            self, base_key, query_key, max, page_max):
         count = 1
         while max >= count:
             page_count = 1
@@ -179,17 +192,18 @@ class CacheCreateAndUpdateAndDestroyModelMixin(
     def delete_list_query_cache(self, base_key):
         page_max_key = get_max_num_key(base_key, 'page')
         page_max = cache.get(page_max_key)
-        if not page_max:
-            return
-        for key in self.enable_query_param_list:
-            if key == 'page':
-                self.delete_page_only_cache(base_key, int(page_max))
-            else:
-                max_key = get_max_num_key(base_key, key)
-                max = cache.get(max_key)
-                if max:
-                    self.delete_cache_max_number(
-                        base_key, key, int(max), int(page_max))
+        if page_max:
+            for key in self.enable_query_param_list:
+                if key == 'page' and page_max:
+                    self.delete_page_only_cache(base_key, int(page_max))
+                else:
+                    max_key = get_max_num_key(base_key, key)
+                    max = cache.get(max_key)
+                    if max:
+                        self.delete_cache_max_number_and_page(
+                            base_key, key, int(max), int(page_max))
+        else:
+            self.delete_cache_max_number(base_key)
 
 
 """

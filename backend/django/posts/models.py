@@ -61,8 +61,8 @@ class Post(models.Model):
 
     @classmethod
     def get_recent_posts(cls):
-        return cache.get_or_set(cls.recent_cache_key, Post.objects.filter(
-            is_show=True).order_by('-id')[:3])
+        return cache.get_or_set(cls.recent_cache_key, Post.objects.filter(is_show=True). select_related(
+            'cover_media').select_related('category').prefetch_related('tag').order_by('-id')[:3])
 
     @staticmethod
     def get_tag_and_category_list():
