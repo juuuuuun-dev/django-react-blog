@@ -24,7 +24,6 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
           renderItem={(item, index) => (
             <List.Item
               key={item.id} data-testid={`post-list-item-${index}`}
-
             >
               <List.Item.Meta
                 title={<Link to={`/posts/${item.id}`}><Paragraph
@@ -33,6 +32,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                     expandable: false,
                   }}
                   className="post-list__title"
+                  data-testid={`post-list-link-${item.id}`}
                   title={`${item.title}`}
                 >
                   {item.title}
