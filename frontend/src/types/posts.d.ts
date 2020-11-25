@@ -36,6 +36,13 @@ export type PostListProps = {
   handlePageChange: (page: number, pageSize?: number | undefined) => void
 }
 
+export type EntryDataProps = {
+  post: PostDetail;
+  showUpdateAt?: boolean;
+  showCategory?: boolean;
+  showTag?: boolean;
+}
+
 export type PostFormItem = {
   tags: TagDetail[];
   categories: CategoryDetail[]

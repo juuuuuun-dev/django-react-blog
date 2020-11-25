@@ -1,16 +1,12 @@
 import { List, Typography } from 'antd';
-import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { ClockCircleOutlined } from '@ant-design/icons';
-
-import { MainContext } from '../../../context/mainContext';
 import { RecentPostListProps } from '../../../types/components/main/rightContents';
+import EntryData from '../posts/EntryData';
 import RightContentSection from './RightContentSection';
 
 const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {
-  const [{ dateFormat }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
 
   return (
@@ -36,12 +32,7 @@ const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {
                 </Paragraph>
                 </Link>
                 }
-                description={<>
-                  <ul className="entry-date">
-                    <li className="entry-date__item"><ClockCircleOutlined />{moment(item.created_at).format(dateFormat)}</li>
-                    {/* <li className="entry-date__item"><ApartmentOutlined />{item.category.name}</li> */}
-                  </ul>
-                </>}
+                description={<EntryData post={item} />}
               />
               {/* <div className="post-list__thumb">
                 <Link to={`/posts/${item.id}`}>
@@ -56,8 +47,6 @@ const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {
           )}
         >
         </List>
-
-
       </RightContentSection>}
     </>
   )

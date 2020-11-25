@@ -1,7 +1,8 @@
-import React from 'react';
 import { Menu } from 'antd';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ApartmentOutlined } from '@ant-design/icons';
+
+import { FolderOpenOutlined } from '@ant-design/icons';
 
 export interface NavProps {
   mode?: 'vertical' | 'vertical-left' | 'vertical-right' | 'horizontal' | 'inline' | undefined;
@@ -24,7 +25,7 @@ const Nav = ({ mode, styles, theme, handleClick }: NavProps) => {
         <SubMenu
           title={
             <span className="submenu-title-wrapper">
-              <ApartmentOutlined />
+              <FolderOpenOutlined />
               Category
             </span>
           }

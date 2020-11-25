@@ -17,7 +17,7 @@ const TagLinkList: React.FC<TagLinkListProps> = ({ tags }) => {
             if (value.slug === slug) {
               color = "#444"
             }
-            return (<Tag color={color} key={index}><Link data-testid={`right-contents-tag-link-${value.slug}`} to={`/tags/${value.slug}`}>{value.name}</Link></Tag>)
+            return (<Tag color={color} key={index} style={{ marginBottom: 5 }}><Link data-testid={`right-contents-tag-link-${value.slug}`} to={`/tags/${value.slug}`}>{value.name}</Link></Tag>)
           })}
         </div>
       </RightContentSection>}
