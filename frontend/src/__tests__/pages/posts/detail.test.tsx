@@ -6,9 +6,7 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import { setUp } from '../../../__mocks__/mainSetUp';
 import { error500AxiosResponse } from '../../../__mocks__/serviceResponse/common';
 import { initAxiosResponse } from '../../../__mocks__/serviceResponse/init';
-import {
-    detailAxiosResponse, list0ResultAxiosResponse, listAxiosResponse
-} from '../../../__mocks__/serviceResponse/posts';
+import { detailAxiosResponse, listAxiosResponse } from '../../../__mocks__/serviceResponse/posts';
 import { useHistoryPushError } from '../../../helper/useHistoryPushError';
 import { getInit } from '../../../service/main/init';
 import { list, retrieve } from '../../../service/main/posts';
@@ -50,6 +48,9 @@ describe("Post detail", () => {
 
     await waitFor(() => {
       expect(utils.getByTestId('post-detail-title').innerHTML).toMatch(listAxiosResponse.data.results[tagetDataKey].title)
+      expect(utils.getByTestId('markdown-content').innerHTML).toMatch(listAxiosResponse.data.results[tagetDataKey].content)
+
+      console.log(utils.getByTestId('markdown-content').innerHTML)
       // expect(utils.getByTestId('post-list-page-count-results').innerHTML).toMatch(`${listCategoryFilterAxiosResponse.data.results.length} results`)
     })
   })

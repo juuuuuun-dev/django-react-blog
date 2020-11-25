@@ -1,18 +1,16 @@
 import '../../../less/main/posts/postList.less';
 
 import { List, Pagination, Typography } from 'antd';
-import moment from 'moment';
 import React from 'react';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
 
-import { ApartmentOutlined, ClockCircleOutlined } from '@ant-design/icons';
-
 import { MainContext } from '../../../context/mainContext';
 import { PostListProps } from '../../../types/posts';
+import EntryData from './EntryData';
 
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
-  const [{ init, breakPoint, dateFormat }] = React.useContext(MainContext);
+  const [{ init, breakPoint }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
   return React.useMemo(() => {
     return (
@@ -50,10 +48,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                   >
                     <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
                   </Paragraph>
-                  <div className="entry-date">
-                    <span className="entry-date__item"><ClockCircleOutlined />{moment(item.created_at).format(dateFormat)}</span>
-                    <span className="entry-date__item"><ApartmentOutlined />{item.category.name}</span>
-                  </div>
+                  <EntryData post={item} showCategory={true} />
                 </>}
               />
               {item.cover_media.cover &&
@@ -82,8 +77,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
         />
       </>
     )
-  }, [data, init, dateFormat, breakPoint, query, handlePageChange])
+  }, [data, init, breakPoint, query, handlePageChange])
 };
-
 
 export default PostList;

@@ -38,7 +38,7 @@ export const resultData = {
     tagList[0],
   ],
   "created_at": "2020-02-02",
-  "updated_at": "2020-02-02",
+  "updated_at": "2020-02-03",
 }
 
 export const resultData2 = {
@@ -58,7 +58,7 @@ export const resultData2 = {
     "cover_mini": "http://localhost:3000/image_mini.jpg",
   },
   "created_at": "2020-02-03",
-  "updated_at": "2020-02-03",
+  "updated_at": "2020-02-04",
 }
 
 export const AdminResultData = {
