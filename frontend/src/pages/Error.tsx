@@ -10,7 +10,7 @@ const Error: React.FC = () => {
   const [status] = useQueryParam('status', NumberParam);
   const [errorCode, setErrorCode] = React.useState<number | undefined>()
   React.useEffect(() => {
-    if (status) {
+    if (status && statusCodes[status]) {
       setErrorCode(status)
     } else {
       setErrorCode(404)
@@ -20,9 +20,9 @@ const Error: React.FC = () => {
   return (
     <div>
       <div><img src={img} width="175" alt="error" /></div>
-      <h3>{errorCode}</h3>
-      {errorCode && statusCodes[errorCode].name}<p></p>
-      <Button onClick={() => history.push('/')}>Back to home page</Button>
+      <h3 data-testid="error-code">{errorCode}</h3>
+      {errorCode && statusCodes[errorCode] && <p data-testid="error-name">{statusCodes[errorCode].name}</p>}
+      <Button data-testid="back-to-home-page-link" onClick={() => history.push('/')}>Back to home page</Button>
     </div>
   );
 };
