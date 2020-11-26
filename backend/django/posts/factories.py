@@ -6,7 +6,7 @@ from tags.factories import TagFactory
 from .models import Post
 
 
-class PostFactory(factory.DjangoModelFactory):
+class PostFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Post
 
