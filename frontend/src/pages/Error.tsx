@@ -21,8 +21,8 @@ const Error: React.FC = () => {
     <div>
       <div><img src={img} width="175" alt="error" /></div>
       <h3 data-testid="error-code">{errorCode}</h3>
-      {errorCode && statusCodes[errorCode] && statusCodes[errorCode].name}<p></p>
-      <Button onClick={() => history.push('/')}>Back to home page</Button>
+      {errorCode && statusCodes[errorCode] && <p data-testid="error-name">{statusCodes[errorCode].name}</p>}
+      <Button data-testid="back-to-home-page-link" onClick={() => history.push('/')}>Back to home page</Button>
     </div>
   );
 };

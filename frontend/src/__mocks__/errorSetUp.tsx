@@ -6,11 +6,9 @@ import { QueryParamProvider } from 'use-query-params';
 
 import { act, render } from '@testing-library/react';
 
-import MainLayout from '../components/main/layout/MainLayout';
-import { MainContextProvider } from '../context/mainContext';
+import ErrorLayout from '../components/error/layout/ErrorLayout';
 
 export const setUp = async (initialPath: string) => {
-
   const history = createMemoryHistory();
   history.push(initialPath);
   let utils: any;
@@ -18,9 +16,7 @@ export const setUp = async (initialPath: string) => {
     utils = render(
       <Router history={history}>
         <QueryParamProvider ReactRouterRoute={Route}>
-          <MainContextProvider>
-            <MainLayout />
-          </MainContextProvider>
+          <ErrorLayout />
         </QueryParamProvider>
       </Router>
     )
