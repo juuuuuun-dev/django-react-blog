@@ -3,7 +3,7 @@ import factory
 from .models import Category
 
 
-class CategoryFactory(factory.DjangoModelFactory):
+class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
 

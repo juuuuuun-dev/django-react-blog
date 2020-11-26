@@ -1,8 +1,5 @@
-from pprint import pprint
-
 from django.conf import settings
 from django.core.cache import cache
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
