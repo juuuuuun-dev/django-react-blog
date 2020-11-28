@@ -3,7 +3,6 @@
 docker-compose pull
 docker-compose build --no-cache
 docker volume create --name=sync-blog-backend
-docker volume create --name=sync-blog-frontend
 ```
 Docker start
 ```

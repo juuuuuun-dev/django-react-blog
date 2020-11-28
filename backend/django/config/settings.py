@@ -51,7 +51,6 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 API_VERSION = "api/v1/"
 
 # Application definition
-
 INSTALLED_APPS = [
     'categories',
     'tags',
@@ -70,13 +69,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    # 'rest_framework.authtoken',
     'django_filters',
-    # 'allauth',
-    # 'allauth.account',
-    # "allauth.socialaccount",
-    # 'rest_auth',
-    # 'rest_auth.registration',
     'djoser',
     'django_cleanup.apps.CleanupConfig',
     'imagekit',
@@ -100,7 +93,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': 'cache:11211',
-        # 'LOCATION': '/tmp/memcached.sock',
         'TIMEOUT': env.int('CACHE_TIMEOUT')
     }
 }
