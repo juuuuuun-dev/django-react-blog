@@ -82,23 +82,22 @@ jobs:
             - ~/caches/docker.tar
   frontend-test:
     executor: frontend-excutor
-    working_directory: frontend
     steps:
       - checkout
       - yarn_install
       - run:
           name: yarn test
           command: yarn test --runInBand
-
+          working_directory: frontend
   frontend-deploy:
     executor: frontend-excutor
-    working_directory: frontend
     steps:
       - checkout
       - yarn_install
       - run:
           name: yarn build
           command: yarn build --runInBand
+          working_directory: frontend
       - aws-s3/sync:
           from: build
           to: "s3://junkata-blog"
