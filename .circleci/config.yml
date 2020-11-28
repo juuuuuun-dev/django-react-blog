@@ -2,6 +2,27 @@ version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
 
+commands:
+  yarn_install:
+    steps:
+      - restore_cache:
+          name: Yarn cache restore
+          keys:
+            - v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
+      - run:
+          name: yarn install
+          command: yarn install --frozen-lockfile
+          working_directory: frontend
+      - run:
+          name: cp env
+          command: cp .env.ci .env
+          working_directory: frontend
+      - save_cache:
+          name: Save yarn cache
+          key: v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
+          paths:
+            - ~/caches/yarn
+
 executors:
   frontend-excutor:
     working_directory: ~/project
@@ -63,23 +84,7 @@ jobs:
     executor: frontend-excutor
     steps:
       - checkout
-      - restore_cache:
-          name: Yarn cache restore
-          keys:
-            - v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
-      - run:
-          name: yarn install
-          command: yarn install --frozen-lockfile
-          working_directory: frontend
-      - run:
-          name: cp env
-          command: cp .env.ci .env
-          working_directory: frontend
-      - save_cache:
-          name: Save yarn cache
-          key: v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
-          paths:
-            - ~/caches/yarn
+      - yarn_install
       - run:
           name: yarn test
           command: yarn test --runInBand
@@ -88,10 +93,7 @@ jobs:
     executor: frontend-excutor
     steps:
       - checkout
-      - restore_cache:
-          name: Yarn cache restore
-          keys:
-            - v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
+      - yarn_install
       - run:
           name: yarn build
           command: yarn build --runInBand
