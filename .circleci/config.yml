@@ -88,6 +88,10 @@ jobs:
     executor: frontend-excutor
     steps:
       - checkout
+      - restore_cache:
+          name: Yarn cache restore
+          keys:
+            - v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
       - run:
           name: yarn build
           command: yarn build --runInBand
