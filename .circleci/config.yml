@@ -28,13 +28,17 @@ commands:
           name: yarn build
           command: yarn build --runInBand
           working_directory: frontend
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - build
       - run:
           name: ls
           command: ls -la
           working_directory: frontend
       - run:
-          name: ls base path
-          command: ls -la
+          name: ls /tmp/workspace
+          command: ls -la /tmp/workspace
 
 executors:
   frontend-excutor:
@@ -112,12 +116,18 @@ jobs:
   frontend-deploy:
     executor: frontend-excutor
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - checkout
       # - yarn_install
       - run:
           name: ls
           command: ls -la
           working_directory: frontend
+      - run:
+          name: ls /tmp/workspace
+          command: ls -la /tmp/workspace
+
       # - run:
       #     name: yarn build
       #     command: yarn build --runInBand
