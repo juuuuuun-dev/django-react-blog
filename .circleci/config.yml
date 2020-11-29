@@ -27,11 +27,14 @@ commands:
       - run:
           name: yarn build
           command: yarn build --runInBand
-          # working_directory: frontend
+          working_directory: frontend
       - run:
           name: ls
           command: ls -la
-          # working_directory: frontend
+          working_directory: frontend
+      - run:
+          name: ls base path
+          command: ls -la
 
 executors:
   frontend-excutor:
@@ -92,17 +95,15 @@ jobs:
             - ~/caches/docker.tar
   frontend-test:
     executor: frontend-excutor
-    working_directory: ~/project/frontend
     steps:
       - checkout
       - yarn_install
       - run:
           name: yarn test
           command: yarn test --runInBand
-          # working_directory: frontend
+          working_directory: frontend
   frontend-build:
     executor: frontend-excutor
-    working_directory: ~/project/frontend
     steps:
       - checkout
       - yarn_install
@@ -116,7 +117,7 @@ jobs:
       - run:
           name: yarn build
           command: yarn build --runInBand
-          # working_directory: frontend
+          working_directory: frontend
       - aws-s3/sync:
           from: build
           to: "s3://junkata-blog"
