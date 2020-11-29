@@ -36,9 +36,6 @@ commands:
           name: ls
           command: ls -la
           working_directory: frontend
-      - run:
-          name: ls /tmp/workspace
-          command: ls -la /tmp/workspace
 
 executors:
   frontend-excutor:
