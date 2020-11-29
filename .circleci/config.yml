@@ -92,6 +92,7 @@ jobs:
             - ~/caches/docker.tar
   frontend-test:
     executor: frontend-excutor
+    working_directory: ~/project/frontend
     steps:
       - checkout
       - yarn_install
@@ -101,6 +102,7 @@ jobs:
           # working_directory: frontend
   frontend-build:
     executor: frontend-excutor
+    working_directory: ~/project/frontend
     steps:
       - checkout
       - yarn_install
