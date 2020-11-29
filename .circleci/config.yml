@@ -22,7 +22,7 @@ commands:
           key: v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
           paths:
             - ~/caches/yarn
-  frontend-build:
+  yarn-build:
     steps:
       - run:
           name: yarn build
@@ -95,6 +95,12 @@ jobs:
           name: yarn test
           command: yarn test --runInBand
           working_directory: frontend
+  forntend-build:
+    executor: frontend-excutor
+    steps:
+      - checkout
+      - yarn_build
+
   frontend-deploy:
     executor: frontend-excutor
     steps:
@@ -127,7 +133,7 @@ workflows:
             - frontend-test
       - frontend-deploy:
           requires:
-            - frontend-test
+            - frontend-build
           filters:
             branches:
               only: master
