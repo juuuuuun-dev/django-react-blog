@@ -115,7 +115,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ./frontend
-      - checkout
+      # - checkout
       # - yarn_install
       - run:
           name: ls frontend
