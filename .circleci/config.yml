@@ -12,11 +12,11 @@ commands:
       - run:
           name: yarn install
           command: yarn install --frozen-lockfile
-          # working_directory: frontend
+          working_directory: frontend
       - run:
           name: cp env
           command: cp .env.ci .env
-          # working_directory: frontend
+          working_directory: frontend
       - save_cache:
           name: Save yarn cache
           key: v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
