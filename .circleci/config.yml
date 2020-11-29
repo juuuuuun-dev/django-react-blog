@@ -22,10 +22,23 @@ commands:
           key: v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
           paths:
             - ~/caches/yarn
+  yarn_build:
+    steps:
+      - run:
+          name: yarn build
+          command: yarn build --runInBand
+          working_directory: frontend
+      - run:
+          name: ls
+          command: ls -la
+          working_directory: frontend
+      - run:
+          name: ls base path
+          command: ls -la
 
 executors:
   frontend-excutor:
-    working_directory: ~/project
+    working_directory: ~/project/frontend
     docker:
       - image: circleci/node
   backend-executor:
@@ -89,6 +102,13 @@ jobs:
           name: yarn test
           command: yarn test --runInBand
           working_directory: frontend
+  frontend-build:
+    executor: frontend-excutor
+    steps:
+      - checkout
+      - yarn_install
+      - yarn_build
+
   frontend-deploy:
     executor: frontend-excutor
     steps:
@@ -99,7 +119,7 @@ jobs:
           command: yarn build --runInBand
           working_directory: frontend
       - aws-s3/sync:
-          from: build
+          from: frontend/build
           to: "s3://junkata-blog"
           # arguments: | # Optional arguments
           #   --acl public-read \
@@ -115,9 +135,12 @@ workflows:
           requires:
             - docker-compose-cache
       - frontend-test
-      - frontend-deploy:
+      - frontend-build:
           requires:
             - frontend-test
+      - frontend-deploy:
+          requires:
+            - frontend-build
           filters:
             branches:
               only: master
