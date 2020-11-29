@@ -22,7 +22,7 @@ commands:
           key: v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
           paths:
             - ~/caches/yarn
-  yarn-build:
+  yarn_build:
     steps:
       - run:
           name: yarn build
@@ -95,7 +95,7 @@ jobs:
           name: yarn test
           command: yarn test --runInBand
           working_directory: frontend
-  forntend-build:
+  frontend-build:
     executor: frontend-excutor
     steps:
       - checkout
@@ -113,7 +113,6 @@ jobs:
       - aws-s3/sync:
           from: build
           to: "s3://junkata-blog"
-          working_directory: frontend
           # arguments: | # Optional arguments
           #   --acl public-read \
           #   --cache-control "max-age=86400"
