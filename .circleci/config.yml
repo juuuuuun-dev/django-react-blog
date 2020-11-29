@@ -12,11 +12,11 @@ commands:
       - run:
           name: yarn install
           command: yarn install --frozen-lockfile
-          working_directory: frontend
+          # working_directory: frontend
       - run:
           name: cp env
           command: cp .env.ci .env
-          working_directory: frontend
+          # working_directory: frontend
       - save_cache:
           name: Save yarn cache
           key: v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
@@ -27,19 +27,15 @@ commands:
       - run:
           name: yarn build
           command: yarn build --runInBand
-          working_directory: frontend
+          # working_directory: frontend
       - run:
           name: ls
           command: ls -la
-          working_directory: frontend
-      - run:
-          name: ls repo
-          command: ls -la ~/repo
-          working_directory: frontend
+          # working_directory: frontend
 
 executors:
   frontend-excutor:
-    working_directory: ~/project
+    working_directory: ~/project/frontend
     docker:
       - image: circleci/node
   backend-executor:
@@ -102,7 +98,7 @@ jobs:
       - run:
           name: yarn test
           command: yarn test --runInBand
-          working_directory: frontend
+          # working_directory: frontend
   frontend-build:
     executor: frontend-excutor
     steps:
@@ -118,7 +114,7 @@ jobs:
       - run:
           name: yarn build
           command: yarn build --runInBand
-          working_directory: frontend
+          # working_directory: frontend
       - aws-s3/sync:
           from: build
           to: "s3://junkata-blog"
