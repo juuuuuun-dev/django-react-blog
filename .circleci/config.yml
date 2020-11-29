@@ -106,7 +106,7 @@ jobs:
     executor: frontend-excutor
     steps:
       - checkout
-      - yarn_install
+      # - yarn_install
       - yarn_build
 
   frontend-deploy:
@@ -119,7 +119,7 @@ jobs:
           command: yarn build --runInBand
           working_directory: frontend
       - aws-s3/sync:
-          from: build
+          from: frontend/build
           to: "s3://junkata-blog"
           # arguments: | # Optional arguments
           #   --acl public-read \
