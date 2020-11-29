@@ -28,6 +28,14 @@ commands:
           name: yarn build
           command: yarn build --runInBand
           working_directory: frontend
+      - run:
+          name: ls
+          command: ls -la
+          working_directory: frontend
+      - run:
+          name: ls repo
+          command: ls -la ~/repo
+          working_directory: frontend
 
 executors:
   frontend-excutor:
@@ -99,6 +107,7 @@ jobs:
     executor: frontend-excutor
     steps:
       - checkout
+      - yarn_install
       - yarn_build
 
   frontend-deploy:
