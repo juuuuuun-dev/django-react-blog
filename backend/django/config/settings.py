@@ -33,19 +33,27 @@ TEST_RUNNER = 'my_project.runner.PytestTestRunner'
 
 env = environ.Env(DEBUG=(bool, False),)
 env.read_env(os.path.join(BASE_DIR, '.env'))
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG', default=False)
 sysStr = str(sys.argv[0])
 if len(sys.argv) > 1 and re.match(r'.*test$', sysStr):
     TESTING = True
 else:
     TESTING = False
 
+# @TODO
+# storage
+if DEBUG:
+    DEFAULT_FILE_STORAGE = 'django.files.storage.FileSystemStorage'
+else:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 CORS_ORIGIN_ALLOW_ALL = True
 
 # CORS_ORIGIN_WHITELIST is not working
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["127.0.0.1", "localhost"])
 
 # API
 API_VERSION = "api/v1/"
@@ -92,7 +100,7 @@ MIDDLEWARE = [
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'cache:11211',
+        'LOCATION': env('CACHE_LOCATION'),
         'TIMEOUT': env.int('CACHE_TIMEOUT')
     }
 }
@@ -167,11 +175,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog',
-        'USER': 'user',
-        'PASSWORD': 'pass',
-        'HOST': 'db',
-        'PORT': '3306',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env.int('DB_PORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
             "init_command": "SET foreign_key_checks = 0;",

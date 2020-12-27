@@ -15,8 +15,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['access'] = str(refresh.access_token)
         data['username'] = self.user.username
         if self.user.profile.thumb:
-            data['thumb'] = f"{settings.BACKEND_URL}\
-                {self.user.profile.thumb.url}"
+            data['thumb'] = self.user.profile.thumb.name
+
+        #     data['thumb'] = f"{settings.BACKEND_URL}\
+        #         {self.user.profile.thumb.url}"
         data['page_size'] = settings.PAGE_SIZE
         return data
 
