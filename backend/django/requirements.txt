@@ -16,6 +16,8 @@ python-memcached==1.59
 Pillow==8.0.1
 django-cleanup==5.1
 django-imagekit==4.0.2
+boto3==1.16.43
+django-storages==1.11.1
 
 # dev
 factory-boy==3.1
