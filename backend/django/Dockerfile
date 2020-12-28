@@ -8,7 +8,7 @@ RUN pip install --upgrade pip \
   && pip install -r requirements.txt \
   && echo "alias pm='python manage.py'" >>/root/.bashrc \
   && echo "alias reload='uwsgi --reload /app/config/uwsgi.pid'" >>/root/.bashrc \
-  && groupadd uwsgi && useradd -r -s /bin/false -g uwsgi uwsgi
+  && groupadd uwsgi && useradd -r -g uwsgi uwsgi
 COPY --chown=uwsgi:uwsgi . .
 USER uwsgi
 CMD ["uwsgi", "--ini", "/app/django.ini"]

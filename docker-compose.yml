@@ -30,7 +30,7 @@ services:
     build:
       context: ./backend/django
     container_name: django-blog.backend
-    # user: uwsgi:uwsgi
+    user: uwsgi:uwsgi
     volumes:
       - ./backend/django:/app
     # command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
