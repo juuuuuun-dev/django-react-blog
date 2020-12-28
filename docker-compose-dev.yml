@@ -1,9 +1,0 @@
-version: "3.3"
-
-volumes:
-  sync-blog-backend:
-    external: true
-services:
-  backend:
-    volumes:
-      - sync-blog-backend:/app:consistent

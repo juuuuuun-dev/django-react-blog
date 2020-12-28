@@ -2,13 +2,10 @@
 ```
 docker-compose pull
 docker-compose build --no-cache
-docker volume create --name=sync-blog-backend
 ```
 Docker start
 ```
-docker-sync-stack start
-or
-docker-compose -f ./docker-compose.yml -f ./docker-compose-dev.yml up -d
+docker-compose up -d
 ```
 http://localhost:8000/
 # create superuser
