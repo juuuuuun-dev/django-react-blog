@@ -77,7 +77,7 @@ jobs:
             docker load -i ~/caches/docker.tar
       - run:
           name: ".env copy"
-          command: docker-compose run backend cp .env.ci .env
+          command: docker-compose run backend cp -p .env.ci .env
       - run:
           name: sleep for waiting launch db
           command: sleep 10
