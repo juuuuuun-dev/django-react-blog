@@ -30,9 +30,13 @@ TEST_RUNNER = 'my_project.runner.PytestTestRunner'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
+if os.environ['ENV_NAME'] == 'ci':
+    envfile = '.env.ci'
+else:
+    envfile = '.env'
 
 env = environ.Env(DEBUG=(bool, False),)
-env.read_env(os.path.join(BASE_DIR, '.env'))
+env.read_env(os.path.join(BASE_DIR, envfile))
 DEBUG = env.bool('DEBUG', default=False)
 sysStr = str(sys.argv[0])
 if len(sys.argv) > 1 and re.match(r'.*test$', sysStr):
@@ -56,7 +60,6 @@ else:
     AWS_LOCATION = 'static'
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
     STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-
 
 
 # SECURITY WARNING: keep the secret key used in production secret!

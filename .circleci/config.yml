@@ -75,21 +75,21 @@ jobs:
           name: docker load
           command: |
             docker load -i ~/caches/docker.tar
-      - run:
-          name: ".env copy"
-          command: docker-compose run -u uwsgi backend cp -p .env.ci .env
+      # - run:
+      #     name: ".env copy"
+      #     command: docker-compose run -u uwsgi backend cp -p .env.ci .env
       - run:
           name: sleep for waiting launch db
           command: sleep 10
       - run:
           name: "before_test: makemigrations"
-          command: docker-compose run backend python manage.py makemigrations
+          command: docker-compose run -e ENV_NAME=ci backend python manage.py makemigrations
       - run:
           name: "before_test: migrate"
-          command: docker-compose run backend python manage.py migrate
+          command: docker-compose run -e ENV_NAME=ci backend python manage.py migrate
       - run:
           name: "test pytest"
-          command: docker-compose run backend pytest
+          command: docker-compose run -e ENV_NAME=ci backend pytest
       - save_cache:
           key: v2-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
@@ -131,7 +131,8 @@ jobs:
       #     working_directory: frontend
       - aws-s3/sync:
           from: frontend/build
-          to: "s3://junkata-blog"
+          to: "s3://${S3_FRONTEND_BUILD_SOURCE_BUCKET_NAME}"
+          # to: "s3://junkata-blog"
           # arguments: | # Optional arguments
           #   --acl public-read \
           #   --cache-control "max-age=86400"
