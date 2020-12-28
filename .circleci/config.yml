@@ -79,8 +79,11 @@ jobs:
       #     name: ".env copy"
       #     command: docker-compose run -u uwsgi backend cp -p .env.ci .env
       - run:
+          name: compose up
+          command: docker-compose up -d
+      - run:
           name: sleep for waiting launch db
-          command: sleep 10
+          command: sleep 15
       - run:
           name: "before_test: makemigrations"
           command: docker-compose run -e ENV_NAME=ci backend python manage.py makemigrations
