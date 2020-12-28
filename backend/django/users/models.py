@@ -1,5 +1,4 @@
 import os
-import re
 import uuid
 
 from django.conf import settings

@@ -40,35 +40,24 @@ if len(sys.argv) > 1 and re.match(r'.*test$', sysStr):
 else:
     TESTING = False
 
-# @TODO
-# storage
-# if DEBUG:
-#     STATIC_URL = '/static/'
-#     STATIC_ROOT = 'static'
-# else:
-#     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#     AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-#     AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-#     AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-#     AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
-#     AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', default='public-read')
-#     AWS_LOCATION = 'static'
-#     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-#     STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+if DEBUG:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = 'static'
+else:
+    # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    DEFAULT_FILE_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
+    STATICFILES_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
+    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+    AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', default='public-read')
+    AWS_LOCATION = 'static'
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-DEFAULT_FILE_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
-STATICFILES_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
-AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', default='public-read')
-AWS_LOCATION = 'static'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
@@ -107,7 +96,6 @@ INSTALLED_APPS = [
 ]
 SITE_ID = 1
 SITE_NAME = "Django and React blog"
-BACKEND_URL = env('BACKEND_URL')
 FRONTEND_URL = env('FRONTEND_URL')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
