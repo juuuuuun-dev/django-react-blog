@@ -30,11 +30,10 @@ services:
     build:
       context: ./backend/django
     container_name: django-blog.backend
-    user: uwsgi:uwsgi
     environment:
       - ENV_NAME=develop
-    # volumes:
-    #   - ./backend/django:/app
+    volumes:
+      - ./backend/django:/app
     # command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
     expose:
       - "8001"

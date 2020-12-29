@@ -57,7 +57,7 @@ jobs:
           name: docker build
           command: |
             if [ ! -f ~/caches/docker.tar ]; then
-              docker-compose build
+              docker-compose build --build-arg OWNER=root
               mkdir -p ~/caches
               docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/caches/docker.tar
             fi
@@ -86,13 +86,13 @@ jobs:
           command: sleep 15
       - run:
           name: "before_test: makemigrations"
-          command: docker-compose run -e ENV_NAME=ci LOCAL_UID=$(id -u $USER) -e LOCAL_GID=$(id -g $USER) backend python manage.py makemigrations
+          command: docker-compose run -e ENV_NAME=ci backend python manage.py makemigrations
       - run:
           name: "before_test: migrate"
-          command: docker-compose run -e ENV_NAME=ci LOCAL_UID=$(id -u $USER) -e LOCAL_GID=$(id -g $USER) backend python manage.py migrate
+          command: docker-compose run -e ENV_NAME=ci backend python manage.py migrate
       - run:
           name: "test pytest"
-          command: docker-compose run -e LOCAL_UID=$(id -u $USER) -e LOCAL_GID=$(id -g $USER) ENV_NAME=ci backend pytest
+          command: docker-compose run -e ENV_NAME=ci backend pytest
       - save_cache:
           key: v2-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
