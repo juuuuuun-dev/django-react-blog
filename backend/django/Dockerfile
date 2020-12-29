@@ -12,3 +12,4 @@ RUN pip install --upgrade pip \
 COPY --chown=uwsgi:uwsgi . .
 USER uwsgi
 CMD ["uwsgi", "--ini", "/app/django.ini"]
+ENTRYPOINT ["./entrypoint.sh"]
