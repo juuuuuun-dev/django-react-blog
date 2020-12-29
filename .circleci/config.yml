@@ -57,8 +57,7 @@ jobs:
           name: docker build
           command: |
             if [ ! -f ~/caches/docker.tar ]; then
-              docker-compose build --build-arg OWNER=root backend
-              docker-compose build db nginx cache smtp
+              docker-compose -f docker-compose-ci.yml build
               mkdir -p ~/caches
               docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/caches/docker.tar
             fi
@@ -81,19 +80,19 @@ jobs:
       #     command: docker-compose run -u uwsgi backend cp -p .env.ci .env
       - run:
           name: compose up
-          command: docker-compose up -d
+          command: docker-compose -f docker-compose-ci.yml up -d
       - run:
           name: sleep for waiting launch db
           command: sleep 15
       - run:
           name: "before_test: makemigrations"
-          command: docker-compose run -e ENV_NAME=ci backend python manage.py makemigrations
+          command: docker-compose -f docker-compose-ci.yml run backend python manage.py makemigrations
       - run:
           name: "before_test: migrate"
-          command: docker-compose run -e ENV_NAME=ci backend python manage.py migrate
+          command: docker-compose -f docker-compose-ci.yml run backend python manage.py migrate
       - run:
           name: "test pytest"
-          command: docker-compose run -e ENV_NAME=ci backend pytest
+          command: docker-compose -f docker-compose-ci.yml run backend pytest
       - save_cache:
           key: v2-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:

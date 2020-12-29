@@ -1,0 +1,50 @@
+version: "3.3"
+
+services:
+  nginx:
+    build:
+      context: ./backend/nginx
+    container_name: django-blog.nginx
+    ports:
+      - "8000:8000"
+    environment:
+      - NGINX_PORT=8000
+    depends_on:
+      - backend
+  cache:
+    image: memcached:alpine
+  db:
+    image: mysql:5.7
+    container_name: django-blog.mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      TZ: "Asia/Tokyo"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - .dbdata:/var/lib/mysql
+      - ./backend/sql:/docker-entrypoint-initdb.d
+      - ./backend/my.cnf:/etc/mysql/conf.d/my.cnf
+  backend:
+    build:
+      context: ./backend/django
+      dockerfile: Dockerfile.ci
+    container_name: django-blog.backend
+    environment:
+      - ENV_NAME=ci
+    volumes:
+      - ./backend/django:/app
+    # command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
+    expose:
+      - "8001"
+    depends_on:
+      - db
+      - cache
+  # smtp:
+  #   container_name: smtp
+  #   image: mailhog/mailhog:v1.0.0
+  #   ports:
+  #     - 8025:8025
+  #     - 1025:1025
+  #   restart: always
