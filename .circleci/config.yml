@@ -57,7 +57,8 @@ jobs:
           name: docker build
           command: |
             if [ ! -f ~/caches/docker.tar ]; then
-              docker-compose build --build-arg OWNER=root
+              docker-compose build --build-arg OWNER=root backend
+              docker-compose build db nginx cache smtp
               mkdir -p ~/caches
               docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/caches/docker.tar
             fi
