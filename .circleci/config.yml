@@ -78,9 +78,9 @@ jobs:
       # - run:
       #     name: ".env copy"
       #     command: docker-compose run -u uwsgi backend cp -p .env.ci .env
-      - run:
-          name: compose up
-          command: docker-compose -f docker-compose-ci.yml up -d
+      # - run:
+      #     name: compose up
+      #     command: docker-compose -f docker-compose-ci.yml up -d
       - run:
           name: sleep for waiting launch db
           command: sleep 15
