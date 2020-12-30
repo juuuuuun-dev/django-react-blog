@@ -115,14 +115,14 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': env('CACHE_LOCATION'),
-        'TIMEOUT': env.int('CACHE_TIMEOUT')
+        'TIMEOUT': env.int('CACHE_TIMEOUT', default=120)
     }
 }
 
 ROOT_URLCONF = 'config.urls'
 
 # testing page_size is 1
-PAGE_SIZE = env.int('PAGE_SIZE', 20) if not TESTING else 1
+PAGE_SIZE = env.int('PAGE_SIZE', default=20) if not TESTING else 1
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
