@@ -1,7 +1,7 @@
 # the upstream component nginx needs to connect to
 upstream backend {
     ip_hash;
-    server backend:8001;
+    server ${UPSTREAM_HOST}:8001;
 }
 
 # configuration of the server

@@ -9,6 +9,7 @@ services:
       - "8000:8000"
     environment:
       - NGINX_PORT=8000
+      - UPSTREAM_HOST=backend
     depends_on:
       - backend
   cache:
