@@ -30,22 +30,46 @@ TEST_RUNNER = 'my_project.runner.PytestTestRunner'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
+if os.environ['ENV_NAME'] == 'ci':
+    envfile = '.env.ci'
+else:
+    envfile = '.env'
 
 env = environ.Env(DEBUG=(bool, False),)
-env.read_env(os.path.join(BASE_DIR, '.env'))
-DEBUG = env('DEBUG')
+env.read_env(os.path.join(BASE_DIR, envfile))
+DEBUG = env.bool('DEBUG', default=False)
 sysStr = str(sys.argv[0])
+DJANGO_SUPERUSER_PASSWORD = env('DJANGO_SUPERUSER_PASSWORD')
+
 if len(sys.argv) > 1 and re.match(r'.*test$', sysStr):
     TESTING = True
 else:
     TESTING = False
+
+if DEBUG:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = 'static'
+else:
+    # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    DEFAULT_FILE_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
+    STATICFILES_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
+    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+    AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', default='public-read')
+    AWS_LOCATION = 'static'
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 CORS_ORIGIN_ALLOW_ALL = True
 
 # CORS_ORIGIN_WHITELIST is not working
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["127.0.0.1", "localhost"])
 
 # API
 API_VERSION = "api/v1/"
@@ -73,10 +97,10 @@ INSTALLED_APPS = [
     'djoser',
     'django_cleanup.apps.CleanupConfig',
     'imagekit',
+    'storages',
 ]
 SITE_ID = 1
 SITE_NAME = "Django and React blog"
-BACKEND_URL = env('BACKEND_URL')
 FRONTEND_URL = env('FRONTEND_URL')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -92,15 +116,15 @@ MIDDLEWARE = [
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'cache:11211',
-        'TIMEOUT': env.int('CACHE_TIMEOUT')
+        'LOCATION': env('CACHE_LOCATION'),
+        'TIMEOUT': env.int('CACHE_TIMEOUT', default=120)
     }
 }
 
 ROOT_URLCONF = 'config.urls'
 
 # testing page_size is 1
-PAGE_SIZE = env.int('PAGE_SIZE', 20) if not TESTING else 1
+PAGE_SIZE = env.int('PAGE_SIZE', default=20) if not TESTING else 1
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
@@ -167,11 +191,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog',
-        'USER': 'user',
-        'PASSWORD': 'pass',
-        'HOST': 'db',
-        'PORT': '3306',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env.int('DB_PORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
             "init_command": "SET foreign_key_checks = 0;",
@@ -237,6 +261,5 @@ LOGGING = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+
 AUTH_USER_MODEL = "users.User"

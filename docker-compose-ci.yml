@@ -9,7 +9,6 @@ services:
       - "8000:8000"
     environment:
       - NGINX_PORT=8000
-      - UPSTREAM_HOST=backend
     depends_on:
       - backend
   cache:
@@ -30,9 +29,10 @@ services:
   backend:
     build:
       context: ./backend/django
+      dockerfile: Dockerfile.ci
     container_name: django-blog.backend
     environment:
-      - ENV_NAME=develop
+      - ENV_NAME=ci
     volumes:
       - ./backend/django:/app
     # command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
@@ -41,10 +41,10 @@ services:
     depends_on:
       - db
       - cache
-  smtp:
-    container_name: smtp
-    image: mailhog/mailhog:v1.0.0
-    ports:
-      - 8025:8025
-      - 1025:1025
-    restart: always
+  # smtp:
+  #   container_name: smtp
+  #   image: mailhog/mailhog:v1.0.0
+  #   ports:
+  #     - 8025:8025
+  #     - 1025:1025
+  #   restart: always
