@@ -39,6 +39,8 @@ env = environ.Env(DEBUG=(bool, False),)
 env.read_env(os.path.join(BASE_DIR, envfile))
 DEBUG = env.bool('DEBUG', default=False)
 sysStr = str(sys.argv[0])
+DJANGO_SUPERUSER_PASSWORD = env('DJANGO_SUPERUSER_PASSWORD')
+
 if len(sys.argv) > 1 and re.match(r'.*test$', sysStr):
     TESTING = True
 else:
