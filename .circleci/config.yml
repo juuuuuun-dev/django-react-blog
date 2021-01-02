@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
-
+  aws-ecr: circleci/aws-ecr@6.15.2
 commands:
   yarn_install:
     steps:
@@ -140,6 +140,22 @@ jobs:
           #   --acl public-read \
           #   --cache-control "max-age=86400"
           overwrite: true
+  django-docker-image-build:
+    executor: backend-executor
+    steps:
+      - aws-ecr/build-and-push-image:
+          repo: "$AWS_DJANGO_REPO_NAME"
+          region: AWS_REGION
+          path: backend/django/
+          tag: latest
+  nginx-docker-image-build:
+    executor: backend-executor
+    steps:
+      - aws-ecr/build-and-push-image:
+          repo: "$AWS_NGINX_REPO_NAME"
+          region: AWS_REGION
+          path: backend/nginx/
+          tag: latest
 
 workflows:
   version: 2
@@ -156,6 +172,18 @@ workflows:
       - frontend-deploy:
           requires:
             - frontend-build
+          filters:
+            branches:
+              only: master
+      - django-docker-image-build:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
+      - nginx-docker-image-build:
+          requires:
+            - backend-test
           filters:
             branches:
               only: master

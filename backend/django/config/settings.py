@@ -59,7 +59,7 @@ else:
     AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
     AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
     AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', default='public-read')
-    AWS_LOCATION = 'static'
+    AWS_LOCATION = 'storage'
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
     STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
