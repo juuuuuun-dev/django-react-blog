@@ -140,15 +140,6 @@ jobs:
           #   --acl public-read \
           #   --cache-control "max-age=86400"
           overwrite: true
-  django-docker-image-build:
-    executor: backend-executor
-    steps:
-      - aws-ecr/build_and_push_image:
-          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-          repo: "${AWS_DJANGO_REPO_NAME}"
-          region: ${AWS_DEFAULT_REGION}
-          tag: "${CIRCLE_SHA1}"
-          dockerfile: "./backend/django/Dockerfile"
 
 workflows:
   version: 2
@@ -168,7 +159,12 @@ workflows:
           filters:
             branches:
               only: master
-      - django-docker-image-build:
-          filters:
-            branches:
-              only: master
+      - aws-ecr/build_and_push_image:
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          repo: "${AWS_DJANGO_REPO_NAME}"
+          region: ${AWS_DEFAULT_REGION}
+          tag: "${CIRCLE_SHA1}"
+          dockerfile: "./backend/django/Dockerfile"
+          # filters:
+          #   branches:
+          #     only: master
