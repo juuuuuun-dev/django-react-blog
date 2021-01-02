@@ -172,9 +172,10 @@ workflows:
       - aws-ecr/build-and-push-image:
           account-url: AWS_DJANGO_REPO_URL
           repo: AWS_DJANGO_REPO_NAME
-          region: AWS_DEFAULT_REGION
+          region: AWS_REGION
           path: backend/django/
-          tag: CIRCLE_SHA1
+          tag: latest
+          # docker-login: true
           # dockerfile: "./backend/django/Dockerfile"
       # - django-docker-image-build:
       #     requires:
