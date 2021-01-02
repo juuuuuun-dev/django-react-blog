@@ -142,12 +142,19 @@ jobs:
           overwrite: true
   django-docker-image-build:
     executor: backend-executor
-    working_directory: ~/project/backend/django
     steps:
       - aws-ecr/build-and-push-image:
           repo: "$AWS_DJANGO_REPO_NAME"
           region: AWS_REGION
           path: backend/django/
+          tag: latest
+  nginx-docker-image-build:
+    executor: backend-executor
+    steps:
+      - aws-ecr/build-and-push-image:
+          repo: "$AWS_NGINX_REPO_NAME"
+          region: AWS_REGION
+          path: backend/nginx/
           tag: latest
 
 workflows:
@@ -155,29 +162,28 @@ workflows:
   build-and-test:
     jobs:
       - docker-compose-cache
-      # - backend-test:
-      #     requires:
-      #       - docker-compose-cache
-      # - frontend-test
-      # - frontend-build:
-      #     requires:
-      #       - frontend-test
-      # - frontend-deploy:
-      #     requires:
-      #       - frontend-build
-      #     filters:
-      #       branches:
-      #         only: master
-      - django-docker-image-build
-      - aws-ecr/build-and-push-image:
-          repo: "$AWS_NGINX_REPO_NAME"
-          region: AWS_REGION
-          path: backend/nginx/
-          tag: latest
-      # - aws-ecr/build-and-push-image:
-      #     account-url: AWS_DJANGO_REPO_URL
-      #     repo: "$AWS_DJANGO_REPO_NAME"
-      #     region: AWS_REGION
-      #     path: backend/django/
-      #     tag: latest
-      # docker-login: true
+      - backend-test:
+          requires:
+            - docker-compose-cache
+      - frontend-test
+      - frontend-build:
+          requires:
+            - frontend-test
+      - frontend-deploy:
+          requires:
+            - frontend-build
+          filters:
+            branches:
+              only: master
+      - django-docker-image-build:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
+      - nginx-docker-image-build:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
