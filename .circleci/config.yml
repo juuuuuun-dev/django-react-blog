@@ -156,13 +156,13 @@ workflows:
   build-and-test:
     jobs:
       - docker-compose-cache
-      - backend-test:
-          requires:
-            - docker-compose-cache
-      - frontend-test
-      - frontend-build:
-          requires:
-            - frontend-test
+      # - backend-test:
+      #     requires:
+      #       - docker-compose-cache
+      # - frontend-test
+      # - frontend-build:
+      #     requires:
+      #       - frontend-test
       - frontend-deploy:
           requires:
             - frontend-build
@@ -171,7 +171,7 @@ workflows:
               only: master
       - aws-ecr/build-and-push-image:
           account-url: AWS_DJANGO_REPO_URL
-          repo: AWS_DJANGO_REPO_NAME
+          repo: "$AWS_DJANGO_REPO_NAME"
           region: AWS_REGION
           path: backend/django/
           tag: latest
