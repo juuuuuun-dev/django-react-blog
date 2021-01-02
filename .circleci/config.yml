@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
-  aws-ecr: circleci/aws-ecr@0.0.2
+  aws-ecr: circleci/aws-ecr@6.15.2
 commands:
   yarn_install:
     steps:
@@ -140,16 +140,16 @@ jobs:
           #   --acl public-read \
           #   --cache-control "max-age=86400"
           overwrite: true
-  django-docker-image-build:
-    executor: backend-executor
-    working_directory: ~/project/backend/django
-    steps:
-      - aws-ecr/build_and_push_image:
-          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-          repo: "${AWS_DJANGO_REPO_NAME}"
-          region: ${AWS_DEFAULT_REGION}
-          tag: "${CIRCLE_SHA1}"
-          # dockerfile: "./backend/django/Dockerfile"
+  # django-docker-image-build:
+  #   executor: backend-executor
+  #   working_directory: ~/project/backend/django
+  #   steps:
+  #     - aws-ecr/build_and_push_image:
+  #         account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+  #         repo: "${AWS_DJANGO_REPO_NAME}"
+  #         region: ${AWS_DEFAULT_REGION}
+  #         tag: "${CIRCLE_SHA1}"
+  # dockerfile: "./backend/django/Dockerfile"
 
 workflows:
   version: 2
@@ -169,9 +169,16 @@ workflows:
           filters:
             branches:
               only: master
-      - django-docker-image-build:
-          requires:
-            - backend-test
-          # filters:
-          #   branches:
-          #     only: master
+      - aws-ecr/build-and-push-image:
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          repo: "${AWS_DJANGO_REPO_NAME}"
+          region: ${AWS_DEFAULT_REGION}
+          path: backend/django/
+          tag: "${CIRCLE_SHA1}"
+          # dockerfile: "./backend/django/Dockerfile"
+      # - django-docker-image-build:
+      #     requires:
+      #       - backend-test
+      # filters:
+      #   branches:
+      #     only: master
