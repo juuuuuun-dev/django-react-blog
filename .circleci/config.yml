@@ -163,12 +163,12 @@ workflows:
       # - frontend-build:
       #     requires:
       #       - frontend-test
-      - frontend-deploy:
-          requires:
-            - frontend-build
-          filters:
-            branches:
-              only: master
+      # - frontend-deploy:
+      #     requires:
+      #       - frontend-build
+      #     filters:
+      #       branches:
+      #         only: master
       - aws-ecr/build-and-push-image:
           account-url: AWS_DJANGO_REPO_URL
           repo: "$AWS_DJANGO_REPO_NAME"
@@ -176,10 +176,3 @@ workflows:
           path: backend/django/
           tag: latest
           # docker-login: true
-          # dockerfile: "./backend/django/Dockerfile"
-      # - django-docker-image-build:
-      #     requires:
-      #       - backend-test
-      # filters:
-      #   branches:
-      #     only: master
