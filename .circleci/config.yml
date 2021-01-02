@@ -170,11 +170,11 @@ workflows:
             branches:
               only: master
       - aws-ecr/build-and-push-image:
-          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-          repo: "${AWS_DJANGO_REPO_NAME}"
-          region: ${AWS_DEFAULT_REGION}
+          account-url: AWS_DJANGO_REPO_URL
+          repo: AWS_DJANGO_REPO_NAME
+          region: AWS_DEFAULT_REGION
           path: backend/django/
-          tag: "${CIRCLE_SHA1}"
+          tag: CIRCLE_SHA1
           # dockerfile: "./backend/django/Dockerfile"
       # - django-docker-image-build:
       #     requires:
