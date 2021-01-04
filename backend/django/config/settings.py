@@ -16,6 +16,7 @@ import sys
 from datetime import timedelta
 
 import environ
+import requests
 from django.utils.translation import ugettext_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -54,8 +55,8 @@ else:
     # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
     STATICFILES_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
-    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = env('AWS_S3_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = env('AWS_S3_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
     AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
     AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', default='public-read')
@@ -71,6 +72,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_WHITELIST is not working
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["127.0.0.1", "localhost"])
 
+# ECS Fargate health check
+if 'ECS_CONTAINER_METADATA_URI' in os.environ:
+    METADATA_URI = os.environ['ECS_CONTAINER_METADATA_URI']
+    container_metadata = requests.get(METADATA_URI).json()
+    ALLOWED_HOSTS.append(container_metadata['Networks'][0]['IPv4Addresses'][0])
 # API
 API_VERSION = "api/v1/"
 
