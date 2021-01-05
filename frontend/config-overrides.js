@@ -2,10 +2,10 @@ const {
   override,
   fixBabelImports,
   addLessLoader,
-  addWebpackPlugin
+  addWebpackPlugin,
 } = require("customize-cra");
 const CopyPlugin = require('copy-webpack-plugin');
-
+console.log("override build start")
 module.exports = override(
   fixBabelImports("import", {
     libraryName: "antd", libraryDirectory: "es", style: true // change importing css to less
