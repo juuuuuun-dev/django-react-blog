@@ -33,6 +33,7 @@ services:
     container_name: django-blog.backend
     environment:
       - ENV_NAME=develop
+      - DEBUG=1
     volumes:
       - ./backend/django:/app
     # command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini

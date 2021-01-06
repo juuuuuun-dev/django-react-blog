@@ -15,6 +15,7 @@ const RightContainer: React.FC = () => {
       <div className="right-contents-section">
         <LazyLoadImage
           alt="test"
+          className="right-contents-section__banner"
           width={"100%"}
           src={`/assets/images/right.jpg`}
         />
