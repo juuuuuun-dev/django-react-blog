@@ -166,8 +166,8 @@ SIMPLE_JWT = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_PORT = env('EMAIL_PORT', None)
-EMAIL_HOST = env('EMAIL_HOST', None)
+EMAIL_PORT = env('EMAIL_PORT', default=None)
+EMAIL_HOST = env('EMAIL_HOST', default=None)
 
 EMAIL_USE_TLS = False
 
@@ -236,9 +236,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 
-LANGUAGE_CODE = env('LANGUAGE_CODE')
+LANGUAGE_CODE = env('LANGUAGE_CODE', default="ja")
 
-TIME_ZONE = env('TIME_ZONE')
+TIME_ZONE = env('TIME_ZONE', default="Asia/Tokyo")
 
 USE_I18N = True
 

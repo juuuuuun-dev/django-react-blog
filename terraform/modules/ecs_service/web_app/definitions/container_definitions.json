@@ -3,7 +3,7 @@
     "name": "backend",
     "image": "${django_image}",
     "essential": true,
-    "cpu": 156,
+    "cpu": 210,
     "memory": 512,
     "portMappings": [
       {
@@ -104,7 +104,7 @@
     "name": "nginx",
     "image": "${nginx_image}",
     "essential": true,
-    "cpu": 100,
+    "cpu": 46,
     "memory": 512,
     "dependsOn": [
       {
