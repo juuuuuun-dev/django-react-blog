@@ -113,3 +113,7 @@ variable "AWS_STORAGE_BUCKET_NAME" {
 variable "AWS_S3_REGION_NAME" {
   description = "Used in Django app"
 }
+variable "AWS_S3_STORAGE_CUSTOM_DOMAIN" {
+  description = "If use Cloudfront, Cloudfront domain"
+  default=""
+}

@@ -51,17 +51,20 @@ if DEBUG:
     STATIC_URL = '/static/'
     STATIC_ROOT = 'static'
 else:
-    # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
     STATICFILES_STORAGE = 'utils.custom_s3boto.CustomS3Boto3Storage'
     AWS_ACCESS_KEY_ID = env('AWS_S3_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = env('AWS_S3_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
     AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+    AWS_S3_STORAGE_CUSTOM_DOMAIN = env(
+        'AWS_S3_STORAGE_CUSTOM_DOMAIN', default=None)
     AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', default='public-read')
     AWS_LOCATION = 'storage'
-    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    if AWS_S3_STORAGE_CUSTOM_DOMAIN:
+        AWS_S3_CUSTOM_DOMAIN = AWS_S3_STORAGE_CUSTOM_DOMAIN
+    else:
+        AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
     STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
 
