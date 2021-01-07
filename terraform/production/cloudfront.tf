@@ -41,6 +41,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       restriction_type = "none"
     }
   }
+  custom_error_response {
+    error_caching_min_ttl = 3000
+    error_code = 404
+    response_code = 200
+    response_page_path = "/index.html"
+  }
   # @TODO SSL
   viewer_certificate {
     cloudfront_default_certificate = true

@@ -9,6 +9,7 @@ data "aws_iam_policy_document" "s3_static_website_policy" {
     sid     = "PublicReadAndPutGetObject"
     effect  = "Allow"
     actions = ["s3:GetObject"]
+    # actions = ["s3:*"]
 
     principals {
       type        = "*"

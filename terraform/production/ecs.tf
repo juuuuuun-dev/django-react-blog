@@ -44,13 +44,15 @@ module "web_app" {
   django_secret_key         = var.django_secret_key
   django_superuser_password = var.django_superuser_password
   allowed_hosts             = "${module.alb.this_lb_dns_name},${var.front_record_name}.${var.zone_domain},${aws_cloudfront_distribution.s3_distribution.domain_name}"
-  // @TODO dns解決したら変更する
-  frontend_url = aws_cloudfront_distribution.s3_distribution.domain_name
-  # frontend_url = "${var.front_record_name}.${var.zone_domain}"
+  
   AWS_S3_ACCESS_KEY_ID      = var.AWS_S3_ACCESS_KEY_ID
   AWS_S3_SECRET_ACCESS_KEY  = var.AWS_S3_SECRET_ACCESS_KEY
   AWS_S3_REGION_NAME        = var.aws_region
   AWS_STORAGE_BUCKET_NAME   = "${var.app_name}-storage"
+  # @TODO dns解決したらdomainを変更する
+  frontend_url = aws_cloudfront_distribution.s3_distribution.domain_name
+  AWS_S3_STORAGE_CUSTOM_DOMAIN = aws_cloudfront_distribution.s3_distribution.domain_name
+  # frontend_url = "${var.front_record_name}.${var.zone_domain}"
 }
 
 

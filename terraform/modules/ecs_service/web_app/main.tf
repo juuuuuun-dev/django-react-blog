@@ -43,6 +43,7 @@ resource "aws_ecs_task_definition" "web_app" {
     "AWS_S3_SECRET_ACCESS_KEY" : var.AWS_S3_SECRET_ACCESS_KEY
     "AWS_STORAGE_BUCKET_NAME" : var.AWS_STORAGE_BUCKET_NAME
     "AWS_S3_REGION_NAME" : var.AWS_S3_REGION_NAME
+    "AWS_S3_STORAGE_CUSTOM_DOMAIN": var.AWS_S3_STORAGE_CUSTOM_DOMAIN
   })
   execution_role_arn = var.ecs_task_execution_role_arn
   tags = {
@@ -131,6 +132,7 @@ resource "aws_ecs_task_definition" "migrate" {
     "AWS_S3_SECRET_ACCESS_KEY" : var.AWS_S3_SECRET_ACCESS_KEY
     "AWS_STORAGE_BUCKET_NAME" : var.AWS_STORAGE_BUCKET_NAME
     "AWS_S3_REGION_NAME" : var.AWS_S3_REGION_NAME
+    "AWS_S3_STORAGE_CUSTOM_DOMAIN": var.AWS_S3_STORAGE_CUSTOM_DOMAIN
   })
   execution_role_arn = var.ecs_task_execution_role_arn
   tags = {
