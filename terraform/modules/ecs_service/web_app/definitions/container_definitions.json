@@ -1,0 +1,142 @@
+[
+  {
+    "name": "backend",
+    "image": "${django_image}",
+    "essential": true,
+    "cpu": 156,
+    "memory": 512,
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 8001
+      }
+    ],
+    "environment": [
+      {
+        "name": "DJANGO_DATABASES__default__ENGINE",
+        "value": "django.db.backends.mysql"
+      },
+      {
+        "name": "DB_HOST",
+        "value": "${db_host}"
+      },
+      {
+        "name": "DB_USER",
+        "value": "${db_user}"
+      },
+      {
+        "name": "DB_PASSWORD",
+        "value": "${db_password}"
+      },
+      {
+        "name": "DB_PORT",
+        "value": "${db_port}"
+      },
+      {
+        "name": "DB_NAME",
+        "value": "${db_name}"
+      },
+      {
+        "name": "CACHE_LOCATION",
+        "value": "${cache_location}"
+      },
+      {
+        "name": "SECRET_KEY",
+        "value": "${django_secret_key}"
+      },
+      {
+        "name": "ENV_NAME",
+        "value": "${env_name}"
+      },
+      {
+        "name": "DEBUG",
+        "value": "False"
+      },
+      {
+        "name": "DJANGO_SUPERUSER_PASSWORD",
+        "value": "${django_superuser_password}"
+      },
+      {
+        "name": "ALLOWED_HOSTS",
+        "value": "${allowed_hosts}"
+      },
+      {
+        "name": "FRONTEND_URL",
+        "value": "${frontend_url}"
+      },
+      {
+        "name": "AWS_S3_ACCESS_KEY_ID",
+        "value": "${AWS_S3_SECRET_ACCESS_KEY}"
+      },
+      {
+        "name": "AWS_S3_SECRET_ACCESS_KEY",
+        "value": "${AWS_S3_SECRET_ACCESS_KEY}"
+      },
+      {
+        "name": "AWS_STORAGE_BUCKET_NAME",
+        "value": "${AWS_STORAGE_BUCKET_NAME}"
+      },
+      {
+        "name": "AWS_S3_REGION_NAME",
+        "value": "${AWS_S3_REGION_NAME}"
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "django",
+        "awslogs-group": "${django_log_group}"
+      }
+    },
+    "placementStrategy": [
+      {
+        "type": "spread",
+        "field": "attribute:ecs.availability-zone"
+      }
+    ]
+  },
+  {
+    "name": "nginx",
+    "image": "${nginx_image}",
+    "essential": true,
+    "cpu": 100,
+    "memory": 512,
+    "dependsOn": [
+      {
+        "containerName": "backend",
+        "condition": "START"
+      }
+    ],
+    "environment": [
+      {
+        "name": "UPSTREAM_HOST",
+        "value": "localhost"
+      },
+      {
+        "name": "NGINX_PORT",
+        "value": "80"
+      }
+    ],
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "nginx",
+        "awslogs-group": "${nginx_log_group}"
+      }
+    },
+    "placementStrategy": [
+      {
+        "type": "spread",
+        "field": "attribute:ecs.availability-zone"
+      }
+    ]
+  }
+]
