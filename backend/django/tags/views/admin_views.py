@@ -6,7 +6,6 @@ from utils import cache_views
 
 class AdminTagViewSet(cache_views.CacheModelViewSet):
     queryset = Tag.objects.all().order_by('-id')
-    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = TagSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'slug']

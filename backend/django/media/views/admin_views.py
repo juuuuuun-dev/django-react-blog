@@ -6,11 +6,18 @@ from utils import cache_views, file
 
 class AdminMediaViewSet(cache_views.CacheModelViewSet):
     queryset = Media.objects.all().order_by('-id')
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.DjangoModelPermissions,)
     serializer_class = admin_serializers.AdminMediaSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     base_cache_key = 'media'
+
+    # def get_permissions(self):
+    #     if self.request.method == 'GET':
+    #         self.permission_classes = (permissions.IsAuthenticated, )
+    #     else:
+    #         self.permission_classes = (permissions.IsAdminUser, )
+    #     return super(cache_views.CacheModelViewSet, self).get_permissions()
 
     def perform_update(self, serializer):
         """
