@@ -135,11 +135,8 @@ jobs:
       - aws-s3/sync:
           from: frontend/build
           to: "s3://${S3_FRONTEND_BUILD_SOURCE_BUCKET_NAME}"
-          # to: "s3://junkata-blog"
-          # arguments: | # Optional arguments
-          #   --acl public-read \
-          #   --cache-control "max-age=86400"
           overwrite: true
+          arguments: '--exclude "/storage/*"'
   django-docker-image-build:
     executor: backend-executor
     steps:
