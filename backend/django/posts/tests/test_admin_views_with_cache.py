@@ -4,6 +4,7 @@ from categories.factories import CategoryFactory
 from django.core.cache import cache
 from django.urls import reverse
 from media.factories import MediaFactory
+from media.models import Media
 from posts.factories import PostFactory
 from posts.models import Post
 from rest_framework import status
@@ -12,6 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from tags.factories import TagFactory
 from users.factories import UserFactory
 from utils.cache_views import cache_key_stringfiy, get_detail_key
+from utils.file import delete_thumb
 
 
 class AdminPostViewSetWithTestCase(APITestCase):
@@ -28,6 +30,10 @@ class AdminPostViewSetWithTestCase(APITestCase):
 
     def tearDown(self):
         cache.clear()
+        media = Media.objects.all()
+        for value in media:
+            delete_thumb(value.file.name)
+            value.file.delete(False)
 
     def test_list_with_cache(self):
         tag = TagFactory.create(name="tagdayo")
