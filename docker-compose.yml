@@ -36,7 +36,6 @@ services:
       - AUTO_RELOAD=1
     volumes:
       - ./backend/django:/app
-    # command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
     expose:
       - "8001"
     depends_on:
