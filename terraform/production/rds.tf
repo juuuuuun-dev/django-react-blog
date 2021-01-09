@@ -51,6 +51,12 @@ module "db" {
   # Database Deletion Protection
   deletion_protection = false
 
+  enabled_cloudwatch_logs_exports = [
+    "audit",
+    "error",
+    "general",
+    "slowquery",
+  ]
   parameters = [
     {
       name  = "character_set_client"
