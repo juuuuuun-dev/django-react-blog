@@ -21,6 +21,10 @@ class AdminMediaViewSet(cache_views.CacheModelViewSet):
             file.delete_thumb(media.file.name)
         serializer.save()
 
+    def perform_destroy(self, instance):
+        file.delete_thumb(instance.file.name)
+        instance.delete()
+
 
 class AdminPostPageMediaView(generics.ListCreateAPIView):
     queryset = Media.get_all()
