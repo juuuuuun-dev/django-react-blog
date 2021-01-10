@@ -16,7 +16,7 @@ server {
     client_max_body_size 75M;   # adjust to taste
 
     location /static {
-        alias /static; 
+        alias /app/static/;
     }
 
     # Finally, send all non-media requests to the Django server.

@@ -14,6 +14,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
         data['username'] = self.user.username
+        data['is_staff'] = self.user.is_staff
+        data['is_admin'] = self.user.is_admin
         if self.user.profile.thumb:
             data['thumb'] = self.user.profile.thumb.url
         data['page_size'] = settings.PAGE_SIZE

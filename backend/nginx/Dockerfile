@@ -1,5 +1,5 @@
 FROM nginx:1.19
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./backend/nginx/templates/ /etc/nginx/templates
-COPY ./backend/nginx/uwsgi_params etc/nginx/uwsgi_params
-COPY ./backend/django/static/ /static
+COPY ./templates/ /etc/nginx/templates
+COPY ./uwsgi_params etc/nginx/uwsgi_params
+# COPY ./backend/django/static/ /static

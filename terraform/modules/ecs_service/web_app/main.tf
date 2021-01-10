@@ -1,4 +1,3 @@
-
 resource "aws_cloudwatch_log_group" "nginx" {
   name              = "${var.app_name}/${var.environment}/nginx"
   retention_in_days = 30
@@ -38,17 +37,21 @@ resource "aws_ecs_task_definition" "web_app" {
     "env_name" : var.environment
     "django_superuser_password" : var.django_superuser_password
     "allowed_hosts" : var.allowed_hosts
-    "frontend_url": var.frontend_url
+    "frontend_url" : var.frontend_url
     "AWS_S3_ACCESS_KEY_ID" : var.AWS_S3_ACCESS_KEY_ID
     "AWS_S3_SECRET_ACCESS_KEY" : var.AWS_S3_SECRET_ACCESS_KEY
     "AWS_STORAGE_BUCKET_NAME" : var.AWS_STORAGE_BUCKET_NAME
     "AWS_S3_REGION_NAME" : var.AWS_S3_REGION_NAME
-    "AWS_S3_STORAGE_CUSTOM_DOMAIN": var.AWS_S3_STORAGE_CUSTOM_DOMAIN
+    "AWS_S3_STORAGE_CUSTOM_DOMAIN" : var.AWS_S3_STORAGE_CUSTOM_DOMAIN
   })
   execution_role_arn = var.ecs_task_execution_role_arn
   tags = {
     "Name" = "web_app"
   }
+}
+
+output "storage-path" {
+  value = "${data.aws_s3_bucket.storage.bucket_domain_name}/storage/"
 }
 
 resource "aws_ecs_service" "web_app" {
@@ -127,12 +130,12 @@ resource "aws_ecs_task_definition" "migrate" {
     "django_secret_key" : var.django_secret_key
     "env_name" : var.environment
     "django_superuser_password" : var.django_superuser_password
-    "frontend_url": var.frontend_url
+    "frontend_url" : var.frontend_url
     "AWS_S3_ACCESS_KEY_ID" : var.AWS_S3_ACCESS_KEY_ID
     "AWS_S3_SECRET_ACCESS_KEY" : var.AWS_S3_SECRET_ACCESS_KEY
     "AWS_STORAGE_BUCKET_NAME" : var.AWS_STORAGE_BUCKET_NAME
     "AWS_S3_REGION_NAME" : var.AWS_S3_REGION_NAME
-    "AWS_S3_STORAGE_CUSTOM_DOMAIN": var.AWS_S3_STORAGE_CUSTOM_DOMAIN
+    "AWS_S3_STORAGE_CUSTOM_DOMAIN" : var.AWS_S3_STORAGE_CUSTOM_DOMAIN
   })
   execution_role_arn = var.ecs_task_execution_role_arn
   tags = {

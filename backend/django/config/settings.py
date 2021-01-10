@@ -31,7 +31,7 @@ TEST_RUNNER = 'my_project.runner.PytestTestRunner'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ['ENV_NAME'] == 'ci':
+if "ENV_NAME" not in os.environ or os.environ['ENV_NAME'] == 'ci':
     envfile = '.env.ci'
 else:
     envfile = '.env'
