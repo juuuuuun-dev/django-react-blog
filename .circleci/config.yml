@@ -60,7 +60,8 @@ jobs:
               # docker-compose -f docker-compose-ci.yml build
               # docker-compose -f docker-compose-ci.yml build backend
               docker-compose -f docker-compose-ci.yml run backend python manage.py collectstatic
-              docker-compose -f docker-compose-ci.yml build
+              docker-compose cp app:/static /static
+              # docker-compose -f docker-compose-ci.yml build
               mkdir -p ~/caches
               docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/caches/docker.tar
             fi
