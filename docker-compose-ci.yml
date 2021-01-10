@@ -3,7 +3,8 @@ version: "3.3"
 services:
   nginx:
     build:
-      context: ./backend/nginx
+      context: .
+      dockerfile: backend/nginx/Dockerfile
     container_name: django-blog.nginx
     ports:
       - "8000:8000"

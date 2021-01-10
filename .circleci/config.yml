@@ -150,7 +150,8 @@ jobs:
       - aws-ecr/build-and-push-image:
           repo: "$AWS_NGINX_REPO_NAME"
           region: AWS_REGION
-          path: backend/nginx/
+          path: .
+          dockerfile: backend/nginx/Dockerfile
           tag: latest
 
 workflows:
@@ -158,28 +159,28 @@ workflows:
   build-and-test:
     jobs:
       - docker-compose-cache
-      - backend-test:
-          requires:
-            - docker-compose-cache
-      - frontend-test
-      - frontend-build:
-          requires:
-            - frontend-test
-      - frontend-deploy:
-          requires:
-            - frontend-build
-          filters:
-            branches:
-              only: master
-      - django-docker-image-build:
-          requires:
-            - backend-test
-          filters:
-            branches:
-              only: master
-      - nginx-docker-image-build:
-          requires:
-            - backend-test
-          filters:
-            branches:
-              only: master
+      # - backend-test:
+      #     requires:
+      #       - docker-compose-cache
+      # - frontend-test
+      # - frontend-build:
+      #     requires:
+      #       - frontend-test
+      # - frontend-deploy:
+      #     requires:
+      #       - frontend-build
+      #     filters:
+      #       branches:
+      #         only: master
+      # - django-docker-image-build:
+      #     requires:
+      #       - backend-test
+      #     filters:
+      #       branches:
+      #         only: master
+      # - nginx-docker-image-build:
+      #     requires:
+      #       - backend-test
+      #     filters:
+      #       branches:
+      #         only: master
