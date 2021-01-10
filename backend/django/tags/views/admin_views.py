@@ -1,4 +1,4 @@
-from rest_framework import filters, permissions
+from rest_framework import filters
 from tags.models import Tag
 from tags.serializers import TagSerializer
 from utils import cache_views

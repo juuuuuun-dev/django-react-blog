@@ -9,7 +9,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     username = "testname"
     email = "test@test.com"
     password = "testtest1234"
-    is_active = 1
-    is_staff = 1
-    is_admin = 1
-    is_superuser = 1
+    is_active = True
+    is_staff = True
+    is_admin = True
+    is_superuser = True

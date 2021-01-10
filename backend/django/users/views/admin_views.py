@@ -11,8 +11,6 @@ from utils.file import delete_thumb
 
 
 class UserProfileView(views.APIView):
-    permission_classes = (IsAuthenticated, AllowAny)
-
     def get(self, request):
         queryset = UserProfile.objects.all()
         user_profile = get_object_or_404(
@@ -85,7 +83,6 @@ class PasswordResetConfirmationView(views.APIView):
 
 
 class AdminAboutMeView(views.APIView):
-    permission_classes = (IsAuthenticated, AllowAny)
 
     def get(self, request):
         queryset = AboutMe.objects.all()

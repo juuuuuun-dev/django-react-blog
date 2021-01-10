@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from users.models import User
 
 SAFE_METHODS = ('GET', 'HEAD')
 
@@ -6,7 +7,8 @@ SAFE_METHODS = ('GET', 'HEAD')
 class GuestReadOnlyParmission(permissions.BasePermission):
 
     def has_permission(self, request, view):
+        user = User.objects.get(pk=request.user.id)
         if request.method in SAFE_METHODS:
-            return bool(request.user and request.user.is_authenticated)
+            return bool(user and user.is_authenticated)
         else:
-            return bool(request.user and request.user.is_staff)
+            return bool(user and user.is_staff)

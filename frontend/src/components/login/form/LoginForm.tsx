@@ -14,6 +14,7 @@ const LoginForm: React.FC = () => {
       set<string>('token', data.access);
       set<string>('refresh', data.refresh);
       set<string>('username', data.username);
+      set<string>('isStaff', data.is_staff);
       set<string>('thumb', data.thumb);
       set<string>('pageSize', data.page_size);
       history.push('/admin/dashboard');
