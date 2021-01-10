@@ -4,7 +4,7 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: backend/nginx/Dockerfile
+      dockerfile: backend/nginx/Dockerfile.ci
     container_name: django-blog.nginx
     ports:
       - "8000:8000"

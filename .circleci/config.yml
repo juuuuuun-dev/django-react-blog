@@ -57,7 +57,6 @@ jobs:
           name: docker build
           command: |
             if [ ! -f ~/caches/docker.tar ]; then
-              docker-compose -f docker-compose-ci.yml run backend python manage.py collectstatic
               docker-compose -f docker-compose-ci.yml build
               mkdir -p ~/caches
               docker save $(docker images | awk 'NR>=2 && ! /^<none>/{print $1}') -o ~/caches/docker.tar
