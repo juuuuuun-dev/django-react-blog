@@ -48,7 +48,7 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
     } catch (e) {
       logout();
     }
-  }, [setUserDataFromStorage, fetchToken, logout]);
+  }, [fetchToken, logout]);
 
   React.useEffect(() => {
     const fn = async () => {
