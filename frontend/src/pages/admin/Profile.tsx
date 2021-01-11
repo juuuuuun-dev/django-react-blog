@@ -1,10 +1,12 @@
+import { stat } from 'fs';
+import { set } from 'local-storage';
 import React from 'react';
+
 import ProfileForm from '../../components/admin/form/ProfileForm';
-import { AdminContext } from '../../context/adminContext';
 import toast from '../../components/common/toast';
+import { AdminContext } from '../../context/adminContext';
 import { retrieve, update } from '../../service/admin/profile';
 import { ProfileDetail } from '../../types/profile';
-import { set } from 'local-storage';
 
 const Profile: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
@@ -47,7 +49,7 @@ const Profile: React.FC = () => {
   };
   return (
     <>
-      <ProfileForm data={data} onSubmit={handleSubmit} />
+      <ProfileForm data={data} isStaff={state.isStaff} onSubmit={handleSubmit} />
     </>
   );
 };

@@ -13,7 +13,7 @@ import { PostFormProps } from '../../../types/posts';
 import MediaModal from '../../admin/MediaModal';
 import MarkdownContent from '../../common/MarkdownContent';
 
-const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) => {
+const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, error }) => {
   const { Option } = Select;
   const [form] = Form.useForm();
   const [title, setTitle] = React.useState<string>('')
@@ -261,7 +261,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, error }) 
             </Form.Item>
 
             <Form.Item colon={false}>
-              <Button aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
+              <Button disabled={!isStaff} aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
                 Submit
           </Button>
             </Form.Item>

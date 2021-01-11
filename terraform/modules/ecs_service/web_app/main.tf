@@ -50,10 +50,6 @@ resource "aws_ecs_task_definition" "web_app" {
   }
 }
 
-output "storage-path" {
-  value = "${data.aws_s3_bucket.storage.bucket_domain_name}/storage/"
-}
-
 resource "aws_ecs_service" "web_app" {
   name            = "web_app"
   cluster         = var.cluster_id

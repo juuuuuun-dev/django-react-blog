@@ -71,8 +71,8 @@ const Edit: React.FC = () => {
 
   return (
     <>
-      <DeleteBtn onDelete={onDelete} />
-      <Form data={data} formItem={formItem} onSubmit={onSubmit} error={error} />
+      <DeleteBtn isStaff={state.isStaff} onDelete={onDelete} />
+      <Form data={data} isStaff={state.isStaff} formItem={formItem} onSubmit={onSubmit} error={error} />
     </>
   );
 };

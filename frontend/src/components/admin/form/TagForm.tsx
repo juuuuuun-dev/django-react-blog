@@ -3,7 +3,7 @@ import React from 'react';
 
 import { TagFormProps } from '../../../types/tags';
 
-const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, error }) => {
+const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, isStaff, error }) => {
   const [fields, setFields] = React.useState([
     {
       name: 'name',
@@ -65,7 +65,7 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, error }) => {
       </Form.Item>
 
       <Form.Item colon={false}>
-        <Button type="primary" aria-label="form-submit" htmlType="submit" className="login-form-button">
+        <Button disabled={!isStaff} type="primary" aria-label="form-submit" htmlType="submit" className="login-form-button">
           Submit
         </Button>
       </Form.Item>

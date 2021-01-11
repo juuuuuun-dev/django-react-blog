@@ -55,7 +55,8 @@ export type PostFormProps = {
   error?: {
     title?: Array<string>,
     slug?: Array<string>,
-  }
+  },
+  isStaff?: Boolean;
 }
 
 export type PostDetailProps = {

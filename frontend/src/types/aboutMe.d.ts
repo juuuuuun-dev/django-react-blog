@@ -4,6 +4,7 @@ export type AboutMeDetail = {
 }
 
 export type AboutMeFormProps = {
-  data: AboutMeDetailDetail | undefined,
+  data: AboutMeDetailDetail | undefined;
   onSubmit: (values: any) => Promise<void>;
+  isStaff?: Boolean;
 }

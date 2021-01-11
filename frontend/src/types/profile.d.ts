@@ -7,6 +7,7 @@ export type ProfileDetail = {
 }
 
 export type ProfileFormProps = {
-  data: ProfileDetail | undefined,
+  data: ProfileDetail | undefined;
   onSubmit: (values: any) => Promise<void>;
+  isStaff?: Boolean;
 }

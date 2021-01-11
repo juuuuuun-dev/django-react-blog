@@ -1,16 +1,18 @@
-import React from 'react';
 import { Button, Modal } from 'antd';
+import React from 'react';
+
 import { DeleteOutlined } from '@ant-design/icons';
 
 interface IProps {
   onDelete: () => Promise<void>;
+  isStaff?: Boolean;
 }
-const DeleteBtn: React.FC<IProps> = ({ onDelete }) => {
+const DeleteBtn: React.FC<IProps> = ({ onDelete, isStaff = false }) => {
   const [showModal, setShowModal] = React.useState<boolean>(false);
   return (
     <>
       <div className="delete-btn">
-        <Button type="link" aria-label="delete-btn" danger onClick={() => setShowModal(true)}>Delete</Button>
+        <Button disabled={!isStaff} type="link" aria-label="delete-btn" danger onClick={() => setShowModal(true)}>Delete</Button>
       </div>
       <Modal
         visible={showModal}

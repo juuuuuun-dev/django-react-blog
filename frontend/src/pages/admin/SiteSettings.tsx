@@ -56,7 +56,7 @@ const SiteSettings: React.FC = () => {
   };
   return (
     <>
-      <SiteSettingForm data={data} config={config} onSubmit={handleSubmit} />
+      <SiteSettingForm data={data} isStaff={state.isStaff} config={config} onSubmit={handleSubmit} />
     </>
   );
 };

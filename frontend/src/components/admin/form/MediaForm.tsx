@@ -8,7 +8,7 @@ import toast from '../../../components/common/toast';
 import { getBase64 } from '../../../helper/file';
 import { MediaFormProps } from '../../../types/media';
 
-const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
+const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, isStaff, error }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [imageUrl, setImageUrl] = React.useState<string>('');
@@ -129,7 +129,7 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, error }) => {
         </Form.Item>
 
         <Form.Item colon={false}>
-          <Button aria-label="media-form-submit" type="primary" htmlType="submit" className="login-form-button">
+          <Button disabled={!isStaff} aria-label="media-form-submit" type="primary" htmlType="submit" className="login-form-button">
             Submit
         </Button>
         </Form.Item>

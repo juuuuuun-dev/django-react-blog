@@ -16,6 +16,7 @@ export type SiteSettingsFormProps = {
   data: SiteSettingDetail | undefined,
   config: SiteSettingConfig | undefined,
   onSubmit: (values: any) => Promise<void>;
+  isStaff?: Boolean,
 }
 export type ImageSize = {
   width: number,

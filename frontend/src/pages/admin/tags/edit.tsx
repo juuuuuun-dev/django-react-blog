@@ -71,8 +71,8 @@ const TagEdit: React.FC = () => {
   }
   return (
     <>
-      <DeleteBtn onDelete={onDelete} />
-      <TagForm data={data} onSubmit={onSubmit} error={error} />
+      <DeleteBtn isStaff={state.isStaff} onDelete={onDelete} />
+      <TagForm data={data} isStaff={state.isStaff} onSubmit={onSubmit} error={error} />
     </>
   );
 };

@@ -38,7 +38,7 @@ const Profile: React.FC = () => {
   };
   return (
     <>
-      <AboutMeForm data={data} onSubmit={handleSubmit} />
+      <AboutMeForm data={data} isStaff={state.isStaff} onSubmit={handleSubmit} />
     </>
   );
 };

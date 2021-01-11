@@ -1,4 +1,3 @@
-import { stat } from 'fs';
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
@@ -71,7 +70,7 @@ const Edit: React.FC = () => {
   }
   return (
     <>
-      <DeleteBtn onDelete={onDelete} />
+      <DeleteBtn isStaff={state.isStaff} onDelete={onDelete} />
       <Form data={data} onSubmit={onSubmit} isStaff={state.isStaff} error={error} />
     </>
   );

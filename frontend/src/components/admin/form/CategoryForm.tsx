@@ -4,7 +4,6 @@ import React from 'react';
 import { CategoryFormProps } from '../../../types/categories';
 
 const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, isStaff, error }) => {
-  console.log({ isStaff })
   const [fields, setFields] = React.useState([
     {
       name: 'name',
