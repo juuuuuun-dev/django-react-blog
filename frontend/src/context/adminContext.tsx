@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { refreshAuthToken, useLogout } from '../service/admin/auth';
 import { setClientToken } from '../service/client';
 import { AdminState, providerProps } from '../types/adminContext';
+import { setUserDataFromStorage } from './adminContextStorages';
 import { adminReducer } from './adminReducer';
 
 const initState: AdminState = {
@@ -21,6 +22,7 @@ const initState: AdminState = {
 
 export const AdminContext = React.createContext({} as providerProps);
 
+
 export const AdminContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = React.useReducer(adminReducer, initState);
   const history = useHistory();
@@ -29,6 +31,7 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
   const [logout] = useLogout();
   const fetchToken = React.useCallback(async () => {
     try {
+      console.log("fetchToken")
       const res = await refreshAuthToken(refresh);
       const { access } = res.data;
       set<string>('token', access);
@@ -41,15 +44,11 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
   const setAuthToken = React.useCallback(async () => {
     try {
       await fetchToken();
-      dispatch({ type: 'SET_HAS_TOKEN', payload: { hasToken: true } });
-      dispatch({ type: 'SET_USERNAME', payload: { username: get("username") } });
-      dispatch({ type: 'SET_IS_STAFF', payload: { isStaff: get("isStaff") } });
-      dispatch({ type: 'SET_THUMB', payload: { thumb: get("thumb") } });
-      dispatch({ type: 'SET_PAGE_SIZE', payload: { pageSize: get("pageSize") } });
+      setUserDataFromStorage(dispatch)
     } catch (e) {
       logout();
     }
-  }, [fetchToken, logout]);
+  }, [setUserDataFromStorage, fetchToken, logout]);
 
   React.useEffect(() => {
     const fn = async () => {

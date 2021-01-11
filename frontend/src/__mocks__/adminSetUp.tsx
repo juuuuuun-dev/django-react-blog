@@ -8,24 +8,29 @@ import { mocked } from 'ts-jest/utils';
 import { QueryParamProvider } from 'use-query-params';
 
 import { act, cleanup, render } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
 
 import AdminLayout from '../components/admin/layout/AdminLayout';
 import { AdminContextProvider } from '../context/adminContext';
+import { setUserDataFromStorage } from '../context/adminContextStorages';
 import { refreshAuthToken, useLogout } from '../service/admin/auth';
+import { setStaffUserMock } from './context/adminContextStorages';
 import { refreshTokenAxiosResponse } from './serviceResponse/auth';
 
 afterEach(() => cleanup());
 jest.mock('../service/admin/auth');
-
+jest.mock('../context/adminContextStorages');
 export const setUp = async (initialPath: string) => {
 
 
   beforeEach(() => {
     mocked(refreshAuthToken).mockClear();
+    mocked(setUserDataFromStorage).mockClear();
   })
   mocked(refreshAuthToken).mockImplementation(
     (): Promise<AxiosResponse<any>> => Promise.resolve(refreshTokenAxiosResponse)
+  )
+  mocked(setUserDataFromStorage).mockImplementation(
+    (dispatch) => setStaffUserMock(dispatch)
   )
   mocked(useLogout).mockImplementation(
     () => {

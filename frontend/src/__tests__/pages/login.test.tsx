@@ -17,6 +17,7 @@ export const successAxiosResponse: AxiosResponse = {
     access: "test-token",
     refresh: "test-refresh",
     username: "Abe",
+    is_staff: true,
   },
   status: 200,
   statusText: 'OK',
