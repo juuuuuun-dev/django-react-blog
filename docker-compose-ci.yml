@@ -35,7 +35,6 @@ services:
       - ENV_NAME=ci
     volumes:
       - ./backend/django:/app
-    # command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
     expose:
       - "8001"
     depends_on:

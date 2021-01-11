@@ -1,22 +1,19 @@
 from bs4 import BeautifulSoup
-from categories.models import Category
-from categories.serializers import CategoryListSerializer
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from markdown import markdown
 from posts.models import Post
 from posts.paginatin import PostPagination
 from posts.serializers import admin_serializers
-from rest_framework import filters, permissions, response, status
-from tags.models import Tag
-from tags.serializers import TagListSerializer
+from rest_framework import filters, response, status
 from users.models import User
-from utils import cache_views, file
+from users.parmission import GuestReadOnly
+from utils import cache_views
 
 
 class AdminPostViewSet(cache_views.CacheModelViewSet):
+    permission_classes = (GuestReadOnly, )
     queryset = Post.objects.all().order_by('-id')
-    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = admin_serializers.AdminPostSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['title', 'slug', 'plain_content']

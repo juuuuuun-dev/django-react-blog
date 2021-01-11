@@ -118,8 +118,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ./frontend
-      # - checkout
-      # - yarn_install
       - run:
           name: ls frontend
           command: ls -la
@@ -135,8 +133,7 @@ jobs:
       - aws-s3/sync:
           from: frontend/build
           to: "s3://${S3_FRONTEND_BUILD_SOURCE_BUCKET_NAME}"
-          overwrite: true
-          arguments: '--exclude "/storage/*"'
+          arguments: --exclude "/storage/*"
   django-docker-image-build:
     executor: backend-executor
     steps:
@@ -151,7 +148,8 @@ jobs:
       - aws-ecr/build-and-push-image:
           repo: "$AWS_NGINX_REPO_NAME"
           region: AWS_REGION
-          path: backend/nginx/
+          path: .
+          dockerfile: backend/nginx/Dockerfile
           tag: latest
 
 workflows:

@@ -48,7 +48,7 @@ class Post(models.Model):
     is_show = models.BooleanField()
     category = models.ForeignKey(
         Category, verbose_name='category', on_delete=models.PROTECT)
-    tag = models.ManyToManyField(Tag, null=True, blank=True)
+    tag = models.ManyToManyField(Tag)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

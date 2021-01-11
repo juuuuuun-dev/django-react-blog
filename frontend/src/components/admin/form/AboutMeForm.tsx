@@ -91,7 +91,7 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
         />
 
         <Form.Item>
-          <Button aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
+          <Button disabled={!props.isStaff} aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
             Submit
         </Button>
         </Form.Item>

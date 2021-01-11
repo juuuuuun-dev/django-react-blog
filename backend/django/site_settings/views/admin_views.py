@@ -1,14 +1,13 @@
-from django.shortcuts import render
-from rest_framework import (filters, generics, permissions, response, status,
-                            views)
+from rest_framework import response, status, views
 from site_settings.models import SiteSetting
 from site_settings.serializers.admin_serializers import \
     AdminSiteSettingSerializer
+from users.parmission import GuestReadOnly
 from utils.file import delete_thumb
 
 
 class AdminSiteSettingView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (GuestReadOnly, )
 
     def get(self, request):
         queryset = SiteSetting.get_site_setting()

@@ -4,6 +4,7 @@ from rest_framework import status, views
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from users.models import AboutMe, User, UserProfile
+from users.parmission import GuestReadOnly
 from users.serializers import (AboutMeSerializer,
                                PasswordResetConfirmSerializer,
                                PasswordResetSerializer, UserProfileSerializer)
@@ -11,7 +12,7 @@ from utils.file import delete_thumb
 
 
 class UserProfileView(views.APIView):
-    permission_classes = (IsAuthenticated, AllowAny)
+    permission_classes = (GuestReadOnly, )
 
     def get(self, request):
         queryset = UserProfile.objects.all()
@@ -85,7 +86,7 @@ class PasswordResetConfirmationView(views.APIView):
 
 
 class AdminAboutMeView(views.APIView):
-    permission_classes = (IsAuthenticated, AllowAny)
+    permission_classes = (GuestReadOnly, )
 
     def get(self, request):
         queryset = AboutMe.objects.all()

@@ -21,6 +21,7 @@ export type TagFormProps = {
     name?: Array<string>,
     slug?: Array<string>
   }
+  isStaff?: Boolean;
 }
 
 export type RequestData = {

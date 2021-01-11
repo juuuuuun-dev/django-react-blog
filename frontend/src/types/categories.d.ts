@@ -16,6 +16,7 @@ export type CategoryList = Pagination & {
 export type CategoryFormProps = {
   data?: CategoryDetail;
   onSubmit: (values: any) => Promise<void>;
+  isStaff: boolean;
   error?: {
     name?: Array<string>
     slug?: Array<string>

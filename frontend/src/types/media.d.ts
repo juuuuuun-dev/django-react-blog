@@ -24,6 +24,7 @@ export type MediaFormProps = {
     name?: Array<string>,
     file?: Array<string>,
   }
+  isStaff?: Boolean,
 }
 
 

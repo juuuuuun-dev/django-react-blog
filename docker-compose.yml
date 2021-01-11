@@ -5,6 +5,8 @@ services:
     build:
       context: ./backend/nginx
     container_name: django-blog.nginx
+    volumes:
+      - ./backend/django/static:/app/static
     ports:
       - "8000:8000"
     environment:
@@ -36,7 +38,6 @@ services:
       - AUTO_RELOAD=1
     volumes:
       - ./backend/django:/app
-    # command: uwsgi --socket :8001 --py-autoreload 1 --ini /app/django.ini
     expose:
       - "8001"
     depends_on:

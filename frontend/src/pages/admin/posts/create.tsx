@@ -44,7 +44,7 @@ const Create: React.FC = () => {
 
   return (
     <>
-      <Form onSubmit={onSubmit} formItem={formItem} error={error} />
+      <Form onSubmit={onSubmit} isStaff={state.isStaff} formItem={formItem} error={error} />
     </>
   );
 };

@@ -4,6 +4,7 @@ export type AdminState = {
   hasToken: boolean;
   username: string;
   thumb: string;
+  isStaff: boolean;
   pageSize: number;
   dateFormat: string;
   dateTimeFormat: string;

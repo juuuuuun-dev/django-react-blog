@@ -42,7 +42,7 @@ const Create: React.FC = () => {
     }
   };
   return (
-    <Form onSubmit={onSubmit} error={error} />
+    <Form onSubmit={onSubmit} isStaff={state.isStaff} error={error} />
   );
 };
 

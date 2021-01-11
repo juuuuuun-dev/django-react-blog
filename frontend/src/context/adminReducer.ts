@@ -8,6 +8,7 @@ const SET_USERNAME = 'SET_USERNAME' as const;
 const SET_THUMB = 'SET_THUMB' as const;
 const SET_LOADING = 'SET_LOADING' as const;
 const SET_PAGE_SIZE = 'SET_PAGE_SIZE' as const;
+const SET_IS_STAFF = 'SET_IS_STAFF' as const;
 
 
 export const siderShow = () => ({
@@ -46,6 +47,13 @@ export const setUsername = (username: string) => ({
   },
 });
 
+export const setIsStaff = (isStaff: boolean) => ({
+  type: SET_IS_STAFF,
+  payload: {
+    isStaff: isStaff,
+  },
+});
+
 export const setThumb = (thumb: string) => ({
   type: SET_THUMB,
   payload: {
@@ -59,6 +67,7 @@ export type Actions =
   | ReturnType<typeof siderToggle>
   | ReturnType<typeof setHasToken>
   | ReturnType<typeof setUsername>
+  | ReturnType<typeof setIsStaff>
   | ReturnType<typeof setThumb>
   | ReturnType<typeof setPageSize>
   | ReturnType<typeof setLoading>;
@@ -75,6 +84,8 @@ export const adminReducer = (state: AdminState, action: Actions) => {
       return { ...state, hasToken: action.payload.hasToken };
     case SET_USERNAME:
       return { ...state, username: action.payload.username };
+    case SET_IS_STAFF:
+      return { ...state, isStaff: action.payload.isStaff };
     case SET_THUMB:
       return { ...state, thumb: action.payload.thumb };
     case SET_LOADING:

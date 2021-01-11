@@ -3,7 +3,7 @@ import React from 'react';
 
 import { CategoryFormProps } from '../../../types/categories';
 
-const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, isStaff, error }) => {
   const [fields, setFields] = React.useState([
     {
       name: 'name',
@@ -62,7 +62,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, error }) =>
       </Form.Item>
 
       <Form.Item colon={false}>
-        <Button aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
+        <Button disabled={!isStaff} aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
           Submit
         </Button>
       </Form.Item>

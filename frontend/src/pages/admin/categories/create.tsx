@@ -7,7 +7,7 @@ import { AdminContext } from '../../../context/adminContext';
 import { create } from '../../../service/admin/categories';
 
 const Create: React.FC = () => {
-  const dispatch = React.useContext(AdminContext)[1];
+  const [state, dispatch] = React.useContext(AdminContext);
   const [error, setError] = React.useState({});
   const history = useHistory();
 
@@ -34,7 +34,7 @@ const Create: React.FC = () => {
   };
   return (
     <>
-      <Form onSubmit={onSubmit} error={error} />
+      <Form onSubmit={onSubmit} isStaff={state.isStaff} error={error} />
     </>
   );
 };
