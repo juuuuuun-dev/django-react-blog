@@ -7,10 +7,12 @@ from posts.paginatin import PostPagination
 from posts.serializers import admin_serializers
 from rest_framework import filters, response, status
 from users.models import User
+from users.parmission import GuestReadOnly
 from utils import cache_views
 
 
 class AdminPostViewSet(cache_views.CacheModelViewSet):
+    permission_classes = (GuestReadOnly, )
     queryset = Post.objects.all().order_by('-id')
     serializer_class = admin_serializers.AdminPostSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]

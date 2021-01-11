@@ -4,7 +4,7 @@ from users.models import User
 SAFE_METHODS = ('GET', 'HEAD')
 
 
-class GuestReadOnlyParmission(permissions.BasePermission):
+class GuestReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         user = User.objects.get(pk=request.user.id)

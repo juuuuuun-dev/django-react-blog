@@ -138,10 +138,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'users.parmission.GuestReadOnlyParmission',
-        # 'rest_framework.permissions.IsAuthenticated',
-    ],
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.ScopedRateThrottle',
     ],
