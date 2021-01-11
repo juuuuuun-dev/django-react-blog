@@ -148,7 +148,7 @@ jobs:
       - aws-ecr/build-and-push-image:
           repo: "$AWS_NGINX_REPO_NAME"
           region: AWS_REGION
-          path: .
+          path: backend/nginx/
           dockerfile: backend/nginx/Dockerfile
           tag: latest
 
