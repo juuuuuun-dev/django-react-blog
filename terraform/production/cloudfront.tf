@@ -3,13 +3,21 @@ data "aws_s3_bucket" "s3_bucket_for_app_storage" {
 }
 
 locals {
-  s3_origin_id = "${var.app_name}-storage-origin"
+  # s3_origin_id = "${var.app_name}-storage-origin"
+  s3_origin_id = "${var.front_record_name}.${var.zone_domain}"
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = data.aws_s3_bucket.s3_bucket_for_app_storage.bucket_domain_name
     origin_id   = local.s3_origin_id
+    custom_origin_config {
+      // These are all the defaults.
+      http_port              = "80"
+      https_port             = "443"
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+    }
   }
   enabled             = true
   is_ipv6_enabled     = false
@@ -43,13 +51,16 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
   custom_error_response {
     error_caching_min_ttl = 3000
-    error_code = 404
-    response_code = 200
-    response_page_path = "/index.html"
+    error_code            = 404
+    response_code         = 200
+    response_page_path    = "/index.html"
   }
-  # @TODO SSL
+
+  aliases = [local.s3_origin_id]
+
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn = aws_acm_certificate.virginia_cert.arn
+    ssl_support_method  = "sni-only"
   }
 }
 

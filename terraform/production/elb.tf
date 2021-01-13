@@ -7,16 +7,6 @@ access_logsのbacketは同じterraform commandで作成したものでは動作�
 https://github.com/hashicorp/terraform-provider-aws/issues/7987
 */
 
-# module "http_sg" {
-#   source           = "./security_group"
-#   name             = "http-sg"
-#   vpc_id           = aws_vpc.example.id
-#   port             = 80
-#   cidr_blocks      = ["0.0.0.0/0"]
-#   ipv6_cidr_blocks = ["::/0"]
-# }
-
-
 
 module "alb" {
   source             = "terraform-aws-modules/alb/aws"
@@ -25,16 +15,22 @@ module "alb" {
   name               = "${var.app_name}-${var.environment}-alb"
   vpc_id             = module.vpc.vpc_id
   subnets            = module.vpc.public_subnets
-  # vpc_id = aws_vpc.example.id
-  # subnets = [
-  #   aws_subnet.public_1a.id,
-  #   aws_subnet.public_1c.id
-  # ]
   security_groups = [
-    # module.http_sg.security_group_id,
     module.http_sg.this_security_group_id,
+    module.https_sg.this_security_group_id,
+    # module.web_sg.this_security_group_id,
+    # module.http_sg.this_security_group_id,
   ]
   internal = false
+
+  https_listeners = [
+    {
+      port               = 443
+      protocol           = "HTTPS"
+      certificate_arn    = aws_acm_certificate.default_cert.arn
+      target_group_index = 0
+    }
+  ]
 
   http_tcp_listeners = [
     # Forward action is default, either when defined or undefined
@@ -65,6 +61,26 @@ module "alb" {
       }
     }
   ]
+
+  # target_groups = [
+  #   {
+  #     backend_protocol = "HTTP"
+  #     backend_port     = 80
+  #     action_type      = "forward"
+  #     target_type      = "ip"
+  #     health_check = {
+  #       enabled             = true
+  #       interval            = 60
+  #       path                = "/api/v1/init/"
+  #       port                = "traffic-port"
+  #       healthy_threshold   = 3
+  #       unhealthy_threshold = 3
+  #       timeout             = 6
+  #       protocol            = "HTTP"
+  #       matcher             = "200-399"
+  #     }
+  #   }
+  # ]
 
   access_logs = {
     bucket  = data.aws_s3_bucket.logs.id
