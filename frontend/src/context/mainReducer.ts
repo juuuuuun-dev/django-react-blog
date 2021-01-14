@@ -1,4 +1,4 @@
-import { GlobalModalConfig, InitState, MainState } from '../types/mainContext';
+import { InitState, MainState } from '../types/mainContext';
 import { MetaType } from '../types/meta';
 
 const SET_LOADING = 'SET_LOADING' as const;
@@ -6,7 +6,6 @@ const SET_INIT = 'SET_INIT' as const;
 const SET_PAGE_TITLE = 'SET_PAGE_TITLE' as const;
 const SET_META = 'SET_META' as const;
 const SET_LD_JSON = 'SET_LD_JSON' as const;
-const SET_GLOBAL_MODAL_CONFIG = 'SET_GLOBAL_MODAL_CONFIG' as const;
 
 export const setLoading = (loading: boolean) => ({
   type: SET_LOADING,
@@ -43,24 +42,14 @@ export const setInit = (init: InitState) => ({
   }
 });
 
-export const setGlobalModalConfig = (config: GlobalModalConfig) => ({
-  type: SET_GLOBAL_MODAL_CONFIG,
-  payload: {
-    globalModalConfig: {
-      title: config.title,
-      type: config.type,
-      content: config.content
-    },
-  },
-});
+
 
 export type Actions =
   | ReturnType<typeof setLoading>
   | ReturnType<typeof setPageTitle>
   | ReturnType<typeof setInit>
   | ReturnType<typeof setMeta>
-  | ReturnType<typeof setLdJson>
-  | ReturnType<typeof setGlobalModalConfig>;
+  | ReturnType<typeof setLdJson>;
 
 export const mainReducer = (state: MainState, action: Actions) => {
   switch (action.type) {
@@ -74,7 +63,5 @@ export const mainReducer = (state: MainState, action: Actions) => {
       return { ...state, meta: action.payload.meta };
     case SET_LD_JSON:
       return { ...state, ldJson: action.payload.ldJson };
-    case SET_GLOBAL_MODAL_CONFIG:
-      return { ...state, conifg: action.payload.globalModalConfig };
   }
 };

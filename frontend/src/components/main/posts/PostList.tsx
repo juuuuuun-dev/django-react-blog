@@ -6,14 +6,12 @@ import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
 
 import { MainContext } from '../../../context/mainContext';
-import { makeTemporaryPostList } from '../../../helper/temporaryPosts';
 import { PostListProps } from '../../../types/posts';
 import EntryData from './EntryData';
 
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
-  const [{ init, breakPoint }] = React.useContext(MainContext);
+  const [{ init, temporaryPostList, breakPoint }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
-  const temporaryPostList = makeTemporaryPostList();
 
   return React.useMemo(() => {
     return (
@@ -82,7 +80,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
         />
       </>
     )
-  }, [data, init, breakPoint, query, temporaryPostList, handlePageChange])
+  }, [data, init, breakPoint, temporaryPostList, query, handlePageChange])
 };
 
 export default PostList;

@@ -1,6 +1,7 @@
 import { keyBy } from 'lodash';
 import React from 'react';
 
+import { makeTemporaryPostList } from '../helper/temporaryPosts';
 import { useHistoryPushError } from '../helper/useHistoryPushError';
 import { getInit } from '../service/main/init';
 import { MainState, ProviderProps } from '../types/mainContext';
@@ -16,11 +17,7 @@ export const mainState: MainState = {
   copyrightStartYear: parseInt(process.env.REACT_APP_COPYRIGHT_START_YEAR || "2020"),
   dateFormat: process.env.REACT_APP_DATE_FORMAT || "YYYY-MM-DD",
   dateTimeFormat: process.env.REACT_APP__DATETIME_FORMAT || "YYYY-MM-DD hh:mm:ss",
-  globalModalConfig: {
-    title: null,
-    type: null,
-    content: null,
-  },
+  temporaryPostList: makeTemporaryPostList(),
   breakPoint: {
     xs: 480,
     sm: 576,

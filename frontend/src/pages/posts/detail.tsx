@@ -4,6 +4,7 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import PostDetail from '../../components/main/posts/PostDetail';
+import TemporaryPostDetail from '../../components/main/posts/TemporaryPostDetail';
 import SnsShare from '../../components/main/SNS/Share';
 import { MainContext } from '../../context/mainContext';
 import { createLdJsonTypeBlogPosting } from '../../helper/ldJson';
@@ -47,6 +48,7 @@ const Detail: React.FC = () => {
 
   return (
     <>
+      {!post && <TemporaryPostDetail />}
       {post && <PostDetail post={post} />}
       {post && <SnsShare title={post.title} url={state.init?.url + history.location.pathname} />}
     </>
