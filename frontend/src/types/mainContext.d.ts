@@ -5,12 +5,6 @@ import { ProfileDetail } from './profile';
 import { SiteSettingDetail } from './siteSettings';
 import { TagDetail } from './tags';
 
-export type GlobalModalConfig = {
-  title: string | null,
-  type: string | null,
-  content: string | null,
-}
-
 export type InitState = {
   author: ProfileDetail,
   categories: { [key: string]: CategoryDetail },
@@ -41,14 +35,14 @@ export type MainState = {
   init: InitState | undefined;
   appTitle: string;
   pageTitle: string;
-  meta: MetaType,
-  ldJson: [],
+  meta: MetaType;
+  ldJson: [];
   loading: boolean;
   copyrightStartYear: number;
-  globalModalConfig: GlobalModalConfig,
-  dateFormat: string,
-  dateTimeFormat: string,
-  breakPoint: BreakPoint,
+  dateFormat: string;
+  dateTimeFormat: string;
+  breakPoint: BreakPoint;
+  temporaryPostList: PostDetail[];
 }
 
 

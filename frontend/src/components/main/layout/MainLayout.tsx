@@ -6,7 +6,6 @@ import React, { useContext } from 'react';
 import MetaHead from '../../../components/common/MetaHead';
 import { MainContext } from '../../../context/mainContext';
 import Footer from '../Footer';
-import GlobalModal from '../GlobalModal';
 import Header from '../Header';
 import Container from './Container';
 import RightContainer from './RightContainer';
@@ -31,7 +30,6 @@ const MainLayout: React.FC = () => {
             </Col>
           </Row>
         </div>
-        <GlobalModal />
       </Content>
       <Footer />
     </>

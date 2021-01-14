@@ -1,6 +1,6 @@
 import '../../../less/main/posts/postList.less';
 
-import { List, Pagination, Typography } from 'antd';
+import { List, Pagination, Skeleton, Typography } from 'antd';
 import React from 'react';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
@@ -10,60 +10,63 @@ import { PostListProps } from '../../../types/posts';
 import EntryData from './EntryData';
 
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
-  const [{ init, breakPoint }] = React.useContext(MainContext);
+  const [{ init, temporaryPostList, breakPoint }] = React.useContext(MainContext);
   const { Paragraph } = Typography;
+
   return React.useMemo(() => {
     return (
       <>
         <List
           className="post-list"
           data-testid="post-list"
-          dataSource={data?.results}
+          dataSource={data?.results || temporaryPostList}
           renderItem={(item, index) => (
             <List.Item
               key={item.id} data-testid={`post-list-item-${index}`}
             >
-              <List.Item.Meta
-                title={<Link to={`/posts/${item.id}`}><Paragraph
-                  ellipsis={{
-                    rows: 2,
-                    expandable: false,
-                  }}
-                  className="post-list__title"
-                  data-testid={`post-list-link-${item.id}`}
-                  title={`${item.title}`}
-                >
-                  {item.title}
-                </Paragraph>
-                </Link>
-                }
-                description={<>
-                  <Paragraph
+              <Skeleton loading={data?.results ? false : true} active>
+                <List.Item.Meta
+                  title={<Link to={`/posts/${item.id}`}><Paragraph
                     ellipsis={{
                       rows: 2,
                       expandable: false,
                     }}
-                    className="post-list__description"
-                    title={`${item.plain_content}`}
+                    className="post-list__title"
+                    data-testid={`post-list-link-${item.id}`}
+                    title={`${item.title}`}
                   >
-                    <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
+                    {item.title}
                   </Paragraph>
-                  <EntryData post={item} showCategory={true} />
-                </>}
-              />
-              {item.cover_media.cover &&
-                <div className="post-list__thumb">
-                  <Link to={`/posts/${item.id}`}>
-                    <LazyLoadComponent>
-                      <picture>
-                        <source media={`(max-width: ${breakPoint.sm - 1}px)`} srcSet={`${item.cover_media.cover} 2x`}></source>
-                        <source media={`(min-width: ${breakPoint.sm}px)`} srcSet={`${item.cover_media.cover_mini} 1x`}></source>
-                        <img width={80} alt={item.title} src={item.cover_media.cover} />
-                      </picture>
-                    </LazyLoadComponent>
                   </Link>
-                </div>
-              }
+                  }
+                  description={<>
+                    <Paragraph
+                      ellipsis={{
+                        rows: 2,
+                        expandable: false,
+                      }}
+                      className="post-list__description"
+                      title={`${item.plain_content}`}
+                    >
+                      <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
+                    </Paragraph>
+                    <EntryData post={item} showCategory={true} />
+                  </>}
+                />
+                {item.cover_media.cover &&
+                  <div className="post-list__thumb">
+                    <Link to={`/posts/${item.id}`}>
+                      <LazyLoadComponent>
+                        <picture>
+                          <source media={`(max-width: ${breakPoint.sm - 1}px)`} srcSet={`${item.cover_media.cover} 2x`}></source>
+                          <source media={`(min-width: ${breakPoint.sm}px)`} srcSet={`${item.cover_media.cover_mini} 1x`}></source>
+                          <img width={80} alt={item.title} src={item.cover_media.cover} />
+                        </picture>
+                      </LazyLoadComponent>
+                    </Link>
+                  </div>
+                }
+              </Skeleton>
             </List.Item>
           )}
         >
@@ -77,7 +80,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
         />
       </>
     )
-  }, [data, init, breakPoint, query, handlePageChange])
+  }, [data, init, breakPoint, temporaryPostList, query, handlePageChange])
 };
 
 export default PostList;
