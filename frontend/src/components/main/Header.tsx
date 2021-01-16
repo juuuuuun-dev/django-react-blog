@@ -54,6 +54,7 @@ const Header: React.FC = () => {
                     styles={{
                       lineHeight: headerHeight,
                       float: 'right',
+                      marginTop: "-2px"
                     }}
                   />
                 )}

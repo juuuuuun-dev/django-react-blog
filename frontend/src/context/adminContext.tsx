@@ -31,7 +31,6 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
   const [logout] = useLogout();
   const fetchToken = React.useCallback(async () => {
     try {
-      console.log("fetchToken")
       const res = await refreshAuthToken(refresh);
       const { access } = res.data;
       set<string>('token', access);
