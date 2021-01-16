@@ -4,12 +4,12 @@ import React from 'react';
 const temporaryPostDetail: React.FC = () => {
   return (
     <>
-      <Skeleton />
+      <Skeleton active />
       <br />
       <Skeleton.Image />
       <br />
-      <Skeleton />
-      <Skeleton />
+      <Skeleton active />
+      <Skeleton active />
     </>
   )
 }

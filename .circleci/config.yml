@@ -26,7 +26,7 @@ commands:
     steps:
       - run:
           name: yarn build
-          command: REACT_APP_BACKEND=${BACKEND_API_URL} yarn build --runInBand
+          command: REACT_APP_BACKEND=${BACKEND_API_URL} REACT_APP_GTM=${GTM_ID} yarn build --runInBand
           working_directory: frontend
       - persist_to_workspace:
           root: ./frontend
