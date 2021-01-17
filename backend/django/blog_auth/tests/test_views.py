@@ -21,8 +21,9 @@ class RestUserAuthTestCase(APITestCase):
 
     def test_login_success(self):
         # login
+        print(self.user.username)
         post_data = {
-            "email": "test@test.com",
+            "username": self.user.username,
             "password": "testtest1234",
         }
         response = self.client.post(
@@ -34,7 +35,7 @@ class RestUserAuthTestCase(APITestCase):
 
     def test_login_unsuccess(self):
         post_data = {
-            "email": "test9@test.com",
+            "username": "test9@test.com",
             "password": "testtest1234",
         }
         response = self.client.post(

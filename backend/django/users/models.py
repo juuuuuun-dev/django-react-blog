@@ -64,8 +64,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = CustomUserManager()
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ("username",)
+    # USERNAME_FIELD = "email"
+    USERNAME_FIELD = "username"  # login field
+    # REQUIRED_FIELDS = ("username",)
 
     @classmethod
     def get_author(cls):
@@ -126,10 +127,11 @@ class UserProfile(models.Model):
         subject = ''.join(subject.splitlines())
         message = render_to_string(
             'users/password_reset_email.content.html', context)
-
-        msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
-        msg.attach_alternative(message, 'text/html')
-        msg.send()
+        print(message)
+        if os.environ['ENV_NAME'] == 'develop':
+            msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
+            msg.attach_alternative(message, 'text/html')
+            msg.send()
         TESTING = getattr(settings, 'TESTING', None)
         if TESTING:
             data = {

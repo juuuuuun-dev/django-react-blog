@@ -34,11 +34,11 @@ const LoginForm: React.FC = () => {
   return (
     <>
       <Form name="normal_login" className="login-form" onFinish={onFinish}>
-        <Form.Item name="email" rules={[{ required: true, message: 'requreid email' }]}>
-          <Input aria-label="input-email" placeholder="Email" />
+        <Form.Item name="username" rules={[{ required: true, message: 'requreid username' }]}>
+          <Input aria-label="input-username" placeholder="username" />
         </Form.Item>
         <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
-          <Input aria-label="input-password" type="password" placeholder="Password" />
+          <Input aria-label="input-password" type="password" placeholder="password" />
         </Form.Item>
 
         <Form.Item>

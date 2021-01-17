@@ -76,8 +76,8 @@ describe("Login", () => {
       (): Promise<AxiosResponse<any>> => Promise.resolve(successAxiosResponse)
     );
     const { utils, history } = setUp();
-    expect(utils.getByLabelText("input-email")).toBeTruthy();
-    fireEvent.change(utils.getByLabelText("input-email"), { target: { value: 'test@test.com' } })
+    expect(utils.getByLabelText("input-username")).toBeTruthy();
+    fireEvent.change(utils.getByLabelText("input-username"), { target: { value: 'testuser' } })
     fireEvent.change(utils.getByLabelText("input-password"), { target: { value: '123456' } })
     fireEvent.submit(utils.getByLabelText("login-submit"))
     await waitFor(() => {
@@ -90,8 +90,8 @@ describe("Login", () => {
       (): Promise<AxiosResponse<any>> => Promise.reject({ response: errorAxiosResponse })
     );
     const { utils, history } = setUp();
-    expect(utils.getByLabelText("input-email")).toBeTruthy();
-    fireEvent.change(utils.getByLabelText("input-email"), { target: { value: 'test@test.com' } })
+    expect(utils.getByLabelText("input-username")).toBeTruthy();
+    fireEvent.change(utils.getByLabelText("input-username"), { target: { value: 'testuser' } })
     fireEvent.change(utils.getByLabelText("input-password"), { target: { value: '123456' } })
     fireEvent.submit(utils.getByLabelText("login-submit"))
     await waitFor(() => {
@@ -105,8 +105,8 @@ describe("Login", () => {
       (): Promise<AxiosResponse<any>> => Promise.reject({ response: errorRestrictingRequestAxiosResponse })
     );
     const { utils, history } = setUp();
-    expect(utils.getByLabelText("input-email")).toBeTruthy();
-    fireEvent.change(utils.getByLabelText("input-email"), { target: { value: 'test@test.com' } })
+    expect(utils.getByLabelText("input-username")).toBeTruthy();
+    fireEvent.change(utils.getByLabelText("input-username"), { target: { value: 'testuser' } })
     fireEvent.change(utils.getByLabelText("input-password"), { target: { value: '123456' } })
     fireEvent.submit(utils.getByLabelText("login-submit"))
     await waitFor(() => {
@@ -120,8 +120,8 @@ describe("Login", () => {
       (): Promise<AxiosResponse<any>> => Promise.reject({ response: errorNoneDetailAxiosResponse })
     );
     const { utils, history } = setUp();
-    expect(utils.getByLabelText("input-email")).toBeTruthy();
-    fireEvent.change(utils.getByLabelText("input-email"), { target: { value: 'test@test.com' } })
+    expect(utils.getByLabelText("input-username")).toBeTruthy();
+    fireEvent.change(utils.getByLabelText("input-username"), { target: { value: 'testuser' } })
     fireEvent.change(utils.getByLabelText("input-password"), { target: { value: '123456' } })
     fireEvent.submit(utils.getByLabelText("login-submit"))
     await waitFor(() => {
