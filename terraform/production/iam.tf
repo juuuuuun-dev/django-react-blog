@@ -45,3 +45,44 @@ module "esc_custom_policy" {
 }
 EOF
 }
+
+
+module "lambda_role" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "~> 3.0"
+
+  # principals service
+  trusted_role_services = [
+    "lambda.amazonaws.com",
+  ]
+  custom_role_policy_arns = [
+    module.ses_send_policy.arn,
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+  ]
+
+  create_role       = true
+  role_requires_mfa = false
+  role_name         = "${var.app_name}_${var.environment}_lambda_role"
+}
+
+module "ses_send_policy" {
+  source      = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  name        = "ses_send_policy"
+  description = "ses send policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}

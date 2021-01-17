@@ -66,7 +66,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
     # USERNAME_FIELD = "email"
     USERNAME_FIELD = "username"  # login field
-    # REQUIRED_FIELDS = ("username",)
 
     @classmethod
     def get_author(cls):
