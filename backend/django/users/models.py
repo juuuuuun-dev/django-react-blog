@@ -1,6 +1,8 @@
+import json
 import os
 import uuid
 
+import requests
 from django.conf import settings
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
@@ -111,7 +113,6 @@ class UserProfile(models.Model):
         token = default_token_generator.make_token(self.user)
         uid = self.user.pk
         url = getattr(settings, 'FRONTEND_URL', None)
-        api = getattr(settings, 'API_VERSION', None)
         reset_api = "/password-reset-confirm/{0}/{1}".format(uid, token)
 
         context = {
@@ -126,11 +127,18 @@ class UserProfile(models.Model):
         subject = ''.join(subject.splitlines())
         message = render_to_string(
             'users/password_reset_email.content.html', context)
-        print(message)
+        return self.post_mail_data(subject, message)
+
         if os.environ['ENV_NAME'] == 'develop':
-            msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
-            msg.attach_alternative(message, 'text/html')
-            msg.send()
+            # msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
+            # msg.attach_alternative(message, 'text/html')
+            # msg.send()
+            self.post_mail_data(subject, message)
+            return {
+                "result": True
+            }
+        if os.environ['ENV_NAME'] == 'production':
+            self.post_mail_data(subject, message)
         TESTING = getattr(settings, 'TESTING', None)
         if TESTING:
             data = {
@@ -138,6 +146,16 @@ class UserProfile(models.Model):
                 "token": token,
             }
             return data
+
+    def post_mail_data(self, subject, message):
+        body = {
+            "subject": subject,
+            "message": message
+        }
+        url = f"{settings.API_GATEWAY_URL}/sendmail/"
+        return requests.post(
+            url, json.dumps(body), headers={
+                'Content-Type': 'application/json'})
 
 
 class AboutMe(models.Model):

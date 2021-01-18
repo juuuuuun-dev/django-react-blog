@@ -111,6 +111,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 SITE_NAME = "Django and React blog"
 FRONTEND_URL = env('FRONTEND_URL')
+API_GATEWAY_URL = env('API_GATEWAY_URL', default="")
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

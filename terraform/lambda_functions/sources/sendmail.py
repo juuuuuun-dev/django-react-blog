@@ -31,26 +31,20 @@ def sendmail(source, to, subject, body):
 def handler(event, context):
     try:
         body = event.get("body")
+        encode_body = json.loads(body)
         status_code = 200
         TO_EMAIL = FROM_EMAIL
-        subject = "error accoured"
-        message = """
-<br />
-<br />
-<a href="http://localhost:3010/password-reset-confirm/1/agm3nu-ef22242c328fcc51950911745e484877">http://localhost:3010/password-reset-confirm/1/agm3nu-ef22242c328fcc51950911745e484877</a>
-<br />
-<br />
-from Django and React blog
-"""
-        body["result"] = sendmail(FROM_EMAIL, TO_EMAIL, subject, message)
-    except Exception:
+        subject = str(encode_body['subject'])
+        message = str(encode_body["message"])
+        encode_body["send"] = sendmail(FROM_EMAIL, TO_EMAIL, subject, message)
+    except Exception as e:
         status_code = 500
-        body = {"description": str(Exception)}
+        body = {"description": str(e)}
 
     return {
         'statusCode': status_code,
         "headers": {
             "Content-Type": "text/plain"
         },
-        "body": json.dumps(body)
+        "body": json.dumps(encode_body)
     }

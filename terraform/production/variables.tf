@@ -22,6 +22,9 @@ variable "front_record_name" {
 variable "api_record_name" {
   description = "Host zone api record name"
 }
+variable "api_gateway_record_name" {
+  description = "Api gateway record name"
+}
 
 
 /*

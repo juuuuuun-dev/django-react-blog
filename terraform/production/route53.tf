@@ -24,6 +24,17 @@ resource "aws_route53_record" "api_record" {
   }
 }
 
+resource "aws_route53_record" "api_gateway_record" {
+  zone_id = data.aws_route53_zone.app_zone.zone_id
+  name    = aws_api_gateway_domain_name.default.domain_name
+  type    = "A"
+  alias {
+    name                   = aws_api_gateway_domain_name.default.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.default.regional_zone_id
+    evaluate_target_health = true
+  }
+}
+
 provider "aws" {
   alias  = "virginia"
   region = "us-east-1"

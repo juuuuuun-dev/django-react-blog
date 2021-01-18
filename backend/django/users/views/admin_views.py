@@ -51,7 +51,7 @@ class PasswordResetView(views.APIView):
             }
             if result:
                 data['reset_data'] = result
-            return Response(data=data, status=status.HTTP_200_OK)
+                return Response(data=data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def get_user_profile(self, email):
