@@ -112,7 +112,7 @@ class UserProfile(models.Model):
     def send_password_reset_email(self, site):
         token = default_token_generator.make_token(self.user)
         uid = self.user.pk
-        url = getattr(settings, 'FRONTEND_URL', None)
+        url = settings.FRONTEND_URL
         reset_api = "/password-reset-confirm/{0}/{1}".format(uid, token)
 
         context = {
@@ -127,25 +127,22 @@ class UserProfile(models.Model):
         subject = ''.join(subject.splitlines())
         message = render_to_string(
             'users/password_reset_email.content.html', context)
-        return self.post_mail_data(subject, message)
 
         if os.environ['ENV_NAME'] == 'develop':
-            # msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
-            # msg.attach_alternative(message, 'text/html')
-            # msg.send()
-            self.post_mail_data(subject, message)
-            return {
-                "result": True
+            msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
+            msg.attach_alternative(message, 'text/html')
+            msg.send()
+            data = {
+                "send": True
             }
         if os.environ['ENV_NAME'] == 'production':
-            self.post_mail_data(subject, message)
-        TESTING = getattr(settings, 'TESTING', None)
-        if TESTING:
+            data = self.post_mail_data(subject, message)
+        if settings.TESTING:
             data = {
                 "urlname": "users:password-reset-confirm",
                 "token": token,
             }
-            return data
+        return data
 
     def post_mail_data(self, subject, message):
         body = {

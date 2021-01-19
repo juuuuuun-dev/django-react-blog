@@ -120,7 +120,7 @@ class PasswordResetConfirmationViewTestCase(APITestCase):
                 url, data)
             self.assertEqual(confirm_response.status_code, status.HTTP_200_OK)
             login_data = {
-                "email": self.user.email,
+                "username": self.user.username,
                 "password": newpassword
             }
             token_api = reverse("auth:token_obtain_pair")

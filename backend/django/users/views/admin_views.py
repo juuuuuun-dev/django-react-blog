@@ -46,10 +46,10 @@ class PasswordResetView(views.APIView):
         if user_profile:
             result = user_profile.send_password_reset_email(
                 site=get_current_site(request))
-            data = {
-                'sending': True,
-            }
             if result:
+                data = {
+                    'sending': True,
+                }
                 data['reset_data'] = result
                 return Response(data=data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
