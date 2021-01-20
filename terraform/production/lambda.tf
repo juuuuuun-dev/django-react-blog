@@ -67,7 +67,7 @@ resource "aws_api_gateway_integration_response" "post_200" {
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
     "method.response.header.Access-Control-Allow-Methods" = "'POST'",
-    "method.response.header.Access-Control-Allow-Origin"  = "'${var.api_record_name}.${var.zone_domain}'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'https://${var.api_record_name}.${var.zone_domain}'"
   }
 }
 

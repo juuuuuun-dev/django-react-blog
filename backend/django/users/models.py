@@ -127,22 +127,22 @@ class UserProfile(models.Model):
         subject = ''.join(subject.splitlines())
         message = render_to_string(
             'users/password_reset_email.content.html', context)
-
+        result = {}
         if os.environ['ENV_NAME'] == 'develop':
             msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
             msg.attach_alternative(message, 'text/html')
             msg.send()
-            data = {
+            result = {
                 "send": True
             }
         if os.environ['ENV_NAME'] == 'production':
-            data = self.post_mail_data(subject, message, self.user.email)
+            result = self.post_mail_data(subject, message, self.user.email)
         if settings.TESTING:
-            data = {
+            result = {
                 "urlname": "users:password-reset-confirm",
                 "token": token,
             }
-        return data
+        return result
 
     def post_mail_data(self, subject, message, email):
         body = {
