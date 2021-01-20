@@ -136,7 +136,7 @@ class UserProfile(models.Model):
                 "send": True
             }
         if os.environ['ENV_NAME'] == 'production':
-            data = self.post_mail_data(subject, message)
+            data = self.post_mail_data(subject, message, self.user.email)
         if settings.TESTING:
             data = {
                 "urlname": "users:password-reset-confirm",
@@ -144,8 +144,9 @@ class UserProfile(models.Model):
             }
         return data
 
-    def post_mail_data(self, subject, message):
+    def post_mail_data(self, subject, message, email):
         body = {
+            "email": email,
             "subject": subject,
             "message": message
         }

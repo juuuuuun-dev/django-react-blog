@@ -21,36 +21,37 @@ module "ecs" {
 }
 
 module "web_app" {
-  source                      = "../modules/ecs_service/web_app"
-  cluster_arn                 = module.ecs.this_ecs_cluster_arn
-  cluster_id                  = module.ecs.this_ecs_cluster_id
-  family                      = "${var.app_name}-${var.environment}"
-  target_group_arn            = element(module.alb.target_group_arns, 0)
-  ecs_task_execution_role_arn = module.ecs_task_execution_role.this_iam_role_arn
-  security_groups             = [module.http_sg.this_security_group_id, module.https_sg.this_security_group_id]
-  subnets                     = module.vpc.public_subnets
-  desired_count               = 1
-  app_name                    = var.app_name
-  environment                 = var.environment
-  vpc_id                      = module.vpc.vpc_id
-  django_repository           = var.django_repository
-  nginx_repository            = var.nginx_repository
-  db_host                     = module.db.this_db_instance_address
-  db_name                     = var.db_name
-  db_user                     = var.db_user
-  db_password                 = var.db_password
-  db_port                     = var.db_port
-  cache_location              = aws_elasticache_cluster.default.configuration_endpoint
-  django_secret_key           = var.django_secret_key
-  django_superuser_password   = var.django_superuser_password
-  allowed_hosts               = "${module.alb.this_lb_dns_name},${var.front_record_name}.${var.zone_domain},${var.api_record_name}.${var.zone_domain},${aws_cloudfront_distribution.s3_distribution.domain_name}"
-  AWS_S3_ACCESS_KEY_ID        = var.AWS_S3_ACCESS_KEY_ID
-  AWS_S3_SECRET_ACCESS_KEY    = var.AWS_S3_SECRET_ACCESS_KEY
-  AWS_S3_REGION_NAME          = var.aws_region
-  AWS_STORAGE_BUCKET_NAME     = "${var.app_name}-storage"
-  # @TODO dns解決したらdomainを変更する
-  frontend_url                 = aws_cloudfront_distribution.s3_distribution.domain_name
-  AWS_S3_STORAGE_CUSTOM_DOMAIN = aws_cloudfront_distribution.s3_distribution.domain_name
+  source                       = "../modules/ecs_service/web_app"
+  cluster_arn                  = module.ecs.this_ecs_cluster_arn
+  cluster_id                   = module.ecs.this_ecs_cluster_id
+  family                       = "${var.app_name}-${var.environment}"
+  target_group_arn             = element(module.alb.target_group_arns, 0)
+  ecs_task_execution_role_arn  = module.ecs_task_execution_role.this_iam_role_arn
+  security_groups              = [module.http_sg.this_security_group_id, module.https_sg.this_security_group_id]
+  subnets                      = module.vpc.public_subnets
+  desired_count                = 1
+  app_name                     = var.app_name
+  environment                  = var.environment
+  vpc_id                       = module.vpc.vpc_id
+  django_repository            = var.django_repository
+  nginx_repository             = var.nginx_repository
+  db_host                      = module.db.this_db_instance_address
+  db_name                      = var.db_name
+  db_user                      = var.db_user
+  db_password                  = var.db_password
+  db_port                      = var.db_port
+  cache_location               = aws_elasticache_cluster.default.configuration_endpoint
+  django_secret_key            = var.django_secret_key
+  django_superuser_password    = var.django_superuser_password
+  allowed_hosts                = "${module.alb.this_lb_dns_name},${var.front_record_name}.${var.zone_domain},${var.api_record_name}.${var.zone_domain},${aws_cloudfront_distribution.s3_distribution.domain_name}"
+  AWS_S3_ACCESS_KEY_ID         = var.AWS_S3_ACCESS_KEY_ID
+  AWS_S3_SECRET_ACCESS_KEY     = var.AWS_S3_SECRET_ACCESS_KEY
+  AWS_S3_REGION_NAME           = var.aws_region
+  AWS_STORAGE_BUCKET_NAME      = "${var.app_name}-storage"
+  frontend_url                 = "${var.front_record_name}.${var.zone_domain}"
+  AWS_S3_STORAGE_CUSTOM_DOMAIN = "${var.front_record_name}.${var.zone_domain}"
+  # frontend_url                 = aws_cloudfront_distribution.s3_distribution.domain_name
+  # AWS_S3_STORAGE_CUSTOM_DOMAIN = aws_cloudfront_distribution.s3_distribution.domain_name
   # frontend_url = "${var.front_record_name}.${var.zone_domain}"
 }
 

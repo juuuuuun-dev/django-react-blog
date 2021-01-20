@@ -33,10 +33,10 @@ def handler(event, context):
         body = event.get("body")
         encode_body = json.loads(body)
         status_code = 200
-        TO_EMAIL = FROM_EMAIL
+        to_email = str(encode_body['email'])
         subject = str(encode_body['subject'])
         message = str(encode_body["message"])
-        encode_body["send"] = sendmail(FROM_EMAIL, TO_EMAIL, subject, message)
+        encode_body["send"] = sendmail(FROM_EMAIL, to_email, subject, message)
     except Exception as e:
         status_code = 500
         body = {"description": str(e)}
