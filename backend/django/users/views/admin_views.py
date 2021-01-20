@@ -42,16 +42,22 @@ class PasswordResetView(views.APIView):
     serializer_class = PasswordResetSerializer
 
     def post(self, request):
+        print("post 1")
+        print(request.data['email'])
         user_profile = self.get_user_profile(request.data['email'])
+        print("post 2")
         if user_profile:
+            print("post 3")
             result = user_profile.send_password_reset_email(
                 site=get_current_site(request))
-            data = {
-                'sending': True,
-            }
             if result:
+                print("post 4")
+
+                data = {
+                    'sending': True,
+                }
                 data['reset_data'] = result
-            return Response(data=data, status=status.HTTP_200_OK)
+                return Response(data=data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def get_user_profile(self, email):

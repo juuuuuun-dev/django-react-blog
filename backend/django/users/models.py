@@ -1,6 +1,8 @@
+import json
 import os
 import uuid
 
+import requests
 from django.conf import settings
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
@@ -66,7 +68,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
     # USERNAME_FIELD = "email"
     USERNAME_FIELD = "username"  # login field
-    # REQUIRED_FIELDS = ("username",)
 
     @classmethod
     def get_author(cls):
@@ -111,8 +112,7 @@ class UserProfile(models.Model):
     def send_password_reset_email(self, site):
         token = default_token_generator.make_token(self.user)
         uid = self.user.pk
-        url = getattr(settings, 'FRONTEND_URL', None)
-        api = getattr(settings, 'API_VERSION', None)
+        url = settings.FRONTEND_URL
         reset_api = "/password-reset-confirm/{0}/{1}".format(uid, token)
 
         context = {
@@ -127,18 +127,33 @@ class UserProfile(models.Model):
         subject = ''.join(subject.splitlines())
         message = render_to_string(
             'users/password_reset_email.content.html', context)
-        print(message)
+        result = {}
         if os.environ['ENV_NAME'] == 'develop':
             msg = EmailMultiAlternatives(subject, "", to=[self.user.email])
             msg.attach_alternative(message, 'text/html')
             msg.send()
-        TESTING = getattr(settings, 'TESTING', None)
-        if TESTING:
-            data = {
+            result = {
+                "send": True
+            }
+        if os.environ['ENV_NAME'] == 'production':
+            result = self.post_mail_data(subject, message, self.user.email)
+        if settings.TESTING:
+            result = {
                 "urlname": "users:password-reset-confirm",
                 "token": token,
             }
-            return data
+        return result
+
+    def post_mail_data(self, subject, message, email):
+        body = {
+            "email": email,
+            "subject": subject,
+            "message": message
+        }
+        url = f"{settings.API_GATEWAY_URL}/sendmail/"
+        return requests.post(
+            url, json.dumps(body), headers={
+                'Content-Type': 'application/json'})
 
 
 class AboutMe(models.Model):

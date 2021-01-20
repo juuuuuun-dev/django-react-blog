@@ -22,6 +22,9 @@ variable "front_record_name" {
 variable "api_record_name" {
   description = "Host zone api record name"
 }
+variable "api_gateway_record_name" {
+  description = "Api gateway record name"
+}
 
 
 /*
@@ -74,15 +77,15 @@ variable "nginx_repository" {
 */
 variable "db_engine" {
   description = "Database engine"
-  default = "mysql"
+  default     = "mysql"
 }
 variable "db_engine_version" {
   description = "Database engine version"
-  default = "5.7.19"
+  default     = "5.7.19"
 }
 variable "db_instance_class" {
   description = "Database instance class"
-  default = "db.t2.micro"
+  default     = "db.t2.micro"
 }
 variable "db_user" {
   description = "Database user name"
@@ -98,6 +101,7 @@ variable "db_port" {
 variable "db_name" {
   description = "Database name"
 }
+
 
 /*
   Django
@@ -119,3 +123,9 @@ variable "AWS_S3_SECRET_ACCESS_KEY" {
   description = "Used in Django app"
 }
 
+/*
+SES
+*/
+variable "ses_sendmail_address" {
+  description = "Used to send email with SES"
+}
