@@ -5,6 +5,7 @@ import boto3
 
 FROM_EMAIL = os.environ['FROM_EMAIL_ADDRESS']
 REGION = os.environ['REGION']
+ALLOW_ORIGIN = os.environ['ALLOW_ORIGIN']
 
 
 def sendmail(source, to, subject, body):
@@ -44,7 +45,8 @@ def handler(event, context):
     return {
         'statusCode': status_code,
         "headers": {
-            "Content-Type": "text/plain"
-        },
-        "body": json.dumps(encode_body)
-    }
+            "Content-Type": 'application/json',
+            "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Methods": "POST",
+            "Access-Control-Allow-Origin": ALLOW_ORIGIN,
+        "body": json.dumps(encode_body)}
