@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from rest_framework import status
@@ -11,6 +12,7 @@ from utils.file import delete_thumb
 
 class AdminUserProfileTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.api_basename = "users:user-profile"
         self.factory = APIRequestFactory()
         # user
@@ -61,6 +63,7 @@ class AdminUserProfileTestCase(APITestCase):
 
 class PasswordResetViewTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.api_basename = "users:password-reset"
         self.factory = APIRequestFactory()
         # user
@@ -88,6 +91,7 @@ class PasswordResetViewTestCase(APITestCase):
 
 class PasswordResetConfirmationViewTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.api_basename = "users:password-reset"
         self.factory = APIRequestFactory()
         self.auth_api = "/{}blog_auth/".format(settings.API_VERSION)
@@ -131,6 +135,7 @@ class PasswordResetConfirmationViewTestCase(APITestCase):
 
 class AdminAboutMeViewTestCase(APITestCase):
     def setUp(self):
+        cache.clear()
         self.api_basename = "users:admin-about-me"
         self.factory = APIRequestFactory()
         self.auth_api = "/{}blog_auth/".format(settings.API_VERSION)

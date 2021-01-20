@@ -42,7 +42,10 @@ DEBUG = env.bool('DEBUG', default=False)
 sysStr = str(sys.argv[0])
 DJANGO_SUPERUSER_PASSWORD = env('DJANGO_SUPERUSER_PASSWORD')
 
-if len(sys.argv) > 1 and re.match(r'.*test$', sysStr):
+if len(
+        sys.argv) > 1 and re.match(
+            r'.*test$',
+        sysStr) or os.environ.get("TESTING"):
     TESTING = True
 else:
     TESTING = False
