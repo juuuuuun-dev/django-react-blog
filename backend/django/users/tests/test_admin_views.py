@@ -70,7 +70,7 @@ class PasswordResetViewTestCase(APITestCase):
 
     def test_reset_password_send_mail_success(self):
         post_data = {
-            "email": "test@test.com"
+            "email": self.user.email
         }
         api = reverse(self.api_basename)
         response = self.client.post(api, post_data, format='json')
@@ -98,7 +98,7 @@ class PasswordResetConfirmationViewTestCase(APITestCase):
 
     def test_reset_password_confirm_success(self):
         post_data = {
-            "email": "test@test.com"
+            "email": self.user.email
         }
         api = reverse(self.api_basename)
         response = self.client.post(api, post_data, format='json')
