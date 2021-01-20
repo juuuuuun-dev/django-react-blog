@@ -92,7 +92,7 @@ jobs:
           command: docker-compose -f docker-compose-ci.yml run backend python manage.py migrate
       - run:
           name: "test pytest"
-          command: docker-compose -f docker-compose-ci.yml run backend pytest
+          command: docker-compose -f docker-compose-ci.yml run backend pytest users -s
       - save_cache:
           key: v2-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
           paths:
