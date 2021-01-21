@@ -154,38 +154,40 @@ jobs:
   ecs-service-update:
     executor: backend-executor
     steps:
-      - aws-ecs/deploy-service-update:
+      - aws-ecs/update-service:
           family: "${APP_PREFIX}-production"
           cluster-name: "${APP_PREFIX}-production-ecs"
           container-image-name-updates: "container=backend,tag=latest"
 workflows:
   version: 2
-  build-and-test:
+  # build-and-test:
+  #   jobs:
+  # - docker-compose-cache
+  # - backend-test:
+  #     requires:
+  #       - docker-compose-cache
+  # - frontend-test
+  # - frontend-build:
+  #     requires:
+  #       - frontend-test
+  # - frontend-deploy:
+  #     requires:
+  #       - frontend-build
+  #     filters:
+  #       branches:
+  #         only: master
+  # - django-docker-image-build:
+  #     requires:
+  #       - backend-test
+  #     filters:
+  #       branches:
+  #         only: master
+  # - nginx-docker-image-build:
+  #     requires:
+  #       - backend-test
+  #     filters:
+  #       branches:
+  #         only: master
+  deploy:
     jobs:
-      # - docker-compose-cache
-      # - backend-test:
-      #     requires:
-      #       - docker-compose-cache
-      # - frontend-test
-      # - frontend-build:
-      #     requires:
-      #       - frontend-test
-      # - frontend-deploy:
-      #     requires:
-      #       - frontend-build
-      #     filters:
-      #       branches:
-      #         only: master
-      # - django-docker-image-build:
-      #     requires:
-      #       - backend-test
-      #     filters:
-      #       branches:
-      #         only: master
-      # - nginx-docker-image-build:
-      #     requires:
-      #       - backend-test
-      #     filters:
-      #       branches:
-      #         only: master
       - ecs-service-update
