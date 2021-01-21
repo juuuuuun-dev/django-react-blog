@@ -150,14 +150,14 @@ jobs:
           repo: "$AWS_NGINX_REPO_NAME"
           region: AWS_REGION
           path: backend/nginx/
-          tag: latest
+          tag: "${CIRCLE_SHA1}"
   ecs-service-update:
     executor: backend-executor
     steps:
       - aws-ecs/update-service:
           family: "${APP_PREFIX}-production"
           cluster-name: "${APP_PREFIX}-production-ecs"
-          container-image-name-updates: "container=backend,tag=latest"
+          container-image-name-updates: "container=backend,tag=${CIRCLE_SHA1}"
 workflows:
   version: 2
   # build-and-test:
