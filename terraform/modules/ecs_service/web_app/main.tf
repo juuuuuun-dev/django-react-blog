@@ -38,6 +38,7 @@ resource "aws_ecs_task_definition" "web_app" {
     "django_superuser_password" : var.django_superuser_password
     "allowed_hosts" : var.allowed_hosts
     "frontend_url" : var.frontend_url
+    "api_gateway_url" : var.api_gateway_url
     "AWS_S3_ACCESS_KEY_ID" : var.AWS_S3_ACCESS_KEY_ID
     "AWS_S3_SECRET_ACCESS_KEY" : var.AWS_S3_SECRET_ACCESS_KEY
     "AWS_STORAGE_BUCKET_NAME" : var.AWS_STORAGE_BUCKET_NAME
@@ -109,7 +110,7 @@ aws ecs run-task \
 
 */
 resource "aws_ecs_task_definition" "migrate" {
-  family                   = "${var.app_name}-${var.environment}-migrate"
+  family                   = "${var.family}-migrate"
   cpu                      = var.cpu
   memory                   = var.memory
   network_mode             = "awsvpc"
@@ -127,6 +128,7 @@ resource "aws_ecs_task_definition" "migrate" {
     "env_name" : var.environment
     "django_superuser_password" : var.django_superuser_password
     "frontend_url" : var.frontend_url
+    "api_gateway_url" : var.api_gateway_url
     "AWS_S3_ACCESS_KEY_ID" : var.AWS_S3_ACCESS_KEY_ID
     "AWS_S3_SECRET_ACCESS_KEY" : var.AWS_S3_SECRET_ACCESS_KEY
     "AWS_STORAGE_BUCKET_NAME" : var.AWS_STORAGE_BUCKET_NAME

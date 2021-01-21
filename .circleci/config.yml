@@ -1,7 +1,9 @@
 version: 2.1
 orbs:
+  aws-cli: circleci/aws-cli@0.1.4
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
+  aws-ecs: circleci/aws-ecs@1.4.0
 commands:
   yarn_install:
     steps:
@@ -134,7 +136,7 @@ jobs:
           from: frontend/build
           to: "s3://${S3_FRONTEND_BUILD_SOURCE_BUCKET_NAME}"
           arguments: --exclude "/storage/*"
-  django-docker-image-build:
+  django-docker-image-build-and-deploy:
     executor: backend-executor
     steps:
       - aws-ecr/build-and-push-image:
@@ -142,14 +144,26 @@ jobs:
           region: AWS_REGION
           path: backend/django/
           tag: latest
-  nginx-docker-image-build:
+  nginx-docker-image-build-and-deploy:
     executor: backend-executor
     steps:
       - aws-ecr/build-and-push-image:
           repo: "$AWS_NGINX_REPO_NAME"
           region: AWS_REGION
           path: backend/nginx/
-          tag: latest
+          # tag: "${CIRCLE_SHA1}"
+
+  ecs-service-update:
+    executor: backend-executor
+    steps:
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-region: $AWS_REGION
+      - aws-ecs/update-service:
+          family: "${APP_PREFIX}-production"
+          cluster-name: "${APP_PREFIX}-production-ecs"
+          service-name: "web_app"
 
 workflows:
   version: 2
@@ -169,15 +183,22 @@ workflows:
           filters:
             branches:
               only: master
-      - django-docker-image-build:
+      - django-docker-image-build-and-deploy:
           requires:
             - backend-test
           filters:
             branches:
               only: master
-      - nginx-docker-image-build:
+      - nginx-docker-image-build-and-deploy:
           requires:
             - backend-test
+          filters:
+            branches:
+              only: master
+      - ecs-service-update:
+          requires:
+            - django-docker-image-build-and-deploy
+            - nginx-docker-image-build-and-deploy
           filters:
             branches:
               only: master
