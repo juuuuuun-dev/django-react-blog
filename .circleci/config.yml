@@ -197,7 +197,7 @@ workflows:
   #         only: master
   deploy:
     jobs:
-      - django-docker-image-build
-      - ecs-service-update:
-          requires:
-            - django-docker-image-build
+      # - django-docker-image-build
+      - ecs-service-update
+        # requires:
+        #   - django-docker-image-build
