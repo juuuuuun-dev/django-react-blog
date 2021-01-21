@@ -100,6 +100,10 @@ variable "frontend_url" {
   description = "Frontend URL"
 }
 
+variable "api_gateway_url" {
+  description = "API Gateway url"
+}
+
 variable "AWS_S3_ACCESS_KEY_ID" {
   description = "Used in Django app"
 }
@@ -115,5 +119,5 @@ variable "AWS_S3_REGION_NAME" {
 }
 variable "AWS_S3_STORAGE_CUSTOM_DOMAIN" {
   description = "If use Cloudfront, Cloudfront domain"
-  default=""
+  default     = ""
 }

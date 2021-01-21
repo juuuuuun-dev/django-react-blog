@@ -136,7 +136,7 @@ jobs:
           from: frontend/build
           to: "s3://${S3_FRONTEND_BUILD_SOURCE_BUCKET_NAME}"
           arguments: --exclude "/storage/*"
-  django-docker-image-build:
+  django-docker-image-build-and-deploy:
     executor: backend-executor
     steps:
       - aws-ecr/build-and-push-image:
@@ -144,7 +144,7 @@ jobs:
           region: AWS_REGION
           path: backend/django/
           tag: latest
-  nginx-docker-image-build:
+  nginx-docker-image-build-and-deploy:
     executor: backend-executor
     steps:
       - aws-ecr/build-and-push-image:
@@ -164,40 +164,41 @@ jobs:
           family: "${APP_PREFIX}-production"
           cluster-name: "${APP_PREFIX}-production-ecs"
           service-name: "web_app"
-          # container-image-name-updates: "container=backend,tag=latest"
+
 workflows:
   version: 2
-  # build-and-test:
-  #   jobs:
-  # - docker-compose-cache
-  # - backend-test:
-  #     requires:
-  #       - docker-compose-cache
-  # - frontend-test
-  # - frontend-build:
-  #     requires:
-  #       - frontend-test
-  # - frontend-deploy:
-  #     requires:
-  #       - frontend-build
-  #     filters:
-  #       branches:
-  #         only: master
-  # - django-docker-image-build:
-  #     requires:
-  #       - backend-test
-  #     filters:
-  #       branches:
-  #         only: master
-  # - nginx-docker-image-build:
-  #     requires:
-  #       - backend-test
-  #     filters:
-  #       branches:
-  #         only: master
-  deploy:
+  build-and-test:
     jobs:
-      # - django-docker-image-build
-      - ecs-service-update
-        # requires:
-        #   - django-docker-image-build
+      - docker-compose-cache
+      - backend-test:
+          requires:
+            - docker-compose-cache
+      - frontend-test
+      - frontend-build:
+          requires:
+            - frontend-test
+      - frontend-deploy:
+          requires:
+            - frontend-build
+          filters:
+            branches:
+              only: master
+      - django-docker-image-build-and-deploy:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
+      - nginx-docker-image-build-and-deploy:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
+      - ecs-service-update:
+          requires:
+            - django-docker-image-build-and-deploy
+            - nginx-docker-image-build-and-deploy
+          filters:
+            branches:
+              only: master

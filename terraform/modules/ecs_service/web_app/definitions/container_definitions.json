@@ -65,6 +65,10 @@
         "value": "${frontend_url}"
       },
       {
+        "name": "API_GATEWAY_URL",
+        "value": "${api_gateway_url}"
+      },
+      {
         "name": "AWS_S3_ACCESS_KEY_ID",
         "value": "${AWS_S3_ACCESS_KEY_ID}"
       },
