@@ -1,8 +1,9 @@
 version: 2.1
 orbs:
+  aws-cli: circleci/aws-cli@0.1.4
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
-  aws-ecs: circleci/aws-ecs@1.4.0
+  aws-ecs: circleci/aws-ecs@0.0.10
 commands:
   yarn_install:
     steps:
@@ -150,14 +151,15 @@ jobs:
           repo: "$AWS_NGINX_REPO_NAME"
           region: AWS_REGION
           path: backend/nginx/
-          tag: "${CIRCLE_SHA1}"
+          # tag: "${CIRCLE_SHA1}"
+          tag: latest
   ecs-service-update:
     executor: backend-executor
     steps:
-      - aws-ecs/update-service:
+      - aws-ecs/deploy-service-update:
           family: "${APP_PREFIX}-production"
           cluster-name: "${APP_PREFIX}-production-ecs"
-          container-image-name-updates: "container=backend,tag=${CIRCLE_SHA1}"
+          container-image-name-updates: "container=backend,tag=latest"
 workflows:
   version: 2
   # build-and-test:
