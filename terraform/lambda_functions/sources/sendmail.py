@@ -48,5 +48,6 @@ def handler(event, context):
             "Content-Type": 'application/json',
             "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
             "Access-Control-Allow-Methods": "POST",
-            "Access-Control-Allow-Origin": ALLOW_ORIGIN,
+            "Access-Control-Allow-Origin": f"{ALLOW_ORIGIN}",
+        },
         "body": json.dumps(encode_body)}

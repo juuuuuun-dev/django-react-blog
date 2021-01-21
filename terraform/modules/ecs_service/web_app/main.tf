@@ -109,7 +109,7 @@ aws ecs run-task \
 
 */
 resource "aws_ecs_task_definition" "migrate" {
-  family                   = "${var.app_name}-${var.environment}-migrate"
+  family                   = "${var.family}-migrate"
   cpu                      = var.cpu
   memory                   = var.memory
   network_mode             = "awsvpc"

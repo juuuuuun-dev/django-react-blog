@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
+  aws-ecs: circleci/aws-ecs@1.4.0
 commands:
   yarn_install:
     steps:
@@ -150,34 +151,41 @@ jobs:
           region: AWS_REGION
           path: backend/nginx/
           tag: latest
-
+  ecs-service-update:
+    executor: backend-executor
+    steps:
+      - aws-ecs/deploy-service-update:
+          family: "${APP_PREFIX}-production"
+          cluster-name: "${APP_PREFIX}-production-ecs"
+          container-image-name-updates: "container=backend,tag=latest"
 workflows:
   version: 2
   build-and-test:
     jobs:
-      - docker-compose-cache
-      - backend-test:
-          requires:
-            - docker-compose-cache
-      - frontend-test
-      - frontend-build:
-          requires:
-            - frontend-test
-      - frontend-deploy:
-          requires:
-            - frontend-build
-          filters:
-            branches:
-              only: master
-      - django-docker-image-build:
-          requires:
-            - backend-test
-          filters:
-            branches:
-              only: master
-      - nginx-docker-image-build:
-          requires:
-            - backend-test
-          filters:
-            branches:
-              only: master
+      # - docker-compose-cache
+      # - backend-test:
+      #     requires:
+      #       - docker-compose-cache
+      # - frontend-test
+      # - frontend-build:
+      #     requires:
+      #       - frontend-test
+      # - frontend-deploy:
+      #     requires:
+      #       - frontend-build
+      #     filters:
+      #       branches:
+      #         only: master
+      # - django-docker-image-build:
+      #     requires:
+      #       - backend-test
+      #     filters:
+      #       branches:
+      #         only: master
+      # - nginx-docker-image-build:
+      #     requires:
+      #       - backend-test
+      #     filters:
+      #       branches:
+      #         only: master
+      - ecs-service-update
