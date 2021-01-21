@@ -161,7 +161,7 @@ jobs:
           aws-access-key-id: $AWS_ACCESS_KEY_ID
           aws-region: $AWS_REGION
       - aws-ecs/update-service:
-          family: "${APP_PREFIX}-production"
+          family: "web_app"
           cluster-name: "${APP_PREFIX}-production-ecs"
           # container-image-name-updates: "container=backend,tag=latest"
 workflows:
