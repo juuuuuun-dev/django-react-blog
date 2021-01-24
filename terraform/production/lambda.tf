@@ -24,6 +24,14 @@ resource "aws_lambda_function" "sendmail" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "lambda_sendmail_logs" {
+  name              = "/aws/lambda/${aws_lambda_function.sendmail.function_name}"
+  retention_in_days = 30
+}
+
+# resource "aws_iam_role_policy_attachment" "lambda_sendmail_logs" {
+# }
+
 resource "aws_api_gateway_resource" "proxy" {
   rest_api_id = aws_api_gateway_rest_api.default.id
   parent_id   = aws_api_gateway_rest_api.default.root_resource_id

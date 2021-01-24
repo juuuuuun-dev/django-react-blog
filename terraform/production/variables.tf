@@ -10,6 +10,10 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "aws_account_id" {
+  description = "AWS account id"
+}
+
 /*
   ROUTE53
 */
