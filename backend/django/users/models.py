@@ -114,10 +114,10 @@ class UserProfile(models.Model):
         uid = self.user.pk
         url = settings.FRONTEND_URL
         reset_api = "/password-reset-confirm/{0}/{1}".format(uid, token)
-
+        site_setting = SiteSetting.get_site_setting()
         context = {
             'email': self.user.email,
-            'site_name': getattr(settings, 'SITE_NAME', 'site name'),
+            'site_name': site_setting.name,
             'user': self.user,
             'reset_url': "{0}{1}".format(url, reset_api)
         }
