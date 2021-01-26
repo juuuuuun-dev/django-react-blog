@@ -1,5 +1,5 @@
 resource "aws_sns_topic" "alarm_topic" {
-  name = "alarm_topic"
+  name = "${var.app_name}-${var.environment}-alarm-topic"
 }
 
 resource "aws_sns_topic_policy" "alarm_topic_policy" {
@@ -12,31 +12,21 @@ data "aws_iam_policy_document" "sns_topic_policy" {
   statement {
     actions = [
       "SNS:Subscribe",
-      "SNS:SetTopicAttributes",
-      "SNS:RemovePermission",
       "SNS:Receive",
       "SNS:Publish",
-      "SNS:ListSubscriptionsByTopic",
-      "SNS:GetTopicAttributes",
-      "SNS:DeleteTopic",
-      "SNS:AddPermission",
     ]
-
     condition {
       test     = "StringEquals"
       variable = "AWS:SourceOwner"
-
       values = [
         var.aws_account_id,
       ]
     }
-
     effect = "Allow"
-
     principals {
       type = "Service"
       identifiers = [
-        "sns.amazonaws.com",
+        "cloudwatch.amazonaws.com",
       ]
     }
     resources = [
@@ -52,8 +42,7 @@ webでコンソールにログインして設定する必要がある
 */
 resource "aws_sns_topic_subscription" "name" {
   topic_arn = aws_sns_topic.alarm_topic.arn
-  protocol  = "sqs"
-  endpoint  = aws_sqs_queue.alarm_queue.arn
-
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.send_sns_message.arn
 }
 

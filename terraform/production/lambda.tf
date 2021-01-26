@@ -17,9 +17,25 @@ resource "aws_lambda_function" "sendmail" {
   source_code_hash = data.archive_file.lambda_functions.output_base64sha256
   environment {
     variables = {
-      FROM_EMAIL_ADDRESS = var.ses_sendmail_address
+      FROM_EMAIL_ADDRESS = var.ses_sendmail_from_email_address
       REGION             = var.aws_region
       ALLOW_ORIGIN       = local.allow_origin
+    }
+  }
+}
+
+resource "aws_lambda_function" "send_sns_message" {
+  function_name    = "send_sns_message"
+  handler          = "send_sns_message.handler"
+  role             = module.lambda_role.this_iam_role_arn
+  runtime          = "python3.8"
+  filename         = data.archive_file.lambda_functions.output_path
+  source_code_hash = data.archive_file.lambda_functions.output_base64sha256
+  environment {
+    variables = {
+      FROM_EMAIL_ADDRESS = var.ses_sendmail_from_email_address
+      TO_EMAIL_ADDRESS   = var.send_sns_message_to_email_address
+      REGION             = var.aws_region
     }
   }
 }
@@ -27,6 +43,20 @@ resource "aws_lambda_function" "sendmail" {
 resource "aws_cloudwatch_log_group" "lambda_sendmail_logs" {
   name              = "/aws/lambda/${aws_lambda_function.sendmail.function_name}"
   retention_in_days = 30
+}
+
+
+resource "aws_cloudwatch_log_group" "lambda_send_sns_message_logs" {
+  name              = "/aws/lambda/${aws_lambda_function.send_sns_message.function_name}"
+  retention_in_days = 30
+}
+
+resource "aws_lambda_permission" "send_sns_message_permission" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.send_sns_message.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.alarm_topic.arn
 }
 
 # resource "aws_iam_role_policy_attachment" "lambda_sendmail_logs" {
