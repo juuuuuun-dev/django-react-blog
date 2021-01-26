@@ -1,11 +1,13 @@
 @import '../variable.less';
 @import './postCommon.less';
+@import "../../markdown.less";
 
 //////////////
 // postDetail
 //////////////
 
 .post-detail {
+  margin-bottom: @global-margin / 2;
   &__cover {
     margin-bottom: @global-margin / 2;
     border-radius: 4px;
@@ -18,6 +20,14 @@
     margin-bottom: @global-margin / 2;
     &__item:not(:last-child) {
       margin-bottom: 10px;
+    }
+  }
+}
+
+@media screen and (max-width: @sm-break-point) {
+  .post-detail {
+    &__cover {
+      width: 80px;
     }
   }
 }
