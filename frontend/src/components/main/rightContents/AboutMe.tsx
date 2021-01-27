@@ -14,8 +14,8 @@ const AboutMe: React.FC<AboutMeProps> = ({ author }) => {
       {author && <RightContentSection title="About me">
         <div className="right-contents-about-me" data-testid="right-contents-about-me">
           <Row className="right-contents-about-me__avatar">
-            <Col flex="80px">
-              {author.thumb && init && <Link to="/about"><Avatar size={60} src={`${author.thumb}`}></Avatar></Link>}
+            <Col flex="40px">
+              {author.thumb && init && <Link to="/about"><Avatar size={30} src={`${author.thumb}`}></Avatar></Link>}
             </Col>
             <Col flex="auto">
               <h3><Link data-testid="right-contents-about-me-name" to="/about">{author.public_name}</Link></h3>

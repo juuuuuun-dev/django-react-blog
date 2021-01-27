@@ -2,7 +2,6 @@ import os
 import uuid
 
 from django.db import models
-from django.shortcuts import get_object_or_404
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
@@ -13,6 +12,7 @@ def get_file_path(instance, filename):
 
 
 class SiteSetting(models.Model):
+    default_site_setting_id = 1
     base_cache_key = 'site_settings'
     default_site_name = 'Site name'
     default_description = 'Site descritpion'
@@ -61,7 +61,8 @@ class SiteSetting(models.Model):
     @classmethod
     def get_site_setting(self):
         try:
-            site_setting = SiteSetting.objects.get(id=1)
+            site_setting = SiteSetting.objects.get(
+                id=self.default_site_setting_id)
         except SiteSetting.DoesNotExist:
             site_setting = None
         return site_setting

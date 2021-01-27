@@ -1,4 +1,5 @@
 import '../../less/admin/postForm.less';
+import '../../less/markdown.less';
 
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';

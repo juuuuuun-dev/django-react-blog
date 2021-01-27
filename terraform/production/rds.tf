@@ -69,6 +69,26 @@ module "db" {
     {
       name  = "collation_server"
       value = "utf8mb4_unicode_ci"
+    },
+    {
+      name  = "slow_query_log"
+      value = 1
+    }
+  ]
+
+  options = [
+    {
+      option_name = "MARIADB_AUDIT_PLUGIN"
+      option_settings = [
+        {
+          name  = "SERVER_AUDIT_EVENTS"
+          value = "CONNECT"
+        },
+        {
+          name  = "SERVER_AUDIT_FILE_ROTATIONS"
+          value = "30"
+        }
+      ]
     }
   ]
 }

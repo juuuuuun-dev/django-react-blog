@@ -10,6 +10,10 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "aws_account_id" {
+  description = "AWS account id"
+}
+
 /*
   ROUTE53
 */
@@ -126,6 +130,9 @@ variable "AWS_S3_SECRET_ACCESS_KEY" {
 /*
 SES
 */
-variable "ses_sendmail_address" {
+variable "ses_sendmail_from_email_address" {
   description = "Used to send email with SES"
+}
+variable "send_sns_message_to_email_address" {
+  description = "Send sns message to email address"
 }
