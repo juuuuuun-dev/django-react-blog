@@ -31,31 +31,31 @@ describe("Admin posts index", () => {
   })
 
   // filter search
-  it("Filter search", async () => {
-    mocked(list).mockImplementation(
-      (): Promise<AxiosResponse<any>> => Promise.resolve(adminListAxiosResponse)
-    );
-    const { utils } = await setUp(initialPath);
-    await waitFor(() => {
-      expect(utils.getAllByText("CREATE")).toBeTruthy();
-      expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
-    })
-    fireEvent.click(utils.getByLabelText('open-filter-serach'));
-    await waitFor(() => {
-      expect(utils.getByLabelText("input-filter-search")).toBeTruthy();
-      fireEvent.change(utils.getByLabelText("input-filter-search"), { target: { value: "STAY HOME" } })
-    })
-    fireEvent.click(utils.getByLabelText('submit-filter-search'));
+  // it("Filter search", async () => {
+  //   mocked(list).mockImplementation(
+  //     (): Promise<AxiosResponse<any>> => Promise.resolve(adminListAxiosResponse)
+  //   );
+  //   const { utils } = await setUp(initialPath);
+  //   await waitFor(() => {
+  //     expect(utils.getAllByText("CREATE")).toBeTruthy();
+  //     expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
+  //   })
+  //   fireEvent.click(utils.getByLabelText('open-filter-serach'));
+  //   await waitFor(() => {
+  //     expect(utils.getByLabelText("input-filter-search")).toBeTruthy();
+  //     fireEvent.change(utils.getByLabelText("input-filter-search"), { target: { value: "STAY HOME" } })
+  //   })
+  //   fireEvent.click(utils.getByLabelText('submit-filter-search'));
 
-    await waitFor(() => {
-      expect(utils.getAllByText("No Data")).toBeTruthy();
-    })
-    fireEvent.click(utils.getByLabelText('open-filter-serach'));
-    fireEvent.click(utils.getByLabelText('reset-filter-search'));
-    await waitFor(() => {
-      expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
-    })
-  })
+  //   await waitFor(() => {
+  //     expect(utils.getAllByText("No Data")).toBeTruthy();
+  //   })
+  //   fireEvent.click(utils.getByLabelText('open-filter-serach'));
+  //   fireEvent.click(utils.getByLabelText('reset-filter-search'));
+  //   await waitFor(() => {
+  //     expect(utils.getByText(adminListAxiosResponse.data.results[0].title)).toBeTruthy()
+  //   })
+  // })
 
   // filter category
   it("Filter category", async () => {

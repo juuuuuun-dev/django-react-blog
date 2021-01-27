@@ -7,11 +7,12 @@ const endPoint = '/posts/admin-post/';
 
 export const list = async (queries: ListQuery) => {
   const query = queryStringify(queries);
-  return axios.get(`${endPoint}?${query}`);
+  const queryString: string = query ? `?${query}` : ''
+  return axios.get(`${endPoint}${queryString}`);
 };
 
 export const retrieve = async (slug: string | undefined) => {
-  return axios.get(`${endPoint}${slug}`)
+  return axios.get(`${endPoint}${slug}/`)
 }
 
 export const update = async (slug: string | undefined, data: PostDetail) => {

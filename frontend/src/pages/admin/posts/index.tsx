@@ -7,9 +7,9 @@ import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import { CheckOutlined } from '@ant-design/icons';
 
+// import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
 import FilterSelectColumn from '../../../components/admin/FilterSelectColumn';
-import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import toast from '../../../components/common/toast';
 import { AdminContext } from '../../../context/adminContext';
 import { sortBoolean, sortDate } from '../../../helper/sort';
@@ -19,12 +19,12 @@ import { PostDetail, PostList } from '../../../types/posts';
 const Posts: React.FC = () => {
   const [state, dispatch] = React.useContext(AdminContext);
   const [query, setQuery] = useQueryParams({ category: NumberParam, tag: NumberParam, search: StringParam, page: NumberParam });
-  const [searchText, setSearchText] = React.useState<string>('');
-  const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const [data, setData] = React.useState<PostList | undefined>();
-  const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
   const history = useHistory();
+  // const [searchText, setSearchText] = React.useState<string>('');
+  // const [searchedColumn, setSearchedColumn] = React.useState<string>('');
+  // const searchRef = React.useRef<null | Input>(null);
 
   const categoryById: any = React.useMemo(() => {
     return keyBy(data?.categories, 'id')
@@ -50,11 +50,11 @@ const Posts: React.FC = () => {
     if (state.hasToken) fetchData();
   }, [fetchData, state.hasToken, query]);
 
-  const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex)
-  };
+  // const handleFilterSearch = (selectedKeys: string, confirm: any, dataIndex: string) => {
+  //   confirm();
+  //   setSearchText(selectedKeys[0]);
+  //   setSearchedColumn(dataIndex)
+  // };
 
   const handleQuerySearch = (search: string): void => {
     setQuery({
@@ -91,10 +91,10 @@ const Posts: React.FC = () => {
       search: query.search || undefined,
     }, 'push')
   }
-  const handleReset = (clearFilters: () => void) => {
-    clearFilters();
-    setSearchText('');
-  };
+  // const handleReset = (clearFilters: () => void) => {
+  //   clearFilters();
+  //   setSearchText('');
+  // };
 
   const columns = [
     {
@@ -103,15 +103,15 @@ const Posts: React.FC = () => {
       dataIndex: 'title',
       key: 'title',
       width: '43%',
-      ...searchWithinPageColumn({
-        dataIndex: 'title',
-        searchRef: searchRef,
-        handleSearch: handleFilterSearch,
-        handleReset: handleReset,
-        searchedColumn: searchedColumn,
-        searchText: searchText,
-        path: location.pathname,
-      })
+      // ...searchWithinPageColumn({
+      //   dataIndex: 'title',
+      //   searchRef: searchRef,
+      //   handleSearch: handleFilterSearch,
+      //   handleReset: handleReset,
+      //   searchedColumn: searchedColumn,
+      //   searchText: searchText,
+      //   path: location.pathname,
+      // })
     },
     {
       title: 'category',
@@ -185,7 +185,6 @@ const Posts: React.FC = () => {
     },
   ];
 
-
   return (
     <>
       <CreateAndSearchRow
@@ -201,7 +200,7 @@ const Posts: React.FC = () => {
         onRow={(record: any) => {
           return {
             onClick: () => {
-              history.push(`${location.pathname}/${record.slug}/edit`);
+              history.push(`${location.pathname}/${record.id}/edit`);
             },
           }
         }}

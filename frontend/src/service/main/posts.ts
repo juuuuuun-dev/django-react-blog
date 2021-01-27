@@ -11,7 +11,7 @@ export const list = async (queries: ListQuery) => {
 };
 
 export const retrieve = async (slug: string | undefined) => {
-  return axios.get(`${endPoint}/detail/${slug}`)
+  return axios.get(`${endPoint}detail/${slug}/`)
 }
 
 // export const postFormItem = async () => {
