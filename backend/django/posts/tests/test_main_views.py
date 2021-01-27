@@ -168,7 +168,8 @@ class PostDetailTestCase(APITestCase):
         tag = TagFactory.create(name="tag")
         category = CategoryFactory.create(name="test")
         post = PostFactory.create(user=self.user, category=category, tag=[tag])
-        api = reverse("posts:post-detail", kwargs={"pk": post.id})
+        api = reverse("posts:post-detail", kwargs={"slug": post.slug})
+        print(api)
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['post']['title'], post.title)
@@ -184,6 +185,6 @@ class PostDetailTestCase(APITestCase):
             is_show=False,
             category=category,
             tag=[tag])
-        api = reverse("posts:post-detail", kwargs={"pk": post.id})
+        api = reverse("posts:post-detail", kwargs={"slug": post.slug})
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

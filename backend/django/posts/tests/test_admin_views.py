@@ -47,7 +47,6 @@ class AdminPostViewSetTestCase(APITestCase):
         self.assertTrue(response.data['results'][0]['category'])
         self.assertEqual(len(response.data['results'][0]['tag']), 1)
         self.assertEqual(len(response.data['tags']), 2)
-        print(response.data['results'][0]['cover_media'])
 
     def test_get_filter_category(self):
         tag = TagFactory.create(name="tagdayo")
@@ -117,7 +116,7 @@ class AdminPostViewSetTestCase(APITestCase):
         category2 = CategoryFactory.create(name="category2")
 
         post = PostFactory.create(user=self.user, category=category, tag=[tag])
-        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        api = reverse("posts:admin-post-detail", kwargs={"slug": post.slug})
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['post']['title'], post.title)
@@ -165,7 +164,7 @@ class AdminPostViewSetTestCase(APITestCase):
         post = PostFactory.create(user=self.user, tag=[tag])
         category = CategoryFactory.create(name="test")
         media = MediaFactory.create(name="test")
-        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        api = reverse("posts:admin-post-detail", kwargs={"slug": post.slug})
         post_data = {
             "title": "testtest",
             "slug": "slug-testtest",
@@ -190,7 +189,7 @@ class AdminPostViewSetTestCase(APITestCase):
     def test_delete(self):
         tag = TagFactory.create(name="tag")
         post = PostFactory.create(user=self.user, tag=[tag])
-        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        api = reverse("posts:admin-post-detail", kwargs={"slug": post.slug})
         response = self.client.delete(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 

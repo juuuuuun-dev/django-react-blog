@@ -10,8 +10,8 @@ export const list = async (queries: ListQuery) => {
   return axios.get(`${endPoint}?${query}`);
 };
 
-export const retrieve = async (id: string | undefined) => {
-  return axios.get(`${endPoint}/${id}`)
+export const retrieve = async (slug: string | undefined) => {
+  return axios.get(`${endPoint}/detail/${slug}`)
 }
 
 // export const postFormItem = async () => {

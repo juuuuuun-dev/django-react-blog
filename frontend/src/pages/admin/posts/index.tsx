@@ -145,13 +145,13 @@ const Posts: React.FC = () => {
         handleChange: handleTagChange,
       }),
       render: (text: Array<any>) =>
-        (<>{tagById && text.map((value, index) => {
-          if (tagById[value]) {
-            return <Tag key={index}>{tagById[value].name}</Tag>
-          }
-          return null
-        })}</>
-        )
+      (<>{tagById && text.map((value, index) => {
+        if (tagById[value]) {
+          return <Tag key={index}>{tagById[value].name}</Tag>
+        }
+        return null
+      })}</>
+      )
     },
     {
       title: 'show',
@@ -201,7 +201,7 @@ const Posts: React.FC = () => {
         onRow={(record: any) => {
           return {
             onClick: () => {
-              history.push(`${location.pathname}/${record.id}/edit`);
+              history.push(`${location.pathname}/${record.slug}/edit`);
             },
           }
         }}

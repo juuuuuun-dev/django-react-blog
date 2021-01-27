@@ -16,9 +16,9 @@ router.register(r'admin-post', AdminPostViewSet, basename="admin-post")
 urlpatterns = [path('',
                     main_views.PostList.as_view({'get': 'list'}),
                     name="post-list"),
-               path('<int:pk>/',
+               path('detail/<slug:slug>/',
                     main_views.PostDetail.as_view({'get': 'retrieve'}),
-                    name="post-detail"),
+                    name="post-detail"),  # need detail path for pattern match
                path('categories/<slug:slug>/',
                     main_views.PostCategorySlugList.as_view({'get': 'list'}),
                     name="post-category-slug-list"),

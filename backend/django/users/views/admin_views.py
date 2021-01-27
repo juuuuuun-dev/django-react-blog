@@ -42,17 +42,11 @@ class PasswordResetView(views.APIView):
     serializer_class = PasswordResetSerializer
 
     def post(self, request):
-        print("post 1")
-        print(request.data['email'])
         user_profile = self.get_user_profile(request.data['email'])
-        print("post 2")
         if user_profile:
-            print("post 3")
             result = user_profile.send_password_reset_email(
                 site=get_current_site(request))
             if result:
-                print("post 4")
-
                 data = {
                     'sending': True,
                 }
@@ -82,7 +76,6 @@ class PasswordResetConfirmationView(views.APIView):
         )
 
         if serializer.is_valid(raise_exception=True):
-            # print(self.user.is_active)
             new_password = serializer.validated_data.get('new_password')
             user = serializer.user
             user.set_password(new_password)

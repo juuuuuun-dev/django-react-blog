@@ -34,7 +34,6 @@ class InitialViewsTestCase(APITestCase):
         category = CategoryFactory(name="cat")
         post = PostFactory.create(user=self.user, tag=[tag])
         api = reverse("init:init-api")
-        print(160 / 2)
         response = self.client.get(api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(

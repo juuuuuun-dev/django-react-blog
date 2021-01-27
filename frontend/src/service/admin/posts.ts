@@ -10,12 +10,12 @@ export const list = async (queries: ListQuery) => {
   return axios.get(`${endPoint}?${query}`);
 };
 
-export const retrieve = async (id: string | undefined) => {
-  return axios.get(`${endPoint}${id}`)
+export const retrieve = async (slug: string | undefined) => {
+  return axios.get(`${endPoint}${slug}`)
 }
 
-export const update = async (id: string | undefined, data: PostDetail) => {
-  return axios.put(`${endPoint}${id}/`, data)
+export const update = async (slug: string | undefined, data: PostDetail) => {
+  return axios.put(`${endPoint}${slug}/`, data)
   // const headers = { "content-type": "multipart/form-data" };
   // return axios.put(`${endPoint}${id}/`, data, { headers })
 }

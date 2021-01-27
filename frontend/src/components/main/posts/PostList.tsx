@@ -26,7 +26,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
             >
               <Skeleton loading={data?.results ? false : true} active>
                 <List.Item.Meta
-                  title={<Link to={`/posts/${item.id}`}><Paragraph
+                  title={<Link to={`/posts/${item.slug}`}><Paragraph
                     ellipsis={{
                       rows: 2,
                       expandable: false,
@@ -48,14 +48,14 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                       className="post-list__description"
                       title={`${item.plain_content}`}
                     >
-                      <Link to={`/posts/${item.id}`}>{item.plain_content}</Link>
+                      <Link to={`/posts/${item.slug}`}>{item.plain_content}</Link>
                     </Paragraph>
                     <EntryData post={item} showCategory={true} />
                   </>}
                 />
                 {item.cover_media.cover &&
                   <div className="post-list__thumb">
-                    <Link to={`/posts/${item.id}`}>
+                    <Link to={`/posts/${item.slug}`}>
                       <LazyLoadComponent>
                         <picture>
                           <source media={`(max-width: ${breakPoint.sm - 1}px)`} srcSet={`${item.cover_media.cover} 2x`}></source>

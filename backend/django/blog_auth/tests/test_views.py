@@ -21,7 +21,6 @@ class RestUserAuthTestCase(APITestCase):
 
     def test_login_success(self):
         # login
-        print(self.user.username)
         post_data = {
             "username": self.user.username,
             "password": "testtest1234",

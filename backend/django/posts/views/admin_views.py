@@ -20,6 +20,7 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
     filterset_fields = ['category', 'tag']
     pagination_class = PostPagination
     base_cache_key = Post.base_cache_key
+    lookup_field = 'slug'
 
     def list(self, request):
         queryset = self.get_list_queryset(
@@ -33,9 +34,9 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         }
         return self.get_paginated_response(data)
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, slug=None):
         queryset = self.get_detail_queryset(
-            base_key=self.base_cache_key, request=request, pk=pk)
+            base_key=self.base_cache_key, request=request, slug=slug)
         serializer = admin_serializers.AdminGetSerializer(queryset, context={
             "request": request})
         data = Post.get_tag_and_category_list()
@@ -49,8 +50,6 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
     def create(self, request, *args, **kwargs):
         user = User.objects.get(id=self.request.user.id)
         cp = request.data.copy()
-        # if 'cover' in self.request.data:
-        #     cp['cover'] = file.base64decode(self.request.data['cover'])
         if 'content' in self.request.data:
             plain = self.make_plain_content(self.request.data['content'])
 
@@ -67,9 +66,9 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
             serializer.data,
             status=status.HTTP_201_CREATED)
 
-    def update(self, request, pk=None):
+    def update(self, request, slug=None):
         queryset = self.queryset
-        instance = get_object_or_404(queryset, pk=pk)
+        instance = get_object_or_404(queryset, slug=slug)
         cp = request.data.copy()
         # if 'cover' in self.request.data:
         #     post = Post.objects.get(id=self.kwargs['pk'])
@@ -86,8 +85,8 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         self.delete_list_cache(self.base_cache_key)
         self.delete_list_cache(Post.show_cache_key)
         self.delete_list_cache(Post.recent_cache_key)
-        self.delete_detail_cache(base_key=self.base_cache_key, pk=pk)
-        self.delete_detail_cache(base_key=Post.show_cache_key, pk=pk)
+        self.delete_detail_cache(base_key=self.base_cache_key, slug=slug)
+        self.delete_detail_cache(base_key=Post.show_cache_key, slug=slug)
         return response.Response(serializer.data)
 
     def make_plain_content(self, content):

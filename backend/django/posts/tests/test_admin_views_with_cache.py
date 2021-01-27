@@ -96,7 +96,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
         update_api = reverse(
             "posts:admin-post-detail",
             kwargs={
-                "pk": post2.id})
+                "slug": post2.slug})
         update_response = self.client.put(update_api, post_data)
         self.assertEqual(update_response.status_code, status.HTTP_200_OK)
         after_cache_data = cache.get(cache_key)
@@ -166,7 +166,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
         update_api = reverse(
             "posts:admin-post-detail",
             kwargs={
-                "pk": post.id})
+                "slug": post.slug})
         update_response = self.client.put(update_api, post_data)
         self.assertEqual(update_response.status_code, status.HTTP_200_OK)
         category_1_cache_data = cache.get(category_1_cache_key)
@@ -188,7 +188,6 @@ class AdminPostViewSetWithTestCase(APITestCase):
             "&",
             urlencode({"page": page}),
         ])
-        print(api)
         cache_key = cache_key_stringfiy(
             base_key=self.base_cache_key, query_dict={
                 'category': category.id, 'page': page, })
@@ -213,7 +212,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
         update_api = reverse(
             "posts:admin-post-detail",
             kwargs={
-                "pk": post_1.id})
+                "slug": post_1.slug})
         update_response = self.client.put(update_api, post_data)
         self.assertEqual(update_response.status_code, status.HTTP_200_OK)
         after_cache_data = cache.get(cache_key)
@@ -223,10 +222,10 @@ class AdminPostViewSetWithTestCase(APITestCase):
         tag = TagFactory.create(name="tag")
         category = CategoryFactory.create(name="test")
         post = PostFactory.create(user=self.user, category=category, tag=[tag])
-        cache_key = get_detail_key(base_key='posts', pk=post.id)
+        cache_key = get_detail_key(base_key='posts', slug=post.slug)
         cache_data = cache.get(cache_key)
         self.assertIsNone(cache_data)
-        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        api = reverse("posts:admin-post-detail", kwargs={"slug": post.slug})
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['post']['title'], post.title)
@@ -248,19 +247,20 @@ class AdminPostViewSetWithTestCase(APITestCase):
             tag=[tag],
             is_show=True)
         show_cache_key = get_detail_key(
-            base_key=Post.show_cache_key, pk=post.id)
-        cache_key = get_detail_key(base_key=self.base_cache_key, pk=post.id)
+            base_key=Post.show_cache_key, slug=post.slug)
+        cache_key = get_detail_key(
+            base_key=self.base_cache_key, slug=post.slug)
         cache_data = cache.get(cache_key)
         show_cache_data = cache.get(show_cache_key)
         self.assertIsNone(cache_data)
         self.assertIsNone(show_cache_data)
-        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        api = reverse("posts:admin-post-detail", kwargs={"slug": post.slug})
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         cache_data = cache.get(cache_key)
         self.assertEqual(cache_data.id, post.id)
 
-        main_api = reverse("posts:post-detail", kwargs={"pk": post.id})
+        main_api = reverse("posts:post-detail", kwargs={"slug": post.slug})
         main_response = self.client.get(main_api, format="json")
         self.assertEqual(main_response.status_code, status.HTTP_200_OK)
 
@@ -276,7 +276,7 @@ class AdminPostViewSetWithTestCase(APITestCase):
         update_api = reverse(
             "posts:admin-post-detail",
             kwargs={
-                "pk": post.id})
+                "slug": post.slug})
         update_response = self.client.put(update_api, post_data)
         self.assertEqual(update_response.status_code, status.HTTP_200_OK)
         after_cache_data = cache.get(cache_key)
@@ -293,19 +293,23 @@ class AdminPostViewSetWithTestCase(APITestCase):
             tag=[tag],
             is_show=True)
         show_cache_key = get_detail_key(
-            base_key=Post.show_cache_key, pk=post.id)
-        cache_key = get_detail_key(base_key=self.base_cache_key, pk=post.id)
+            base_key=Post.show_cache_key, slug=post.slug)
+        cache_key = get_detail_key(
+            base_key=self.base_cache_key, slug=post.slug)
         cache_data = cache.get(cache_key)
         show_cache_data = cache.get(show_cache_key)
         self.assertIsNone(cache_data)
         self.assertIsNone(show_cache_data)
-        api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        api = reverse("posts:admin-post-detail", kwargs={"slug": post.slug})
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         cache_data = cache.get(cache_key)
         self.assertEqual(cache_data.id, post.id)
 
-        delete_api = reverse("posts:admin-post-detail", kwargs={"pk": post.id})
+        delete_api = reverse(
+            "posts:admin-post-detail",
+            kwargs={
+                "slug": post.slug})
         response = self.client.delete(delete_api, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         cache_data = cache.get(cache_key)
