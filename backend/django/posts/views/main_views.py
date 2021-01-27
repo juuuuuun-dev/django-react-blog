@@ -93,10 +93,11 @@ class PostDetail(cache_views.ReadOnlyCacheModelViewSet):
     base_cache_key = Post.show_cache_key
     queryset = Post.objects.filter(is_show=True)
     serializer_class = main_serializers.MainPostSerializer
+    lookup_field = 'slug'
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, **kwargs):
         queryset = self.get_detail_queryset(
-            base_key=self.base_cache_key, request=request, pk=pk)
+            base_key=self.base_cache_key, request=request, **kwargs)
         serializer = self.get_serializer(queryset, context={
             "request": request})
         data = Post.get_tag_and_category_list()

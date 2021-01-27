@@ -16,13 +16,13 @@ import { PostDetail as TypePostDetail } from '../../types/posts';
 
 const Detail: React.FC = () => {
   const [post, setPost] = React.useState<TypePostDetail>()
-  const { id } = useParams();
+  const { slug } = useParams();
   const [state, dispatch] = React.useContext(MainContext);
   const [pushError] = useHistoryPushError();
   const history = useHistory();
   const fetchData = React.useCallback(async () => {
     try {
-      const res = await retrieve(id);
+      const res = await retrieve(slug);
       if (res.status === 200) {
         const meta = createMeta({
           title: res.data.post.title,
@@ -40,7 +40,7 @@ const Detail: React.FC = () => {
         pushError(e.response.status)
       }
     }
-  }, [id, pushError, dispatch, state.init, history.location.pathname])
+  }, [slug, pushError, dispatch, state.init, history.location.pathname])
   React.useEffect(() => {
     if (state.init) {
       fetchData();

@@ -63,7 +63,7 @@ export const navList: INavList[] = [
     icon: EditOutlined,
   },
   {
-    path: '/admin/posts/:id/edit',
+    path: '/admin/posts/:slug/edit',
     title: 'Post edit',
     component: PostEdit,
     hiddenNav: true,

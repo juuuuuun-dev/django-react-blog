@@ -13,14 +13,14 @@ const Edit: React.FC = () => {
   const [data, setData] = useState<PostDetail | undefined>();
   const [formItem, setFormItem] = useState<PostFormItem | undefined>();
   const [error, setError] = useState({})
-  const { id } = useParams();
+  const { slug } = useParams();
   const history = useHistory();
   const redirectPath = "/admin/posts";
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await retrieve(id);
+      const res = await retrieve(slug);
       setData(res.data.post);
       setFormItem({ categories: res.data.categories, tags: res.data.tags });
     } catch (e) {
@@ -28,7 +28,7 @@ const Edit: React.FC = () => {
     }
 
     dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-  }, [dispatch, id]);
+  }, [dispatch, slug]);
 
   React.useEffect(() => {
     if (state.hasToken) fetchData();
@@ -39,7 +39,7 @@ const Edit: React.FC = () => {
   const onSubmit = async (values: any) => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await update(id, values);
+      const res = await update(slug, values);
       if (res.status === 200) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'SUCCESS' });
@@ -57,7 +57,7 @@ const Edit: React.FC = () => {
   const onDelete = async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
     try {
-      const res = await destroy(id);
+      const res = await destroy(slug);
       if (res.status === 204) {
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
         toast({ type: 'DELETE' });

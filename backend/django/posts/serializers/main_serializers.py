@@ -16,6 +16,7 @@ class MainPostListSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
+            "slug",
             "plain_content",
             "cover_media",
             "category",
@@ -32,8 +33,10 @@ class MainPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
+        lookup_field = 'slug'
         fields = [
             "id",
+            "slug",
             "title",
             "content",
             "cover_media",

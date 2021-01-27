@@ -19,6 +19,7 @@ class AdminPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
+        lookup_field = 'slug'
         fields = [
             "user",
             "id",
@@ -48,6 +49,7 @@ class AdminGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
+        lookup_field = 'slug'
         fields = [
             "user",
             "id",
