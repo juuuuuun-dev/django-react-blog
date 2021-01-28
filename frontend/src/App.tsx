@@ -1,24 +1,23 @@
 import './less/app.less';
 
-import React from 'react';
-import { LazyLoadComponent } from 'react-lazy-load-image-component';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 
-import AdminLayout from './components/admin/layout/AdminLayout';
 import ScrollToTop from './components/common/ScrollToTop';
-import ErrorLayout from './components/error/layout/ErrorLayout';
-import LoginLayout from './components/login/layout/LoginLayout';
 import MainLayout from './components/main/layout/MainLayout';
 import { adminPathList } from './config/admin';
 import { mainPathList } from './config/main';
 import { AdminContextProvider } from './context/adminContext';
 import { MainContextProvider } from './context/mainContext';
 
+const AdminLayout = React.lazy(() => import('./components/admin/layout/AdminLayout'));
+const LoginLayout = React.lazy(() => import('./components/login/layout/LoginLayout'))
+const ErrorLayout = React.lazy(() => import('./components/error/layout/ErrorLayout'))
 function App() {
   return (
     <div className="App">
-      <LazyLoadComponent>
+      <Suspense fallback={<div>Loading...</div>}>
         <Router>
           <QueryParamProvider ReactRouterRoute={Route}>
             <ScrollToTop />
@@ -42,7 +41,7 @@ function App() {
             </Switch>
           </QueryParamProvider>
         </Router>
-      </LazyLoadComponent>
+      </Suspense>
     </div>
   );
 }

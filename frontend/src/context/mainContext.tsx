@@ -1,4 +1,4 @@
-import { keyBy } from 'lodash';
+import keyBy from 'lodash/keyBy';
 import React from 'react';
 
 import { makeTemporaryPostList } from '../helper/temporaryPosts';

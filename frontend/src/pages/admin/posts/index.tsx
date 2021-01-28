@@ -1,5 +1,5 @@
-import { Input, Table, Tag } from 'antd';
-import { keyBy } from 'lodash';
+import { Table, Tag } from 'antd';
+import keyBy from 'lodash/keyBy';
 import moment from 'moment';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -200,7 +200,7 @@ const Posts: React.FC = () => {
         onRow={(record: any) => {
           return {
             onClick: () => {
-              history.push(`${location.pathname}/${record.id}/edit`);
+              history.push(`${location.pathname}/${record.slug}/edit`);
             },
           }
         }}
