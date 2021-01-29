@@ -5,7 +5,6 @@ const {
   addWebpackPlugin,
   addWebpackModuleRule,
 } = require("customize-cra");
-const tsImportPluginFactory = require('ts-import-plugin')
 const CopyPlugin = require('copy-webpack-plugin');
 console.log("override build start")
 module.exports = override(
@@ -17,22 +16,9 @@ module.exports = override(
     modifyVars: { "@primary-color": "#333" }
   }),
   addWebpackModuleRule({
-    test: /\.(jsx|tsx|js|ts)$/,
-    loader: 'ts-loader',
-    options: {
-      transpileOnly: true,
-      getCustomTransformers: () => ({
-        before: [tsImportPluginFactory({
-          libraryName: 'antd',
-          libraryDirectory: 'lib',
-          style: true
-        })]
-      }),
-      compilerOptions: {
-        module: 'es2015'
-      }
-    },
-    exclude: /node_modules/
+    test: /\.less$/,
+    exclude: /node_modules/,
+    loader: ['style-loader', 'css-loader', 'less-loader'],
   }),
   addWebpackPlugin(new CopyPlugin({
     patterns: [{

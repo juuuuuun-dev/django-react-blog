@@ -1,3 +1,4 @@
+import 'antd/dist/antd.less';
 import './less/app.less';
 
 import React, { Suspense } from 'react';
@@ -12,8 +13,8 @@ import { AdminContextProvider } from './context/adminContext';
 import { MainContextProvider } from './context/mainContext';
 
 const AdminLayout = React.lazy(() => import('./components/admin/layout/AdminLayout'));
-const LoginLayout = React.lazy(() => import('./components/login/layout/LoginLayout'))
-const ErrorLayout = React.lazy(() => import('./components/error/layout/ErrorLayout'))
+const LoginLayout = React.lazy(() => import('./components/login/layout/LoginLayout'));
+const ErrorLayout = React.lazy(() => import('./components/error/layout/ErrorLayout'));
 function App() {
   return (
     <div className="App">
