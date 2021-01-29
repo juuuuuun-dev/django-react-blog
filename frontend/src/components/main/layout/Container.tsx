@@ -1,7 +1,8 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import { navList } from '../../../config/main';
 import { Spin } from 'antd';
+import React, { Suspense } from 'react';
+import { Route } from 'react-router-dom';
+
+import { navList } from '../../../config/main';
 import { MainContext } from '../../../context/mainContext';
 
 const RouteContentList = navList.map((item, index) => (
@@ -15,7 +16,9 @@ const Container = () => {
   return React.useMemo(() => {
     return (
       <Spin spinning={loading} tip="Loading..." >
-        {RouteContentList}
+        <Suspense fallback={<div></div>}>
+          {RouteContentList}
+        </Suspense>
       </Spin>
     );
   }, [loading]);

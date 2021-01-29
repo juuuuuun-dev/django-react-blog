@@ -2,7 +2,7 @@ import { Input, Table } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
@@ -21,6 +21,7 @@ const Media: React.FC = () => {
   const [searchedColumn, setSearchedColumn] = React.useState<string>('');
   const searchRef = React.useRef<null | Input>(null);
   const location = useLocation();
+  const history = useHistory();
 
   const fetchData = React.useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
@@ -120,9 +121,16 @@ const Media: React.FC = () => {
       />
       <Table
         data-testid="list-table"
-        className="list-table"
+        className="admin-table"
         columns={columns}
         dataSource={data?.results}
+        onRow={(record: any) => {
+          return {
+            onClick: () => {
+              history.push(`${location.pathname}/${record.id}/edit`);
+            },
+          }
+        }}
         pagination={{
           total: data?.count,
           pageSize: state.pageSize || 1,

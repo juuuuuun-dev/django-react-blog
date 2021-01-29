@@ -3,6 +3,7 @@ const {
   fixBabelImports,
   addLessLoader,
   addWebpackPlugin,
+  addWebpackModuleRule,
 } = require("customize-cra");
 const CopyPlugin = require('copy-webpack-plugin');
 console.log("override build start")
@@ -13,6 +14,11 @@ module.exports = override(
   addLessLoader({
     javascriptEnabled: true,
     modifyVars: { "@primary-color": "#333" }
+  }),
+  addWebpackModuleRule({
+    test: /\.less$/,
+    exclude: /node_modules/,
+    loader: ['style-loader', 'css-loader', 'less-loader'],
   }),
   addWebpackPlugin(new CopyPlugin({
     patterns: [{

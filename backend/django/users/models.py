@@ -27,6 +27,8 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, username, password=None):
+        if not email:
+            raise ValueError("email is required")
         user = self.create_user(email, username, password)
         user.is_staff = True
         user.is_admin = True
@@ -68,6 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
     # USERNAME_FIELD = "email"
     USERNAME_FIELD = "username"  # login field
+    REQUIRED_FIELDS = ['email']
 
     @classmethod
     def get_author(cls):

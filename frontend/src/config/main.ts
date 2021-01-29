@@ -1,11 +1,5 @@
 import React from 'react';
 
-import About from '../pages/about/index';
-import Categories from '../pages/categories/index';
-import Index from '../pages/Main';
-import PostDetail from '../pages/posts/detail';
-import Tags from '../pages/tags/index';
-
 interface INavList {
   path: string;
   title: string;
@@ -18,29 +12,29 @@ export const navList: INavList[] = [
   {
     path: '/',
     title: 'Home',
-    component: Index,
+    component: React.lazy(() => import("../pages/Main")),
     exact: true,
   },
   {
     path: '/posts/:slug/',
     title: 'Post',
-    component: PostDetail,
+    component: React.lazy(() => import("../pages/posts/detail")),
     hiddenNav: true,
   },
   {
     path: '/categories/:slug/',
     title: 'Categories',
-    component: Categories,
+    component: React.lazy(() => import("../pages/categories/index")),
   },
   {
     path: '/tags/:slug/',
     title: 'Tags',
-    component: Tags,
+    component: React.lazy(() => import("../pages/tags/index")),
   },
   {
     path: '/about/',
     title: 'About me',
-    component: About,
+    component: React.lazy(() => import("../pages/about/index")),
   },
 
 ];

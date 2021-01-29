@@ -4,23 +4,6 @@ import {
     ApartmentOutlined, EditOutlined, FileImageOutlined, SettingOutlined, TagOutlined
 } from '@ant-design/icons';
 
-import AboutMe from '../pages/admin/AboutMe';
-import CategoryCreate from '../pages/admin/categories/create';
-import CategoryEdit from '../pages/admin/categories/edit';
-import Categories from '../pages/admin/categories/index';
-import Dashboard from '../pages/admin/Dashboard';
-import MediaCreate from '../pages/admin/media/create';
-import MediaEdit from '../pages/admin/media/edit';
-import Media from '../pages/admin/media/index';
-import PostCreate from '../pages/admin/posts/create';
-import PostEdit from '../pages/admin/posts/edit';
-import Posts from '../pages/admin/posts/index';
-import Profile from '../pages/admin/Profile';
-import SiteSettings from '../pages/admin/SiteSettings';
-import TagCreate from '../pages/admin/tags/create';
-import TagEdit from '../pages/admin/tags/edit';
-import Tags from '../pages/admin/tags/index';
-
 interface INavList {
   id?: string;
   path: string;
@@ -52,27 +35,27 @@ export const navList: INavList[] = [
     id: 'dashboard',
     path: '/admin/dashboard',
     title: 'Dashboard',
-    component: Dashboard,
+    component: React.lazy(() => import("../pages/admin/Dashboard")),
   },
   {
     id: 'posts',
     path: '/admin/posts',
     title: 'Posts',
-    component: Posts,
+    component: React.lazy(() => import("../pages/admin/posts/index")),
     exact: true,
     icon: EditOutlined,
   },
   {
     path: '/admin/posts/:slug/edit',
     title: 'Post edit',
-    component: PostEdit,
+    component: React.lazy(() => import("../pages/admin/posts/edit")),
     hiddenNav: true,
     parentId: 'posts',
   },
   {
     path: '/admin/posts/create',
     title: 'Post create',
-    component: PostCreate,
+    component: React.lazy(() => import("../pages/admin/posts/create")),
     hiddenNav: true,
     parentId: 'posts',
   },
@@ -80,21 +63,21 @@ export const navList: INavList[] = [
     id: 'media',
     path: '/admin/media',
     title: 'Media',
-    component: Media,
+    component: React.lazy(() => import("../pages/admin/media/index")),
     exact: true,
     icon: FileImageOutlined,
   },
   {
     path: '/admin/media/create',
     title: 'Media create',
-    component: MediaCreate,
+    component: React.lazy(() => import("../pages/admin/media/create")),
     hiddenNav: true,
     parentId: 'media',
   },
   {
     path: '/admin/media/:id/edit',
     title: 'Media edit',
-    component: MediaEdit,
+    component: React.lazy(() => import("../pages/admin/media/edit")),
     hiddenNav: true,
     parentId: 'media',
   },
@@ -102,21 +85,21 @@ export const navList: INavList[] = [
     id: 'tags',
     path: '/admin/tags',
     title: 'Tags',
-    component: Tags,
+    component: React.lazy(() => import("../pages/admin/tags/index")),
     exact: true,
     icon: TagOutlined,
   },
   {
     path: '/admin/tags/:id/edit',
     title: 'Tag edit',
-    component: TagEdit,
+    component: React.lazy(() => import("../pages/admin/tags/edit")),
     hiddenNav: true,
     parentId: 'tags',
   },
   {
     path: '/admin/tags/create',
     title: 'Tag create',
-    component: TagCreate,
+    component: React.lazy(() => import("../pages/admin/tags/create")),
     hiddenNav: true,
     parentId: 'tags',
   },
@@ -124,21 +107,21 @@ export const navList: INavList[] = [
     id: 'categories',
     path: '/admin/categories',
     title: 'Categories',
-    component: Categories,
+    component: React.lazy(() => import("../pages/admin/categories/index")),
     exact: true,
     icon: ApartmentOutlined,
   },
   {
     path: '/admin/categories/:id/edit',
     title: 'Category edit',
-    component: CategoryEdit,
+    component: React.lazy(() => import("../pages/admin/categories/edit")),
     hiddenNav: true,
     parentId: 'categories',
   },
   {
     path: '/admin/categories/create',
     title: 'Category create',
-    component: CategoryCreate,
+    component: React.lazy(() => import("../pages/admin/categories/create")),
     hiddenNav: true,
     parentId: 'categories',
   },
@@ -147,21 +130,21 @@ export const navList: INavList[] = [
     group: 'setting',
     path: '/admin/profile',
     title: 'Public profile',
-    component: Profile,
+    component: React.lazy(() => import("../pages/admin/Profile")),
   },
   {
     id: 'aboutMe',
     group: 'setting',
     path: '/admin/about-me',
     title: 'About me',
-    component: AboutMe,
+    component: React.lazy(() => import("../pages/admin/AboutMe")),
   },
   {
     id: 'siteSettings',
     group: 'setting',
     path: '/admin/site-settings',
     title: 'Site settings',
-    component: SiteSettings,
+    component: React.lazy(() => import("../pages/admin/SiteSettings")),
   },
 ];
 
