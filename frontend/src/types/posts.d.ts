@@ -23,12 +23,18 @@ export type PostDetail = {
 }
 
 export type PostList = Pagination & {
-  results: PostDetail[],
-  tags: TagDetail[],
-  categories: CategoryDetail[],
+  results: PostDetail[];
+  tags: TagDetail[];
+  categories: CategoryDetail[];
   tag_name?: string;
   category_name?: string;
+  links: {
+    next?: string;
+    previous?: string;
+  },
+  count: number;
 } | undefined;
+
 
 export type PostListProps = {
   data: PostList;
