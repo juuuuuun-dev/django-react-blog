@@ -1,4 +1,5 @@
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
+import Button from 'antd/lib/button';
 import React from 'react';
 
 import { DeleteOutlined } from '@ant-design/icons';

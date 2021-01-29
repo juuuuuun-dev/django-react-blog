@@ -1,5 +1,4 @@
 import React from 'react';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import { MainContext } from '../../../context/mainContext';
 import AboutMe from '../rightContents/AboutMe';
@@ -13,12 +12,12 @@ const RightContainer: React.FC = () => {
   return (
     <>
       <div className="right-contents-section">
-        <LazyLoadImage
+        {/* <LazyLoadImage
           alt="test"
           className="right-contents-section__banner"
           width={"100%"}
           src={`/assets/images/right.jpg`}
-        />
+        /> */}
       </div>
       <AboutMe author={init?.author} />
       <PostSearchInput />

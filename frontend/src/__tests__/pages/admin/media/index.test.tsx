@@ -125,7 +125,7 @@ describe("Admin media index", () => {
     const { utils } = await setUp(initialPath);
     fireEvent.click(utils.getByTestId('side-nav-media'));
     await waitFor(() => {
-      expect(utils.getByText(defaultErrorText)).toBeTruthy();
+      expect(utils.getAllByText(defaultErrorText)).toBeTruthy();
     })
   })
 })
