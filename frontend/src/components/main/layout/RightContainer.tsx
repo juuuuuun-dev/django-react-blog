@@ -11,21 +11,21 @@ const RightContainer: React.FC = () => {
   const [{ init }] = React.useContext(MainContext);
   return (
     <>
-      <div className="right-contents-section">
-        {/* <LazyLoadImage
+      {/*<div className="right-contents-section">
+          <LazyLoadImage
           alt="test"
           className="right-contents-section__banner"
           width={"100%"}
           src={`/assets/images/right.jpg`}
-        /> */}
-      </div>
+        /> 
+      </div>*/}
       <AboutMe author={init?.author} />
       <PostSearchInput />
       <RecentPostList posts={init?.recentPosts} />
       <CategoryLinkList categories={init?.categories} />
       <TagLinkList tags={init?.tags} />
     </>
-  )
-}
+  );
+};
 
 export default RightContainer;
