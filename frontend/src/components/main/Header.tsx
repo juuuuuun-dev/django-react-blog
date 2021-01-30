@@ -32,7 +32,7 @@ const Header: React.FC = () => {
           <div className="header-container">
             <Row>
               <Col>
-                <Link to="/">
+                <Link to="/" title="Home">
                   <h1 className="app-title" data-testid="app-title">
                     {state.init?.siteSettings.logo
                       ? <picture>
