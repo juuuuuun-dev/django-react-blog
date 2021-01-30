@@ -8,6 +8,10 @@ https://github.com/hashicorp/terraform-provider-aws/issues/7987
 */
 
 
+data "aws_s3_bucket" "logs" {
+  bucket = "${var.app_name}-${var.environment}-logs"
+}
+
 module "alb" {
   source             = "terraform-aws-modules/alb/aws"
   version            = "~> 5.0"

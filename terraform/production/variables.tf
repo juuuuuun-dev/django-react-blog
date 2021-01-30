@@ -65,16 +65,6 @@ variable "availability_zones" {
   ]
 }
 
-/*
-  ECR
-*/
-variable "django_repository" {
-  description = "App repository name"
-}
-
-variable "nginx_repository" {
-  description = "Nginx repository name"
-}
 
 /*
   RDS

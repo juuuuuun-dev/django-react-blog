@@ -14,7 +14,7 @@ module "ecs" {
     base              = 0
     weight            = 1
   }
-
+  depends_on = [aws_ecr_repository.django, aws_ecr_repository.nginx]
   tags = {
     Environment = var.environment
   }
@@ -33,8 +33,8 @@ module "web_app" {
   app_name                     = var.app_name
   environment                  = var.environment
   vpc_id                       = module.vpc.vpc_id
-  django_repository            = var.django_repository
-  nginx_repository             = var.nginx_repository
+  django_repository            = aws_ecr_repository.django.repository_url
+  nginx_repository             = aws_ecr_repository.nginx.repository_url
   db_host                      = module.db.this_db_instance_address
   db_name                      = var.db_name
   db_user                      = var.db_user
@@ -49,8 +49,9 @@ module "web_app" {
   AWS_S3_ACCESS_KEY_ID         = var.AWS_S3_ACCESS_KEY_ID
   AWS_S3_SECRET_ACCESS_KEY     = var.AWS_S3_SECRET_ACCESS_KEY
   AWS_S3_REGION_NAME           = var.aws_region
-  AWS_STORAGE_BUCKET_NAME      = "${var.app_name}-storage"
+  AWS_STORAGE_BUCKET_NAME      = "${var.app_name}-${var.environment}-storage"
   AWS_S3_STORAGE_CUSTOM_DOMAIN = "${var.front_record_name}.${var.zone_domain}"
+  depends_on                   = [aws_ecr_repository.django, aws_ecr_repository.nginx]
   # frontend_url                 = aws_cloudfront_distribution.s3_distribution.domain_name
   # AWS_S3_STORAGE_CUSTOM_DOMAIN = aws_cloudfront_distribution.s3_distribution.domain_name
   # frontend_url = "${var.front_record_name}.${var.zone_domain}"
