@@ -15,7 +15,7 @@ const AboutMe: React.FC<AboutMeProps> = ({ author }) => {
         <div className="right-contents-about-me" data-testid="right-contents-about-me">
           <Row className="right-contents-about-me__avatar">
             <Col flex="40px">
-              {author.thumb && init && <Link to="/about"><Avatar className="right-contents-about-me__avatar-image" size={30} src={`${author.thumb}`}></Avatar></Link>}
+              {author.thumb && init && <Link to="/about" title="About me"><Avatar className="right-contents-about-me__avatar-image" size={30} src={`${author.thumb}`} alt={author.public_name}></Avatar></Link>}
             </Col>
             <Col flex="auto">
               <h3><Link data-testid="right-contents-about-me-name" to="/about">{author.public_name}</Link></h3>

@@ -101,6 +101,10 @@ export const listData = {
   "results": [resultData, resultData2],
   "tags": tagList,
   "categories": categoryList,
+  "links": {
+    "next": "/api/v1/posts/?page=2",
+    "previous": null,
+  }
 }
 
 export const adminListData = {
@@ -108,6 +112,10 @@ export const adminListData = {
   "results": [AdminResultData, AdminResultData2],
   "tags": tagList,
   "categories": categoryList,
+  "links": {
+    "next": "/api/v1/posts/?page=2",
+    "previous": null,
+  }
 }
 
 export const listTagFilterData = {
@@ -116,6 +124,10 @@ export const listTagFilterData = {
   "tags": tagList,
   "categories": categoryList,
   "tag_name": "test",
+  "links": {
+    "next": "/api/v1/posts/?page=2",
+    "previous": null,
+  }
 }
 
 export const listCategoryFilterData = {
@@ -124,6 +136,10 @@ export const listCategoryFilterData = {
   "tags": tagList,
   "categories": categoryList,
   "category_name": "test",
+  "links": {
+    "next": "/api/v1/posts/?page=2",
+    "previous": null,
+  }
 }
 
 export const updateResultData = {
@@ -173,6 +189,10 @@ export const list0ResultAxiosResponse: AxiosResponse = {
     "results": [],
     "tags": tagList,
     "categories": categoryList,
+    "links": {
+      "next": null,
+      "previous": null,
+    }
   },
   status: 200,
   statusText: 'OK',
