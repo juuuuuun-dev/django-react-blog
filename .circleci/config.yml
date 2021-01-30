@@ -115,45 +115,32 @@ jobs:
       - yarn_install
       - yarn_build
 
-  frontend-deploy:
+  production-frontend-deploy:
     executor: frontend-excutor
     steps:
       - attach_workspace:
           at: ./frontend
-      - run:
-          name: ls frontend
-          command: ls -la
-          working_directory: frontend
-      - run:
-          name: ls
-          command: ls -la
-
-      # - run:
-      #     name: yarn build
-      #     command: yarn build --runInBand
-      #     working_directory: frontend
       - aws-s3/sync:
           from: frontend/build
-          to: "s3://${S3_FRONTEND_BUILD_SOURCE_BUCKET_NAME}"
+          to: "s3://${APP_PREFIX}-production-storage"
           arguments: --exclude "/storage/*"
-  django-docker-image-build-and-deploy:
+  production-django-docker-image-build-and-deploy:
     executor: backend-executor
     steps:
       - aws-ecr/build-and-push-image:
-          repo: "$AWS_DJANGO_REPO_NAME"
+          repo: "${APP_PREFIX}-production-django"
           region: AWS_REGION
           path: backend/django/
           tag: latest
-  nginx-docker-image-build-and-deploy:
+  production-nginx-docker-image-build-and-deploy:
     executor: backend-executor
     steps:
       - aws-ecr/build-and-push-image:
-          repo: "$AWS_NGINX_REPO_NAME"
+          repo: "${APP_PREFIX}-production-nginx"
           region: AWS_REGION
           path: backend/nginx/
-          # tag: "${CIRCLE_SHA1}"
 
-  ecs-service-update:
+  production-ecs-service-update:
     executor: backend-executor
     steps:
       - aws-cli/install
@@ -177,28 +164,28 @@ workflows:
       - frontend-build:
           requires:
             - frontend-test
-      - frontend-deploy:
+      - production-frontend-deploy:
           requires:
             - frontend-build
           filters:
             branches:
               only: master
-      - django-docker-image-build-and-deploy:
+      - production-django-docker-image-build-and-deploy:
           requires:
             - backend-test
           filters:
             branches:
               only: master
-      - nginx-docker-image-build-and-deploy:
+      - production-nginx-docker-image-build-and-deploy:
           requires:
             - backend-test
           filters:
             branches:
               only: master
-      - ecs-service-update:
+      - production-ecs-service-update:
           requires:
-            - django-docker-image-build-and-deploy
-            - nginx-docker-image-build-and-deploy
+            - production-django-docker-image-build-and-deploy
+            - production-nginx-docker-image-build-and-deploy
           filters:
             branches:
               only: master

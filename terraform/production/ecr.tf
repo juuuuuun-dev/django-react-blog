@@ -1,9 +1,9 @@
 
 resource "aws_ecr_repository" "django" {
-  name = "${var.app_name}-django"
+  name = "${var.app_name}-${var.environment}-django"
 }
 resource "aws_ecr_repository" "nginx" {
-  name = "${var.app_name}-nginx"
+  name = "${var.app_name}-${var.environment}-nginx"
 }
 
 resource "aws_ecr_lifecycle_policy" "django_lifecycle_policy" {

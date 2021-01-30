@@ -1,6 +1,6 @@
-data "aws_s3_bucket" "s3_bucket_for_app_storage" {
-  bucket = "${var.app_name}-storage"
-}
+# data "aws_s3_bucket" "s3_bucket_for_app_storage" {
+#   bucket = "${var.app_name}-${var.environment}-storage"
+# }
 
 locals {
   # s3_origin_id = "${var.app_name}-storage-origin"
@@ -9,7 +9,7 @@ locals {
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name = data.aws_s3_bucket.s3_bucket_for_app_storage.bucket_domain_name
+    domain_name = module.s3_bucket_for_app_storage.this_s3_bucket_bucket_domain_name
     origin_id   = local.s3_origin_id
     custom_origin_config {
       // These are all the defaults.
@@ -43,7 +43,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     # min_ttl                = 0
     # default_ttl            = 3600
     # max_ttl                = 86400
-    compress               = true
+    compress = true
   }
   restrictions {
     geo_restriction {

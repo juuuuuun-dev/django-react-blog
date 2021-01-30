@@ -8,14 +8,6 @@ resource "aws_cloudwatch_log_group" "django" {
   retention_in_days = 30
 }
 
-data "aws_ecr_repository" "django" {
-  name = var.django_repository
-}
-
-data "aws_ecr_repository" "nginx" {
-  name = var.nginx_repository
-}
-
 resource "aws_ecs_task_definition" "web_app" {
   family                   = var.family
   cpu                      = var.cpu     # CPUユニットの整数かvCPUの文字列 1vCPU
@@ -25,8 +17,8 @@ resource "aws_ecs_task_definition" "web_app" {
   container_definitions = templatefile("../modules/ecs_service/web_app/definitions/container_definitions.json", {
     "nginx_log_group" : aws_cloudwatch_log_group.nginx.name
     "django_log_group" : aws_cloudwatch_log_group.django.name
-    "nginx_image" : data.aws_ecr_repository.nginx.repository_url
-    "django_image" : data.aws_ecr_repository.django.repository_url
+    "nginx_image" : var.nginx_repository
+    "django_image" : var.django_repository
     "db_name" : var.db_name
     "db_port" : var.db_port
     "db_host" : var.db_host
@@ -117,7 +109,7 @@ resource "aws_ecs_task_definition" "migrate" {
   requires_compatibilities = ["FARGATE"]
   container_definitions = templatefile("../modules/ecs_service/web_app/definitions/migrate_definition.json", {
     "django_log_group" : aws_cloudwatch_log_group.django.name
-    "django_image" : data.aws_ecr_repository.django.repository_url
+    "django_image" : var.django_repository
     "db_name" : var.db_name
     "db_port" : var.db_port
     "db_host" : var.db_host

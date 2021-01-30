@@ -48,7 +48,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                         className="post-list__description"
                         title={`${item.plain_content}`}
                       >
-                        <Link to={`/posts/${item.slug}`}>{item.plain_content}</Link>
+                        <Link to={`/posts/${item.slug}`} title={item.title}>{item.plain_content}</Link>
                       </Paragraph>
                       <EntryData post={item} showCategory={true} />
                     </>
