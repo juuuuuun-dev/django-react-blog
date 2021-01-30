@@ -54,7 +54,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                     </>
                   }
                 />
-                {item.cover_media.cover && (
+                {item.cover_media && item.cover_media.cover && (
                   <div className="post-list__thumb">
                     <Link to={`/posts/${item.slug}`}>
                       <LazyLoadComponent>
@@ -80,6 +80,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
         {(data?.links.next || data?.links.previous) && (
           <Pagination
             total={data?.count}
+            data-testid="post-pagination"
             pageSize={init?.pageSize || 1}
             defaultCurrent={query.page || 1}
             current={query.page || 1}

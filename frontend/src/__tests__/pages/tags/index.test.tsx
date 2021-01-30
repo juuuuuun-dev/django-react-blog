@@ -6,9 +6,7 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import { setUp } from '../../../__mocks__/mainSetUp';
 import { error500AxiosResponse } from '../../../__mocks__/serviceResponse/common';
 import { initAxiosResponse } from '../../../__mocks__/serviceResponse/init';
-import {
-    list0ResultAxiosResponse, listTagFilterAxiosResponse
-} from '../../../__mocks__/serviceResponse/posts';
+import { listTagFilterAxiosResponse } from '../../../__mocks__/serviceResponse/posts';
 import { useHistoryPushError } from '../../../helper/useHistoryPushError';
 import { getInit } from '../../../service/main/init';
 import { tagPagelist } from '../../../service/main/posts';

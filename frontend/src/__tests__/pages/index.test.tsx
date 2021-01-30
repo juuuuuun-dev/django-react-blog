@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { mocked } from 'ts-jest/utils';
 
 import { useWindowSize } from '@react-hook/window-size';
-import { act, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 
 import { setUp } from '../../__mocks__/mainSetUp';
 import { error500AxiosResponse } from '../../__mocks__/serviceResponse/common';
@@ -173,6 +173,16 @@ describe("Main index", () => {
     await waitFor(() => {
       expect(utils.getByText("STAY HOME")).toBeTruthy();
       expect(utils.getByText("(0 results)")).toBeTruthy();
+    })
+  })
+
+  it("Is pagination hidden", async () => {
+    mocked(list).mockImplementation(
+      (): Promise<AxiosResponse<any>> => Promise.resolve(list0ResultAxiosResponse)
+    );
+    const { utils } = await setUp(initialPath);
+    await waitFor(() => {
+      expect(utils.queryByText("post-pagination")).toBeNull();
     })
   })
 
