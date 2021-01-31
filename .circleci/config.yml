@@ -167,15 +167,15 @@ jobs:
     steps:
       - checkout
       - terraform/init:
-          path: .
+          path: ./terraform/production
       - terraform/validate:
-          path: .
+          path: ./terraform/production
       - terraform/fmt:
-          path: .
+          path: ./terraform/production
       - terraform/plan:
-          path: .
+          path: ./terraform/production
       - terraform/apply:
-          path: .
+          path: ./terraform/production
 
 workflows:
   version: 2
