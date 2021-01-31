@@ -1,9 +1,19 @@
+# Required environment variables
+# APP_PREFIX
+# AWS_ACCESS_KEY_ID
+# AWS_REGION
+# AWS_ECR_ACCOUNT_URL
+# AWS_SECRET_ACCESS_KEY
+# BACKEND_API_URL
+# GTM_ID
+
 version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@0.1.4
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
   aws-ecs: circleci/aws-ecs@1.4.0
+  terraform: circleci/terraform@1.2.0
 commands:
   yarn_install:
     steps:
@@ -151,41 +161,59 @@ jobs:
           family: "${APP_PREFIX}-production"
           cluster-name: "${APP_PREFIX}-production-ecs"
           service-name: "web_app"
+  production-terraform-apply:
+    executor: terraform/default
+    working_directory: ~/terraform/production
+    steps:
+      - checkout
+      - terraform/init:
+          path: .
+      - terraform/validate:
+          path: .
+      - terraform/fmt:
+          path: .
 
 workflows:
   version: 2
   build-and-test:
     jobs:
-      - docker-compose-cache
-      - backend-test:
-          requires:
-            - docker-compose-cache
-      - frontend-test
-      - frontend-build:
-          requires:
-            - frontend-test
-      - production-frontend-deploy:
-          requires:
-            - frontend-build
-          filters:
-            branches:
-              only: master
-      - production-django-docker-image-build-and-deploy:
-          requires:
-            - backend-test
-          filters:
-            branches:
-              only: master
-      - production-nginx-docker-image-build-and-deploy:
-          requires:
-            - backend-test
-          filters:
-            branches:
-              only: master
-      - production-ecs-service-update:
-          requires:
-            - production-django-docker-image-build-and-deploy
-            - production-nginx-docker-image-build-and-deploy
-          filters:
-            branches:
-              only: master
+      - production-terraform-apply
+      # - docker-compose-cache
+      # - backend-test:
+      #     requires:
+      #       - docker-compose-cache
+      # - frontend-test
+      # - frontend-build:
+      #     requires:
+      #       - frontend-test
+      # - production-frontend-deploy:
+      #     requires:
+      #       - frontend-build
+      #     filters:
+      #       branches:
+      #         only: master
+      # - production-django-docker-image-build-and-deploy:
+      #     requires:
+      #       - backend-test
+      #     filters:
+      #       branches:
+      #         only: master
+      # - production-nginx-docker-image-build-and-deploy:
+      #     requires:
+      #       - backend-test
+      #     filters:
+      #       branches:
+      #         only: master
+      # - production-ecs-service-update:
+      #     requires:
+      #       - production-django-docker-image-build-and-deploy
+      #       - production-nginx-docker-image-build-and-deploy
+      #     filters:
+      #       branches:
+      #         only: master
+      # - production-terraform-apply:
+      #     requires:
+      #       - production-ecs-service-update
+      #     filters:
+      #       branches:
+      #         only: master
