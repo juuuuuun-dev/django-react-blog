@@ -163,7 +163,7 @@ jobs:
           service-name: "web_app"
   production-terraform-apply:
     executor: terraform/default
-    working_directory: ~/terraform/production
+    working_directory: ./terraform/production
     steps:
       - checkout
       - terraform/init:
