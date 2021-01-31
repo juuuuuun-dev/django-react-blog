@@ -1,12 +1,11 @@
+/*
+terraform init -backend-config=terraform.tfbackend
+*/
+
 terraform {
   required_version = ">=0.13"
-  backend "s3" {
-    bucket = "my-app-terraform-tfstates"
-    key    = "init-terraform.tfstate"
-    region = "ap-northeast-1"
-  }
+  backend "s3" {}
 }
-
 
 provider "aws" {
   region  = var.aws_region
