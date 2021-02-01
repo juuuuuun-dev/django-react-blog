@@ -1,0 +1,3 @@
+bucket = "your-bucket"
+key    = "your-init.tfstate"
+region = "ap-northeast-1"

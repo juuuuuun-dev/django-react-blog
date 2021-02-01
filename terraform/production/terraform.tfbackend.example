@@ -1,0 +1,3 @@
+bucket = "your-tfstates"
+key    = "your-production.tfstate"
+region = "ap-northeast-1"

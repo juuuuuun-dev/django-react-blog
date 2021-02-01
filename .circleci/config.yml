@@ -1,3 +1,12 @@
+# Required environment variables
+# APP_PREFIX
+# AWS_ACCESS_KEY_ID
+# AWS_REGION
+# AWS_ECR_ACCOUNT_URL
+# AWS_SECRET_ACCESS_KEY
+# BACKEND_API_URL
+# GTM_ID
+
 version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@0.1.4
@@ -77,9 +86,6 @@ jobs:
           name: docker load
           command: |
             docker load -i ~/caches/docker.tar
-      # - run:
-      #     name: ".env copy"
-      #     command: docker-compose run -u uwsgi backend cp -p .env.ci .env
       - run:
           name: compose up
           command: docker-compose -f docker-compose-ci.yml up -d
