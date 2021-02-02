@@ -24,7 +24,7 @@ variable "aws_account_id" {
 variable "zone_domain" {
   description = "Zone domain"
 }
-variable "front_record_name" {
+variable "frontend_record_name" {
   description = "Host zone font record name"
 }
 variable "api_record_name" {

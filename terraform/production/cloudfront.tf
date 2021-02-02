@@ -1,10 +1,5 @@
-# data "aws_s3_bucket" "s3_bucket_for_app_storage" {
-#   bucket = "${var.app_name}-${var.environment}-storage"
-# }
-
 locals {
-  # s3_origin_id = "${var.app_name}-storage-origin"
-  s3_origin_id = "${var.front_record_name}.${var.zone_domain}"
+  s3_origin_id = "${var.frontend_record_name}.${var.zone_domain}"
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
