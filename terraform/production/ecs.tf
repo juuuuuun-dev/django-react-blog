@@ -43,18 +43,18 @@ module "web_app" {
   cache_location               = aws_elasticache_cluster.default.configuration_endpoint
   django_secret_key            = var.django_secret_key
   django_superuser_password    = var.django_superuser_password
-  allowed_hosts                = "${module.alb.this_lb_dns_name},${var.front_record_name}.${var.zone_domain},${var.api_record_name}.${var.zone_domain},${aws_cloudfront_distribution.s3_distribution.domain_name}"
-  frontend_url                 = "${var.front_record_name}.${var.zone_domain}"
+  allowed_hosts                = "${module.alb.this_lb_dns_name},${var.frontend_record_name}.${var.zone_domain},${var.api_record_name}.${var.zone_domain},${aws_cloudfront_distribution.s3_distribution.domain_name}"
+  frontend_url                 = "${var.frontend_record_name}.${var.zone_domain}"
   api_gateway_url              = "https://${aws_api_gateway_domain_name.default.domain_name}"
   AWS_S3_ACCESS_KEY_ID         = var.AWS_S3_ACCESS_KEY_ID
   AWS_S3_SECRET_ACCESS_KEY     = var.AWS_S3_SECRET_ACCESS_KEY
   AWS_S3_REGION_NAME           = var.aws_region
   AWS_STORAGE_BUCKET_NAME      = "${var.app_name}-${var.environment}-storage"
-  AWS_S3_STORAGE_CUSTOM_DOMAIN = "${var.front_record_name}.${var.zone_domain}"
+  AWS_S3_STORAGE_CUSTOM_DOMAIN = "${var.frontend_record_name}.${var.zone_domain}"
   depends_on                   = [aws_ecr_repository.django, aws_ecr_repository.nginx]
   # frontend_url                 = aws_cloudfront_distribution.s3_distribution.domain_name
   # AWS_S3_STORAGE_CUSTOM_DOMAIN = aws_cloudfront_distribution.s3_distribution.domain_name
-  # frontend_url = "${var.front_record_name}.${var.zone_domain}"
+  # frontend_url = "${var.frontend_record_name}.${var.zone_domain}"
 }
 
 

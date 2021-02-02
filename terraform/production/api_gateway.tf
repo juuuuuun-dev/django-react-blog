@@ -1,3 +1,4 @@
+
 resource "aws_api_gateway_rest_api" "default" {
   name        = "${var.app_name}-${var.environment}-api"
   description = "REST API"
@@ -10,6 +11,7 @@ resource "aws_api_gateway_domain_name" "default" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
+  depends_on = [aws_acm_certificate_validation.default_validation]
 }
 
 resource "aws_api_gateway_base_path_mapping" "default" {
