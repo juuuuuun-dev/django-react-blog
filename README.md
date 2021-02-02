@@ -46,7 +46,8 @@ $ terraform init -backend-config=terraform.tfbackend
 $ terraform apply
 ```
 
-### Prodction environment
+### Prodction environment apply
+You need to **terraform apply** with terraform/init directory first
 ```
 $ cd terraform/production
 $ cp terraform.tfbackend.example terraform.tfbackend # Update terraform.tfbackend to your settings
