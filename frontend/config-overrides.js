@@ -13,7 +13,7 @@ module.exports = override(
   }),
   addLessLoader({
     javascriptEnabled: true,
-    modifyVars: { "@primary-color": "#333" }
+    modifyVars: { "@primary-color": "#444" }
   }),
   addWebpackModuleRule({
     test: /\.less$/,

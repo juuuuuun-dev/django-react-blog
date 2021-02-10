@@ -1,7 +1,9 @@
+import { Col, Drawer, Layout, Row } from 'antd';
 import React from 'react';
-import { Layout, Drawer, Row, Col } from 'antd';
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
+
+import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
 import { useWindowSize } from '@react-hook/window-size';
+
 import Nav from './Nav';
 
 const Header = () => {
@@ -10,7 +12,7 @@ const Header = () => {
   const [showDrawer, setShowDrawer] = React.useState<boolean>(false);
   const [width] = useWindowSize();
 
-  const navOnClick = (): void => {};
+  const navOnClick = (): void => { };
   return (
     <>
       <Header
