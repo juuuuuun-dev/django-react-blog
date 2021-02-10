@@ -1,6 +1,3 @@
-variable "tf_state_bucket" {
-  description = "terraform tf state backend buckete name"
-}
 variable "aws_region" {
   description = "AWS default region"
 }
