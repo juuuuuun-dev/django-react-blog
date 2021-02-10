@@ -20,7 +20,7 @@ const RecentPostList: React.FC<RecentPostListProps> = ({ posts }) => {
             <List.Item key={item.id}>
               <List.Item.Meta
                 title={<Link to={`/posts/${item.slug}`}><Paragraph
-                  style={{ marginBottom: 0 }}
+                  // style={{ marginBottom: 0 }}
                   ellipsis={{
                     rows: 2,
                     expandable: false,
