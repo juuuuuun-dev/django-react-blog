@@ -44,6 +44,7 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, isStaff, error }) => 
       <Form.Item
         label="name"
         name="name"
+        help={error && error.name ? error.name[0] : null}
         rules={[{ required: true, message: 'Please input name' }]}
       >
         <Input aria-label="input-name" placeholder="name" />
@@ -53,6 +54,7 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, isStaff, error }) => 
         label="slug"
         extra="Used for url. If you change it, the URL will change"
         name="slug"
+        help={error && error.slug ? error.slug[0] : null}
         rules={[
           { required: true, message: 'Please input slug' },
           { pattern: new RegExp(validateSlug.pattern), message: validateSlug.message },

@@ -81,7 +81,7 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
                   setMediaModalVisible(true)
                 },
                 className: "fa fa-image",
-                title: "About me",
+                title: "Add media",
               }],
             }}
           />

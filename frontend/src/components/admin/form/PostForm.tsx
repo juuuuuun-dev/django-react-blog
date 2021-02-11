@@ -111,6 +111,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, 
             <Form.Item
               label="Title"
               name="title"
+              help={error && error.title ? error.title[0] : null}
               rules={[{ required: true, message: 'Please input title' }]}
             >
               <Input
@@ -123,6 +124,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, 
               label="slug"
               extra="Used for url. If you change it, the URL will change"
               name="slug"
+              help={error && error.slug ? error.slug[0] : null}
               rules={[
                 { required: true, message: 'Please input slug' },
                 { pattern: new RegExp(validateSlug.pattern), message: validateSlug.message },

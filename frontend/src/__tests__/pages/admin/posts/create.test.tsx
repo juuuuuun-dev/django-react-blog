@@ -192,6 +192,11 @@ describe("Admin posts create", () => {
     await waitFor(() => {
       fireEvent.click(utils.getByTestId(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
     })
+    // tag
+    fireEvent.mouseDown(utils.getByTestId("select-tag").firstElementChild);
+    fireEvent.click(utils.getByTestId(`option-tag-${formItemAxiosResponse.data.tags[0].id}`));
+    fireEvent.click(utils.getByTestId(`option-tag-${formItemAxiosResponse.data.tags[1].id}`));
+
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getByText(defaultErrorText)).toBeTruthy();
@@ -221,6 +226,10 @@ describe("Admin posts create", () => {
     await waitFor(() => {
       fireEvent.click(utils.getByTestId(`option-category-${formItemAxiosResponse.data.categories[0].id}`));
     })
+    fireEvent.mouseDown(utils.getByTestId("select-tag").firstElementChild);
+    fireEvent.click(utils.getByTestId(`option-tag-${formItemAxiosResponse.data.tags[0].id}`));
+    fireEvent.click(utils.getByTestId(`option-tag-${formItemAxiosResponse.data.tags[1].id}`));
+
     fireEvent.submit(utils.getByLabelText("form-submit"))
     await waitFor(() => {
       expect(utils.getAllByText(defaultErrorText)).toBeTruthy();
