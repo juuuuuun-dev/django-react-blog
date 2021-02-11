@@ -8,6 +8,7 @@ import SimpleMDE from 'react-simplemde-editor';
 import { CloseCircleOutlined, EditOutlined, EyeOutlined, FileImageFilled } from '@ant-design/icons';
 
 import PostPreview from '../../../components/admin/PostPreview';
+import { validateSlug } from '../../../helper/validation';
 import { MediaDetail } from '../../../types/media';
 import { PostFormProps } from '../../../types/posts';
 import MediaModal from '../../admin/MediaModal';
@@ -110,7 +111,6 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, 
             <Form.Item
               label="Title"
               name="title"
-              validateStatus={error && error.title ? "error" : "success"}
               help={error && error.title ? error.title[0] : null}
               rules={[{ required: true, message: 'Please input title' }]}
             >
@@ -124,11 +124,10 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, 
               label="slug"
               extra="Used for url. If you change it, the URL will change"
               name="slug"
-              validateStatus={error && error.slug ? "error" : "success"}
               help={error && error.slug ? error.slug[0] : null}
               rules={[
                 { required: true, message: 'Please input slug' },
-                { pattern: new RegExp("^[a-z0-9_-]*$"), message: 'The slug must contain only lowercase letters, numbers, and hyphens/underscores.' },
+                { pattern: new RegExp(validateSlug.pattern), message: validateSlug.message },
               ]}
             >
               <Input aria-label="input-slug" placeholder="Used for url" />
@@ -194,6 +193,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, 
                 onChange={setContent}
                 value={content}
                 options={{
+                  spellChecker: false,
                   previewRender(text) {
                     return ReactDOMServer.renderToString(
                       <MarkdownContent content={text} />
@@ -241,6 +241,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, 
             <Form.Item
               label="Tag"
               name="tag"
+              rules={[{ required: true, message: 'Please select tag' }]}
             >
               <Select
                 mode="multiple"

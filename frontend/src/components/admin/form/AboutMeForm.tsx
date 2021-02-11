@@ -65,6 +65,7 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
             onChange={setContent}
             value={content}
             options={{
+              spellChecker: false,
               previewRender(text) {
                 return ReactDOMServer.renderToString(
                   <PostDetailContent content={text} />
