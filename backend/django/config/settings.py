@@ -137,7 +137,7 @@ CACHES = {
 ROOT_URLCONF = 'config.urls'
 
 # testing page_size is 1
-PAGE_SIZE = env.int('PAGE_SIZE', default=20) if not TESTING else 1
+PAGE_SIZE = env.int('PAGE_SIZE', default=10) if not TESTING else 1
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
