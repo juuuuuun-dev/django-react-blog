@@ -11,18 +11,40 @@ export const defaultDeleteText = 'Successful delete';
 
 const toast = (props: IToastProps) => {
   let text;
+  message.config({
+    duration: 3,
+    maxCount: 3,
+    rtl: true,
+  });
+  const style = {
+    marginTop: '30px',
+    marginRight: '10px',
+    width: "auto",
+    left: "auto",
+    right: "10px",
+    position: "fixed",
+  };
   switch (props.type) {
     case 'SUCCESS':
       text = props.text || defaultSuccessText;
-      message.success(text);
+      message.success({
+        content: text,
+        style,
+      });
       break;
     case 'DELETE':
       text = props.text || defaultDeleteText;
-      message.success(text);
+      message.success({
+        content: text,
+        style,
+      });
       break;
     case 'ERROR':
       text = props.text || defaultErrorText;
-      message.error(text);
+      message.error({
+        content: text,
+        style,
+      });
       break;
     default:
   }

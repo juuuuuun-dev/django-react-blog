@@ -3,7 +3,7 @@ This is a blog using Django, React, TypeScript, Ant Design, Jest, React Testing 
 Terraform uses AWS Fargate, RDS, S3, CloudFront, lambda and Api Gataway, etc.  
 
 # Example
-This is [my blog](https://blog.junkata.com) that is actually working
+My blog: [https://blog.junkata.com](https://blog.junkata.com)
 <!-- TODO screen shot -->
 ![image1](https://user-images.githubusercontent.com/60050242/106447082-6bce9380-64c4-11eb-9090-0701fe7e9699.jpg)
 ![image2](https://user-images.githubusercontent.com/60050242/106447152-7c7f0980-64c4-11eb-83e8-c9b2d16a5375.jpg)

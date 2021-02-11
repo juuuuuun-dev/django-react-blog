@@ -1,3 +1,5 @@
+import 'easymde/dist/easymde.min.css';
+
 import { Button, Form, Input } from 'antd';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';

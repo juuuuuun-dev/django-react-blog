@@ -14,6 +14,7 @@ body {
 
 h1,h2,h3,h4,h5,h6 {
   font-weight: bold;
+  color: @primary-text-color;
 }
 ul{ margin: 0; padding: 0;}
 li {list-style: none;}
@@ -26,6 +27,7 @@ a.active{ color: @active-link-color; font-weight: 500;}
     padding: 0 10px;
     &__icon {
       font-size: 20px;
+      color: @primary-color;
     }
     
   }
@@ -45,17 +47,19 @@ a.active{ color: @active-link-color; font-weight: 500;}
   padding: @global-padding;
 }
 // .right-contents
+
 .right-contents{
   &__catch {
     margin-bottom: @global-margin;
   }
+  
   background: #fff;
   margin-left: @global-margin;
   &-section {
     margin-bottom: @global-margin;
     &__title {
       font-weight: bold;
-      font-size: 1rem;
+      font-size: .9rem;
       margin-bottom: @global-margin / 4;
     }
     &__banner {
@@ -64,7 +68,16 @@ a.active{ color: @active-link-color; font-weight: 500;}
       margin: 0 auto;
       display: block;
     }
+    .post-list {
+      &__title {
+        font-size: .8rem;
+        font-weight: normal;
+      }
+      
+    }
   }
+  
+  
   &-about-me {
     &__avatar {
       margin-bottom: @global-margin / 4;

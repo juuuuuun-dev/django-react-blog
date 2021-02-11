@@ -5,7 +5,7 @@ import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
-import { CheckOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined } from '@ant-design/icons';
 
 // import searchWithinPageColumn from '../../../components/admin/SearchWithinPageColumn';
 import CreateAndSearchRow from '../../../components/admin/CreateAndSearchRow';
@@ -160,7 +160,7 @@ const Posts: React.FC = () => {
       key: 'is_show',
       render: (text: boolean) =>
         text === true ? (
-          <CheckOutlined style={{ color: '#243a82' }} />
+          <CheckCircleOutlined style={{ color: '#29bbaf' }} />
         ) : null,
       width: '6%',
       sorter: (a: PostDetail, b: PostDetail) => sortBoolean(a.is_show, b.is_show),

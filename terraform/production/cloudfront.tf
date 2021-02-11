@@ -16,6 +16,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
   enabled             = true
   is_ipv6_enabled     = false
+  comment             = "${var.app_name}-${var.environment}"
+
   default_root_object = "index.html"
   logging_config {
     bucket = data.aws_s3_bucket.logs.bucket_domain_name

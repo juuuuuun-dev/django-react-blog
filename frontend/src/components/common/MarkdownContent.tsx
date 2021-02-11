@@ -1,5 +1,6 @@
 import 'highlight.js/styles/dark.css';
 import '../../less/highlightCode.less';
+import '../../less/markdown.less';
 
 import marked from 'marked';
 import React from 'react';

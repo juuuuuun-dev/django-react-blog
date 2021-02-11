@@ -6,13 +6,13 @@
 
 .post-list {
   &__title {
-    font-size: 1rem;
+    font-size: .9rem;
     margin-right: 10px;
     font-weight: 600;
     font-family:  Roboto, 'Helvetica Neue',
   }
   .ant-typography {
-    color: #111;
+    color: @primary-color;
   }
   &__description.ant-typography{
     margin-right: @global-margin / 4;
@@ -31,8 +31,7 @@
   }
   .ant-list-items {
     .ant-list-item {
-      margin-bottom: @global-margin / 3;
-      padding-bottom: @global-margin / 2.5;
+      padding: @global-margin 0;
     }
     .ant-list-item:first-child {
       padding-top: 0;
@@ -40,11 +39,15 @@
   }
 }
 
-.right-contents-section .post-list {
-  &__title {
-    font-size: .8rem;
-    font-weight: normal;
+@media screen and (max-width: @sm-break-point) {
+  .post-list {
+    .ant-list-items {
+      .ant-list-item {
+        padding: @global-margin / 2 0;
+      }
+    }
   }
 }
+
 
 
