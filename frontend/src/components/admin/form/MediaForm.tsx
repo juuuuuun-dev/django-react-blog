@@ -13,11 +13,10 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, isStaff, error })
   const [loading, setLoading] = React.useState<boolean>(false);
   const [imageUrl, setImageUrl] = React.useState<string>('');
   const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
-  const [file, setFile] = React.useState<File | undefined>();
+  const [file, setFile] = React.useState<File | null>();
   const [removeFile, setRemoveFile] = React.useState<boolean>(false)
   const [width, setWidth] = React.useState<number>(0);
   const [height, setHeight] = React.useState<number>(0);
-
   React.useEffect(() => {
     if (data) {
       setImageUrl(data.file);
@@ -46,11 +45,11 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, isStaff, error })
     if (!isJpgOrPng) {
       toast({ type: 'ERROR', text: 'You can only upload JPG/PNG file!' })
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      toast({ type: 'ERROR', text: 'Image must smaller than 2MB!' })
+    const isLt4M = file.size / 1024 / 1024 < 4;
+    if (!isLt4M) {
+      toast({ type: 'ERROR', text: 'Image must smaller than 4MB!' })
     }
-    if (isJpgOrPng && isLt2M) {
+    if (isJpgOrPng && isLt4M) {
       getBase64(file, (imageUrl: string, image: HTMLImageElement) => {
         setLoading(true);
         setRemoveFile(false);
@@ -82,7 +81,7 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, isStaff, error })
     setImageUrl('')
     setHeight(0);
     setWidth(0);
-    setFile(undefined);
+    setFile(null);
     setLoading(false);
     setRemoveFile(true);
   }
@@ -100,31 +99,34 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, isStaff, error })
         <Form.Item
           label="Name"
           name="name"
-          validateStatus={error && error.name ? "error" : "success"}
-          help={error && error.name ? "This name already exists" : null}
           rules={[{ required: true, message: 'Please input name' }]}
         >
           <Input aria-label="media-form-name" placeholder="Name" />
         </Form.Item>
 
-        <Form.Item
-          label="File"
-          validateStatus={file ? "success" : "error"}
-          help={removeFile ? "Please selected file" : null}
-        >
-          <Upload
-            name="file"
-            listType="picture-card"
-            className="file-uploader"
-            aria-label="media-form-file"
-            showUploadList={false}
-            beforeUpload={beforeUpload}
-            // onPreview={handlePreview}
-            onChange={handleChange}
-            onRemove={handleRemove}
+        <Form.Item label="File">
+          <Form.Item
+            validateStatus={file ? "success" : "error"}
+            rules={[{ required: true, message: 'Please selected file' }]}
+            help={removeFile ? "Please selected file" : null}
+            name="File"
+            valuePropName="file"
           >
-            {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
-          </Upload>
+            <Upload
+              name="file"
+              listType="picture-card"
+              className="file-uploader"
+              aria-label="media-form-file"
+              showUploadList={false}
+              beforeUpload={beforeUpload}
+              // onPreview={handlePreview}
+              onChange={handleChange}
+              onRemove={handleRemove}
+            >
+              {imageUrl ? <><img src={imageUrl} alt="avatar" style={{ width: '100%' }} /></> : uploadButton}
+            </Upload>
+
+          </Form.Item>
           {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="media-form-preview" onClick={() => handlePreview()} /><DeleteOutlined aria-label="media-form-delete-image" onClick={handleRemove} /></> : <></>}
         </Form.Item>
 

@@ -1,6 +1,7 @@
 import { Button, Form, Input } from 'antd';
 import React from 'react';
 
+import { validateSlug } from '../../../helper/validation';
 import { CategoryFormProps } from '../../../types/categories';
 
 const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, isStaff, error }) => {
@@ -40,8 +41,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, isStaff, er
       <Form.Item
         label="name"
         name="name"
-        validateStatus={error && error.name ? "error" : "success"}
-        help={error && error.name ? error.name[0] : null}
         rules={[{ required: true, message: 'Please input name' }]}
       >
         <Input aria-label="input-name" placeholder="name" />
@@ -51,11 +50,9 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ data, onSubmit, isStaff, er
         label="slug"
         extra="Used for url. If you change it, the URL will change"
         name="slug"
-        validateStatus={error && error.slug ? "error" : "success"}
-        help={error && error.slug ? error.slug[0] : null}
         rules={[
           { required: true, message: 'Please input slug' },
-          { pattern: new RegExp("^[a-z0-9_-]*$"), message: 'The slug must contain only lowercase letters, numbers, and hyphens/underscores.' },
+          { pattern: new RegExp(validateSlug.pattern), message: validateSlug.message },
         ]}
       >
         <Input aria-label="input-slug" placeholder="Used for url" />

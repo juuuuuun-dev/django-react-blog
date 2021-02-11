@@ -1,6 +1,7 @@
 import { Button, Form, Input } from 'antd';
 import React from 'react';
 
+import { validateSlug } from '../../../helper/validation';
 import { TagFormProps } from '../../../types/tags';
 
 const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, isStaff, error }) => {
@@ -43,8 +44,6 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, isStaff, error }) => 
       <Form.Item
         label="name"
         name="name"
-        validateStatus={error && error.name ? "error" : "success"}
-        help={error && error.name ? error.name[0] : null}
         rules={[{ required: true, message: 'Please input name' }]}
       >
         <Input aria-label="input-name" placeholder="name" />
@@ -54,11 +53,9 @@ const TagForm: React.FC<TagFormProps> = ({ data, onSubmit, isStaff, error }) => 
         label="slug"
         extra="Used for url. If you change it, the URL will change"
         name="slug"
-        validateStatus={error && error.slug ? "error" : "success"}
-        help={error && error.slug ? error.slug[0] : null}
         rules={[
           { required: true, message: 'Please input slug' },
-          { pattern: new RegExp("^[a-z0-9_-]*$"), message: 'The slug must contain only lowercase letters, numbers, and hyphens/underscores.' },
+          { pattern: new RegExp(validateSlug.pattern), message: validateSlug.message },
         ]}
       >
         <Input aria-label="input-slug" placeholder="Used for url" />

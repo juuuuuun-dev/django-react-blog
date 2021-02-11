@@ -65,6 +65,7 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
             onChange={setContent}
             value={content}
             options={{
+              spellChecker: false,
               previewRender(text) {
                 return ReactDOMServer.renderToString(
                   <PostDetailContent content={text} />
@@ -80,7 +81,7 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
                   setMediaModalVisible(true)
                 },
                 className: "fa fa-image",
-                title: "Add media",
+                title: "About me",
               }],
             }}
           />
