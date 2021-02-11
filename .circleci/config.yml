@@ -21,6 +21,10 @@ commands:
           keys:
             - v2-yarn-cache-{{ .Branch }}-{{ checksum "frontend/yarn.lock" }}
       - run:
+          name: yarn config set
+          command: yarn config set network-timeout 300000
+          working_directory: frontend
+      - run:
           name: yarn install
           command: yarn install --frozen-lockfile
           working_directory: frontend
