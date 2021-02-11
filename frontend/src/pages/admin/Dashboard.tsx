@@ -1,5 +1,11 @@
-import React from 'react';
+import 'moment/locale/ja';
+import '../../less/AntDesign/calendar.less';
+
 import { Calendar } from 'antd';
+import moment from 'moment';
+import React from 'react';
+
+moment.locale('ja');
 
 const Dashboard = () => {
   const onPanelChange = (value: any, mode: any) => {
@@ -7,8 +13,8 @@ const Dashboard = () => {
   }
   return (
     <>
-      <Calendar fullscreen={false} onPanelChange={onPanelChange} />
-      <br />
+      <h4>At the moment, This is just a calendar</h4>
+      <Calendar onPanelChange={onPanelChange} />
     </>
   );
 };
