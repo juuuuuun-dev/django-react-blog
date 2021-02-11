@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-    ApartmentOutlined, EditOutlined, FileImageOutlined, SettingOutlined, TagOutlined
+    EditOutlined, FileImageOutlined, FolderOpenOutlined, SettingOutlined, TagOutlined
 } from '@ant-design/icons';
 
 interface INavList {
@@ -109,7 +109,7 @@ export const navList: INavList[] = [
     title: 'Categories',
     component: React.lazy(() => import("../pages/admin/categories/index")),
     exact: true,
-    icon: ApartmentOutlined,
+    icon: FolderOpenOutlined,
   },
   {
     path: '/admin/categories/:id/edit',
