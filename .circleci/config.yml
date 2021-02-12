@@ -119,7 +119,6 @@ jobs:
           command: yarn test --runInBand
           working_directory: frontend
   frontend-build:
-    resource_class: large
     executor: frontend-excutor
     steps:
       - checkout
