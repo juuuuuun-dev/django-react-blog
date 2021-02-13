@@ -6,8 +6,25 @@ const {
   addWebpackModuleRule,
 } = require("customize-cra");
 const CopyPlugin = require('copy-webpack-plugin');
+// const TerserPlugin = require('terser-webpack-plugin')
+
 console.log("override build start")
+
+/**
+ * https://github.com/facebook/create-react-app/issues/8320
+ * CircleCI + Terser Error: Call retries were exceeded
+ */
+function myOptimization(config) {
+  config.optimization.minimizer.forEach(minimizer => {
+    if (minimizer && minimizer.options && minimizer.options.parallel === true) {
+      minimizer.options.parallel = 1;
+    }
+  });
+  return config;
+}
+
 module.exports = override(
+  myOptimization,
   fixBabelImports("import", {
     libraryName: "antd", libraryDirectory: "es", style: true // change importing css to less
   }),
