@@ -24,17 +24,6 @@ module "https_sg" {
 }
 
 
-# module "web_sg" {
-#   source              = "terraform-aws-modules/security-group/aws"
-#   version             = "~> 3.0"
-#   name                = "${var.app_name}_${var.environment}_web_sg"
-#   description         = "${var.app_name}_${var.environment} web security group"
-#   vpc_id              = module.vpc.vpc_id
-#   ingress_cidr_blocks = ["0.0.0.0/0"]
-#   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
-#   egress_rules        = ["http-80-tcp", "https-443-tcp"]
-# }
-
 module "mysql_sg" {
   source      = "terraform-aws-modules/security-group/aws//modules/mysql"
   version     = "~> 3.0"
