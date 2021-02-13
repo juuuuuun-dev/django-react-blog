@@ -196,7 +196,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, 
                   spellChecker: false,
                   previewRender(text) {
                     return ReactDOMServer.renderToString(
-                      <MarkdownContent content={text} />
+                      <MarkdownContent name="post-form" content={text} />
                     )
                   },
                   toolbar: ["bold", "italic", "heading", "|", "quote", "code", "table", "|", "preview", "side-by-side", "fullscreen", {

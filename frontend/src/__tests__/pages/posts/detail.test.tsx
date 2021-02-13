@@ -48,7 +48,7 @@ describe("Post detail", () => {
 
     await waitFor(() => {
       expect(utils.getByTestId('post-detail-title').innerHTML).toMatch(listAxiosResponse.data.results[tagetDataKey].title)
-      expect(utils.getByTestId('markdown-content').innerHTML).toMatch(listAxiosResponse.data.results[tagetDataKey].content)
+      expect(utils.getByTestId('post-detail-markdown-content').innerHTML).toMatch(listAxiosResponse.data.results[tagetDataKey].content)
     })
   })
 

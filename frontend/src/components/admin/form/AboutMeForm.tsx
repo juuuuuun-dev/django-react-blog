@@ -8,7 +8,7 @@ import SimpleMDE from 'react-simplemde-editor';
 import { AboutMeFormProps } from '../../../types/aboutMe';
 import { MediaDetail } from '../../../types/media';
 import MediaModal from '../../admin/MediaModal';
-import PostDetailContent from '../../common/MarkdownContent';
+import MarkdownContent from '../../common/MarkdownContent';
 
 const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
   const { data, onSubmit } = props;
@@ -68,7 +68,7 @@ const AboutMeForm: React.FC<AboutMeFormProps> = (props) => {
               spellChecker: false,
               previewRender(text) {
                 return ReactDOMServer.renderToString(
-                  <PostDetailContent content={text} />
+                  <MarkdownContent name="about-me-form" content={text} />
                 )
               },
               toolbar: ["bold", "italic", "heading", "|", "quote", "code", "table", "|", "preview", "side-by-side", "fullscreen", {

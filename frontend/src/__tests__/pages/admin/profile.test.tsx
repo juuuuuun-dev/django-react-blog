@@ -1,13 +1,18 @@
-import { mocked } from 'ts-jest/utils'
 import { AxiosResponse } from 'axios';
-import { cleanup, fireEvent, waitFor, act } from '@testing-library/react'
-import { retrieve, update } from '../../../service/admin/profile';
-import { defaultSuccessText, defaultErrorText, defaultDeleteText } from '../../../components/common/toast'
-import { detailAxiosResponse, updateAxiosResponse, error400AxiosResponse } from '../../../__mocks__/serviceResponse/profile';
-import { error404AxiosResponse, error500AxiosResponse, deleteAxiosResponse } from '../../../__mocks__/serviceResponse/common';
-import { setUp } from '../../../__mocks__/adminSetUp';
-import { getBase64 } from '../../../helper/file';
+import { mocked } from 'ts-jest/utils';
 
+import { cleanup, fireEvent, waitFor } from '@testing-library/react';
+
+import { setUp } from '../../../__mocks__/adminSetUp';
+import {
+    deleteAxiosResponse, error404AxiosResponse, error500AxiosResponse
+} from '../../../__mocks__/serviceResponse/common';
+import {
+    detailAxiosResponse, error400AxiosResponse, updateAxiosResponse
+} from '../../../__mocks__/serviceResponse/profile';
+import { defaultErrorText, defaultSuccessText } from '../../../components/common/toast';
+import { getBase64 } from '../../../helper/file';
+import { retrieve, update } from '../../../service/admin/profile';
 
 afterEach(() => cleanup());
 jest.mock('../../../service/admin/profile');

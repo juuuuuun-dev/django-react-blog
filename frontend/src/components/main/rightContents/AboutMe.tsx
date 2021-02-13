@@ -2,6 +2,7 @@ import { Avatar, Col, Row } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import MarkdownContent from '../../../components/common/MarkdownContent';
 import { MainContext } from '../../../context/mainContext';
 import { AboutMeProps } from '../../../types/components/main/rightContents';
 import RightContentSection from './RightContentSection';
@@ -21,7 +22,7 @@ const AboutMe: React.FC<AboutMeProps> = ({ author }) => {
               <h3><Link data-testid="right-contents-about-me-name" to="/about">{author.public_name}</Link></h3>
             </Col>
           </Row>
-          <p>{author.message}</p>
+          <MarkdownContent name="message" content={author?.message}></MarkdownContent>
         </div>
 
       </RightContentSection>}
