@@ -91,7 +91,7 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, isStaff, error })
     if (data?.file || file || value.file) {
       return Promise.resolve();
     } else {
-      return Promise.reject('Please selected bfile');
+      return Promise.reject('Please selected file');
     }
   };
 
@@ -116,7 +116,7 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, isStaff, error })
         <Form.Item label="File">
           <Form.Item
             rules={[{ validator: validateFile }]}
-            help={removeFile ? "Please selected afile" : null}
+            help={removeFile ? "Please selected file" : null}
             name="file"
             valuePropName="file"
           >
