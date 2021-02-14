@@ -24,32 +24,17 @@ jest.mock('../../../../service/admin/posts');
 jest.mock('../../../../service/admin/media');
 jest.mock('../../../../helper/file');
 
-// Use to SimpleMDE
-// @ts-ignore
-global.document.createRange = () => ({
-  setStart: () => { },
-  setEnd: () => { },
-  collapsed: true,
-  getBoundingClientRect: function () {
-    return {
-      width: 0,
-      height: 0,
-      top: 0,
-      left: 0
-    }
-  },
-  getClientRects: function () {
-    return {
-      width: 0,
-      height: 0,
-    }
-  },
+// Use to codeMirror
+document.createRange = () => {
+  const range = new Range();
+  range.getBoundingClientRect = jest.fn();
   // @ts-ignore
-  commonAncestorContainer: {
-    nodeName: 'BODY',
-    ownerDocument: document,
-  },
-});
+  range.getClientRects = jest.fn(() => ({
+    item: () => null,
+    length: 0,
+  }));
+  return range;
+};
 
 describe("Admin posts create", () => {
   const initialPath = "/admin/posts";

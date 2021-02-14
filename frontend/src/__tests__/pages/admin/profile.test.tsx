@@ -14,9 +14,20 @@ import { defaultErrorText, defaultSuccessText } from '../../../components/common
 import { getBase64 } from '../../../helper/file';
 import { retrieve, update } from '../../../service/admin/profile';
 
-afterEach(() => cleanup());
 jest.mock('../../../service/admin/profile');
 jest.mock('../../../helper/file');
+
+// Use to codeMirror
+document.createRange = () => {
+  const range = new Range();
+  range.getBoundingClientRect = jest.fn();
+  // @ts-ignore
+  range.getClientRects = jest.fn(() => ({
+    item: () => null,
+    length: 0,
+  }));
+  return range;
+};
 
 describe("Admin profile edit", () => {
   const initialPath = "/admin/profile";

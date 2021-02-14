@@ -42,7 +42,6 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
     }
   }, [data, form]);
 
-  console.log({ message })
   const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
     if (!isJpgOrPng) {
@@ -155,7 +154,7 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
           <SimpleMDE
             data-testid="text-area"
             onChange={setMessage}
-            value="asdf"
+            value={message}
             options={{
               spellChecker: false,
               previewRender(text) {
