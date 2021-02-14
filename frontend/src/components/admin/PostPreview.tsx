@@ -11,7 +11,7 @@ const PostPreview: React.FC<PostPreviewProps> = ({ title, content, cover }) => {
       <div className="preview" data-testid="post-preview">
         {cover && <img src={cover} data-testid="post-preview-cover" alt="preview" />}
         <h2>{title}</h2>
-        <MarkdownContent content={content} />
+        <MarkdownContent name="post-preview" content={content} />
       </div>
     </div>
   )

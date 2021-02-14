@@ -3,7 +3,6 @@ export type ProfileDetail = {
   message: string;
   avator: string;
   thumb?: string;
-  url: string;
 }
 
 export type ProfileFormProps = {

@@ -106,7 +106,6 @@ class UserProfile(models.Model):
         format='JPEG',
         options={'quality': 90}
     )
-    url = models.TextField(null=True, blank=True)
     message = models.TextField(null=True, blank=True)
 
     def __str__(self):

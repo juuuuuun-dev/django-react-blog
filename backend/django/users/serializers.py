@@ -14,7 +14,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = (
             "avator",
             "public_name",
-            "url",
             "message",
             "thumb",
         )
@@ -46,7 +45,6 @@ class UserSerializer(serializers.ModelSerializer):
             "message", instance.profile.message)
         instance.profile.avator = profile_data.get(
             "avator", instance.profile.avator)
-        instance.profile.url = profile_data.get("url", instance.profile.url)
         instance.profile.save()
         return instance
 

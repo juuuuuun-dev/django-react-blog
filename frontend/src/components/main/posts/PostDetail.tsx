@@ -22,7 +22,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
               src={post.cover_media.cover}
             />
           }
-          <MarkdownContent content={post.content} />
+          <MarkdownContent name="post-detail" content={post.content} />
         </article>
       </>
     );

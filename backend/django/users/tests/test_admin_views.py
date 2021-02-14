@@ -37,14 +37,12 @@ class AdminUserProfileTestCase(APITestCase):
             response.data['public_name'],
             self.user.profile.public_name)
         self.assertEqual(response.data['message'], self.user.profile.message)
-        self.assertEqual(response.data['url'], self.user.profile.url)
         self.assertEqual(response.data['avator'], self.user.profile.avator)
 
     def test_profile_put(self):
         post_data = {
             "public_name": "test",
             "message": "test message",
-            "url": "test.com",
             "avator": SimpleUploadedFile(
                 name='test_image.jpg',
                 content=open(

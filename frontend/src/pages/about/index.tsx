@@ -46,7 +46,7 @@ const Index: React.FC = () => {
   return (
     <>
       <h3 className="page-title" data-testid="page-title">{data?.page_title}</h3>
-      <MarkdownContent content={data?.content}></MarkdownContent>
+      <MarkdownContent name="about-me" content={data?.content}></MarkdownContent>
     </>
   )
 }

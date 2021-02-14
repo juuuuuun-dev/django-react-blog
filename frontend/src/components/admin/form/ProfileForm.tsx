@@ -1,12 +1,19 @@
+import 'easymde/dist/easymde.min.css';
+
 import { Button, Form, Input, Modal, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import SimpleMDE from 'react-simplemde-editor';
 
 import { DeleteOutlined, EyeOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 import toast from '../../../components/common/toast';
 import { getBase64 } from '../../../helper/file';
+import { MediaDetail } from '../../../types/media';
 import { ProfileFormProps } from '../../../types/profile';
+import MediaModal from '../../admin/MediaModal';
+import MarkdownContent from '../../common/MarkdownContent';
 
 // import ImgCrop from 'antd-img-crop';
 
@@ -20,14 +27,17 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
   const [file, setFile] = React.useState<File | undefined>();
   const [removeFile, setRemoveFile] = React.useState<boolean>(false)
   const [showModal, setShowModal] = React.useState<boolean>(false)
+  const [message, setMessage] = React.useState<string>("");
+  const [codemirror, setCodeMirror] = React.useState<any>();
+  const [mediaModalVisible, setMediaModalVisible] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     if (data) {
       setImageUrl(data.avator);
+      setMessage(data.message)
       form.setFieldsValue({
         public_name: data.public_name,
         message: data.message,
-        url: data.url,
       });
     }
   }, [data, form]);
@@ -57,6 +67,9 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
       setRemoveFile(true);
       return false;
     }
+    if (message) {
+      values.message = message;
+    }
     values.avator = file;
     onSubmit(values);
   };
@@ -83,6 +96,15 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
     setRemoveFile(true);
   }
 
+  const handleAddMedia = (value: MediaDetail) => {
+    const text = `<img src="${value.file}" alt="${value.name}" width="${value.width}" height="${value.height}" loading="lazy">`
+    if (codemirror) {
+      const { line, ch } = codemirror.getCursor();
+      codemirror.replaceRange(text, { line: line, ch: ch })
+      setMessage(codemirror.getValue())
+    }
+  }
+
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -99,9 +121,6 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
         form={form}
         onFinish={onFinish}
       >
-        {/* <Form.Item label="username" name="username" rules={[{ required: true, message: 'Please input your username' }]}>
-        <Input data-testid="input-username" placeholder="username" />
-      </Form.Item> */}
         <Form.Item label="Public name" name="public_name" rules={[{ required: true, message: 'Please input your username' }]}>
           <Input aria-label="input-public_name" placeholder="public name" />
         </Form.Item>
@@ -128,12 +147,42 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
           {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview()} /><DeleteOutlined aria-label="delete-image" onClick={handleRemove} /></> : <></>}
 
         </Form.Item>
-        <Form.Item label="Url" name="url" rules={[{ required: false, message: '' }]}>
+        {/* <Form.Item label="Url" name="url" rules={[{ required: false, message: '' }]}>
           <Input aria-label="input-url" placeholder="url" />
+        </Form.Item> */}
+        <Form.Item label="Message (Used in the about me section of the right column)" name="message">
+          <SimpleMDE
+            data-testid="text-area"
+            onChange={setMessage}
+            value={message}
+            options={{
+              spellChecker: false,
+              previewRender(text) {
+                return ReactDOMServer.renderToString(
+                  <MarkdownContent name="about-me-form" content={text} />
+                )
+              },
+              toolbar: ["bold", "italic", "heading", "|", "quote", "code", "table", "|", "preview", "side-by-side", "fullscreen", {
+                name: "custom",
+                action: async function customFunction(editor) {
+                  await new Promise((resolve) => {
+                    setCodeMirror(editor.codemirror)
+                    resolve();
+                  })
+                  setMediaModalVisible(true)
+                },
+                className: "fa fa-image",
+                title: "Add media",
+              }],
+            }}
+          />
+
         </Form.Item>
-        <Form.Item label="Message" name="message" rules={[{ required: false, message: 'requreid email' }]}>
-          <Input.TextArea aria-label="textarea-message" rows={6} placeholder="message" />
-        </Form.Item>
+        <MediaModal
+          handleAddMedia={handleAddMedia}
+          visible={mediaModalVisible}
+          setVisible={setMediaModalVisible}
+        />
 
         <Form.Item>
           <Button disabled={!props.isStaff} aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
