@@ -29,12 +29,10 @@ const Nav = ({ mode, styles, categories, setShowDrawer }: NavProps) => {
           {categories && Object.keys(categories).map(key => {
             return <Menu.Item key={`nav-category-${key}`}><NavLink data-testid={`nav-category-${categories[key].slug}`} onClick={handleClick} to={`/categories/${categories[key].slug}`}>{categories[key].name}</NavLink></Menu.Item>
           })}
-          {/* {categories?.map((value, index) => {
-            return <Menu.Item key={`nav-category-${index}`}><NavLink data-testid={`nav-category-${value.slug}`} onClick={handleClick} to={`/categories/${value.slug}`}>{value.name}</NavLink></Menu.Item>
-          })} */}
+
         </SubMenu>
         <Menu.Item>
-          <NavLink to="/about">About me</NavLink>
+          <NavLink onClick={handleClick} to="/about">About me</NavLink>
         </Menu.Item>
       </Menu>
     </>
