@@ -13,3 +13,4 @@ process.env.REACT_APP_PAGE_SIZE = '1';
 jest.setTimeout(30000);
 
 afterEach(() => cleanup());
+

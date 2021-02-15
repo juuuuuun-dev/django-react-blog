@@ -15,16 +15,29 @@ console.log("override build start")
  * CircleCI + Terser Error: Call retries were exceeded
  */
 function myOptimization(config) {
+  // config.optimization.minimizer = [
+  //   new TerserPlugin({
+  //     parallel: 1,
+  //   }),
+  // ]
   config.optimization.minimizer.forEach(minimizer => {
     if (minimizer && minimizer.options && minimizer.options.parallel === true) {
       minimizer.options.parallel = 1;
+      minimizer.options.extractComments = "all";
     }
   });
+  return config;
+}
+function myEnv(config) {
+  if (config.env && config.env.test) {
+    config.env.test.presets = [['@babel/preset-env', { targets: { node: 'current' } }]];
+  }
   return config;
 }
 
 module.exports = override(
   myOptimization,
+  myEnv,
   fixBabelImports("import", {
     libraryName: "antd", libraryDirectory: "es", style: true // change importing css to less
   }),

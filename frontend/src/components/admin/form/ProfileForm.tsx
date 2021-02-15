@@ -156,6 +156,7 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
             onChange={setMessage}
             value={message}
             options={{
+              autoDownloadFontAwesome: false,
               spellChecker: false,
               previewRender(text) {
                 return ReactDOMServer.renderToString(

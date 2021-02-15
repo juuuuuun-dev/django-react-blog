@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons-svg": "^4.1.0",
     "@react-hook/window-size": "^1.0.13",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.0",
@@ -15,7 +16,10 @@
     "antd-img-crop": "^3.0.1",
     "axios": "^0.19.2",
     "customize-cra": "^0.9.1",
+    "easymde": "^2.14.0",
     "eslit": "^6.0.0",
+    "forked": "^0.1.4",
+    "from": "^0.1.7",
     "highlight.js": "^10.0.3",
     "local-storage": "^2.0.0",
     "lodash": "^4.17.15",
@@ -36,6 +40,7 @@
     "react-share": "^4.3.1",
     "react-simplemde-editor": "^4.1.1",
     "schema-dts": "^0.7.1",
+    "spar": "^0.0.0",
     "typescript": "^3.8.3"
   },
   "scripts": {

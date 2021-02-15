@@ -193,6 +193,7 @@ const PostForm: React.FC<PostFormProps> = ({ data, formItem, onSubmit, isStaff, 
                 onChange={setContent}
                 value={content}
                 options={{
+                  autoDownloadFontAwesome: false,
                   spellChecker: false,
                   previewRender(text) {
                     return ReactDOMServer.renderToString(
