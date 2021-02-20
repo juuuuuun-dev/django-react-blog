@@ -1,5 +1,6 @@
 from categories.models import Category
 from categories.serializers import CategoryListSerializer
+from media.models import Media
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from tags.models import Tag
@@ -19,6 +20,9 @@ class PostPagination(PageNumberPagination):
             'count': self.page.paginator.count,
             'tags': tagSerializer.data,
             'categories': categorySerializer.data,
+            'media_size': {
+                'cover': Media.cover_size,
+            },
         }
         response.update(data)
         return Response(response)

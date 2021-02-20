@@ -67,7 +67,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
                             media={`(min-width: ${breakPoint.sm}px)`}
                             srcSet={`${item.cover_media.cover_mini} 1x`}
                           ></source>
-                          <img width={80} height={80} alt={item.title} src={item.cover_media.cover} />
+                          <img width={data && data.media_size.cover.width / 2} height={data && data.media_size.cover.height / 2} alt={item.title} src={item.cover_media.cover} />
                         </picture>
                       </LazyLoadComponent>
                     </Link>

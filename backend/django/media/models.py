@@ -16,8 +16,8 @@ def get_file_path(instance, filename):
 class Media(models.Model):
     base_cache_key = 'media'
     cover_size = {
-        'width': 160,
-        'height': 160,
+        'width': 100,
+        'height': 100,
     }
     thumb_size = {
         'width': 40,
