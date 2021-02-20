@@ -36,6 +36,9 @@ class PostListTestCase(APITestCase):
         self.assertEqual(response.data['results'][0]['title'], post.title)
         self.assertTrue(response.data['results'][0]['category'])
         self.assertEqual(len(response.data['results'][0]['tag']), 1)
+        self.assertEqual(
+            response.data['media_size']['cover'],
+            Media.cover_size)
 
     def test_get_not_show(self):
         PostFactory.create(user=self.user, is_show=False)
