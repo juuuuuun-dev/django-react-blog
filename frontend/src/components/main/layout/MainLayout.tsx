@@ -20,12 +20,12 @@ const MainLayout: React.FC = () => {
       <Content className="site-layout">
         <div className="main-container site-layout-background">
           <Row gutter={[{ sm: 60 }, 60]}>
-            <Col lg={17} md={24} sm={24} xs={24}>
+            <Col lg={18} md={24} sm={24} xs={24}>
               <div className="contents">
                 <Container />
               </div>
             </Col>
-            <Col lg={7} md={24} sm={24} xs={24}>
+            <Col className="right-container" lg={6} md={24} sm={24} xs={24}>
               <RightContainer />
             </Col>
           </Row>

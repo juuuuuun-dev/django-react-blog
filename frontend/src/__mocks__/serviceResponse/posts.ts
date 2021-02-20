@@ -104,6 +104,12 @@ export const listData = {
   "links": {
     "next": "/api/v1/posts/?page=2",
     "previous": null,
+  },
+  "media_size": {
+    "cover": {
+      "width": 10,
+      "height": 10
+    }
   }
 }
 
@@ -127,6 +133,12 @@ export const listTagFilterData = {
   "links": {
     "next": "/api/v1/posts/?page=2",
     "previous": null,
+  },
+  "media_size": {
+    "cover": {
+      "width": 10,
+      "height": 10
+    }
   }
 }
 
@@ -139,6 +151,12 @@ export const listCategoryFilterData = {
   "links": {
     "next": "/api/v1/posts/?page=2",
     "previous": null,
+  },
+  "media_size": {
+    "cover": {
+      "width": 10,
+      "height": 10
+    }
   }
 }
 

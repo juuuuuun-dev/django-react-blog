@@ -32,6 +32,9 @@ export type PostList = Pagination & {
     next?: string;
     previous?: string;
   },
+  media_size: {
+    cover: ImageSize;
+  }
   count: number;
 } | undefined;
 
@@ -39,7 +42,12 @@ export type PostList = Pagination & {
 export type PostListProps = {
   data: PostList;
   query: ListQuery;
-  handlePageChange: (page: number, pageSize?: number | undefined) => void
+  handlePageChange: (page: number, pageSize?: number | undefined) => void;
+}
+
+export type ImageSize = {
+  width: number;
+  height: number;
 }
 
 export type EntryDataProps = {
