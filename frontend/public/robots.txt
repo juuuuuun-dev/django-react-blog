@@ -1,3 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
+Sitemap: https://blog-api.junkata.com/api/v1/sitemaps/sitemap.xml
 User-agent: *
 Disallow:
