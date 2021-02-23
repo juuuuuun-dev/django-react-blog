@@ -1,5 +1,5 @@
 from django.contrib.sitemaps.views import sitemap
-from django.urls import include, path
+from django.urls import path
 
 from .category_sitemaps import CategorySitemap
 from .post_sitemaps import PostPaginateSitemap, PostSitemap

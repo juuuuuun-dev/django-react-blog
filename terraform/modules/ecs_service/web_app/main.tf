@@ -84,30 +84,19 @@ resource "aws_ecs_service" "web_app" {
   }
 }
 
-/*
-command
-### migrate
-aws ecs run-task \
---cluster <your_cluster_name> \
---task-definition <your_migrate_task_definition> \
---network-configuration "awsvpcConfiguration={subnets=[<your_subnet_id>],securityGroups=[<your_security_group_id>],assignPublicIp=ENABLED}"
+locals {
+  batch_task_name = "${var.app_name}-${var.environment}-batch"
+}
 
-
-### superuser
-aws ecs run-task \
---cluster <your_cluster_name> \
---task-definition <your_migrate_task_definition> \
---network-configuration "awsvpcConfiguration={subnets=[<your_subnet_id>],securityGroups=[<your_security_group_id>],assignPublicIp=ENABLED}"
---overrides '{"containerOverrides": [{"name":"migrate-backend","command": [ "python", "manage.py", "createsuperuser", "--username", "<your_name>", "--email", "<your_email>", "--noinput" ]}]}'
-
-*/
-resource "aws_ecs_task_definition" "migrate" {
-  family                   = "${var.family}-migrate"
+resource "aws_ecs_task_definition" "batch" {
+  family                   = "${var.family}-batch"
   cpu                      = var.cpu
   memory                   = var.memory
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  container_definitions = templatefile("../modules/ecs_service/web_app/definitions/migrate_definition.json", {
+  container_definitions = templatefile("../modules/ecs_service/web_app/definitions/batch_definition.json", {
+    "task_name" : local.batch_task_name
+    "log_prefix" : "batch"
     "django_log_group" : aws_cloudwatch_log_group.django.name
     "django_image" : var.django_repository
     "db_name" : var.db_name
@@ -129,6 +118,6 @@ resource "aws_ecs_task_definition" "migrate" {
   })
   execution_role_arn = var.ecs_task_execution_role_arn
   tags = {
-    "Name" = "web_app_migrate"
+    "Name" = local.batch_task_name
   }
 }

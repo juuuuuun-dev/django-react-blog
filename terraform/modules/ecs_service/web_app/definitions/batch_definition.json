@@ -1,13 +1,9 @@
 [
   {
-    "name": "migrate-backend",
+    "name": "${task_name}",
     "image": "${django_image}",
     "essential": true,
-    "command": [
-      "python",
-      "manage.py",
-      "migrate"
-    ],
+    "command": [],
     "portMappings": [
       {
         "protocol": "tcp",
@@ -84,7 +80,7 @@
       "logDriver": "awslogs",
       "options": {
         "awslogs-region": "ap-northeast-1",
-        "awslogs-stream-prefix": "django/migrate",
+        "awslogs-stream-prefix": "${log_prefix}",
         "awslogs-group": "${django_log_group}"
       }
     }
