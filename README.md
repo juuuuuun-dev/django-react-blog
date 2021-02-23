@@ -58,29 +58,31 @@ $ terraform apply
 
 ### Production initial setup aws cli command
 - migrate
+Overrides and use batch-definition
 ```sh
 aws ecs run-task \
 --cluster <cluster-name> \
---task-definition <migrate-definition-name> \
---network-configuration "awsvpcConfiguration={subnets=[<your-subnet-id>],securityGroups=[<your-sg-id>],assignPublicIp=ENABLED}"
+--task-definition <batch-definition-name> \
+--network-configuration "awsvpcConfiguration={subnets=[<your-subnet-id>],securityGroups=[<your-sg-id>],assignPublicIp=ENABLED}" \
+--overrides '{"containerOverrides": [{"name":"<batcn-definition-name>","command": [ "python", "manage.py", "migrate" ]}]}'
 ```
 
 - Django createsuperuser  
-Overrides and use migrate-definition
+Overrides and use batch-definition
 ```sh
 aws ecs run-task \
 --cluster <cluster-name> \
---task-definition <migrate-definition-name> \
+--task-definition <batch-definition-name> \
 --network-configuration "awsvpcConfiguration={subnets=[<your-subnet-id>],securityGroups=[<your-sg-id>],assignPublicIp=ENABLED}" \
---overrides '{"containerOverrides": [{"name":"migrate-backend","command": [ "python", "manage.py", "createsuperuser", "--username", "<your-name>", "--email", "<your-email>", "--noinput" ]}]}'
+--overrides '{"containerOverrides": [{"name":"<batcn-definition-name>","command": [ "python", "manage.py", "createsuperuser", "--username", "<your-name>", "--email", "<your-email>", "--noinput" ]}]}'
 ```
 
 - Django collectstatic  
-Overrides and use migrate-definition
+Overrides and use batch-definition
 ```sh
 aws ecs run-task \
 --cluster <cluster-name> \
---task-definition <migrate-definition-name> \
+--task-definition <batcn-definition-name> \
 --network-configuration "awsvpcConfiguration={subnets=[<your-subnet-id>],securityGroups=[<your-sg-id>],assignPublicIp=ENABLED}" \
---overrides '{"containerOverrides": [{"name":"migrate-backend","command": [ "python", "manage.py", "collectstatic", "--noinput" ]}]}'
+--overrides '{"containerOverrides": [{"name":"<batcn-definition-name>","command": [ "python", "manage.py", "collectstatic", "--noinput" ]}]}'
 ```
