@@ -9,7 +9,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 // const TerserPlugin = require('terser-webpack-plugin')
 
 console.log("override build start")
-
 /**
  * https://github.com/facebook/create-react-app/issues/8320
  * CircleCI + Terser Error: Call retries were exceeded
@@ -45,6 +44,14 @@ module.exports = override(
           .replace(/process.env.API_BASE_URL/g, process.env.API_BASE_URL)
           .replace(/process.env.REACT_APP_TITLE/g, process.env.REACT_APP_TITLE)
           .replace(/process.env.REACT_APP_THEME_COLOR/g, process.env.REACT_APP_THEME_COLOR)
+        return content;
+      },
+    },
+    {
+      from: 'public/sitemap.xml',
+      transform(content, path) {
+        content = content.toString()
+          .replace("%REACT_APP_BACKEND%", process.env.REACT_APP_BACKEND)
         return content;
       },
     }],

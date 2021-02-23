@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <sitemap>
-<loc>https://blog-api.junkata.com/api/v1/sitemaps/sitemap.xml</loc>
+<loc>%REACT_APP_BACKEND%/sitemaps/sitemap.xml</loc>
 </sitemap>
 </sitemapindex>

@@ -16,6 +16,8 @@ highlight.registerLanguage('bash', require('highlight.js/lib/languages/bash'));
 highlight.registerLanguage('nginx', require('highlight.js/lib/languages/nginx'));
 highlight.registerLanguage('less', require('highlight.js/lib/languages/less'));
 highlight.registerLanguage('yaml', require('highlight.js/lib/languages/yaml'));
+highlight.registerLanguage('xml', require('highlight.js/lib/languages/xml'));
+highlight.registerLanguage('dockerfile', require('highlight.js/lib/languages/dockerfile'));
 
 
 marked.setOptions({

@@ -38,8 +38,7 @@ urlpatterns = [
     path("{}init/".format(settings.API_VERSION), include("initial.urls")),
     path("{}site-settings/".format(settings.API_VERSION),
          include("site_settings.urls")),
-    path("{}sitemaps/".format(settings.API_VERSION),
-         include("sitemaps.urls")),
+    path("sitemaps/", include("sitemaps.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
