@@ -52,9 +52,6 @@ module "web_app" {
   AWS_STORAGE_BUCKET_NAME      = "${var.app_name}-${var.environment}-storage"
   AWS_S3_STORAGE_CUSTOM_DOMAIN = "${var.frontend_record_name}.${var.zone_domain}"
   depends_on                   = [aws_ecr_repository.django, aws_ecr_repository.nginx]
-  # frontend_url                 = aws_cloudfront_distribution.s3_distribution.domain_name
-  # AWS_S3_STORAGE_CUSTOM_DOMAIN = aws_cloudfront_distribution.s3_distribution.domain_name
-  # frontend_url = "${var.frontend_record_name}.${var.zone_domain}"
 }
 
 

@@ -68,7 +68,6 @@ module "lambda_role" {
 }
 
 
-
 module "ses_send_policy" {
   version     = "~> 3.0"
   source      = "terraform-aws-modules/iam/aws//modules/iam-policy"
@@ -130,4 +129,22 @@ data "aws_iam_policy_document" "s3_static_website_policy" {
       "${module.s3_bucket_for_app_storage.this_s3_bucket_arn}/*",
     ]
   }
+}
+
+
+module "container_event_role" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "~> 3.0"
+
+  # principals service
+  trusted_role_services = [
+    "events.amazonaws.com",
+  ]
+
+  create_role       = true
+  role_requires_mfa = false
+  role_name         = "${var.app_name}_${var.environment}_event_role"
+  custom_role_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceEventsRole",
+  ]
 }
