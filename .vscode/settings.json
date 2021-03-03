@@ -13,14 +13,12 @@
       "source.organizeImports": true
     }
   },
+  // "python.sortImports.path": "${workspaceFolder}/venv/bin/isort",
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.formatting.autopep8Args": [
     "--aggressive",
     "--aggressive"
   ],
-  "python.sortImports.args": [
-    "-rc",
-    "-sp isort.cfg"
-  ],
+  "python.pythonPath": "/Users/katadajun/.local/share/virtualenvs/django-react-blog-SwRR2Hk2/bin/python",
 }
