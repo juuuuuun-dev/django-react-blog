@@ -1,22 +1,14 @@
-import 'easymde/dist/easymde.min.css';
 
 import { Button, Form, Input, Modal, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import SimpleMDE from 'react-simplemde-editor';
 
 import { DeleteOutlined, EyeOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 import toast from '../../../components/common/toast';
 import { getBase64 } from '../../../helper/file';
-import { MediaDetail } from '../../../types/media';
 import { ProfileFormProps } from '../../../types/profile';
-import MediaModal from '../../admin/MediaModal';
-import MarkdownContent from '../../common/MarkdownContent';
-
-// import ImgCrop from 'antd-img-crop';
-
+import MarkdownEditor from '../../common/MarkdownEditor';
 
 const ProfileForm: React.FC<ProfileFormProps> = (props) => {
   const { data, onSubmit } = props;
@@ -28,8 +20,6 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
   const [removeFile, setRemoveFile] = React.useState<boolean>(false)
   const [showModal, setShowModal] = React.useState<boolean>(false)
   const [message, setMessage] = React.useState<string>("");
-  const [codemirror, setCodeMirror] = React.useState<any>();
-  const [mediaModalVisible, setMediaModalVisible] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     if (data) {
@@ -57,8 +47,6 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
         setRemoveFile(false);
         setImageUrl(imageUrl);
       });
-      // cropp用
-      // setFile(new File([file], file.name))
     }
     return false;
   }
@@ -96,14 +84,6 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
     setRemoveFile(true);
   }
 
-  const handleAddMedia = (value: MediaDetail) => {
-    const text = `<img src="${value.file}" alt="${value.name}" width="${value.width}" height="${value.height}" loading="lazy">`
-    if (codemirror) {
-      const { line, ch } = codemirror.getCursor();
-      codemirror.replaceRange(text, { line: line, ch: ch })
-      setMessage(codemirror.getValue())
-    }
-  }
 
   const uploadButton = (
     <div>
@@ -147,47 +127,15 @@ const ProfileForm: React.FC<ProfileFormProps> = (props) => {
           {imageUrl ? <><EyeOutlined style={{ marginRight: "10px" }} aria-label="image-preview" onClick={() => handlePreview()} /><DeleteOutlined aria-label="delete-image" onClick={handleRemove} /></> : <></>}
 
         </Form.Item>
-        {/* <Form.Item label="Url" name="url" rules={[{ required: false, message: '' }]}>
-          <Input aria-label="input-url" placeholder="url" />
-        </Form.Item> */}
         <Form.Item label="Message (Used in the about me section of the right column)" name="message">
-          <SimpleMDE
-            data-testid="text-area"
-            onChange={setMessage}
-            value={message}
-            options={{
-              spellChecker: false,
-              previewRender(text) {
-                return ReactDOMServer.renderToString(
-                  <MarkdownContent name="about-me-form" content={text} />
-                )
-              },
-              toolbar: ["bold", "italic", "heading", "|", "quote", "code", "table", "|", "preview", "side-by-side", "fullscreen", {
-                name: "custom",
-                action: async function customFunction(editor) {
-                  await new Promise((resolve) => {
-                    setCodeMirror(editor.codemirror)
-                    resolve();
-                  })
-                  setMediaModalVisible(true)
-                },
-                className: "fa fa-image",
-                title: "Add media",
-              }],
-            }}
-          />
-
+          <MarkdownEditor onChangeHandler={setMessage} value={message} />
         </Form.Item>
-        <MediaModal
-          handleAddMedia={handleAddMedia}
-          visible={mediaModalVisible}
-          setVisible={setMediaModalVisible}
-        />
+        
 
         <Form.Item>
           <Button disabled={!props.isStaff} aria-label="form-submit" type="primary" htmlType="submit" className="login-form-button">
             Submit
-        </Button>
+          </Button>
         </Form.Item>
       </Form>
       <Modal visible={previewVisible} footer={null} onCancel={() => setPreviewVisible(false)}>
