@@ -5,24 +5,38 @@
 // xxl	≥1600px
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-[role=alert] {
+[role='alert'] {
   color: @alert-text-color;
 }
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: bold;
   color: @primary-text-color;
 }
-ul{ margin: 0; padding: 0;}
-li {list-style: none;}
-a { color: @content-link-color; }
-a.active{ color: @active-link-color; font-weight: 500;}
-.humberger{
+ul {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none;
+}
+a {
+  color: @content-link-color;
+}
+a.active {
+  color: @active-link-color;
+  font-weight: 500;
+}
+.humberger {
   float: right;
   margin-right: -10px;
   &-button {
@@ -31,11 +45,10 @@ a.active{ color: @active-link-color; font-weight: 500;}
       font-size: 20px;
       color: @primary-color;
     }
-    
   }
 }
-.app-title{
-  font-size: .9rem;
+.app-title {
+  font-size: 0.9rem;
   font-weight: 500;
 }
 .header-container {
@@ -43,26 +56,25 @@ a.active{ color: @active-link-color; font-weight: 500;}
   margin: 0 auto;
   padding: 0 @global-padding;
 }
-.main-container{
+.main-container {
   max-width: @max-width;
   margin: 55px auto 0 auto;
   padding: @global-padding;
 }
 // .right-contents
 
-
-.right-contents{
+.right-contents {
   &__catch {
     margin-bottom: @global-margin;
   }
-  
+
   background: #fff;
   margin-left: @global-margin;
   &-section {
     margin-bottom: @global-margin;
     &__title {
       font-weight: bold;
-      font-size: .9rem;
+      font-size: 0.9rem;
       margin-bottom: @global-margin / 4;
     }
     &__banner {
@@ -73,14 +85,12 @@ a.active{ color: @active-link-color; font-weight: 500;}
     }
     .post-list {
       &__title {
-        font-size: .8rem;
+        font-size: 0.8rem;
         font-weight: normal;
       }
-      
     }
   }
-  
-  
+
   &-about-me {
     &__avatar {
       margin-bottom: @global-margin / 4;
@@ -88,16 +98,16 @@ a.active{ color: @active-link-color; font-weight: 500;}
         font-weight: normal;
         line-height: 1.8;
       }
-      &-image img{
+      &-image img {
         width: 30px;
         height: 30px;
       }
     }
     & p {
-      font-size: .8rem;
+      font-size: 0.8rem;
     }
   }
-  &-list{
+  &-list {
     margin-top: -5px;
     &__item {
       border-bottom: 1px dashed #eee;
@@ -106,8 +116,6 @@ a.active{ color: @active-link-color; font-weight: 500;}
         display: block;
       }
     }
-    
-
   }
 }
 
@@ -122,22 +130,22 @@ a.active{ color: @active-link-color; font-weight: 500;}
     margin-right: 10px;
     padding: 0;
     display: inline-block;
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
 }
 
-h3.list-title{
+h3.list-title {
   margin-bottom: 0;
   font-size: @title-font-size;
   span {
-    font-size: .8rem;
+    font-size: 0.8rem;
     font-weight: normal;
     margin-left: 5px;
   }
 }
-h3.list-title.list-title__sub{
-  font-size: .8rem;
-    font-weight: normal;
+h3.list-title.list-title__sub {
+  font-size: 0.8rem;
+  font-weight: normal;
 }
 
 h3.page-title {
@@ -145,23 +153,8 @@ h3.page-title {
   margin-bottom: @global-margin;
 }
 
-// markdown
-.markdown-content {
-  font-size: .9rem;
-  line-height: 1.8rem;
-  color: #333;
-  p {
-    margin-bottom: 1.8rem;
-  }
-  img {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-  }
-}
 // footer
 .footer {
-  
 }
 .footer-container {
   max-width: @max-width;
@@ -169,7 +162,7 @@ h3.page-title {
   padding: @global-padding / 2 0;
   text-align: center;
   border-top: 1px dashed #ddd;
-  font-size: .8rem;
+  font-size: 0.8rem;
   color: #888;
 }
 
@@ -193,7 +186,7 @@ h3.page-title {
   .footer-container {
     margin: 0 @global-margin / 3;
   }
-  .right-contents{
+  .right-contents {
     margin-left: 0;
   }
 }
