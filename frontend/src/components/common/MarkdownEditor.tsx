@@ -75,7 +75,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
               setMediaModalVisible(true)
             },
             className: "fa fa-image",
-            title: "Media",
+            title: "Add media",
           },
           {
             name: "table-of-contents",
