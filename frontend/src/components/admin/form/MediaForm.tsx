@@ -70,7 +70,6 @@ const MediaForm: React.FC<MediaFormProps> = ({ data, onSubmit, isStaff, error })
   );
 
   const handleChange = (info: any) => {
-    console.log("handleChange")
     setFile(info.file)
   };
 
