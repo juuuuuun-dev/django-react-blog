@@ -194,7 +194,7 @@ export const listTagFilterAxiosResponse: AxiosResponse = {
 };
 
 export const listCategoryFilterAxiosResponse: AxiosResponse = {
-  data: listTagFilterData,
+  data: listCategoryFilterData,
   status: 200,
   statusText: 'OK',
   config: {},

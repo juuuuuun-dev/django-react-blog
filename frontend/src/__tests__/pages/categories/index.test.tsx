@@ -40,7 +40,7 @@ describe("Categories index", () => {
     const { utils } = await setUp(initialPath);
     const link = `right-contents-category-link-${initAxiosResponse.data.categories[0].slug}`;
     fireEvent.click(utils.getByTestId(link));
-
+    console.log(listCategoryFilterAxiosResponse.data.category_name)
     await waitFor(() => {
       expect(utils.getByTestId('list-title').innerHTML).toMatch(`${listCategoryFilterAxiosResponse.data.category_name}`)
       expect(utils.getByTestId('post-list-page-count-results').innerHTML).toMatch(`${listCategoryFilterAxiosResponse.data.results.length} results`)
