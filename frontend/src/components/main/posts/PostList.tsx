@@ -105,7 +105,7 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
         )}
       </>
     );
-  }, [data, init, breakPoint, query, list, handlePagination]);
+  }, [data, init, breakPoint, query, list, loading, handlePagination]);
 };
 
 export default PostList;
