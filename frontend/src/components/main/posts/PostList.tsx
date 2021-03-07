@@ -11,17 +11,33 @@ import EntryData from './EntryData';
 
 const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) => {
   const [{ init, temporaryPostList, breakPoint }] = React.useContext(MainContext);
+  const [list, setList] = React.useState(data?.results || temporaryPostList)
+  const [loading, setLoading] = React.useState<boolean>(true)
   const { Paragraph } = Typography;
+
+  React.useEffect(() => {
+    if (data?.results) {
+      setList(data?.results)
+      setLoading(false)
+    }
+  }, [data, setList, setLoading]);
+
+  const handlePagination = React.useCallback((arg) => {
+    setList(temporaryPostList);
+    setLoading(true);
+    handlePageChange(arg);
+  }, [handlePageChange, temporaryPostList]);
+
   return React.useMemo(() => {
     return (
       <>
         <List
           className="post-list"
           data-testid="post-list"
-          dataSource={data?.results || temporaryPostList}
+          dataSource={list}
           renderItem={(item, index) => (
             <List.Item key={item.id} data-testid={`post-list-item-${index}`}>
-              <Skeleton loading={data?.results ? false : true} active>
+              <Skeleton loading={loading} active>
                 <List.Item.Meta
                   title={
                     <Link to={`/posts/${item.slug}`}>
@@ -84,12 +100,12 @@ const PostList: React.FC<PostListProps> = ({ data, query, handlePageChange }) =>
             pageSize={init?.pageSize || 1}
             defaultCurrent={query.page || 1}
             current={query.page || 1}
-            onChange={handlePageChange}
+            onChange={handlePagination}
           />
         )}
       </>
     );
-  }, [data, init, breakPoint, temporaryPostList, query, handlePageChange]);
+  }, [data, init, breakPoint, query, list, loading, handlePagination]);
 };
 
 export default PostList;
