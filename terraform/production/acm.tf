@@ -1,9 +1,4 @@
 
-provider "aws" {
-  alias  = "virginia"
-  region = "us-east-1"
-}
-
 /*
 virginia region for cloudfornt
 */
