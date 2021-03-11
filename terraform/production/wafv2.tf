@@ -1,4 +1,4 @@
-resource "aws_wafv2_web_acl" "default" {
+resource "aws_wafv2_web_acl" "common" {
   name        = "common-acls"
   description = "Common acls"
   scope       = "CLOUDFRONT"
@@ -94,3 +94,4 @@ resource "aws_wafv2_web_acl" "default" {
     "Name" = "common"
   }
 }
+
