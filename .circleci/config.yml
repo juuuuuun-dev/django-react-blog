@@ -170,7 +170,8 @@ jobs:
           security-group-ids: ${AWS_SECURITY_GROUP_ID}
           subnet-ids: '${AWS_SUBNET_ONE}'
           task-definition: '${APP_PREFIX}-production-batch'
-          overrides: '{"containerOverrides": [{"name":"${APP_PREFIX}-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
+          assign-public-ip: ENABLED
+          overrides: '{\\\"containerOverrides\\\": [{\\\"name\\\":\\\"${APP_PREFIX}-production-batch\\\",\\\"command\\\": [ \\\"python\\\", \\\"manage.py\\\", \\\"migrate\\\" ]}]}'
       # - run:
       #     name: 'db migrate'
       #     command: |
