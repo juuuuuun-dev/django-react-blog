@@ -12,7 +12,7 @@ orbs:
   aws-cli: circleci/aws-cli@1.4.0
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
-  aws-ecs: circleci/aws-ecs@2.0.0
+  aws-ecs: circleci/aws-ecs@1.4.0
 commands:
   yarn_install:
     steps:
@@ -166,11 +166,12 @@ jobs:
     executor: backend-executor
     steps:
       - aws-ecs/run-task:
+          awsvpc: true
           platform-version: LATEST
           launch-type: FARGATE
           cluster: '${APP_PREFIX}-production-ecs'
           security-group-ids: ${AWS_SECURITY_GROUP_ID}
-          subnet-ids: '${AWS_SUBNET_ONE}'
+          subnet-ids: ${AWS_SUBNET_ONE}
           task-definition: '${APP_PREFIX}-production-batch'
           assign-public-ip: ENABLED
           # overrides: '{\\\"containerOverrides\\\": [{\\\"name\\\":\\\"${APP_PREFIX}-production-batch\\\",\\\"command\\\": [ \\\"python\\\", \\\"manage.py\\\", \\\"migrate\\\" ]}]}'
