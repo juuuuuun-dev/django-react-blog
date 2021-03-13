@@ -1,12 +1,3 @@
-# Required environment variables
-# APP_PREFIX
-# AWS_ACCESS_KEY_ID
-# AWS_REGION
-# AWS_ECR_ACCOUNT_URL
-# AWS_SECRET_ACCESS_KEY
-# BACKEND_API_URL
-# GTM_ID
-
 version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@1.4.0
@@ -51,16 +42,6 @@ commands:
           name: ls
           command: ls -la
           working_directory: frontend
-  run-task:
-    steps:
-      - aws-ecs/run-task:
-          cluster: '${APP_PREFIX}-production-ecs'
-          security-group-ids: $AWS_SECURITY_GROUP_ID
-          subnet-ids: '${AWS_SUBNET_ONE}'
-          task-definition: '${APP_PREFIX}-production-batch'
-          count: 1
-          launch-type: FARGATE
-          awsvpc: true
 
 executors:
   frontend-excutor:
@@ -186,18 +167,14 @@ jobs:
             --cluster "${APP_PREFIX}-production-ecs" \
             --task-definition "${APP_PREFIX}-production-batch" \
             --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
-            --overrides '{"containerOverrides": [{"name":"${APP_PREFIX}-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
-  production-run-task:
-    executor: backend-executor
-    steps:
-      - run-task
+            --overrides '{"containerOverrides": [{"name":"junkata-blog-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - docker-compose-cache
-      - production-run-task
+      - production-migration
       # - backend-test:
       #     requires:
       #       - docker-compose-cache
