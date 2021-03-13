@@ -3,7 +3,7 @@ orbs:
   aws-cli: circleci/aws-cli@0.1.4
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
-  aws-ecs: circleci/aws-ecs@2.0
+  aws-ecs: circleci/aws-ecs@1.4.0
 commands:
   yarn_install:
     steps:
@@ -168,17 +168,19 @@ jobs:
             --task-definition "${APP_PREFIX}-production-batch" \
             --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
             --overrides '{"containerOverrides": [{"name":"junkata-blog-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
-  run-task:
-    steps:
-      - aws-ecs/run-task:
-          awsvpc: true
-          platform-version: LATEST
-          launch-type: FARGATE
-          cluster: '${APP_PREFIX}-production-ecs'
-          security-group-ids: ${AWS_SECURITY_GROUP_ID}
-          subnet-ids: '${AWS_SUBNET_ONE}'
-          task-definition: '${APP_PREFIX}-production-batch'
-          assign-public-ip: ENABLED
+  # run-task:
+  #   docker:
+  #     - image: 'cimg/python:3.9.1'
+  #   steps:
+  #     - aws-ecs/run-task:
+  #         awsvpc: true
+  #         platform-version: LATEST
+  #         launch-type: FARGATE
+  #         cluster: '${APP_PREFIX}-production-ecs'
+  #         security-group-ids: ${AWS_SECURITY_GROUP_ID}
+  #         subnet-ids: '${AWS_SUBNET_ONE}'
+  #         task-definition: '${APP_PREFIX}-production-batch'
+  #         assign-public-ip: ENABLED
 
 workflows:
   version: 2
@@ -186,41 +188,41 @@ workflows:
     jobs:
       - docker-compose-cache
       - run-task
-      # - backend-test:
-      #     requires:
-      #       - docker-compose-cache
-      # - frontend-test
-      # - frontend-build:
-      #     requires:
-      #       - frontend-test
-      # - production-frontend-deploy:
-      #     requires:
-      #       - frontend-build
-      #     filters:
-      #       branches:
-      #         only: master
-      # - production-django-docker-image-build-and-deploy:
-      #     requires:
-      #       - backend-test
-      #     filters:
-      #       branches:
-      #         only: master
-      # - production-nginx-docker-image-build-and-deploy:
-      #     requires:
-      #       - backend-test
-      #     filters:
-      #       branches:
-      #         only: master
-      # - production-ecs-service-update:
-      #     requires:
-      #       - production-django-docker-image-build-and-deploy
-      #       - production-nginx-docker-image-build-and-deploy
-      #     filters:
-      #       branches:
-      #         only: master
-      # - production-migration:
-      #     requires:
-      #       - production-ecs-service-update
-      #     filters:
-      #       branches:
-      #         only: master
+      - backend-test:
+          requires:
+            - docker-compose-cache
+      - frontend-test
+      - frontend-build:
+          requires:
+            - frontend-test
+      - production-frontend-deploy:
+          requires:
+            - frontend-build
+          filters:
+            branches:
+              only: master
+      - production-django-docker-image-build-and-deploy:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
+      - production-nginx-docker-image-build-and-deploy:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
+      - production-ecs-service-update:
+          requires:
+            - production-django-docker-image-build-and-deploy
+            - production-nginx-docker-image-build-and-deploy
+          filters:
+            branches:
+              only: master
+      - production-migration:
+          requires:
+            - production-ecs-service-update
+          filters:
+            branches:
+              only: master
