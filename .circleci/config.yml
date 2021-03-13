@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-cli: circleci/aws-cli@0.1.4
+  aws-cli: circleci/aws-cli@1.4.0
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
   aws-ecs: circleci/aws-ecs@1.4.0
@@ -144,10 +144,10 @@ jobs:
   production-ecs-service-update:
     executor: backend-executor
     steps:
-      - aws-cli/install
-      - aws-cli/configure:
-          aws-access-key-id: $AWS_ACCESS_KEY_ID
-          aws-region: $AWS_REGION
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_REGION
       - aws-ecs/update-service:
           family: '${APP_PREFIX}-production'
           cluster-name: '${APP_PREFIX}-production-ecs'
