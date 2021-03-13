@@ -166,7 +166,7 @@ jobs:
     executor: backend-executor
     steps:
       - aws-ecs/run-task:
-          awsvpc: true
+          awsvpc: false
           platform-version: LATEST
           launch-type: FARGATE
           cluster: '${APP_PREFIX}-production-ecs'
