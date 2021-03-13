@@ -187,7 +187,6 @@ workflows:
   build-and-test:
     jobs:
       - docker-compose-cache
-      - run-task
       - backend-test:
           requires:
             - docker-compose-cache
