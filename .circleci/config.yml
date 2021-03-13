@@ -3,7 +3,7 @@ orbs:
   aws-cli: circleci/aws-cli@0.1.4
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
-  aws-ecs: circleci/aws-ecs@2.0.0
+  aws-ecs: circleci/aws-ecs@2.0
 commands:
   yarn_install:
     steps:
@@ -169,7 +169,6 @@ jobs:
             --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
             --overrides '{"containerOverrides": [{"name":"junkata-blog-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
   run-task:
-    executor: backend-executor
     steps:
       - aws-ecs/run-task:
           awsvpc: true
