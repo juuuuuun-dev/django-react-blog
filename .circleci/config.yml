@@ -171,19 +171,28 @@ jobs:
           aws-region: AWS_REGION
       - run:
           name: 'db migrate'
-          command: >-
-            aws ecs run-task
-            --cluster "${APP_PREFIX}-production-ecs"
-            --task-definition "${APP_PREFIX}-production-batch"
-            --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}"
+          command: |
+            aws ecs run-task \
+            --cluster "${APP_PREFIX}-production-ecs" \
+            --task-definition "${APP_PREFIX}-production-batch" \
+            --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
             --overrides '{"containerOverrides": [{"name":"${APP_PREFIX}-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
+  run-task:
+    docker:
+      - image: 'cimg/python:3.9.1'
+    steps:
+      - aws-ecs/run-task:
+          cluster: '${APP_PREFIX}-production-ecs'
+          security-group-ids: $AWS_SECURITY_GROUP_ID
+          subnet-ids: '$AWS_SUBNET_ONE'
+          task-definition: ${APP_PREFIX}-production-batch
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - docker-compose-cache
-      - production-migration
+      - run-task
       # - backend-test:
       #     requires:
       #       - docker-compose-cache
