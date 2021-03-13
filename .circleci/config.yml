@@ -1,15 +1,6 @@
-# Required environment variables
-# APP_PREFIX
-# AWS_ACCESS_KEY_ID
-# AWS_REGION
-# AWS_ECR_ACCOUNT_URL
-# AWS_SECRET_ACCESS_KEY
-# BACKEND_API_URL
-# GTM_ID
-
 version: 2.1
 orbs:
-  aws-cli: circleci/aws-cli@0.1.4
+  aws-cli: circleci/aws-cli@1.4.0
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
   aws-ecs: circleci/aws-ecs@1.4.0
@@ -97,13 +88,13 @@ jobs:
           name: sleep for waiting launch db
           command: sleep 10
       - run:
-          name: "before_test: makemigrations"
+          name: 'before_test: makemigrations'
           command: docker-compose -f docker-compose-ci.yml run backend python manage.py makemigrations
       - run:
-          name: "before_test: migrate"
+          name: 'before_test: migrate'
           command: docker-compose -f docker-compose-ci.yml run backend python manage.py migrate
       - run:
-          name: "test pytest"
+          name: 'test pytest'
           command: docker-compose -f docker-compose-ci.yml run backend pytest -c pytest.ini
       - save_cache:
           key: v2-docker-cache-{{ .Branch }}--{{ checksum "backend/django/requirements.txt" }}}--{{ checksum "docker-compose.yml" }}--{{ checksum "backend/django/Dockerfile" }}
@@ -132,13 +123,13 @@ jobs:
           at: ./frontend
       - aws-s3/sync:
           from: frontend/build
-          to: "s3://${APP_PREFIX}-production-storage"
+          to: 's3://${APP_PREFIX}-production-storage'
           arguments: --exclude "/storage/*"
   production-django-docker-image-build-and-deploy:
     executor: backend-executor
     steps:
       - aws-ecr/build-and-push-image:
-          repo: "${APP_PREFIX}-production-django"
+          repo: '${APP_PREFIX}-production-django'
           region: AWS_REGION
           path: backend/django/
           tag: latest
@@ -146,21 +137,50 @@ jobs:
     executor: backend-executor
     steps:
       - aws-ecr/build-and-push-image:
-          repo: "${APP_PREFIX}-production-nginx"
+          repo: '${APP_PREFIX}-production-nginx'
           region: AWS_REGION
           path: backend/nginx/
 
   production-ecs-service-update:
     executor: backend-executor
     steps:
-      - aws-cli/install
-      - aws-cli/configure:
-          aws-access-key-id: $AWS_ACCESS_KEY_ID
-          aws-region: $AWS_REGION
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_REGION
       - aws-ecs/update-service:
-          family: "${APP_PREFIX}-production"
-          cluster-name: "${APP_PREFIX}-production-ecs"
-          service-name: "web_app"
+          family: '${APP_PREFIX}-production'
+          cluster-name: '${APP_PREFIX}-production-ecs'
+          service-name: 'web_app'
+
+  production-migration:
+    executor: backend-executor
+    steps:
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_REGION
+      - run:
+          name: 'db migrate'
+          command: |
+            aws ecs run-task \
+            --cluster "${APP_PREFIX}-production-ecs" \
+            --task-definition "${APP_PREFIX}-production-batch" \
+            --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
+            --overrides '{"containerOverrides": [{"name":"junkata-blog-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
+  # run-task:
+  #   docker:
+  #     - image: 'cimg/python:3.9.1'
+  #   steps:
+  #     - aws-ecs/run-task:
+  #         awsvpc: true
+  #         platform-version: LATEST
+  #         launch-type: FARGATE
+  #         cluster: '${APP_PREFIX}-production-ecs'
+  #         security-group-ids: ${AWS_SECURITY_GROUP_ID}
+  #         subnet-ids: '${AWS_SUBNET_ONE}'
+  #         task-definition: '${APP_PREFIX}-production-batch'
+  #         assign-public-ip: ENABLED
 
 workflows:
   version: 2
@@ -196,6 +216,12 @@ workflows:
           requires:
             - production-django-docker-image-build-and-deploy
             - production-nginx-docker-image-build-and-deploy
+          filters:
+            branches:
+              only: master
+      - production-migration:
+          requires:
+            - production-ecs-service-update
           filters:
             branches:
               only: master
