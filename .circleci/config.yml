@@ -174,37 +174,41 @@ workflows:
   build-and-test:
     jobs:
       - docker-compose-cache
-      - production-migration
-      # - backend-test:
-      #     requires:
-      #       - docker-compose-cache
-      # - frontend-test
-      # - frontend-build:
-      #     requires:
-      #       - frontend-test
-      # - production-frontend-deploy:
-      #     requires:
-      #       - frontend-build
-      #     filters:
-      #       branches:
-      #         only: master
-      # - production-django-docker-image-build-and-deploy:
-      #     requires:
-      #       - backend-test
-      #     filters:
-      #       branches:
-      #         only: master
-      # - production-nginx-docker-image-build-and-deploy:
-      #     requires:
-      #       - backend-test
-      #     filters:
-      #       branches:
-      #         only: master
-      # - production-ecs-service-update:
-      #     requires:
-      #       - production-django-docker-image-build-and-deploy
-      #       - production-nginx-docker-image-build-and-deploy
-      #       - production-migration
-      #     filters:
-      #       branches:
-      #         only: master
+      - backend-test:
+          requires:
+            - docker-compose-cache
+      - frontend-test
+      - frontend-build:
+          requires:
+            - frontend-test
+      - production-frontend-deploy:
+          requires:
+            - frontend-build
+          filters:
+            branches:
+              only: master
+      - production-django-docker-image-build-and-deploy:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
+      - production-nginx-docker-image-build-and-deploy:
+          requires:
+            - backend-test
+          filters:
+            branches:
+              only: master
+      - production-ecs-service-update:
+          requires:
+            - production-django-docker-image-build-and-deploy
+            - production-nginx-docker-image-build-and-deploy
+          filters:
+            branches:
+              only: master
+      - production-migration:
+          requires:
+            - production-ecs-service-update
+          filters:
+            branches:
+              only: master
