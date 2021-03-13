@@ -51,6 +51,16 @@ commands:
           name: ls
           command: ls -la
           working_directory: frontend
+  run-task:
+    steps:
+      - aws-ecs/run-task:
+          cluster: '${APP_PREFIX}-production-ecs'
+          security-group-ids: $AWS_SECURITY_GROUP_ID
+          subnet-ids: '${AWS_SUBNET_ONE}'
+          task-definition: '${APP_PREFIX}-production-batch'
+          count: 1
+          launch-type: FARGATE
+          awsvpc: true
 
 executors:
   frontend-excutor:
@@ -177,14 +187,6 @@ jobs:
             --task-definition "${APP_PREFIX}-production-batch" \
             --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
             --overrides '{"containerOverrides": [{"name":"${APP_PREFIX}-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
-  run-task:
-    executor: backend-executor
-    steps:
-      - aws-ecs/run-task:
-          cluster: '${APP_PREFIX}-production-ecs'
-          security-group-ids: $AWS_SECURITY_GROUP_ID
-          subnet-ids: '${AWS_SUBNET_ONE}'
-          task-definition: '${APP_PREFIX}-production-batch'
 
 workflows:
   version: 2
