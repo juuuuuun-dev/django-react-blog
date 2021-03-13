@@ -173,10 +173,14 @@ jobs:
       - image: 'cimg/python:3.9.1'
     steps:
       - aws-ecs/run-task:
+          awsvpc: true
+          platform-version: LATEST
+          launch-type: FARGATE
           cluster: '${APP_PREFIX}-production-ecs'
-          security-group-ids: AWS_SECURITY_GROUP_ID
+          security-group-ids: ${AWS_SECURITY_GROUP_ID}
           subnet-ids: '${AWS_SUBNET_ONE}'
           task-definition: '${APP_PREFIX}-production-batch'
+          assign-public-ip: ENABLED
 
 workflows:
   version: 2
