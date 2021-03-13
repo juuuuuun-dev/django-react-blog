@@ -174,7 +174,7 @@ jobs:
     steps:
       - aws-ecs/run-task:
           cluster: '${APP_PREFIX}-production-ecs'
-          security-group-ids: '${AWS_SECURITY_GROUP_ID}'
+          security-group-ids: AWS_SECURITY_GROUP_ID
           subnet-ids: '${AWS_SUBNET_ONE}'
           task-definition: '${APP_PREFIX}-production-batch'
 
