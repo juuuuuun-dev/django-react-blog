@@ -169,8 +169,7 @@ jobs:
             --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
             --overrides '{"containerOverrides": [{"name":"junkata-blog-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
   run-task:
-    docker:
-      - image: 'cimg/python:3.9.1'
+    executor: backend-executor
     steps:
       - aws-ecs/run-task:
           awsvpc: true
