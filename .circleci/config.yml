@@ -3,7 +3,7 @@ orbs:
   aws-cli: circleci/aws-cli@1.4.0
   aws-s3: circleci/aws-s3@1.0.11
   aws-ecr: circleci/aws-ecr@6.15.2
-  aws-ecs: circleci/aws-ecs@2.0.0
+  aws-ecs: circleci/aws-ecs@1.4.0
 commands:
   yarn_install:
     steps:
