@@ -187,13 +187,17 @@ jobs:
             --task-definition "${APP_PREFIX}-production-batch" \
             --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
             --overrides '{"containerOverrides": [{"name":"${APP_PREFIX}-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
+  production-run-task:
+    executor: backend-executor
+    steps:
+      - run-task
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - docker-compose-cache
-      - run-task
+      - production-run-task
       # - backend-test:
       #     requires:
       #       - docker-compose-cache
