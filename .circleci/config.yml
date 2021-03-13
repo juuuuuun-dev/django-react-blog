@@ -171,12 +171,12 @@ jobs:
           aws-region: AWS_REGION
       - run:
           name: 'db migrate'
-          command: |
+          command: >-
             aws ecs run-task \
             --cluster "${APP_PREFIX}-production-ecs" \
             --task-definition "${APP_PREFIX}-production-batch" \
             --network-configuration "awsvpcConfiguration={subnets=[${AWS_SUBNET_ONE}],securityGroups=[${AWS_SECURITY_GROUP_ID}],assignPublicIp=ENABLED}" \
-            --overrides '{"containerOverrides": [{"name":\\\"${APP_PREFIX}-production-batch\\\","command": [ "python", "manage.py", "migrate" ]}]}'
+            --overrides '{"containerOverrides": [{"name":"${APP_PREFIX}-production-batch","command": [ "python", "manage.py", "migrate" ]}]}'
 
 workflows:
   version: 2
