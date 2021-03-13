@@ -165,8 +165,7 @@ jobs:
   production-migration:
     executor: aws-cli/default
     steps:
-      - aws-cli/setup:
-          aws-cli/configure:
+      - aws-cli/configure:
           aws-access-key-id: $AWS_ACCESS_KEY_ID
           aws-region: $AWS_REGION
       - run:
