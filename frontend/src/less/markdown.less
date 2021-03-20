@@ -4,10 +4,33 @@
   font-size: 0.9rem;
   line-height: 1.8rem;
   color: #333;
+  a {
+    word-break: break-all;
+  }
   a:hover {
     text-decoration: underline;
   }
-
+  blockquote {
+    position: relative;
+    max-width: 95%;
+    padding: 30px 15px 15px 15px;
+    border-left: 0.4em solid;
+    border-color: rgba(@primary-color, 0.1);
+    // margin-bottom: @global-margin;
+    p {
+      margin-bottom: 0px;
+    }
+    &:before {
+      font-family: 'Sanchez', serif;
+      font-size: 4rem;
+      line-height: 1rem;
+      color: rgba(@primary-color, 0.2);
+      content: '\201C';
+      position: absolute;
+      top: 13px;
+      left: 10px;
+    }
+  }
   p {
     margin-bottom: 1.8rem;
   }
