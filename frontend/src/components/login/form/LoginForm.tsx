@@ -19,7 +19,7 @@ const LoginForm: React.FC = () => {
       set<string>('pageSize', data.page_size);
       history.push('/admin/dashboard');
     } catch (e) {
-      if (e.response.data.detail) {
+      if (e.response.data && e.response.data.detail) {
         if (e.response.status === 429) {
           toast({ type: "ERROR", text: 'Restricting requests' })
         } else {
