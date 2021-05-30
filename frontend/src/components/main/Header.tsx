@@ -40,7 +40,7 @@ const Header: React.FC = () => {
                         <source media={`(min-width: ${state.breakPoint.sm}px)`} srcSet={`${state.init?.siteSettings.logo_mini} 1x`}></source>
                         <img height="56" src={state.init?.siteSettings.logo} alt={state.init?.siteSettings.name} />
                       </picture>
-                      : state.init?.siteSettings.name
+                      : state.appTitle
                     }
                   </h1>
                 </Link>
