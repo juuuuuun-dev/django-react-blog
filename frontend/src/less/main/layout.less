@@ -66,6 +66,12 @@ a:focus {
   margin: 55px auto 0 auto;
   padding: @global-padding;
 }
+.right-container {
+  max-width: 300px;
+  .adsbygoogle {
+    margin-bottom: @global-margin;
+  }
+}
 // .right-contents
 
 .right-contents {
@@ -177,11 +183,17 @@ h3.page-title {
 //     margin-left: 0;
 //   }
 // }
+@media screen and (max-width: @lg-break-point) {
+  .right-container {
+    max-width: 100%;
+  }
+}
 // sm
 @media screen and (max-width: @sm-break-point) {
   .ant-card-body {
     padding: 10px;
   }
+
   .header-container {
     padding: 0 @global-padding / 3;
   }
