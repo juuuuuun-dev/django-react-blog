@@ -32,7 +32,7 @@ commands:
     steps:
       - run:
           name: yarn build
-          command: REACT_APP_TITLE=${APP_TITLE} REACT_APP_BACKEND=${BACKEND_API_URL} REACT_APP_GTM=${GTM_ID} yarn build --runInBand
+          command: REACT_APP_TITLE=${APP_TITLE} REACT_APP_BACKEND=${BACKEND_API_URL} REACT_APP_GTM=${GTM_ID} REACT_APP_GOOGLE_ADS_CLIENT=${GOOGLE_ADS_CLIENT} REACT_APP_GOOGLE_ADS_SLOT_RIGHT=${GOOGLE_ADS_SLOT_RIGHT} yarn build --runInBand
           working_directory: frontend
       - persist_to_workspace:
           root: ./frontend
@@ -124,7 +124,7 @@ jobs:
       - aws-s3/sync:
           from: frontend/build
           to: 's3://${APP_PREFIX}-production-storage'
-          arguments: --exclude "/storage/*"
+          arguments: --exclude "/storage/*" --exclude "ads.txt"
   production-django-docker-image-build-and-deploy:
     executor: backend-executor
     steps:
