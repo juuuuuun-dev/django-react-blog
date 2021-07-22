@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { MainContext } from '../../../context/mainContext';
+import { GoogleAds } from '../ads/GoogleAds';
 import AboutMe from '../rightContents/AboutMe';
 import CategoryLinkList from '../rightContents/CategoryLinkList';
 import PostSearchInput from '../rightContents/PostSearchInput';
@@ -11,14 +12,7 @@ const RightContainer: React.FC = () => {
   const [{ init }] = React.useContext(MainContext);
   return (
     <>
-      {/*<div className="right-contents-section">
-          <LazyLoadImage
-          alt="test"
-          className="right-contents-section__banner"
-          width={"100%"}
-          src={`/assets/images/right.jpg`}
-        /> 
-      </div>*/}
+      <GoogleAds client={process.env.REACT_APP_GOOGLE_ADS_CLIENT} slot={process.env.REACT_APP_GOOGLE_ADS_SLOT_RIGHT} />
       <AboutMe author={init?.author} />
       <PostSearchInput />
       <RecentPostList posts={init?.recentPosts} />
