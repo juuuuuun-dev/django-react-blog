@@ -2,7 +2,8 @@ import React from 'react';
 
 import { GoogleAdsProps } from '../../../types/googleAds';
 
-export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot }) => {
+export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot, format }) => {
+
   React.useEffect(() => {
     if (window.adsbygoogle && process.env.NODE_ENV !== "development") {
         window.adsbygoogle.push({});
@@ -17,12 +18,11 @@ export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot }) => {
             style={{ "display": "block" }}
             data-ad-client={client}
             data-ad-slot={slot}
-            data-ad-format="auto"
+            data-ad-format={format}
             data-full-width-responsive="true"></ins>
         </>
       );
-    } else {
-      return(<></>)
     }
-  }, [client, slot]);
+    return null;
+  }, [client, slot, format]);
 }

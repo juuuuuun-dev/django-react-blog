@@ -1,18 +1,18 @@
 import React from 'react';
 
 import { MainContext } from '../../../context/mainContext';
-import { GoogleAds } from '../ads/GoogleAds';
 import AboutMe from '../rightContents/AboutMe';
 import CategoryLinkList from '../rightContents/CategoryLinkList';
 import PostSearchInput from '../rightContents/PostSearchInput';
 import RecentPostList from '../rightContents/RecentPostList';
+import { RightVerticalAds } from '../rightContents/RightVerticalAds';
 import TagLinkList from '../rightContents/TagLinkList';
 
 const RightContainer: React.FC = () => {
   const [{ init }] = React.useContext(MainContext);
   return (
     <>
-      <GoogleAds client={process.env.REACT_APP_GOOGLE_ADS_CLIENT} slot={process.env.REACT_APP_GOOGLE_ADS_SLOT_RIGHT} />
+      <RightVerticalAds />
       <AboutMe author={init?.author} />
       <PostSearchInput />
       <RecentPostList posts={init?.recentPosts} />
