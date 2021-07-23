@@ -5,6 +5,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import { PostDetailProps } from '../../../types/posts';
 import MarkdownContent from '../../common/MarkdownContent';
+import { HorizonalOrRectangleAds } from '../ads/HorizonalOrRectangleAds';
 import EntryData from './EntryData';
 
 const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
@@ -22,6 +23,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
               src={post.cover_media.cover}
             />
           }
+          <HorizonalOrRectangleAds
+            horizonalSlot={process.env.REACT_APP_GOOGLE_ADS_SLOT_POST_TOP_HORIZONAL}
+            rectangleSlot={process.env.REACT_APP_GOOGLE_ADS_SLOG_POST_TOP_RECTANGLE}
+          />
           <MarkdownContent name="post-detail" content={post.content} />
         </article>
       </>

@@ -93,3 +93,7 @@ export type PostListTilteProps = {
   title: string;
   subTitle: string | undefined;
 }
+
+export type PostHorizonalAdsProps = {
+  slot: string | undefined;
+}
