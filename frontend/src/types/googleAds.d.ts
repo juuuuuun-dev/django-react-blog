@@ -2,5 +2,5 @@
 export type GoogleAdsProps = {
   client: string | undefined;
   slot: string | undefined;
-  format: string;
+  format: "rectangle" | "vertical" | "horizonal" | "auto";
 }
