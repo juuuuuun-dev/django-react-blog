@@ -22,6 +22,7 @@ h6 {
   font-weight: bold;
   color: @primary-text-color;
 }
+
 ul {
   margin: 0;
   padding: 0;
@@ -40,6 +41,9 @@ a:focus {
   outline-color: @primary-color;
   outline-style: auto;
   outline-width: medium;
+}
+.mr-0 {
+  margin-right: 0;
 }
 .humberger {
   float: right;
@@ -60,6 +64,10 @@ a:focus {
   max-width: @max-width;
   margin: 0 auto;
   padding: 0 @global-padding;
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu.mr-0 {
+    margin-right: 0;
+  }
 }
 .main-container {
   max-width: @max-width;
@@ -123,6 +131,7 @@ a:focus {
     &__item {
       border-bottom: 1px solid #e5e5e5;
       padding: 10px 0;
+      font-size: 0.8rem;
       &-link {
         display: block;
         color: @primary-color;

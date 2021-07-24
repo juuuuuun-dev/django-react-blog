@@ -21,7 +21,7 @@ const Nav = ({ mode, styles, categories, setShowDrawer }: NavProps) => {
   }
   return (
     <>
-      <Menu mode={mode} selectedKeys={['1']} style={styles}>
+      <Menu mode={mode} selectedKeys={['1']} style={styles} triggerSubMenuAction="click">
         <SubMenu
           title="Category"
           data-testid="nav-sub-menu-category"
@@ -30,7 +30,7 @@ const Nav = ({ mode, styles, categories, setShowDrawer }: NavProps) => {
             return <Menu.Item key={`nav-category-${key}`}><NavLink data-testid={`nav-category-${categories[key].slug}`} onClick={handleClick} to={`/categories/${categories[key].slug}`}>{categories[key].name}</NavLink></Menu.Item>
           })}
         </SubMenu>
-        <Menu.Item>
+        <Menu.Item className="mr-0">
           <NavLink onClick={handleClick} to="/about">About me</NavLink>
         </Menu.Item>
       </Menu>
