@@ -54,7 +54,7 @@ describe("Main index", () => {
       categoryLinks.push(`nav-category-${value.slug}`);
     })
 
-    fireEvent.mouseOver(utils.getByTitle('Category'));
+    fireEvent.click(utils.getByTitle('Category'));
     await waitFor(() => {
       categoryLinks.forEach((value) => {
         expect(utils.getByTestId(value)).toBeTruthy();
