@@ -2,13 +2,13 @@ import React from 'react';
 
 import { useWindowSize } from '@react-hook/window-size';
 
-import { MainContext } from '../../../context/mainContext';
+// import { MainContext } from '../../../context/mainContext';
 import { HorizonalOrRectangleAdsProps } from '../../../types/ads';
 import { GoogleAds } from './GoogleAds';
 
 export const HorizonalOrRectangleAds: React.FC<HorizonalOrRectangleAdsProps> = ({ horizonalSlot, rectangleSlot }) => {
-  const [width] = useWindowSize();
-  const [{ breakPoint }] = React.useContext(MainContext);
+  // const [width] = useWindowSize();
+  // const [{ breakPoint }] = React.useContext(MainContext);
   return React.useMemo(() => {
     return (
       <GoogleAds
