@@ -10,7 +10,7 @@ export const HorizonalOrRectangleAds: React.FC<HorizonalOrRectangleAdsProps> = (
   const [width] = useWindowSize();
   const [{ breakPoint }] = React.useContext(MainContext);
   return React.useMemo(() => {
-    if (width > breakPoint.lg) {
+    if (width > breakPoint.sm) {
       return (
         <GoogleAds
           client={process.env.REACT_APP_GOOGLE_ADS_CLIENT}
@@ -21,10 +21,11 @@ export const HorizonalOrRectangleAds: React.FC<HorizonalOrRectangleAdsProps> = (
     } else {
       return (
         <GoogleAds
-        client={process.env.REACT_APP_GOOGLE_ADS_CLIENT}
-        slot={rectangleSlot}
-        format="rectangle"
-      />
+          classStr="rectangle"
+          client={process.env.REACT_APP_GOOGLE_ADS_CLIENT}
+          slot={rectangleSlot}
+          format="rectangle"
+        />
       )
     }
   }, [width, breakPoint, horizonalSlot, rectangleSlot])

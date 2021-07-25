@@ -2,7 +2,7 @@ import React from 'react';
 
 import { GoogleAdsProps } from '../../../types/googleAds';
 
-export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot, format }) => {
+export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot, format, classStr }) => {
 
   React.useEffect(() => {
     if (window.adsbygoogle && process.env.NODE_ENV !== "development") {
@@ -14,7 +14,7 @@ export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot, format }) =>
     if (client && slot) {
       return (
         <>
-          <ins className="adsbygoogle"
+          <ins className={`adsbygoogle ${classStr}`}
             style={{ "display": "block" }}
             data-ad-client={client}
             data-ad-slot={slot}
@@ -24,5 +24,5 @@ export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot, format }) =>
       );
     }
     return null;
-  }, [client, slot, format]);
+  }, [client, slot, format, classStr]);
 }
