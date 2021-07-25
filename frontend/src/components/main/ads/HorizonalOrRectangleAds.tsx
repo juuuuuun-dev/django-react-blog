@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useWindowSize } from '@react-hook/window-size';
-
+// import { useWindowSize } from '@react-hook/window-size';
 // import { MainContext } from '../../../context/mainContext';
 import { HorizonalOrRectangleAdsProps } from '../../../types/ads';
 import { GoogleAds } from './GoogleAds';
