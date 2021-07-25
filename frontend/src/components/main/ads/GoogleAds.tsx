@@ -24,5 +24,5 @@ export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot, format, clas
       );
     }
     return null;
-  }, [client, slot, format]);
+  }, [client, slot, format, classStr]);
 }
