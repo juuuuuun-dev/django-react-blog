@@ -36,5 +36,5 @@ export const HorizonalOrRectangleAds: React.FC<HorizonalOrRectangleAdsProps> = (
     //     />
     //   )
     // }
-  }, [width, breakPoint, horizonalSlot, rectangleSlot])
+  }, [rectangleSlot])
 }
