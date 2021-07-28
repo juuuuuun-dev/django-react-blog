@@ -2,7 +2,6 @@ import '../../../less/main/main.less';
 
 import { Col, Layout, Row } from 'antd';
 import React, { useContext } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import MetaHead from '../../../components/common/MetaHead';
 import { MainContext } from '../../../context/mainContext';
@@ -13,13 +12,7 @@ import RightContainer from './RightContainer';
 
 const MainLayout: React.FC = () => {
   const { Content } = Layout;
-  const location = useLocation();
 
-  React.useEffect(() => {
-    if (window.adsbygoogle && process.env.NODE_ENV !== "development") {
-        window.adsbygoogle.push({});
-    }
-  }, [location]);
 
   const [{ init, pageTitle, meta, ldJson }] = useContext(MainContext);
   return (
