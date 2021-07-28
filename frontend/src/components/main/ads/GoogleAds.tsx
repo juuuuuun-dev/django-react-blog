@@ -11,18 +11,15 @@ export const GoogleAds: React.FC<GoogleAdsProps> = ({ client, slot, format, clas
   }, []);
 
   return React.useMemo(() => {
-    if (client && slot) {
-      return (
-        <>
-          <ins className={`adsbygoogle ${classStr}`}
-            style={{ "display": "block" }}
-            data-ad-client={client}
-            data-ad-slot={slot}
-            data-ad-format={format}
-            data-full-width-responsive="true"></ins>
-        </>
-      );
-    }
-    return null;
+    return (
+      <>
+        <ins className={`adsbygoogle ${classStr}`}
+          style={{ "display": "block" }}
+          data-ad-client={client}
+          data-ad-slot={slot}
+          data-ad-format={format}
+          data-full-width-responsive="true"></ins>
+      </>
+    );
   }, [client, slot, format, classStr]);
 }
