@@ -26,8 +26,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
           <GoogleAds
             client={process.env.REACT_APP_GOOGLE_ADS_CLIENT}
             slot={process.env.REACT_APP_GOOGLE_ADS_SLOG_POST_TOP_RECTANGLE}
-            format="auto"
-            style={{display:"inline-block", width:"300px", height: "250px"}}
+            format="rectangle"
+            style={{display:"block", width:"300px", height: "250px"}}
             responsive={false}
           />
           <MarkdownContent name="post-detail" content={post.content} />
