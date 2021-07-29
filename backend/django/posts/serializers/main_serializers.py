@@ -46,3 +46,19 @@ class MainPostSerializer(serializers.ModelSerializer):
             "updated_at",
             "created_at",
         ]
+
+
+class RelatedPostListSerializer(serializers.ModelSerializer):
+    cover_media = CoverSerializer()
+
+    class Meta:
+        model = Post
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "cover_media",
+            "category",
+            "updated_at",
+            "created_at",
+        ]

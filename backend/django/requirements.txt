@@ -25,3 +25,4 @@ mock==4.0.2
 pytest==6.1.2
 pytest-django==4.1.0
 pytest-cov==2.10.1
+pytest-env==0.6.2

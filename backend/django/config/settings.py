@@ -17,7 +17,7 @@ from datetime import timedelta
 
 import environ
 import requests
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -248,8 +248,8 @@ USE_L10N = True
 USE_TZ = False
 
 LANGUAGES = (
-    ('ja', ugettext_lazy('Japanese')),
-    ('en', ugettext_lazy('English')),
+    ('ja', gettext_lazy('Japanese')),
+    ('en', gettext_lazy('English')),
 )
 
 LOGGING = {

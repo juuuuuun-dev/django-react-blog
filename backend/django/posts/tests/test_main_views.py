@@ -191,3 +191,27 @@ class PostDetailTestCase(APITestCase):
         api = reverse("posts:post-detail", kwargs={"slug": post.slug})
         response = self.client.get(api, format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_retrieve_posts(self):
+        tag = TagFactory.create(name="tag")
+        tag2 = TagFactory.create(name="tag2")
+        category = CategoryFactory.create(name="test")
+        category2 = CategoryFactory.create(name="test2")
+        post = PostFactory.create(user=self.user, category=category, tag=[tag])
+        post2 = PostFactory.create(
+            user=self.user, category=category, tag=[tag], title="post2")
+        post3 = PostFactory.create(
+            user=self.user, category=category2, tag=[tag], title="post3")
+        post4 = PostFactory.create(
+            user=self.user, category=category2, tag=[tag2], title="post4")
+
+        api = reverse("posts:post-detail", kwargs={"slug": post.slug})
+
+        response = self.client.get(api, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['post']['title'], post.title)
+        self.assertEqual(response.data['post']['content'], post.content)
+        self.assertEqual(response.data['post']['category']['id'], category.id)
+        self.assertEqual(response.data['post']['tag'][0]['id'], tag.id)
+        self.assertEqual(response.data['related_posts'][0]['id'], post3.id)
+        self.assertEqual(response.data['related_posts'][1]['id'], post2.id)

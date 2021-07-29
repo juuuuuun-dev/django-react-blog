@@ -61,8 +61,20 @@ class Post(models.Model):
 
     @classmethod
     def get_recent_posts(cls):
-        return cache.get_or_set(cls.recent_cache_key, Post.objects.filter(is_show=True). select_related(
+        return cache.get_or_set(cls.recent_cache_key, Post.objects.filter(is_show=True).select_related(
             'cover_media').select_related('category').prefetch_related('tag').order_by('-id')[:3])
+
+    @staticmethod
+    def get_retated_posts(obj, limit=10):
+        print(obj.tag.all()[0].id)
+        return Post.objects.filter(
+            models.Q(category=obj.category) | models.Q(tag__in=obj.tag.all()),
+            is_show=True
+        ).exclude(
+            pk=obj.id
+        ).order_by(
+            '-created_at',
+        ).all()[:limit]
 
     @staticmethod
     def get_tag_and_category_list():

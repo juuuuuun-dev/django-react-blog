@@ -101,7 +101,11 @@ class PostDetail(cache_views.ReadOnlyCacheModelViewSet):
         serializer = self.get_serializer(queryset, context={
             "request": request})
         data = Post.get_tag_and_category_list()
+        related_posts = Post.get_retated_posts(queryset)
+        related_posts_serializer = main_serializers.RelatedPostListSerializer(
+            related_posts, many=True)
         data["post"] = serializer.data
+        data["related_posts"] = related_posts_serializer.data
         return response.Response(data)
 
     # def get(self, request, pk=None):
