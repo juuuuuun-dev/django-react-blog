@@ -59,7 +59,7 @@ const Detail: React.FC = () => {
       <>
         {!post && <TemporaryPostDetail />}
         {post && <PostDetail post={post} />}
-        {list.length !== 0 &&
+        {(list && list.length !== 0) &&
           <div className="related-posts">
             <h3 className="related-posts-title"><TagOutlined /> 関連記事</h3> 
             <PostList data={list} loading={false} media_size={mediaSize} showDate={false} descriptionRows={1} />

@@ -19,7 +19,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
     return (
       <>
         <article className="post-detail">
-          <h2 className="post-detail__title" data-testid='post-detail-title'>{post.title}</h2>
+          <h1 className="post-detail__title" data-testid='post-detail-title'>{post.title}</h1>
           <EntryData post={post} showUpdateAt={true} showCategory={true} showTag={true} />
           {post.cover_media && post.cover_media.cover &&
             <LazyLoadImage
