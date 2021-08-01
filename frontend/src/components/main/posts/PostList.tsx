@@ -22,7 +22,7 @@ const PostList: React.FC<PostListProps> = ({ data, loading, media_size, showDate
           dataSource={data}
           renderItem={(item, index) => (
             <List.Item key={item.id} data-testid={`post-list-item-${index}`}>
-              <Skeleton loading={loading} active>
+              <Skeleton avatar loading={loading} active>
                 <List.Item.Meta
                 avatar={item.cover_media && item.cover_media.cover && (
                   <div className="post-list__thumb">
