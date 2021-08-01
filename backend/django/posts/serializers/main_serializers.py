@@ -58,6 +58,7 @@ class RelatedPostListSerializer(serializers.ModelSerializer):
             "title",
             "slug",
             "cover_media",
+            'plain_content',
             "category",
             "updated_at",
             "created_at",
