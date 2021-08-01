@@ -1,14 +1,20 @@
 import '../../../less/main/posts/postDetail.less';
 
+import { Divider } from 'antd';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useHistory } from 'react-router-dom';
 
+import { MainContext } from '../../../context/mainContext';
 import { PostDetailProps } from '../../../types/posts';
 import MarkdownContent from '../../common/MarkdownContent';
 import { GoogleAds } from '../ads/GoogleAds';
+import SnsShare from '../SNS/Share';
 import EntryData from './EntryData';
 
 const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
+  const [{ init }] = React.useContext(MainContext);
+  const history = useHistory();
   return React.useMemo(() => {
     return (
       <>
@@ -21,8 +27,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
               data-testid="post-detail-cover"
               className="post-detail__cover"
               src={post.cover_media.cover}
+              style={{ marginRight:"30px" }}
             />
           }
+          
+          <SnsShare title={post.title} url={init?.url + history.location.pathname} />
           <GoogleAds
             client={process.env.REACT_APP_GOOGLE_ADS_CLIENT}
             slot={process.env.REACT_APP_GOOGLE_ADS_SLOG_POST_TOP_RECTANGLE}
@@ -31,6 +40,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
             responsive={false}
           />
           <MarkdownContent name="post-detail" content={post.content} />
+          <Divider orientation="right">
+            <SnsShare title={post.title} url={init?.url + history.location.pathname} />
+          </Divider>
+
           <GoogleAds
             client={process.env.REACT_APP_GOOGLE_ADS_CLIENT}
             slot={process.env.REACT_APP_GOOGLE_ADS_SLOT_POST_TOP_HORIZONAL}
@@ -39,7 +52,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ post }) => {
         </article>
       </>
     );
-  }, [post])
+  }, [post, init, history])
 };
 
 
