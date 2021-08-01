@@ -14,11 +14,20 @@
   .ant-typography {
     color: @primary-color;
   }
+  .entry-data {
+    margin-top: 1rem;
+  }
   &__description.ant-typography {
     margin-right: @global-margin / 4;
+    margin-bottom: 0;
     font-size: 0.8rem;
     a {
       color: #666;
+    }
+    p {
+      margin-bottom: 0;
+    }
+    div.ant-typography {
     }
   }
   &__thumb {
@@ -45,5 +54,25 @@
         padding: @global-margin / 2 0;
       }
     }
+  }
+}
+
+.related-posts {
+  .post-list {
+    &__title {
+      font-size: 0.8rem;
+    }
+    .ant-list-items {
+      .ant-list-item {
+        padding: @global-margin / 2 0;
+      }
+      .ant-list-item:first-child {
+        padding-top: 0;
+      }
+    }
+  }
+  &-title {
+    font-size: 0.9rem;
+    margin-bottom: @global-margin;
   }
 }

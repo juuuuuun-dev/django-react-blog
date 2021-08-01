@@ -1,5 +1,6 @@
 from categories.models import Category
 from django_filters.rest_framework import DjangoFilterBackend
+from media.models import Media
 from posts.models import Post
 from posts.paginatin import PostPagination
 from posts.serializers import main_serializers
@@ -100,8 +101,18 @@ class PostDetail(cache_views.ReadOnlyCacheModelViewSet):
             base_key=self.base_cache_key, request=request, **kwargs)
         serializer = self.get_serializer(queryset, context={
             "request": request})
+
         data = Post.get_tag_and_category_list()
+        related_posts = Post.get_retated_posts(queryset)
+        related_posts_serializer = main_serializers.RelatedPostListSerializer(
+            related_posts, many=True, context={
+                "request": request})
+        med = {
+            "cover": Media.cover_size
+        }
         data["post"] = serializer.data
+        data["related_posts"] = related_posts_serializer.data
+        data["meida_size"] = med
         return response.Response(data)
 
     # def get(self, request, pk=None):

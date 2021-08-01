@@ -1,8 +1,8 @@
 import React from 'react';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 
-import PostList from '../components/main/posts/PostList';
 import PostListPageCountResults from '../components/main/posts/PostListPageCountResults';
+import PostListTemplate from '../components/main/posts/PostListTemplate';
 import PostListTitle from '../components/main/posts/PostListTitle';
 import { MainContext } from '../context/mainContext';
 import { createLdJsonTypeWebSite } from '../helper/ldJson';
@@ -65,7 +65,7 @@ const Index = () => {
     <>
       {query.search && <PostListTitle title={`${query.search}`} subTitle="search" />}
       <PageResults />
-      <PostList data={data} query={query} handlePageChange={handlePageChange} />
+      <PostListTemplate data={data} query={query} handlePageChange={handlePageChange} />
     </>
   );
 };

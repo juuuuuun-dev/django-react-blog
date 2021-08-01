@@ -2,8 +2,8 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { NumberParam, useQueryParams } from 'use-query-params';
 
-import PostList from '../../components/main/posts/PostList';
 import PostListPageCountResults from '../../components/main/posts/PostListPageCountResults';
+import PostListTemplate from '../../components/main/posts/PostListTemplate';
 import PostListTitle from '../../components/main/posts/PostListTitle';
 import { MainContext } from '../../context/mainContext';
 import { createLdJsonTypeWebSite } from '../../helper/ldJson';
@@ -59,7 +59,7 @@ const Index: React.FC = () => {
     <>
       <PostListTitle title={`${data?.category_name}`} subTitle="category" />
       <PostListPageCountResults count={data?.count} query={query} />
-      <PostList data={data} query={query} handlePageChange={handlePageChange} />
+      <PostListTemplate data={data} query={query} handlePageChange={handlePageChange} />
     </>
   )
 }

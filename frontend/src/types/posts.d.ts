@@ -1,6 +1,14 @@
+import { at } from 'lodash';
+
 import { CategoryDetail, CategoryList } from './categories';
 import { ListQuery, Pagination } from './pagination';
 import { TagDetail, TagList } from './tags';
+
+export type PostCoverMedia = {
+  id: number | undefined;
+  cover: string | undefined;
+  cover_mini: string | undefined;
+}
 
 export type PostDetail = {
   id?: number;
@@ -8,11 +16,7 @@ export type PostDetail = {
   title: string;
   slug: string;
   content: string;
-  cover_media: {
-    id: number | undefined,
-    cover: string | undefined,
-    cover_mini: string | undefined,
-  };
+  cover_media: PostCoverMedia;
   thumb?: string;
   is_show?: boolean;
   plain_content?: string;
@@ -21,6 +25,7 @@ export type PostDetail = {
   updated_at?: string;
   created_at?: string;
 }
+
 
 export type PostList = Pagination & {
   results: PostDetail[];
@@ -40,6 +45,15 @@ export type PostList = Pagination & {
 
 
 export type PostListProps = {
+  data: PostDetail[];
+  loading: boolean;
+  media_size: MediaSize;
+  showDate: boolean;
+  descriptionRows: number;
+}
+
+
+export type PostListTemplateProps = {
   data: PostList;
   query: ListQuery;
   handlePageChange: (page: number, pageSize?: number | undefined) => void;
@@ -49,6 +63,10 @@ export type ImageSize = {
   width: number;
   height: number;
 }
+
+export type MediaSize = {
+  cover: ImageSize;
+} | undefined;
 
 export type EntryDataProps = {
   post: PostDetail;
