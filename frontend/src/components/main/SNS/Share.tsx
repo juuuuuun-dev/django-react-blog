@@ -6,7 +6,7 @@ import { FacebookOutlined, TwitterOutlined } from '@ant-design/icons';
 import { SnsShareProps } from '../../../types/snsShare';
 import HatenaButton from './HatenaButton';
 
-const SnsShare: React.FC<SnsShareProps> = ({ title, url, color = "#666", fontSize = 18 }) => {
+const SnsShare: React.FC<SnsShareProps> = ({ title, url, color = "#555", fontSize = 18 }) => {
   return (
     <>
       <TwitterShareButton title={title + "\n"} via="-" url={url} style={{ marginRight: 25, outline: 'none' }}>
