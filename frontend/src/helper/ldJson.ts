@@ -1,5 +1,5 @@
 import {
-  BreadcrumbList, CreateLdJsonTypeBlogPostingArg, CreateLdJsonTypeWebSiteArg
+    BreadcrumbList, CreateLdJsonTypeBlogPostingArg, CreateLdJsonTypeWebSiteArg
 } from '../types/ldJson';
 import { InitState } from '../types/mainContext';
 
@@ -24,7 +24,7 @@ export const createLdJsonTypeBlogPosting = ({ init, post }: CreateLdJsonTypeBlog
       "dateModified": post.updated_at,
       "headline": post.title,
       "description": post.plain_content,
-      "image": [post.cover_media],
+      "image": post.cover_media.cover,
       "author": {
         "@type": "Person",
         "name": init?.author.public_name,
