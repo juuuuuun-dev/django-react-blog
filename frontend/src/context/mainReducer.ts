@@ -28,10 +28,10 @@ export const setMeta = (meta: MetaType) => ({
   },
 });
 
-export const setLdJson = (ldJson: []) => ({
+export const setJsonLd = (JsonLd: []) => ({
   type: SET_LD_JSON,
   payload: {
-    ldJson,
+    JsonLd,
   },
 });
 
@@ -49,7 +49,7 @@ export type Actions =
   | ReturnType<typeof setPageTitle>
   | ReturnType<typeof setInit>
   | ReturnType<typeof setMeta>
-  | ReturnType<typeof setLdJson>;
+  | ReturnType<typeof setJsonLd>;
 
 export const mainReducer = (state: MainState, action: Actions) => {
   switch (action.type) {
@@ -62,6 +62,6 @@ export const mainReducer = (state: MainState, action: Actions) => {
     case SET_META:
       return { ...state, meta: action.payload.meta };
     case SET_LD_JSON:
-      return { ...state, ldJson: action.payload.ldJson };
+      return { ...state, JsonLd: action.payload.JsonLd };
   }
 };

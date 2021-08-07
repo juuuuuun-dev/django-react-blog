@@ -5,7 +5,7 @@ import PostListPageCountResults from '../components/main/posts/PostListPageCount
 import PostListTemplate from '../components/main/posts/PostListTemplate';
 import PostListTitle from '../components/main/posts/PostListTitle';
 import { MainContext } from '../context/mainContext';
-import { createLdJsonTypeWebSite } from '../helper/ldJson';
+import { createJsonLdTypeWebSite } from '../helper/jsonLd';
 import { createMeta } from '../helper/meta';
 import { useHistoryPushError } from '../helper/useHistoryPushError';
 import { list } from '../service/main/posts';
@@ -28,10 +28,10 @@ const Index = () => {
         description: state.init?.siteSettings.description,
         image: state.init?.siteSettings.main_image,
       })
-      const ldJson = createLdJsonTypeWebSite({ init: state.init });
+      const JsonLd = createJsonLdTypeWebSite({ init: state.init });
       dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: pageTitle } })
       dispatch({ type: 'SET_META', payload: { meta: meta } })
-      dispatch({ type: 'SET_LD_JSON', payload: { ldJson: [ldJson] } })
+      dispatch({ type: 'SET_LD_JSON', payload: { JsonLd: [JsonLd] } })
     } catch (e) {
       if (e.response && e.response.status) {
         pushError(e.response.status)

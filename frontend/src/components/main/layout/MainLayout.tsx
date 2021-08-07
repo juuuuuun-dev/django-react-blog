@@ -14,10 +14,10 @@ const MainLayout: React.FC = () => {
   const { Content } = Layout;
 
 
-  const [{ init, pageTitle, meta, ldJson }] = useContext(MainContext);
+  const [{ init, pageTitle, meta, jsonLd }] = useContext(MainContext);
   return (
     <>
-      <MetaHead appTitle={init?.siteSettings.name} pageTitle={pageTitle} meta={meta} ldJson={ldJson} />
+      <MetaHead appTitle={init?.siteSettings.name} pageTitle={pageTitle} meta={meta} jsonLd={jsonLd} />
       <Header />
       <Content className="site-layout">
         <div className="main-container site-layout-background">

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import MarkdownContent from '../../components/common/MarkdownContent';
 import { MainContext } from '../../context/mainContext';
-import { createLdJsonTypeWebSite } from '../../helper/ldJson';
+import { createJsonLdTypeWebSite } from '../../helper/jsonLd';
 import { createMeta } from '../../helper/meta';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { retrieve } from '../../service/main/aboutMe';
@@ -25,9 +25,9 @@ const Index: React.FC = () => {
         description: state.init?.siteSettings.description,
         image: state.init?.siteSettings.main_image,
       })
-      const ldJson = createLdJsonTypeWebSite({ init: state.init });
+      const JsonLd = createJsonLdTypeWebSite({ init: state.init });
       dispatch({ type: 'SET_META', payload: { meta: meta } })
-      dispatch({ type: 'SET_LD_JSON', payload: { ldJson: [ldJson] } })
+      dispatch({ type: 'SET_LD_JSON', payload: { JsonLd: [JsonLd] } })
       dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: res.data.page_title } })
       setData(res.data)
     } catch (e) {

@@ -29,7 +29,7 @@ const PostListTemplate: React.FC<PostListTemplateProps> = ({ data, query, handle
   return React.useMemo(() => {
     return (
       <>
-        <PostList data={list} loading={loading} media_size={mediaSize} showDate={true} descriptionRows={2} />
+        <PostList data={list} loading={loading} media_size={mediaSize} showDate={true} descriptionRows={1} />
         {(data?.links.next || data?.links.previous) && (
           <Pagination
             total={data?.count}

@@ -10,7 +10,7 @@ import PostDetail from '../../components/main/posts/PostDetail';
 import PostList from '../../components/main/posts/PostList';
 import TemporaryPostDetail from '../../components/main/posts/TemporaryPostDetail';
 import { MainContext } from '../../context/mainContext';
-import { createLdJsonTypeBlogPosting } from '../../helper/ldJson';
+import { createJsonLdTypeBlogPosting } from '../../helper/jsonLd';
 import { createMeta } from '../../helper/meta';
 import { useHistoryPushError } from '../../helper/useHistoryPushError';
 import { retrieve } from '../../service/main/posts';
@@ -34,10 +34,10 @@ const Detail: React.FC = () => {
           url: state.init?.url + history.location.pathname,
           description: res.data.post.plain_content,
         })
-        const ldJson = createLdJsonTypeBlogPosting({ init: state.init, post: res.data.post });
+        const JsonLd = createJsonLdTypeBlogPosting({ init: state.init, post: res.data.post });
         dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: res.data.post.title } })
         dispatch({ type: 'SET_META', payload: { meta: meta } })
-        dispatch({ type: 'SET_LD_JSON', payload: { ldJson } })
+        dispatch({ type: 'SET_LD_JSON', payload: { JsonLd } })
         setPost(res.data.post)
         setList(res.data.related_posts)
         setMediaSize(res.data.media_size)

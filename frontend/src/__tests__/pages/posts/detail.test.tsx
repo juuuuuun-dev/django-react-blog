@@ -69,7 +69,6 @@ describe("Post detail", () => {
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledTimes(1);
     })
-
   })
 
 })
