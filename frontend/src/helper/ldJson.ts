@@ -9,7 +9,7 @@ export const createLdJsonTypeWebSite = ({ init }: CreateLdJsonTypeWebSiteArg) =>
       "@context": "http://schema.org",
       "@type": "WebSite",
       "url": init.url,
-      "image": [init.siteSettings.main_image],
+      "image": init.siteSettings.main_image,
       "publisher": createPublisher(init),
     }
   }
@@ -35,8 +35,12 @@ export const createLdJsonTypeBlogPosting = ({ init, post }: CreateLdJsonTypeBlog
     const breadcrumbList = createLdJsonTypeBreadcrumbList([
       {
         position: 1,
-        name: post.category.name,
-        item: `${init.url}/categories/${post.category.slug}`
+        type: 'ListItem',
+        item: {
+          type: 'Thing',
+          id: `${init.url}/categories/${post.category.slug}`,
+          name: post.category.name,
+        }
       },
     ])
     return [BlogPosting, breadcrumbList]
