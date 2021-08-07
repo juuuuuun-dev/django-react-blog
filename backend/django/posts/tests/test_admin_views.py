@@ -137,10 +137,20 @@ class AdminPostViewSetTestCase(APITestCase):
         media = MediaFactory.create(name="test")
         tag = TagFactory.create(name="test")
         tag2 = TagFactory.create(name="test2")
+        content = """\
+# title
+## sub title
+```sh
+$ ls
+```
+|名前|説明|
+|-|-|
+|long|64bitの数値 <br />  -9,223,372,036,854,775,808	から
+おわり"""
         post_data = {
             "title": "test",
             "slug": "test",
-            "content": "content test",
+            "content": content,
             "is_show": True,
             "category": category.id,
             "tag": [tag.id, tag2.id],

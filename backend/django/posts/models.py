@@ -65,7 +65,7 @@ class Post(models.Model):
             'cover_media').select_related('category').prefetch_related('tag').order_by('-id')[:3])
 
     @staticmethod
-    def get_retated_posts(obj, limit=10):
+    def get_retated_posts(obj, limit=5):
         print(obj.tag.all()[0].id)
         return Post.objects.filter(
             models.Q(category=obj.category) | models.Q(tag__in=obj.tag.all()),
