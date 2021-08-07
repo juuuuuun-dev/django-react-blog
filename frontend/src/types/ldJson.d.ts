@@ -12,7 +12,11 @@ export type CreateLdJsonTypeBlogPostingArg = {
 
 export type BreadcrumbList = {
   position: number,
-  name: string,
-  item: string,
+  type: string,
+  item: {
+    type: string,
+    id: string,
+    name: string,
+  },
 }[]
 
