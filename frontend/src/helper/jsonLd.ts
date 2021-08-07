@@ -1,9 +1,9 @@
 import {
-    BreadcrumbList, CreateLdJsonTypeBlogPostingArg, CreateLdJsonTypeWebSiteArg
-} from '../types/ldJson';
+    BreadcrumbList, CreateJsonLdTypeBlogPostingArg, CreateJsonLdTypeWebSiteArg
+} from '../types/jsonLd';
 import { InitState } from '../types/mainContext';
 
-export const createLdJsonTypeWebSite = ({ init }: CreateLdJsonTypeWebSiteArg) => {
+export const createJsonLdTypeWebSite = ({ init }: CreateJsonLdTypeWebSiteArg) => {
   if (init) {
     return {
       "@context": "http://schema.org",
@@ -15,7 +15,7 @@ export const createLdJsonTypeWebSite = ({ init }: CreateLdJsonTypeWebSiteArg) =>
   }
 }
 
-export const createLdJsonTypeBlogPosting = ({ init, post }: CreateLdJsonTypeBlogPostingArg) => {
+export const createJsonLdTypeBlogPosting = ({ init, post }: CreateJsonLdTypeBlogPostingArg) => {
   if (init) {
     const BlogPosting = {
       "@context": "http://schema.org",
@@ -32,14 +32,14 @@ export const createLdJsonTypeBlogPosting = ({ init, post }: CreateLdJsonTypeBlog
       },
       "publisher": createPublisher(init),
     }
-    const breadcrumbList = createLdJsonTypeBreadcrumbList([
+    const breadcrumbList = createJsonLdTypeBreadcrumbList([
       {
-        position: 1,
-        type: 'ListItem',
-        item: {
-          type: 'Thing',
-          id: `${init.url}/categories/${post.category.slug}`,
-          name: post.category.name,
+        "position": 1,
+        "@type": 'ListItem',
+        "item": {
+          "@type": 'Thing',
+          "id": `${init.url}/categories/${post.category.slug}`,
+          "name": post.category.name,
         }
       },
     ])
@@ -47,7 +47,7 @@ export const createLdJsonTypeBlogPosting = ({ init, post }: CreateLdJsonTypeBlog
   }
 }
 
-export const createLdJsonTypeBreadcrumbList = (list: BreadcrumbList) => {
+export const createJsonLdTypeBreadcrumbList = (list: BreadcrumbList) => {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

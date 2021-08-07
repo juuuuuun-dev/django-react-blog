@@ -13,7 +13,7 @@ export const mainState: MainState = {
   appTitle: process.env.REACT_APP_TITLE || "SITE NAME",
   pageTitle: "",
   meta: [],
-  ldJson: [],
+  jsonLd: [],
   copyrightStartYear: parseInt(process.env.REACT_APP_COPYRIGHT_START_YEAR || "2020"),
   dateFormat: process.env.REACT_APP_DATE_FORMAT || "YYYY-MM-DD",
   dateTimeFormat: process.env.REACT_APP__DATETIME_FORMAT || "YYYY-MM-DD hh:mm:ss",

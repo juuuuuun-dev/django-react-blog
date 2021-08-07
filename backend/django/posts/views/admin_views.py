@@ -89,9 +89,9 @@ class AdminPostViewSet(cache_views.CacheModelViewSet):
         self.delete_detail_cache(base_key=Post.show_cache_key, slug=slug)
         return response.Response(serializer.data)
 
-    def make_plain_content(self, content):
+    def make_plain_content(self, content, length=100):
         html = markdown(content)
         plain = ''.join(BeautifulSoup(
             html, features="html.parser").findAll(
             text=True))
-        return plain
+        return plain[:length]

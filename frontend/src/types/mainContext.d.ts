@@ -36,7 +36,7 @@ export type MainState = {
   appTitle: string;
   pageTitle: string;
   meta: MetaType;
-  ldJson: [];
+  jsonLd: [];
   loading: boolean;
   copyrightStartYear: number;
   dateFormat: string;
