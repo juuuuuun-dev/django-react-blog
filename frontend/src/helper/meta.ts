@@ -23,7 +23,7 @@ const createOgpMeta = (data: CreateMetaArg) => {
 
 const createTwitterMeta = (data: CreateMetaArg) => {
   return [
-    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:card', content: 'summary' },
     { name: 'twitter:title', content: data.title },
     { name: 'twitter:url', content: data.url },
     { name: 'twitter:description', content: data.description },

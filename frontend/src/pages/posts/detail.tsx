@@ -33,6 +33,7 @@ const Detail: React.FC = () => {
           title: res.data.post.title,
           url: state.init?.url + history.location.pathname,
           description: res.data.post.plain_content,
+          image: res.data.post.cover_media.cover
         })
         const JsonLd = createJsonLdTypeBlogPosting({ init: state.init, post: res.data.post });
         dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: res.data.post.title } })
