@@ -26,7 +26,7 @@ const Index = () => {
         title: state.init?.siteSettings.name,
         url: state.init?.url,
         description: state.init?.siteSettings.description,
-        image: state.init?.siteSettings.main_image,
+        image: `${state.init?.siteSettings.main_image}`,
       })
       const JsonLd = createJsonLdTypeWebSite({ init: state.init });
       dispatch({ type: 'SET_PAGE_TITLE', payload: { pageTitle: pageTitle } })
