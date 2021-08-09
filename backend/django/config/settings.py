@@ -139,6 +139,16 @@ ROOT_URLCONF = 'config.urls'
 
 # testing page_size is 1
 PAGE_SIZE = env.int('PAGE_SIZE', default=10) if not TESTING else 1
+
+DEFAULT_RENDERER_CLASSES = (
+    'rest_framework.renderers.JSONRenderer',
+)
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
@@ -150,6 +160,7 @@ REST_FRAMEWORK = {
         'main': '30/minute',
         'login': '10/minute',
     },
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
     # 'DEFAULT_FILTER_BACKENDS': [
     #     'django_filters.rest_framework.DjangoFilterBackend',
     # ],
