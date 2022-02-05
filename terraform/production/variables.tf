@@ -76,7 +76,7 @@ variable "db_engine" {
 }
 variable "db_engine_version" {
   description = "Database engine version"
-  default     = "5.7.19"
+  default     = "5.7.33"
 }
 variable "db_instance_class" {
   description = "Database instance class"

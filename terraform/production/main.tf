@@ -3,7 +3,7 @@ terraform init -backend-config=terraform.tfbackend
 */
 
 terraform {
-  required_version = ">=0.13"
+  required_version = "0.14.7"
   backend "s3" {}
 }
 

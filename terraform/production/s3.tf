@@ -15,3 +15,12 @@ module "s3_bucket_for_app_storage" {
   # ignore_public_acls      = true
   # restrict_public_buckets = true
 }
+
+# snapshop and file storage backup
+data "aws_s3_bucket" "backup_storage" {
+  bucket = "${var.app_name}-${var.environment}-backup"
+}
+
+output "backup-storage" {
+  value = data.aws_s3_bucket.backup_storage.arn
+}
