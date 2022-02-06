@@ -3,9 +3,9 @@
 This is a blog using Django, React, TypeScript, Ant Design, Jest, React Testing Library, JSON-LD, CircleCi and Teffaform/AWS.  
 Terraform uses AWS Fargate, RDS, S3, CloudFront, lambda and Api Gataway, etc.
 
-# Example
+<!-- # Example -->
 
-My blog: [https://blog.junkata.com](https://blog.junkata.com)
+<!-- My blog: [https://blog.junkata.com](https://blog.junkata.com) -->
 
 <!-- TODO screen shot -->
 
